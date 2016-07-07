@@ -1,0 +1,37 @@
+{
+  "extends": "./node_modules/eslint-config-valorsoft/.eslintrc.json",
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "rules": {
+    "id-length": [
+      "error",
+      {
+        "exceptions": [
+          "_"
+        ]
+      }
+    ],
+    "no-magic-numbers": [
+      2,
+      {
+        "ignore": [
+          -1,
+          0,
+          1
+        ]
+      }
+    ],
+    "func-style": [
+      "error",
+      "declaration",
+      {
+        "allowArrowFunctions": true
+      }
+    ]
+  }
+}
