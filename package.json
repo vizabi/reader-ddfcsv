@@ -1,18 +1,23 @@
 {
   "name": "vizabi-ddfcsv-reader",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Vizabi DDFcsv reader",
   "main": "dist/bundle.js",
   "scripts": {
     "test": "npm run build && ./node_modules/.bin/ava \"test/**/*.spec.js\"",
-    "test-prod": "npm run build-prod && ./node_modules/.bin/ava \"test/**/*.spec.js\"",
+    "n-test": "./node_modules/.bin/webpack && ./node_modules/.bin/ava \"test/**/*.spec.js\"",
+    "test-prod": "npm run eslint && PROD_ENV=1 ./node_modules/.bin/webpack && ./node_modules/.bin/ava \"test/**/*.spec.js\"",
     "build": "npm run eslint && ./node_modules/.bin/webpack",
-    "build-prod": "npm run eslint && PROD_ENV=1 ./node_modules/.bin/webpack",
-    "eslint": "./node_modules/.bin/eslint --ignore-path .gitignore --ext js --fix . .config"
+    "eslint": "./node_modules/.bin/eslint --ignore-path .gitignore --ext js --fix . .config",
+    "prepublish": "npm run eslint && PROD_ENV=1 webpack"
   },
   "author": "Vyacheslav Chub<vyacheslav.chub@valor-software.com>",
   "license": "GPL-3.0",
   "dependencies": {
+    "async-es": "2.0.0-rc.6",
+    "csv-parse": "1.1.3",
+    "ddf-time-utils": "0.1.1",
+    "fs": "0.0.2",
     "lodash": "4.13.1"
   },
   "devDependencies": {
@@ -20,7 +25,9 @@
     "babel": "^6.0.15",
     "babel-loader": "6.2.4",
     "babel-preset-es2015": "^6.1.2",
+    "eslint": "3.0.1",
     "eslint-config-valorsoft": "0.0.16",
     "webpack": "^1.12.3"
   }
 }
+
