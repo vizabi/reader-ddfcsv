@@ -23,6 +23,6 @@ module.exports = {
   resolve: {extensions: ['', '.js']},
   profile: true,
   plugins: PROD ? [
-    new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}, sourceMap: true})
+    new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}})
   ] : []
 };
