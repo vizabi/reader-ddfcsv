@@ -250,79 +250,78 @@ function once(fn) {
   };
 }
 
-export class DDFCSVReader {
-  constructor(name) {
-    this.name = name;
+export default function getDDFCsvReaderObject(externalFileReader, logger) {
+  if (!logger) {
+    logger = console;
   }
 
-  getDDFCsvReaderObject(externalFileReader) {
-    var name = this.name;
+  return {
+    init(reader_info) {
+      var fileReader = externalFileReader || new FrontendFileReader();
 
-    return {
-      init(reader_info) {
-        var fileReader = externalFileReader || new FrontendFileReader();
+      this._data = [];
+      this._ddfPath = reader_info.path;
+      this.ddf = new Ddf(this._ddfPath, fileReader);
+    },
 
-        this._data = [];
-        this._ddfPath = reader_info.path;
-        this.ddf = new Ddf(this._ddfPath, fileReader);
-      },
+    read(queryPar) {
+      var _this = this;
+      var query = cloneDeep(queryPar);
+      var p = new Promise();
 
-      read(queryPar) {
-        var _this = this;
-        var query = cloneDeep(queryPar);
-        var p = new Promise();
-
-        function isShapeQuery() {
-          return queryPar.select.indexOf('shape_lores_svg') >= 0 && queryPar.where['geo.cat'].length > 0;
-        }
-
-        if (isShapeQuery()) {
-          _this._data = getShapes(queryPar.where['geo.cat']);
-          p.resolve();
-        }
-
-        if (!isShapeQuery()) {
-          _this.ddf.getIndex(function () {
-            // get `concepts` and `entities` in any case
-            // this data needed for query's kind (service, data point) detection
-            _this.ddf.getConceptsAndEntities(query, function (err, concepts, entities) {
-              if (err) {
-                p.reject(err);
-              }
-
-              // service query: it was detected by next criteria:
-              // all of `select` section of query parts are NOT measures
-              if (!err && _this.ddf.divideByQuery(query).measures.length <= 0) {
-                _this._data = entities;
-
-                p.resolve();
-              }
-
-              // data point query: it was detected by next criteria:
-              // at least one measure was detected in `select` section of the query
-              if (_this.ddf.divideByQuery(query).measures.length > 0) {
-                _this.ddf.getDataPoints(query, function (err, data) {
-                  if (err) {
-                    p.reject(err);
-                  }
-
-                  if (!err) {
-                    _this._data = data;
-
-                    p.resolve();
-                  }
-                });
-              }
-            });
-          });
-        }
-
-        return p;
-      },
-
-      getData() {
-        return this._data;
+      function isShapeQuery() {
+        return queryPar.select.indexOf('shape_lores_svg') >= 0 && queryPar.where['geo.cat'].length > 0;
       }
-    };
-  }
-}
+
+      if (isShapeQuery()) {
+        _this._data = getShapes(queryPar.where['geo.cat']);
+        logger.log('shapes from reader', JSON.stringify(queryPar), json.stringify(_this._data));
+        p.resolve();
+      }
+
+      if (!isShapeQuery()) {
+        _this.ddf.getIndex(function () {
+          // get `concepts` and `entities` in any case
+          // this data needed for query's kind (service, data point) detection
+          _this.ddf.getConceptsAndEntities(query, function (err, concepts, entities) {
+            if (err) {
+              p.reject(err);
+            }
+
+            // service query: it was detected by next criteria:
+            // all of `select` section of query parts are NOT measures
+            if (!err && _this.ddf.divideByQuery(query).measures.length <= 0) {
+              _this._data = entities;
+              logger.log(JSON.stringify(queryPar), json.stringify(_this._data));
+
+              p.resolve();
+            }
+
+            // data point query: it was detected by next criteria:
+            // at least one measure was detected in `select` section of the query
+            if (_this.ddf.divideByQuery(query).measures.length > 0) {
+              _this.ddf.getDataPoints(query, function (err, data) {
+                if (err) {
+                  p.reject(err);
+                }
+
+                if (!err) {
+                  _this._data = data;
+                  logger.log(JSON.stringify(queryPar), json.stringify(_this._data));
+
+                  p.resolve();
+                }
+              });
+            }
+          });
+        });
+      }
+
+      return p;
+    },
+
+    getData() {
+      return this._data;
+    }
+  };
+};

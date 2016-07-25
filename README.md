@@ -11,12 +11,10 @@ npm test
 
 ```
 var Vizabi = require('vizabi');
-var DDFCSVReader = require('vizabi-ddfcsv-reader').DDFCSVReader;
-var readerName = 'ddf1-csv2';
-var ddfCsvReader = new DDFCSVReader(readerName).getReaderObject();
-Vizabi.Reader.extend(readerName, ddfCsvReader);
-
-require('vizabi/build/dist/vizabi.css');
+var ddfCsvReader = require('vizabi-ddfcsv-reader');
+var readerObject = ddfCsvReader.getDDFCsvReaderObject(ddfExtra.chromeFs);
+Vizabi.Reader.extend('ddf-csv-reader', readerObject);
+// ...
 ```
 
 ## Attention

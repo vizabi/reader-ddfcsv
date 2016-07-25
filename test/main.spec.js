@@ -2,18 +2,10 @@
 
 import _ from 'lodash';
 import test from 'ava';
-import {BackendFileReader, DDFCSVReader, Ddf} from '../dist/bundle';
+import {BackendFileReader, Ddf} from '../dist/bundle';
 
 /* eslint-enable sort-imports */
 /* eslint-enable no-magic-numbers */
-
-test('Reader', t => {
-  const ddfCsvReader = new DDFCSVReader('ddf1csv-i');
-
-  t.true(!!ddfCsvReader);
-
-  t.pass();
-});
 
 test.cb('DDF get index', t => {
   const EXPECTED_RECORDS_COUNT = 601;
@@ -32,7 +24,8 @@ test.cb('DDF get index', t => {
 });
 
 test.cb('DDF get entities', t => {
-  const EXPECTED_RECORDS_COUNT = 574;
+  const EXPECTED_CONCEPTS_RECORDS_COUNT = 574;
+  const EXPECTED_ENTITIES_RECORDS_COUNT = 275;
   const backendFileReader = new BackendFileReader();
   const ddf = new Ddf('./fixtures/ddf-folder', backendFileReader);
   const query = {
@@ -45,10 +38,12 @@ test.cb('DDF get entities', t => {
   ddf.getIndex(indexErr => {
     t.false(!!indexErr);
 
-    ddf.getConceptsAndEntities(query, (entitiesErr, entitiesData) => {
+    ddf.getConceptsAndEntities(query, (entitiesErr, conceptsData, entitiesData) => {
       t.false(!!entitiesErr);
+      t.true(_.isArray(conceptsData));
       t.true(_.isArray(entitiesData));
-      t.is(entitiesData.length, EXPECTED_RECORDS_COUNT);
+      t.is(conceptsData.length, EXPECTED_CONCEPTS_RECORDS_COUNT);
+      t.is(entitiesData.length, EXPECTED_ENTITIES_RECORDS_COUNT);
 
       t.pass();
       t.end();
@@ -89,4 +84,3 @@ test.cb('DDF get data points', t => {
     });
   });
 });
-
