@@ -275,7 +275,7 @@ export default function getDDFCsvReaderObject(externalFileReader, logger) {
 
       if (isShapeQuery()) {
         _this._data = getShapes(queryPar.where['geo.cat']);
-        logger.log('shapes from reader', JSON.stringify(queryPar), json.stringify(_this._data));
+        logger.log('shapes from reader', JSON.stringify(queryPar), JSON.stringify(_this._data));
         p.resolve();
       }
 
@@ -292,7 +292,7 @@ export default function getDDFCsvReaderObject(externalFileReader, logger) {
             // all of `select` section of query parts are NOT measures
             if (!err && _this.ddf.divideByQuery(query).measures.length <= 0) {
               _this._data = entities;
-              logger.log(JSON.stringify(queryPar), json.stringify(_this._data));
+              logger.log(JSON.stringify(queryPar), JSON.stringify(_this._data));
 
               p.resolve();
             }
@@ -307,7 +307,7 @@ export default function getDDFCsvReaderObject(externalFileReader, logger) {
 
                 if (!err) {
                   _this._data = data;
-                  logger.log(JSON.stringify(queryPar), json.stringify(_this._data));
+                  logger.log(JSON.stringify(queryPar), JSON.stringify(_this._data));
 
                   p.resolve();
                 }
