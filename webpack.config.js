@@ -23,6 +23,9 @@ module.exports = {
   resolve: {extensions: ['', '.js']},
   profile: true,
   plugins: PROD ? [
-    new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}})
-  ] : []
+    new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}}),
+    new webpack.IgnorePlugin(/vertx/)
+  ] : [
+    new webpack.IgnorePlugin(/vertx/)
+  ]
 };
