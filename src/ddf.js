@@ -1,120 +1,50 @@
-/* eslint-disable max-lines */
-/* eslint-disable no-prototype-builtins */
-/* eslint-disable max-statements */
-
+import {ContentManager} from './content-manager';
+import {QueryManager} from './query-manager';
 import {getTimeRange} from 'ddf-time-utils';
+
 import parallel from 'async-es/parallel';
+
+import compact from 'lodash/compact';
+import flatten from 'lodash/flatten';
+import includes from 'lodash/includes';
+import isEmpty from 'lodash/isEmpty';
 import uniq from 'lodash/uniq';
 
-const conceptTypeHash = {};
-const CACHE = {
-  FILE_CACHED: {},
-  FILE_REQUESTED: {}
-};
-
-let index = null;
-let concepts = null;
-let entities = null;
+const contentManager = new ContentManager();
 
 export class Ddf {
   constructor(ddfPath, reader) {
     this.ddfPath = ddfPath;
     this.reader = reader;
+    this.queryManager = new QueryManager(this.ddfPath, contentManager);
 
     if (this.ddfPath[this.ddfPath.length - 1] !== '/') {
       this.ddfPath += '/';
     }
   }
 
-  reset() {
-    index = null;
-    concepts = null;
-    entities = null;
-    CACHE.FILE_CACHED = {};
-    CACHE.FILE_REQUESTED = {};
-  }
-
-  getIndex(cb) {
+  getIndex(onIndexLoaded) {
     const indexFileName = `${this.ddfPath}ddf--index.csv`;
 
     this.reader.read(indexFileName, (err, data) => {
       if (err) {
-        cb(err);
+        onIndexLoaded(err);
         return;
       }
 
-      index = data;
+      contentManager.index = data;
+      this.queryManager.setIndex(contentManager.index);
 
-      cb(null, index);
+      onIndexLoaded(null, contentManager.index);
     });
-  }
-
-  getConceptFileNames() {
-    const result = [];
-
-    index.forEach(indexRecord => {
-      if (indexRecord.key === 'concept') {
-        result.push(this.ddfPath + indexRecord.file);
-      }
-    });
-
-    return uniq(result);
-  }
-
-  getSelectParts(query) {
-    return query.select.map(selectPart => {
-      const pos = selectPart.indexOf('.');
-
-      return pos >= 0 ? selectPart.substr(pos + 1) : selectPart;
-    });
-  }
-
-  getWhereParts(query) {
-    const whereParts = [];
-
-    for (const whereKey in query.where) {
-      if (query.where.hasOwnProperty(whereKey)) {
-        const pos = whereKey.indexOf('.');
-
-        let value = pos >= 0 ? whereKey.substr(pos + 1) : whereKey;
-
-        value = value.replace(/is--/, '');
-        whereParts.push(value);
-      }
-    }
-
-    return whereParts;
-  }
-
-
-  getEntitySetsByQuery(query) {
-    if (!query || !query.select || !query.where) {
-      return 'Wrong entities query; it should contain "select" and "where" fields';
-    }
-
-    const selectPartsEntitySets = this.getSelectParts(query)
-      .filter(part => conceptTypeHash[part] === 'entity_set');
-    const wherePartsEntitySets = this.getWhereParts(query)
-      .filter(part => conceptTypeHash[part] === 'entity_set');
-
-    return wherePartsEntitySets.length > 0 ? wherePartsEntitySets : selectPartsEntitySets;
   }
 
   getEntityFileNames(query) {
-    const result = [];
-    const expectedEntities = this.getEntitySetsByQuery(query);
+    const expectedEntities = this.queryManager.getEntitySetsByQuery(query);
 
-    if (typeof expectedEntities === 'string') {
-      return expectedEntities;
-    }
-
-    index.forEach(indexRecord => {
-      if (expectedEntities.indexOf(indexRecord.key) >= 0) {
-        result.push(this.ddfPath + indexRecord.file);
-      }
-    });
-
-    return uniq(result);
+    return uniq(contentManager.index
+      .filter(indexRecord => includes(expectedEntities, indexRecord.key))
+      .map(indexRecord => this.ddfPath + indexRecord.file));
   }
 
   // this method detects kind of particular entity file
@@ -129,10 +59,10 @@ export class Ddf {
     select.forEach(field => {
       // headers should not contain data before `.`
       const pos = field.indexOf('.');
-      const fieldF = pos >= 0 ? field.substr(pos + 1) : field;
+      const correctedField = pos >= 0 ? field.substr(pos + 1) : field;
 
-      if (firstRecord[fieldF]) {
-        convert[fieldF] = field;
+      if (firstRecord[correctedField]) {
+        convert[correctedField] = field;
         count++;
       }
     });
@@ -143,239 +73,140 @@ export class Ddf {
     return {
       // this entity file is expected for future processing
       // if at least one criteria was matched
-      needed: count > 0,
+      shouldBeProcessed: count > 0,
       convert
     };
   }
 
-  applyFilter(record, filter) {
-    let matches = 0;
-
-    for (const filterKey in filter) {
-      if (filter.hasOwnProperty(filterKey)) {
-        const pos = filterKey.indexOf('.');
-        const normConcept = pos >= 0 ? filterKey.substr(pos + 1) : filterKey;
-
-        if (record[normConcept]) {
-          if (record[normConcept].toUpperCase() === filter[filterKey].toString().toUpperCase()) {
-            matches++;
-          }
-        }
-      }
-    }
-
-    return Object.keys(filter).length === matches;
-  }
-
-  // get information for entity correction by filter
-  // for example rule `geo.is--country: true` will be generate pair: `geo: "country"`
-  // it will be needed when geo column in the entity css is 'country', but Vizabi expects only "geo"
-  getFilterConvertPairs(filter) {
-    const result = {};
-
-    for (const filterKey in filter) {
-      if (filter.hasOwnProperty(filterKey)) {
-        const pos = filterKey.indexOf('.');
-
-        if (pos >= 0) {
-          result[filterKey.substr(0, pos)] = filterKey.substr(pos).replace(/^.is--/, '');
-        }
-      }
-    }
-
-    return result;
-  }
-
-  normalizeAndFilter(headerDescriptor, content, filter) {
-    const result = [];
-    const convertPairs = this.getFilterConvertPairs(filter);
-
-    content.forEach(record => {
-      if (!this.applyFilter(record, filter)) {
-        return;
-      }
-
-      const recordF = {};
-
-      for (const field in record) {
-        if (record.hasOwnProperty(field)) {
-          // get filtered data with expected prefix
-          // for example, correct:
-          // transform (in `geo` file) column `name` to `geo.name` field in `Vizabi's data`
-          const fieldF = headerDescriptor.convert[field];
-
-          // add Vizabi oriented data if related concepts are not same in the csv file
-          for (const convertPairKey in convertPairs) {
-            if (convertPairs.hasOwnProperty(convertPairKey) && record[convertPairs[convertPairKey]]) {
-              recordF[convertPairKey] = record[convertPairs[convertPairKey]];
-            }
-          }
-
-          if (fieldF) {
-            recordF[fieldF] = record[field];
-          }
-        }
-      }
-
-      result.push(recordF);
-    });
-
-    return result;
-  }
-
-  getEntities(query, cb) {
+  getEntities(query, onEntitiesLoaded) {
     const entityFileNames = this.getEntityFileNames(query);
     const entityActions =
       entityFileNames
         .map(fileName => onEntryRead => this.reader.read(fileName, err => onEntryRead(err)));
 
-    if (entityActions.length <= 0) {
-      cb();
+    if (isEmpty(entityActions)) {
+      onEntitiesLoaded();
       return;
     }
 
     parallel(entityActions, err => {
       if (err) {
-        cb(err);
+        onEntitiesLoaded(err);
         return;
       }
 
-      let entitiesF = [];
+      const entities = compact(
+        flatten(
+          entityFileNames.map(fileName => {
+            const headerDescriptor = this.getHeaderDescriptor(query.select, this.reader.cache[fileName][0]);
 
-      entityFileNames.forEach(fileName => {
-        const headerDescriptor = this.getHeaderDescriptor(query.select, this.reader.cache[fileName][0]);
+            // apply filter only for entities?
+            if (headerDescriptor.shouldBeProcessed === true) {
+              return this.queryManager.normalizeAndFilter(headerDescriptor, this.reader.cache[fileName], query.where);
+            }
 
-        // apply filter only for entities?
-        if (headerDescriptor.needed === true) {
-          entitiesF = entitiesF
-            .concat(this.normalizeAndFilter(headerDescriptor, this.reader.cache[fileName], query.where));
-        }
-      });
+            return null;
+          })
+        )
+      );
 
-      if (entitiesF.length > 0) {
-        entities = entitiesF;
+      if (!isEmpty(entities)) {
+        contentManager.entities = entities;
       }
 
-      cb(null, entities);
+      onEntitiesLoaded(null, contentManager.entities);
     });
   }
 
-  getConcepts(query, cb) {
-    const conceptFileNames = this.getConceptFileNames();
+  getConcepts(onConceptsLoaded) {
+    const conceptFileNames = this.queryManager.getConceptFileNames();
     const conceptActions =
       conceptFileNames.map(fileName =>
         onConceptRead => this.reader.read(fileName, err => onConceptRead(err)));
 
     parallel(conceptActions, err => {
       if (err) {
-        cb(err);
+        onConceptsLoaded(err);
         return;
       }
 
-      let conceptsF = [];
+      const concepts = flatten(compact(conceptFileNames.map(fileName => this.reader.cache[fileName])));
 
-      conceptFileNames.forEach(fileName => {
-        conceptsF = conceptsF.concat(this.reader.cache[fileName]);
-      });
-
-      if (conceptsF.length > 0) {
-        concepts = conceptsF;
-        concepts.forEach(concept => {
+      if (!isEmpty(concepts)) {
+        contentManager.concepts = concepts;
+        contentManager.concepts.forEach(concept => {
           const splittedConcepts = concept.concept.split(/,/);
 
           splittedConcepts.forEach(splittedConcept => {
-            conceptTypeHash[splittedConcept] = concept.concept_type;
+            contentManager.conceptTypeHash[splittedConcept] = concept.concept_type;
           });
         });
       }
 
-      cb(null, concepts);
+      onConceptsLoaded(null, contentManager.concepts);
     });
   }
 
-  getConceptsAndEntities(query, cb) {
-    this.getConcepts(query, (conceptsErr, conceptsPar) => {
+  getConceptsAndEntities(query, onDataLoaded) {
+    this.getConcepts((conceptsErr, conceptsPar) => {
       if (conceptsErr) {
-        cb(conceptsErr);
+        onDataLoaded(conceptsErr);
         return;
       }
 
       this.getEntities(query, (entitiesErr, entitiesPar) => {
-        cb(entitiesErr, conceptsPar, entitiesPar);
+        onDataLoaded(entitiesErr, conceptsPar, entitiesPar);
       });
     });
-  }
-
-  // extract measures and other concept names from query
-  divideByQuery(query) {
-    const measures = [];
-    const other = [];
-
-    query.select.forEach(partOfSelect => {
-      if (conceptTypeHash[partOfSelect] === 'measure') {
-        measures.push(partOfSelect);
-      }
-
-      if (conceptTypeHash[partOfSelect] !== 'measure') {
-        other.push(partOfSelect);
-      }
-    });
-
-    return {
-      measures,
-      other
-    };
   }
 
   getDataPointDescriptorsByIndex(query) {
     const descriptors = [];
     const fileNames = [];
 
-    if (index) {
-      index.forEach(indexRecord => {
-        if (conceptTypeHash[indexRecord.value] === 'measure') {
-          const other = indexRecord.key.split(/,/);
-          const parts = other.concat(indexRecord.value);
-
-          let founded = 0;
-
-          parts.forEach(part => {
-            if (query.select.indexOf(part) >= 0) {
-              founded++;
-            }
-          });
-
-          if (founded === parts.length) {
-            fileNames.push(this.ddfPath + indexRecord.file);
-            descriptors.push({
-              fileName: this.ddfPath + indexRecord.file,
-              measures: [indexRecord.value],
-              // only one measure should be present in DDF1 data point in case of Vizabi using?
-              measure: indexRecord.value,
-              other
-            });
-          }
-        }
-      });
+    if (!contentManager.index) {
+      throw Error('index is not found');
     }
 
-    return {
-      descriptors,
-      fileNames
-    };
+    contentManager.index.forEach(indexRecord => {
+      if (contentManager.conceptTypeHash[indexRecord.value] === 'measure') {
+        const other = indexRecord.key.split(/,/);
+        const parts = other.concat(indexRecord.value);
+
+        let founded = 0;
+
+        parts.forEach(part => {
+          if (query.select.indexOf(part) >= 0) {
+            founded++;
+          }
+        });
+
+        if (founded === parts.length) {
+          fileNames.push(this.ddfPath + indexRecord.file);
+          descriptors.push({
+            fileName: this.ddfPath + indexRecord.file,
+            measures: [indexRecord.value],
+            // only one measure should be present in DDF1 data point in case of Vizabi using?
+            measure: indexRecord.value,
+            other
+          });
+        }
+      }
+    });
+
+    return {descriptors, fileNames};
   }
 
   // data points descriptors will be used for data points content loading
   getDataPointDescriptors(query) {
-    this.categorizedQuery = this.divideByQuery(query);
+    this.categorizedQuery = this.queryManager.divideConceptsFromQueryByType(query);
 
     const descResultByIndex = this.getDataPointDescriptorsByIndex(query);
 
     return descResultByIndex.descriptors;
   }
 
-  // get data points source
-  getDataPointsContent(query, cb) {
+  getDataPointsContentByQuery(query, onDataPointsLoaded) {
     this.dataPointDescriptors = this.getDataPointDescriptors(query);
 
     const actions = this.dataPointDescriptors
@@ -384,7 +215,7 @@ export class Ddf {
 
     parallel(actions, err => {
       if (err) {
-        cb(err);
+        onDataPointsLoaded(err);
         return;
       }
 
@@ -392,15 +223,29 @@ export class Ddf {
         dataPointDescriptor.content = this.reader.cache[dataPointDescriptor.fileName];
       });
 
-      cb();
+      onDataPointsLoaded();
     });
   }
 
-  getExpectedConcept(type) {
-    for (let conceptIndex = 0; conceptIndex < concepts.length; conceptIndex++) {
-      if (this.categorizedQuery.other.indexOf(concepts[conceptIndex].concept) >= 0 &&
-        concepts[conceptIndex].concept_type === type) {
-        return concepts[conceptIndex].concept;
+  getAllDataPointsContent(onDataPointsFileLoaded, onDataAllPointsLoaded) {
+    const measureRecords = contentManager.index
+      .filter(indexRecord => contentManager.conceptTypeHash[indexRecord.value] === 'measure')
+      .filter(indexRecord => indexRecord.value !== 'latitude' && indexRecord.value !== 'longitude');
+    const actions = measureRecords
+      .map(measureFileRecord => onDataPointFileRead =>
+        this.reader.read(this.ddfPath + measureFileRecord.file, (err, content) => {
+          onDataPointsFileLoaded(err, {measure: measureFileRecord.value, content});
+          onDataPointFileRead(err);
+        }));
+
+    parallel(actions, err => onDataAllPointsLoaded(err));
+  }
+
+  getExpectedNonMeasureConcept(type) {
+    for (let conceptIndex = 0; conceptIndex < contentManager.concepts.length; conceptIndex++) {
+      if (includes(this.categorizedQuery.other, contentManager.concepts[conceptIndex].concept) &&
+        contentManager.concepts[conceptIndex].concept_type === type) {
+        return contentManager.concepts[conceptIndex].concept;
       }
     }
 
@@ -408,25 +253,17 @@ export class Ddf {
   }
 
   getTimeConcept() {
-    return this.getExpectedConcept('time');
+    return this.getExpectedNonMeasureConcept('time');
   }
 
   getEntityDomainConcept() {
-    return this.getExpectedConcept('entity_domain');
+    return this.getExpectedNonMeasureConcept('entity_domain');
   }
 
   // get data points data (for reader)
-  getDataPoints(query, cb) {
-    this.getDataPointsContent(query, err => {
-      if (err) {
-        cb(err);
-        return;
-      }
-
-      const entityDomainConcept = this.getEntityDomainConcept();
-      const timeConcept = this.getTimeConcept();
-
-      // fill hash (measure by entity_domain and time)
+  getDataPoints(query, onDataPointsLoaded) {
+    const result = [];
+    const prepareMeasureTimeEntityHash = (entityDomainConcept, timeConcept) => {
       this.dataPointDescriptors.forEach(pointDescriptor => {
         pointDescriptor.contentHash = {};
 
@@ -439,43 +276,56 @@ export class Ddf {
             record[pointDescriptor.measure];
         });
       });
-
-      const result = [];
+    };
+    const prepareNonMeasureValues = () => {
       // get range for entity_domain
       const entityDomainValues = this.getExpectedEntityDomainValues(this.getEntityDomainConcept());
       // get range for time
       const timeRangeValues = getTimeRange(query.where[this.getTimeConcept()]);
 
+      return {entityDomainValues, timeRangeValues};
+    };
+
+    this.getDataPointsContentByQuery(query, err => {
+      if (err) {
+        onDataPointsLoaded(err);
+        return;
+      }
+
+      const entityDomainConcept = this.getEntityDomainConcept();
+      const timeConcept = this.getTimeConcept();
+
+      prepareMeasureTimeEntityHash(entityDomainConcept, timeConcept);
+      const {entityDomainValues, timeRangeValues} = prepareNonMeasureValues();
+
       // fill data points data
       entityDomainValues.forEach(entity => {
         timeRangeValues.forEach(time => {
-          const record = {};
+          const record = {[entityDomainConcept]: entity, [timeConcept]: new Date(time)};
+          const addMeasures = () => {
+            let count = 0;
 
-          // record (row)
-          record[entityDomainConcept] = entity;
-          record[timeConcept] = new Date(time);
+            this.dataPointDescriptors.forEach(pointDescriptor => {
+              if (pointDescriptor.contentHash[entity] && pointDescriptor.contentHash[entity][time]) {
+                record[pointDescriptor.measure] = Number(pointDescriptor.contentHash[entity][time]);
+                count++;
+              }
+            });
 
-          // add measures
-          let count = 0;
+            return count;
+          };
 
-          this.dataPointDescriptors.forEach(pointDescriptor => {
-            if (pointDescriptor.contentHash[entity] && pointDescriptor.contentHash[entity][time]) {
-              record[pointDescriptor.measure] = Number(pointDescriptor.contentHash[entity][time]);
-              count++;
-            }
-          });
-
-          if (count === this.dataPointDescriptors.length) {
+          if (addMeasures() === this.dataPointDescriptors.length) {
             result.push(record);
           }
         });
       });
 
-      cb(err, result);
+      onDataPointsLoaded(err, result);
     });
   }
 
   getExpectedEntityDomainValues(entityName) {
-    return entities.map(entity => entity[entityName]);
+    return contentManager.entities.map(entity => entity[entityName]);
   }
 }
