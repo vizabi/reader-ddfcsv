@@ -64,7 +64,7 @@ export class ChromeFileReader {
   }
 
   read(filePath, onFileRead, isCacheNeeded = true) {
-    this.chromeFs.filePath(filePath, '', (err, csvContent) => {
+    this.chromeFs.readFile(filePath, '', (err, csvContent) => {
       if (err) {
         onFileRead(err);
         return;
