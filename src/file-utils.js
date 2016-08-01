@@ -11,7 +11,7 @@ export class FrontendFileReader {
     this.cache = {};
   }
 
-  read(filePath, onFileRead) {
+  read(filePath, onFileRead, isCacheNeeded = true) {
     const xhr = new XMLHttpRequest();
 
     xhr.open('GET', filePath);
@@ -22,9 +22,13 @@ export class FrontendFileReader {
           return;
         }
 
-        this.cache[filePath] = parseSync(xhr.responseText, {columns: true});
+        const content = parseSync(xhr.responseText, {columns: true});
 
-        onFileRead(null, this.cache[filePath]);
+        if (isCacheNeeded) {
+          this.cache[filePath] = content;
+        }
+
+        onFileRead(null, content);
       }
     };
     xhr.onerror = () => onFileRead(xhr.status);
@@ -39,10 +43,12 @@ export class BackendFileReader {
     this.cache = {};
   }
 
-  read(filePath, onFileRead) {
+  read(filePath, onFileRead, isCacheNeeded = true) {
     const fileStream = createReadStream(filePath);
     const parser = parse({columns: true}, (err, content) => {
-      this.cache[filePath] = content;
+      if (isCacheNeeded) {
+        this.cache[filePath] = content;
+      }
 
       onFileRead(err, content);
     });
@@ -57,16 +63,20 @@ export class ChromeFileReader {
     this.cache = {};
   }
 
-  read(filePath, onFileRead) {
+  read(filePath, onFileRead, isCacheNeeded = true) {
     this.chromeFs.filePath(filePath, '', (err, csvContent) => {
       if (err) {
         onFileRead(err);
         return;
       }
 
-      this.cache[filePath] = parseSync(csvContent, {columns: true});
+      const content = parseSync(csvContent, {columns: true});
 
-      onFileRead(null, this.cache[filePath]);
+      if (isCacheNeeded) {
+        this.cache[filePath] = content;
+      }
+
+      onFileRead(null, content);
     });
   }
 }

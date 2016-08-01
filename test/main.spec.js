@@ -1,14 +1,11 @@
-/* eslint-disable sort-imports */
-
 import _ from 'lodash';
 import test from 'ava';
 import {BackendFileReader, Ddf} from '../dist/bundle';
 
-/* eslint-enable sort-imports */
-/* eslint-enable no-magic-numbers */
+/* eslint-disable camelcase */
 
 test.cb('DDF get index', t => {
-  const EXPECTED_RECORDS_COUNT = 601;
+  const EXPECTED_RECORDS_COUNT = 71;
   const backendFileReader = new BackendFileReader();
   const ddf = new Ddf('./fixtures/ddf-folder', backendFileReader);
 
@@ -24,7 +21,7 @@ test.cb('DDF get index', t => {
 });
 
 test.cb('DDF get entities', t => {
-  const EXPECTED_CONCEPTS_RECORDS_COUNT = 574;
+  const EXPECTED_CONCEPTS_RECORDS_COUNT = 44;
   const EXPECTED_ENTITIES_RECORDS_COUNT = 275;
   const backendFileReader = new BackendFileReader();
   const ddf = new Ddf('./fixtures/ddf-folder', backendFileReader);
@@ -38,8 +35,8 @@ test.cb('DDF get entities', t => {
   ddf.getIndex(indexErr => {
     t.false(!!indexErr);
 
-    ddf.getConceptsAndEntities(query, (entitiesErr, conceptsData, entitiesData) => {
-      t.false(!!entitiesErr);
+    ddf.getConceptsAndEntities(query, (err, conceptsData, entitiesData) => {
+      t.false(!!err);
       t.true(_.isArray(conceptsData));
       t.true(_.isArray(entitiesData));
       t.is(conceptsData.length, EXPECTED_CONCEPTS_RECORDS_COUNT);
@@ -73,14 +70,46 @@ test.cb('DDF get data points', t => {
     ddf.getConceptsAndEntities(query, entitiesErr => {
       t.false(!!entitiesErr);
 
-      ddf.getDataPoints(query, (dataPointsErr, dataPointsData) => {
-        t.false(!!dataPointsErr);
+      ddf.getDataPoints(query, (err, dataPointsData) => {
+        t.false(!!err);
         t.true(_.isArray(dataPointsData));
         t.is(dataPointsData.length, EXPECTED_RECORDS_COUNT);
 
         t.pass();
         t.end();
       });
+    });
+  });
+});
+
+test.cb('get all concepts and datapoints', t => {
+  const backendFileReader = new BackendFileReader(false);
+  const ddf = new Ddf('./fixtures/ddf-folder', backendFileReader);
+  const expectedConceptCounts = 44;
+  const expectedMeasureTotals = {
+    population_total: 20117,
+    income_per_person_gdppercapita_ppp_inflation_adjusted: 43639,
+    life_expectancy_years: 43444
+  };
+
+  ddf.getIndex(indexErr => {
+    t.false(!!indexErr);
+
+    ddf.getConcepts((conceptsErr, conceptsData) => {
+      t.false(!!conceptsErr);
+      t.is(conceptsData.length, expectedConceptCounts);
+
+      ddf.getAllDataPointsContent(
+        (dataPointsFileErr, dataPointsData) => {
+          t.false(!!dataPointsFileErr);
+          t.is(expectedMeasureTotals[dataPointsData.measure], dataPointsData.content.length);
+        },
+        dataPointsAllErr => {
+          t.false(!!dataPointsAllErr);
+
+          t.pass();
+          t.end();
+        });
     });
   });
 });

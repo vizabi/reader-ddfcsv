@@ -46,7 +46,7 @@ export default function getDDFCsvReaderObject(externalFileReader, logger) {
 
               // service query: it was detected by next criteria:
               // all of `select` section of query parts are NOT measures
-              if (!err && _this.ddf.divideByQuery(query).measures.length <= 0) {
+              if (!err && _this.ddf.queryManager.divideConceptsFromQueryByType(query).measures.length <= 0) {
                 _this._data = entities;
                 if (logger && logger.log) {
                   logger.log(JSON.stringify(queryPar), JSON.stringify(_this._data));
@@ -57,7 +57,7 @@ export default function getDDFCsvReaderObject(externalFileReader, logger) {
 
               // data point query: it was detected by next criteria:
               // at least one measure was detected in `select` section of the query
-              if (_this.ddf.divideByQuery(query).measures.length > 0) {
+              if (_this.ddf.queryManager.divideConceptsFromQueryByType(query).measures.length > 0) {
                 _this.ddf.getDataPoints(query, function (err, data) {
                   if (err) {
                     reject(err);

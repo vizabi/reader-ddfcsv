@@ -1,6 +1,6 @@
 {
   "name": "vizabi-ddfcsv-reader",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "Vizabi DDFcsv reader",
   "main": "dist/bundle.js",
   "scripts": {
