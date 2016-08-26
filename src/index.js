@@ -1,11 +1,9 @@
-import {BackendFileReader, ChromeFileReader, FrontendFileReader} from './file-utils';
 import {Ddf} from './ddf';
-import getDDFCsvReaderObject from './ddfcsv-reader';
+import {BackendFileReader} from './readers/backend-file-reader';
+import prepareDDFCsvReaderObject from './ddfcsv-reader';
 
 module.exports = {
-  BackendFileReader,
-  ChromeFileReader,
-  FrontendFileReader,
-  getDDFCsvReaderObject,
-  Ddf
+  getDDFCsvReaderObject: prepareDDFCsvReaderObject(new BackendFileReader()),
+  Ddf,
+  BackendFileReader
 };
