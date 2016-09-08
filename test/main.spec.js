@@ -1,115 +1,194 @@
-import _ from 'lodash';
 import test from 'ava';
-import {BackendFileReader, Ddf} from '../dist/bundle';
+import {_} from 'lodash';
+import {Ddf, BackendFileReader, getDDFCsvReaderObject} from '../dist/bundle';
 
 /* eslint-disable camelcase */
 
-test.cb('DDF get index', t => {
-  const EXPECTED_RECORDS_COUNT = 71;
-  const backendFileReader = new BackendFileReader();
-  const ddf = new Ddf('./fixtures/ddf-folder', backendFileReader);
+const backendFileReader = new BackendFileReader();
+const GLOBALIS_PATH = './fixtures/systema_globalis';
 
-  ddf.getIndex((indexErr, indexData) => {
-    t.false(!!indexErr);
+test.cb('concepts query', t => {
+  const ddf = new Ddf(GLOBALIS_PATH, backendFileReader);
+  const request = {
+    select: {
+      key: ['concept'],
+      value: [
+        'concept_type', 'name', 'unit', 'color'
+      ]
+    },
+    from: 'concepts',
+    where: {
+      $and: [
+        {concept_type: {$eq: 'entity_set'}},
+        {'color.palette._default': {$exists: true}}
+      ]
+    }
+  };
 
-    t.true(_.isArray(indexData));
-    t.is(indexData.length, EXPECTED_RECORDS_COUNT);
+  ddf.processRequest(request, (err, data) => {
+    const EXPECTED_RECORDS_COUNT = 2;
+    const EXPECTED_FIELDS_COUNT = 5;
+
+    t.false(!!err);
+    t.is(data.length, EXPECTED_RECORDS_COUNT);
+
+    const firstRecord = _.head(data);
+    const keys = Object.keys(firstRecord);
+
+    t.is(keys.length, EXPECTED_FIELDS_COUNT);
+
+    keys.forEach(key => {
+      t.true(_.includes(request.select.key, key) || _.includes(request.select.value, key));
+    });
 
     t.pass();
     t.end();
   });
 });
 
-test.cb('DDF get entities', t => {
-  const EXPECTED_CONCEPTS_RECORDS_COUNT = 44;
-  const EXPECTED_ENTITIES_RECORDS_COUNT = 275;
-  const backendFileReader = new BackendFileReader();
-  const ddf = new Ddf('./fixtures/ddf-folder', backendFileReader);
-  const query = {
-    select: ['geo', 'geo.name', 'geo.world_4region'],
+test.cb('entities query', t => {
+  const ddf = new Ddf(GLOBALIS_PATH, backendFileReader);
+  const request = {
+    from: 'entities',
+    animatable: 'time',
+    select: {
+      key: ['geo'],
+      value: ['geo.name', '_default', 'geo.world_4region']
+    },
     where: {'geo.is--country': true},
     grouping: {},
     orderBy: null
   };
 
-  ddf.getIndex(indexErr => {
-    t.false(!!indexErr);
+  ddf.processRequest(request, (err, data) => {
+    const EXPECTED_RECORDS_COUNT = 275;
 
-    ddf.getConceptsAndEntities(query, (err, conceptsData, entitiesData) => {
-      t.false(!!err);
-      t.true(_.isArray(conceptsData));
-      t.true(_.isArray(entitiesData));
-      t.is(conceptsData.length, EXPECTED_CONCEPTS_RECORDS_COUNT);
-      t.is(entitiesData.length, EXPECTED_ENTITIES_RECORDS_COUNT);
+    t.false(!!err);
+    t.is(data.length, EXPECTED_RECORDS_COUNT);
 
-      t.pass();
-      t.end();
-    });
+    t.pass();
+    t.end();
   });
 });
 
-test.cb('DDF get data points', t => {
-  const EXPECTED_RECORDS_COUNT = 15454;
-  const backendFileReader = new BackendFileReader();
-  const ddf = new Ddf('./fixtures/ddf-folder', backendFileReader);
-  const query = {
-    select: [
-      'geo',
-      'time',
-      'income_per_person_gdppercapita_ppp_inflation_adjusted',
-      'life_expectancy_years',
-      'population_total'],
-    where: {'geo.is--country': true, time: [['1800', '2015']]},
+test.cb('shapes query', t => {
+  const ddf = new Ddf(GLOBALIS_PATH, backendFileReader);
+  const request = {
+    from: 'entities',
+    animatable: false,
+    select: {key: ['geo'], value: ['name', 'shape_lores_svg']},
+    where: {'geo.is--world_4region': true},
+    grouping: {},
+    orderBy: null
+  };
+
+  ddf.processRequest(request, (err, data) => {
+    const EXPECTED_RECORDS_COUNT = 4;
+
+    t.false(!!err);
+    t.is(data.length, EXPECTED_RECORDS_COUNT);
+
+    t.pass();
+    t.end();
+  });
+});
+
+test.cb('shapes query', t => {
+  const ddf = new Ddf(GLOBALIS_PATH, backendFileReader);
+  const request = {
+    from: 'entities',
+    animatable: false,
+    select: {key: ['tag'], value: ['name', 'parent']},
+    where: {},
+    grouping: {},
+    orderBy: null
+  };
+
+  ddf.processRequest(request, (err, data) => {
+    const EXPECTED_RECORDS_COUNT = 84;
+
+    t.false(!!err);
+    t.is(data.length, EXPECTED_RECORDS_COUNT);
+
+    t.pass();
+    t.end();
+  });
+});
+
+test.cb('datapoints query', t => {
+  const ddf = new Ddf(GLOBALIS_PATH, backendFileReader);
+  const request = {
+    from: 'datapoints',
+    animatable: 'time',
+    select: {
+      key: ['geo', 'time'],
+      value: ['life_expectancy_years', 'income_per_person_gdppercapita_ppp_inflation_adjusted', 'population_total']
+    },
+    where: {
+      'geo.is--country': true,
+      time: {$gt: 1800, $lt: 2016}
+    },
     grouping: {},
     orderBy: 'time'
   };
 
-  ddf.getIndex(indexErr => {
-    t.false(!!indexErr);
+  ddf.processRequest(request, (err, data) => {
+    const EXPECTED_RECORDS_COUNT = 47930;
+    const EXPECTED_FIELDS_COUNT = 5;
 
-    ddf.getConceptsAndEntities(query, entitiesErr => {
-      t.false(!!entitiesErr);
+    t.false(!!err);
+    t.is(data.length, EXPECTED_RECORDS_COUNT);
 
-      ddf.getDataPoints(query, (err, dataPointsData) => {
-        t.false(!!err);
-        t.true(_.isArray(dataPointsData));
-        t.is(dataPointsData.length, EXPECTED_RECORDS_COUNT);
+    const firstRecord = _.head(data);
+    const keys = Object.keys(firstRecord);
 
-        t.pass();
-        t.end();
-      });
+    t.is(keys.length, EXPECTED_FIELDS_COUNT);
+
+    keys.forEach(key => {
+      t.true(_.includes(request.select.key, key) || _.includes(request.select.value, key));
     });
+
+    t.pass();
+    t.end();
   });
 });
 
-test.cb('get all concepts and datapoints', t => {
-  const backendFileReader = new BackendFileReader(false);
-  const ddf = new Ddf('./fixtures/ddf-folder', backendFileReader);
-  const expectedConceptCounts = 44;
-  const expectedMeasureTotals = {
-    population_total: 20117,
-    income_per_person_gdppercapita_ppp_inflation_adjusted: 43639,
-    life_expectancy_years: 43444
+test('read method', t => {
+  const readerObject = getDDFCsvReaderObject();
+  const request = {
+    select: {
+      key: ['concept'],
+      value: [
+        'concept_type', 'name', 'unit', 'color'
+      ]
+    },
+    from: 'concepts',
+    where: {
+      $and: [
+        {concept_type: {$eq: 'entity_set'}},
+        {'color.palette._default': {$exists: true}}
+      ]
+    }
   };
 
-  ddf.getIndex(indexErr => {
-    t.false(!!indexErr);
+  readerObject.init({path: GLOBALIS_PATH});
 
-    ddf.getConcepts((conceptsErr, conceptsData) => {
-      t.false(!!conceptsErr);
-      t.is(conceptsData.length, expectedConceptCounts);
+  const pro = readerObject.read(request);
 
-      ddf.getAllDataPointsContent(
-        (dataPointsFileErr, dataPointsData) => {
-          t.false(!!dataPointsFileErr);
-          t.is(expectedMeasureTotals[dataPointsData.measure], dataPointsData.content.length);
-        },
-        dataPointsAllErr => {
-          t.false(!!dataPointsAllErr);
+  return pro.then(() => {
+    const EXPECTED_RECORDS_COUNT = 2;
+    const EXPECTED_FIELDS_COUNT = 5;
+    const data = readerObject.getData();
 
-          t.pass();
-          t.end();
-        });
+    t.is(data.length, EXPECTED_RECORDS_COUNT);
+
+    const firstRecord = _.head(data);
+    const keys = Object.keys(firstRecord);
+
+    t.is(keys.length, EXPECTED_FIELDS_COUNT);
+
+    keys.forEach(key => {
+      t.true(_.includes(request.select.key, key) || _.includes(request.select.value, key));
     });
   });
 });

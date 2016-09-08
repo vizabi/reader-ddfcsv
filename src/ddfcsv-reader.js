@@ -1,86 +1,61 @@
 /* eslint-disable */
 
 import cloneDeep from 'lodash/cloneDeep';
-import {FrontendFileReader} from './file-utils';
 import {Ddf} from './ddf';
-import {getShapes} from './shapes';
+const Promise = require('bluebird');
 
-const Promise = require('es6-promise').Promise;
+export default function prepareDDFCsvReaderObject(defaultFileReader) {
+  return function (externalFileReader, logger) {
+    return {
+      init(reader_info) {
+        var fileReader = externalFileReader || defaultFileReader;
 
-export default function getDDFCsvReaderObject(externalFileReader, logger) {
-  return {
-    init(reader_info) {
-      var fileReader = externalFileReader || new FrontendFileReader();
+        this._data = [];
+        this._ddfPath = reader_info.path;
+        this._parsers = reader_info.parsers;
+        this.ddf = new Ddf(this._ddfPath, fileReader);
+      },
 
-      this._data = [];
-      this._ddfPath = reader_info.path;
-      this.ddf = new Ddf(this._ddfPath, fileReader);
-    },
+      read(queryPar) {
+        var _this = this;
 
-    read(queryPar) {
-      var _this = this;
+        function prettifyData(data) {
+          return data.map(record => {
+            const keys = Object.keys(record);
 
-      return new Promise(function (resolve, reject) {
-        var query = cloneDeep(queryPar);
-
-        function isShapeQuery() {
-          return queryPar.select.indexOf('shape_lores_svg') >= 0 && queryPar.where['geo.cat'].length > 0;
-        }
-
-        if (isShapeQuery()) {
-          _this._data = getShapes(queryPar.where['geo.cat']);
-          if (logger && logger.log) {
-            logger.log('shapes from reader', JSON.stringify(queryPar), JSON.stringify(_this._data));
-          }
-          resolve();
-        }
-
-        if (!isShapeQuery()) {
-          _this.ddf.getIndex(function () {
-            // get `concepts` and `entities` in any case
-            // this data needed for query's kind (service, data point) detection
-            _this.ddf.getConceptsAndEntities(query, function (err, concepts, entities) {
-              if (err) {
-                reject(err);
-              }
-
-              // service query: it was detected by next criteria:
-              // all of `select` section of query parts are NOT measures
-              if (!err && _this.ddf.queryManager.divideConceptsFromQueryByType(query).measures.length <= 0) {
-                _this._data = entities;
-                if (logger && logger.log) {
-                  logger.log(JSON.stringify(queryPar), JSON.stringify(_this._data));
-                }
-
-                resolve();
-              }
-
-              // data point query: it was detected by next criteria:
-              // at least one measure was detected in `select` section of the query
-              if (_this.ddf.queryManager.divideConceptsFromQueryByType(query).measures.length > 0) {
-                _this.ddf.getDataPoints(query, function (err, data) {
-                  if (err) {
-                    reject(err);
-                  }
-
-                  if (!err) {
-                    _this._data = data;
-                    if (logger && logger.log) {
-                      logger.log(JSON.stringify(queryPar), JSON.stringify(_this._data));
-                    }
-
-                    resolve();
-                  }
-                });
+            keys.forEach(key => {
+              if (_this._parsers[key]) {
+                record[key] = _this._parsers[key](record[key]);
               }
             });
+
+            return record;
           });
         }
-      });
-    },
 
-    getData() {
-      return this._data;
-    }
+        return new Promise(function (resolve, reject) {
+          var query = cloneDeep(queryPar);
+
+          _this.ddf.processRequest(query, function (err, data) {
+            if (err) {
+              reject(err);
+              return;
+            }
+
+            _this._data = _this._parsers ? prettifyData(data) : data;
+
+            if (logger && logger.log) {
+              logger.log(JSON.stringify(queryPar), JSON.stringify(_this._data));
+            }
+
+            resolve();
+          });
+        });
+      },
+
+      getData() {
+        return this._data;
+      }
+    };
   };
-};
+}
