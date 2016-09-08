@@ -3,13 +3,7 @@
 ## Install
 
 ```
-npm i
-```
-
-## Run tests
-
-```
-npm test
+npm i vizabi-ddfcsv-reader
 ```
 
 ## Usage
@@ -17,18 +11,39 @@ npm test
 ```
 const Vizabi = require('vizabi');
 const ddfCsvReader = require('vizabi-ddfcsv-reader');
-const readerObject = ddfCsvReader.getDDFCsvReaderObject(ddfExtra.chromeFs);
+const readerObject = ddfCsvReader.getDDFCsvReaderObject();
 Vizabi.Reader.extend('ddf-csv-reader', readerObject);
 // ...
 ```
 
+## Build
+
+```
+git clone https://github.com/vizabi/vizabi-ddfcsv-reader.git
+cd vizabi-ddfcsv-reader
+npm i
+npm run build
+```
+
+### Run tests
+
+```
+npm test
+```
+
+And after this you can see `dist` folder that contains two sets:
+
+  * `bundle.js` and `bundle.js.map`
+  * `bundle.web.js` and `bundle.web.js.map`
+  
+First one is for using with electron app or tests. Second one is only for using in browser.
+
 ## File readers
 
-`Vizabi DDFcsv reader` has 3 file reader:
+`Vizabi DDFcsv reader` has 2 file readers:
  
-  * FrontendFileReader
-  * BackendFileReader
-  * ChromeFileReader
+  * FrontendFileReader is a part of `bundle.js` version.
+  * BackendFileReader is a part of `bundle.web.js` version.
   
 ### BackendFileReader
 
@@ -38,32 +53,19 @@ This reader is designed for file reading via OS file system.
 
 This reader is designed for file reading via HTTP protocol.
 
-### ChromeFileReader
-
-This reader is designed for file reading via Chrome File System API. More info: [here](https://developer.chrome.com/apps/fileSystem).
-
-These readers should be used on different cases: `BackendFileReader` is good for console tools such as [Vizabi Metadata Generator](https://github.com/Gapminder/vizabi-metadata-generator),
-`FrontendFileReader` is good for `DDFcsv reader` using in Gapminder Tools or Gapminder Offline,
-`ChromeFileReader` is good only for `Chrome Application`.
-
-## DDFcsv reader usage for DDF data reading example
+## DDFcsv reader usage for DDF data reading examples:
 
 ```
 import {BackendFileReader, Ddf} from 'vizabi-ddfcsv-reader';
 
 const backendFileReader = new BackendFileReader();
 const ddf = new Ddf('your-ddf-folder', backendFileReader);
-// for example, :
-const query = {
-  select: ['geo', 'geo.name', 'geo.world_4region'],
-  where: {'geo.is--country': true},
-  grouping: {},
-  orderBy: null
-};
 
 ddf.getIndex(indexErr => {
+  // process indexErr here ...
+    
   ddf.getConcepts((conceptsErr, conceptsData) => {
-    // process indexErr here ...
+    // process conceptsErr here ...
 
     // process conceptsData here ...
 
@@ -80,4 +82,31 @@ ddf.getIndex(indexErr => {
       });
   });
 });
+```
+
+or 
+
+```
+import {BackendFileReader, Ddf} from 'vizabi-ddfcsv-reader';
+
+const backendFileReader = new BackendFileReader();
+const ddf = new Ddf('your-ddf-folder', backendFileReader);
+// for example, :
+const query = {
+  from: 'entities',
+  animatable: 'time',
+    select: {
+      key: ['geo'],
+      value: ['geo.name', '_default', 'geo.world_4region']
+    },
+    where: {'geo.is--country': true},
+    grouping: {},
+    orderBy: null
+  };
+  
+ddf.processRequest(query, (err, data) => {
+    // process err here ...
+
+    // process expected data here ...
+};
 ```
