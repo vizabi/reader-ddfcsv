@@ -1,24 +1,33 @@
 import {ContentManager} from './content-manager';
-import {ConceptAdapter} from './concept-adapter';
-import {EntityAdapter} from './entity-adapter';
-import {DataPointAdapter} from './datapoint-adapter';
+import {ConceptAdapter} from './adapters/concept-adapter';
+import {EntityAdapter} from './adapters/entity-adapter';
+import {JoinsAdapter} from './adapters/joins-adapter';
+import {DataPointAdapter} from './adapters/datapoint-adapter';
+import {RequestNormalizer} from './request-normalizer';
 
 import parallel from 'async-es/parallel';
 
 import cloneDeep from 'lodash/cloneDeep';
+import isArray from 'lodash/isArray';
 import isObject from 'lodash/isObject';
 import flatten from 'lodash/flatten';
+import startsWith from 'lodash/startsWith';
 import uniq from 'lodash/uniq';
 
+const traverse = require('traverse');
 const contentManager = new ContentManager();
-
 const ADAPTERS = {
   concepts: ConceptAdapter,
   entities: EntityAdapter,
+  joins: JoinsAdapter,
   datapoints: DataPointAdapter
 };
 
 function postProcessing(data) {
+  if (!isArray(data)) {
+    return data;
+  }
+
   return data.map(record => {
     Object.keys(record).forEach(key => {
       if (isObject(record[key])) {
@@ -69,6 +78,9 @@ export class Ddf {
           .forEach(concept => {
             contentManager.conceptTypeHash[concept.concept] = concept.concept_type;
           });
+        contentManager.timeConcepts = conceptsData
+          .filter(concept => concept.concept_type === 'time')
+          .map(concept => concept.concept);
 
         onIndexLoaded(null, contentManager.index);
       });
@@ -88,33 +100,102 @@ export class Ddf {
     parallel(actions, (err, results) => onConceptsLoaded(err, flatten(results)));
   }
 
-  processRequest(requestParam, onRequestProcessed) {
-    this.getIndex((indexErr, indexData) => {
-      if (indexErr) {
-        onRequestProcessed(indexErr);
-        return;
+  /* eslint-disable no-invalid-this */
+
+  getRelationKeysDescriptors(requestParam) {
+    const condition = cloneDeep(requestParam.where);
+    const conditionToTraverse = traverse(condition);
+    const relationKeysDescriptors = [];
+
+    function processConditionBranch() {
+      if (startsWith(this.node, '$') && this.isLeaf) {
+        relationKeysDescriptors.push({
+          value: this.node,
+          path: this.path
+        });
       }
+    }
 
-      const ddfTypeAdapter =
-        new ADAPTERS[requestParam.from](contentManager, this.reader, this.ddfPath);
+    conditionToTraverse.forEach(processConditionBranch);
 
-      ddfTypeAdapter.getNormalizedRequest(requestParam, (normError, normRequest) => {
-        if (normError) {
-          onRequestProcessed(normError);
+    return relationKeysDescriptors;
+  }
+
+  /* eslint-enable no-invalid-this */
+
+  getJoinProcessors(requestParam, relationKeysDescriptors) {
+    return relationKeysDescriptors
+      .map(relationKeyDescriptor => onJoinProcessed => {
+        if (!requestParam.join || !requestParam.join[relationKeyDescriptor.value]) {
+          onJoinProcessed(new Error(`join for relation ${relationKeyDescriptor.value} is not found!`));
           return;
         }
 
-        const expectedIndexData = ddfTypeAdapter.getExpectedIndexData(normRequest, indexData);
-        const expectedFiles = uniq(expectedIndexData.map(indexRecord => indexRecord.file));
+        const joinRequest = cloneDeep(requestParam.join[relationKeyDescriptor.value]);
 
-        this.reader.setRecordTransformer(ddfTypeAdapter.getRecordTransformer(normRequest));
+        joinRequest.from = 'joins';
 
-        const fileActions = ddfTypeAdapter.getFileActions(expectedFiles);
+        this.processRequest(joinRequest, null, (err, condition) =>
+          onJoinProcessed(err, {relationKeyDescriptor, condition}));
+      });
+  }
 
-        parallel(fileActions, (err, results) => onRequestProcessed(
-          err,
-          postProcessing(ddfTypeAdapter.getFinalData(results, normRequest)))
-        );
+  processRequest(requestParam, requestNormalizer, onRequestProcessed) {
+    const request = cloneDeep(requestParam);
+
+    const ddfTypeAdapter =
+      new ADAPTERS[request.from](contentManager, this.reader, this.ddfPath)
+        .addRequestNormalizer(requestNormalizer);
+
+    ddfTypeAdapter.getNormalizedRequest(request, (normError, normRequest) => {
+      if (normError) {
+        onRequestProcessed(normError);
+        return;
+      }
+
+      const expectedIndexData =
+        ddfTypeAdapter.getExpectedIndexData(normRequest, contentManager.index);
+      const expectedFiles = uniq(expectedIndexData.map(indexRecord => indexRecord.file));
+
+      this.reader.setRecordTransformer(ddfTypeAdapter.getRecordTransformer(normRequest));
+
+      const fileActions = ddfTypeAdapter.getFileActions(expectedFiles);
+
+      parallel(fileActions, (err, results) => onRequestProcessed(
+        err,
+        postProcessing(ddfTypeAdapter.getFinalData(results, normRequest)))
+      );
+    });
+  }
+
+  ddfRequest(requestParam, onDdfRequestProcessed) {
+    this.getIndex(indexErr => {
+      if (indexErr) {
+        onDdfRequestProcessed(indexErr);
+        return;
+      }
+
+      const requestNormalizer = new RequestNormalizer(requestParam, contentManager);
+      const request = requestNormalizer.getNormalized();
+      const relationKeysDescriptors = this.getRelationKeysDescriptors(request);
+
+      parallel(this.getJoinProcessors(request, relationKeysDescriptors), (err, results) => {
+        if (err) {
+          onDdfRequestProcessed(err);
+          return;
+        }
+
+        const normalRequestCondition = traverse(request.where);
+
+        results.forEach(result => {
+          normalRequestCondition.set(result.relationKeyDescriptor.path, result.condition);
+        });
+
+        request.where = normalRequestCondition.value;
+
+        this.processRequest(request, requestNormalizer, (mainError, data) => {
+          onDdfRequestProcessed(mainError, data);
+        });
       });
     });
   }

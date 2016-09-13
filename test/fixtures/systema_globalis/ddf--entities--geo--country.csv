@@ -56,7 +56,7 @@ cod,i49,"Congo, Dem. Rep.",sub_saharan_africa,low_income,landlocked,g77,africa,c
 cog,i50,"Congo, Rep.",sub_saharan_africa,lower_middle_income,coastline,g77,africa,christian,"Congo, Rep.",Congo (Republic of),Congo Brazzaville,Republic of Congo,Congo,"CONGO, REPUBLIC OF THE",CG,Congo - Brazzaville,"CONGO, Republic of",COG,178.0,Cong,Congo_Brazzaville,,,,,TRUE,africa,-1.0,15.5
 cok,i51,Cook Is,east_asia_pacific,,coastline,others,asia,christian,Cook Islands,Cook Is,,,Cook Islands,,CK,,COOK ISLANDS,COK,184.0,,,,,,,TRUE,asia,-21.24842,-159.78516000000002
 cri,i52,Costa Rica,america,upper_middle_income,coastline,g77,america,christian,Costa Rica,,,,Costa Rica,COSTA RICA,CR,,COSTA RICA,CRI,188.0,,,,,,,TRUE,americas,10.0,-84.0
-civ,i53,Cote d'Ivoire,sub_saharan_africa,lower_middle_income,coastline,g77,africa,,Cote d'Ivoire,Cote Divoire,Côte d'Ivoire,CÃ´te d'Ivoire,Cote D Ivoire,COTE D'IVOIRE,CI,Ivory Coast,COTE D'IVOIRE,CIV,384.0,CÃ´te dâ€™Ivoire,Cote d&apos;Ivoire,Cote_dIvoire,,,,TRUE,africa,8.0,-5.5
+civ,i53,Cote d'Ivoire,sub_saharan_africa,lower_middle_income,coastline,g77,africa,,Cote d'Ivoire,Cote Divoire,Côte d'Ivoire,CÃ´te d'Ivoire,Cote D Ivoire,COTE D'IVOIRE,CI,Ivory Coast,COTE D'IVOIRE,CIV,384.0,CÃ´te dâ€™Ivoire,Cote d'Ivoire,Cote_dIvoire,,,,TRUE,africa,8.0,-5.5
 hrv,i54,Croatia,europe_central_asia,high_income,coastline,others,europe,christian,Croatia,,,,Croatia,CROATIA,HR,,CROATIA (local name: Hrvatska),HRV,191.0,,,,,,,TRUE,europe,45.16667,15.5
 cub,i55,Cuba,america,upper_middle_income,coastline,g77,america,christian,Cuba,,,,Cuba,,CU,,CUBA,CUB,192.0,,,,,,,TRUE,americas,22.0,-79.5
 nld_curacao,i280,Curaçao,,high_income,,,,,,,,,,,CW,,,,,,,,,,,TRUE,americas,12.16667,-68.96667

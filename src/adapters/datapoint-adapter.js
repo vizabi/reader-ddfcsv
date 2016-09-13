@@ -1,23 +1,43 @@
-import {EntityUtils} from './entity-utils';
+import {EntityUtils} from '../entity-utils';
 
 import * as Mingo from 'mingo';
 
 import cloneDeep from 'lodash/cloneDeep';
-import concat from 'lodash/concat';
 import head from 'lodash/head';
 import includes from 'lodash/includes';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
+import isInteger from 'lodash/isInteger';
 import intersection from 'lodash/intersection';
+import keys from 'lodash/keys';
 import reduce from 'lodash/reduce';
 import split from 'lodash/split';
 import values from 'lodash/values';
+
+const timeUtils = require('ddf-time-utils');
+
+const timeValuesHash = {};
+const timeDescriptorHash = {};
+
+function getTimeDescriptor(time) {
+  if (!timeDescriptorHash[time]) {
+    timeDescriptorHash[time] = timeUtils.parseTime(time);
+  }
+
+  return timeDescriptorHash[time];
+}
 
 export class DataPointAdapter {
   constructor(contentManager, reader, ddfPath) {
     this.contentManager = contentManager;
     this.reader = reader;
     this.ddfPath = ddfPath;
+  }
+
+  addRequestNormalizer(requestNormalizer) {
+    this.requestNormalizer = requestNormalizer;
+
+    return this;
   }
 
   getExpectedIndexData(request, indexData) {
@@ -51,16 +71,48 @@ export class DataPointAdapter {
     const times = this.contentManager.concepts
       .filter(conceptRecord => conceptRecord.concept_type === 'time')
       .map(conceptRecord => conceptRecord.concept);
-    const shouldBeNumbers = concat(expectedMeasures, times);
-
-    return record => {
-      for (const keyToTransform of shouldBeNumbers) {
-        if (record[keyToTransform]) {
+    const transformNumbers = record => {
+      for (const keyToTransform of expectedMeasures) {
+        if (record[keyToTransform] && record[keyToTransform]) {
           record[keyToTransform] = Number(record[keyToTransform]);
         }
       }
+    };
 
-      return record;
+    /* eslint-disable max-statements */
+
+    const transformTimes = record => {
+      let isRecordAvailable = true;
+
+      for (const keyToTransform of times) {
+        const timeDescriptor = getTimeDescriptor(record[keyToTransform]);
+
+        if (timeDescriptor) {
+          if (timeDescriptor.type !== this.requestNormalizer.timeType) {
+            isRecordAvailable = false;
+            break;
+          }
+
+          if (!timeValuesHash[keyToTransform]) {
+            timeValuesHash[keyToTransform] = {};
+          }
+
+          timeValuesHash[keyToTransform][timeDescriptor.time] = record[keyToTransform];
+          record[keyToTransform] = timeDescriptor.time;
+        }
+      }
+
+      return isRecordAvailable;
+    };
+
+    /* eslint-enable max-statements */
+
+    return record => {
+      transformNumbers(record);
+
+      const isRecordAvailable = transformTimes(record);
+
+      return isRecordAvailable ? record : null;
     };
   }
 
@@ -101,26 +153,6 @@ export class DataPointAdapter {
     });
   }
 
-  getCorrectedCondition(condition) {
-    const result = cloneDeep(condition);
-
-    if (result.$and && result.$and.length > 1) {
-      if (result.$and[1].time && result.$and[1].time.$gte) {
-        result.$and[1].time.$gte = Number(result.$and[1].time.$gte);
-      }
-
-      if (result.$and[1].time && result.$and[1].time.$lte) {
-        result.$and[1].time.$lte = Number(result.$and[1].time.$lte);
-      }
-
-      if (result.$and[1].time) {
-        result.$and[1].time = Number(result.$and[1].time);
-      }
-    }
-
-    return result;
-  }
-
   /* eslint-disable no-console */
 
   getFinalData(results, request) {
@@ -133,14 +165,12 @@ export class DataPointAdapter {
         return currentProjection;
       },
       {});
-    const query = new Mingo.Query(this.getCorrectedCondition(request.where), projection);
 
     results.forEach(result => {
       if (isEmpty(result.data)) {
         return;
       }
 
-      const filteredData = query.find(result.data).all();
       const timeKey = result.timeField;
       const measureKey = result.measureField;
 
@@ -150,13 +180,13 @@ export class DataPointAdapter {
         entityKey = this.contentManager.domainHash[result.entityField];
       }
 
-      filteredData.forEach(record => {
+      result.data.forEach(record => {
         const holderKey = `${record[result.entityField]},${record[result.timeField]}`;
 
         if (!dataHash[holderKey]) {
           dataHash[holderKey] = {
             [entityKey]: record[result.entityField],
-            [timeKey]: `${record[result.timeField]}`
+            [timeKey]: record[result.timeField]
           };
           request.select.value.forEach(measure => {
             dataHash[holderKey][measure] = null;
@@ -167,6 +197,23 @@ export class DataPointAdapter {
       });
     });
 
-    return values(dataHash);
+    const query = new Mingo.Query(request.where, projection);
+    const data = values(dataHash);
+    const timeKeys = keys(timeValuesHash);
+    const filteredData = query
+      .find(data)
+      .all()
+      .map(record => {
+        for (const timeKey of timeKeys) {
+          if (isInteger(record[timeKey])) {
+            record[timeKey] = `${timeValuesHash[timeKey][record[timeKey]]}`;
+            break;
+          }
+        }
+
+        return record;
+      });
+
+    return filteredData;
   }
 }
