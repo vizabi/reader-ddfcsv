@@ -65,6 +65,10 @@ test.cb('entities query', t => {
     t.false(!!err);
     t.is(data.length, EXPECTED_RECORDS_COUNT);
 
+    data.forEach(record => {
+      t.is(record.geo, record.country);
+    });
+
     t.pass();
     t.end();
   });

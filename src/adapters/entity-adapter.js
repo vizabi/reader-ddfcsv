@@ -99,13 +99,16 @@ export class EntityAdapter {
   }
 
   getRecordTransformer() {
+    const isTruth = value => value === 'true' || value === 'TRUE';
+
     return record => {
       if (!isEmpty(this.domainDescriptors)) {
-        this.domainDescriptors.forEach(domainDescriptor => {
-          if (record[domainDescriptor.key] && !record[domainDescriptor.domain]) {
+        for (const domainDescriptor of this.domainDescriptors) {
+          if (isTruth(record[`is--${domainDescriptor.key}`])) {
             record[domainDescriptor.domain] = record[domainDescriptor.key];
+            break;
           }
-        });
+        }
       }
 
       return record;
