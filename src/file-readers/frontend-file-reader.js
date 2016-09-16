@@ -1,18 +1,23 @@
+import compact from 'lodash/compact';
+
 const csvParse = require('csv-parse');
 
 require('fetch-polyfill');
 
+const cache = {};
+
 /* eslint-disable no-undef */
 export class FrontendFileReader {
-  constructor() {
-    this.cache = {};
-  }
-
   setRecordTransformer(recordTransformer) {
     this.recordTransformer = recordTransformer;
   }
 
-  read(filePath, onFileRead, isCacheNeeded = true) {
+  read(filePath, onFileRead) {
+    if (cache[filePath]) {
+      onFileRead(null, cache[filePath]);
+      return;
+    }
+
     fetch(filePath)
       .then(response => response.text())
       .then(text => {
@@ -25,14 +30,15 @@ export class FrontendFileReader {
           let content = json;
 
           if (this.recordTransformer) {
-            content = content.map(record => this.recordTransformer(record));
+            content = compact(
+              content
+                .map(record => this.recordTransformer(record))
+            );
           }
 
-          if (isCacheNeeded) {
-            this.cache[filePath] = content;
-          }
+          cache[filePath] = content;
 
-          onFileRead(null, content);
+          onFileRead(null, cache[filePath]);
         });
       })
       .catch(err => {

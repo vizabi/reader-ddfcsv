@@ -1,5 +1,5 @@
 import {Ddf} from './ddf';
-import {BackendFileReader} from './readers/backend-file-reader';
+import {BackendFileReader} from './file-readers/backend-file-reader';
 import prepareDDFCsvReaderObject from './ddfcsv-reader';
 
 module.exports = {

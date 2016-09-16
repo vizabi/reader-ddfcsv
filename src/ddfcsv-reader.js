@@ -36,7 +36,7 @@ export default function prepareDDFCsvReaderObject(defaultFileReader) {
         return new Promise(function (resolve, reject) {
           var query = cloneDeep(queryPar);
 
-          _this.ddf.processRequest(query, function (err, data) {
+          _this.ddf.ddfRequest(query, function (err, data) {
             if (err) {
               reject(err);
               return;
@@ -45,7 +45,7 @@ export default function prepareDDFCsvReaderObject(defaultFileReader) {
             _this._data = _this._parsers ? prettifyData(data) : data;
 
             if (logger && logger.log) {
-              logger.log(JSON.stringify(queryPar), JSON.stringify(_this._data));
+              logger.log(JSON.stringify(queryPar), _this._data);
             }
 
             resolve();

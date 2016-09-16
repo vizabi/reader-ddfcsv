@@ -1,10 +1,13 @@
 import * as Mingo from 'mingo';
 
+import compact from 'lodash/compact';
 import cloneDeep from 'lodash/cloneDeep';
 import flatten from 'lodash/flatten';
 import reduce from 'lodash/reduce';
 import includes from 'lodash/includes';
+import isEmpty from 'lodash/isEmpty';
 import startsWith from 'lodash/startsWith';
+import uniq from 'lodash/uniq';
 
 const traverse = require('traverse');
 
@@ -53,10 +56,24 @@ export class EntityAdapter {
     this.ddfPath = ddfPath;
   }
 
+  addRequestNormalizer(requestNormalizer) {
+    this.requestNormalizer = requestNormalizer;
+
+    return this;
+  }
+
   getExpectedIndexData(request, indexData) {
     return indexData
       .filter(indexRecord => includes(request.select.key, indexRecord.key) &&
       includes(request.select.value, indexRecord.value));
+  }
+
+  getDomainDescriptorsByRequestKeys(requestKey) {
+    return compact(uniq(
+      requestKey
+        .map(key => ({key, domain: this.contentManager.domainHash[key]}))
+        .filter(descriptor => !!descriptor.domain)
+    ));
   }
 
   getNormalizedRequest(requestParam, onRequestNormalized) {
@@ -76,11 +93,23 @@ export class EntityAdapter {
       .filter(value => value !== '_default');
     request.where = getNormalizedBoolean(getCroppedKeys(request.where));
 
+    this.domainDescriptors = this.getDomainDescriptorsByRequestKeys(request.select.key);
+
     onRequestNormalized(null, request);
   }
 
   getRecordTransformer() {
-    return null;
+    return record => {
+      if (!isEmpty(this.domainDescriptors)) {
+        this.domainDescriptors.forEach(domainDescriptor => {
+          if (record[domainDescriptor.key] && !record[domainDescriptor.domain]) {
+            record[domainDescriptor.domain] = record[domainDescriptor.key];
+          }
+        });
+      }
+
+      return record;
+    };
   }
 
   getFileActions(expectedFiles) {

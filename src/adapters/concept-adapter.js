@@ -13,6 +13,12 @@ export class ConceptAdapter {
     this.ddfPath = ddfPath;
   }
 
+  addRequestNormalizer(requestNormalizer) {
+    this.requestNormalizer = requestNormalizer;
+
+    return this;
+  }
+
   getExpectedIndexData(request, indexData) {
     return indexData
       .filter(indexRecord => includes(request.select.key, indexRecord.key) &&
