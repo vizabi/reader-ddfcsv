@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import * as Mingo from 'mingo';
 
 import compact from 'lodash/compact';
@@ -94,6 +96,7 @@ export class EntityAdapter {
     request.where = getNormalizedBoolean(getCroppedKeys(request.where));
 
     this.domainDescriptors = this.getDomainDescriptorsByRequestKeys(request.select.key);
+    this.request = request;
 
     onRequestNormalized(null, request);
   }
@@ -102,12 +105,22 @@ export class EntityAdapter {
     const isTruth = value => value === 'true' || value === 'TRUE';
 
     return record => {
+      // entity set to domain
       if (!isEmpty(this.domainDescriptors)) {
         for (const domainDescriptor of this.domainDescriptors) {
-          if (isTruth(record[`is--${domainDescriptor.key}`])) {
+          if (isTruth(record[`is--${domainDescriptor.key}`]) && isEmpty(record[domainDescriptor.domain])) {
             record[domainDescriptor.domain] = record[domainDescriptor.key];
             break;
           }
+        }
+      }
+
+      // domain to entity set
+      for (const requestValue of this.request.select.value) {
+        const domain = this.contentManager.domainHash[requestValue];
+
+        if (isEmpty(record[requestValue]) && !isEmpty(record[domain])) {
+          record[requestValue] = record[domain];
         }
       }
 
