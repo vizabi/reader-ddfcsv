@@ -1,6 +1,6 @@
 {
   "name": "vizabi-ddfcsv-reader",
-  "version": "0.4.15",
+  "version": "0.4.16",
   "description": "Vizabi DDFcsv reader",
   "main": "dist/bundle.js",
   "scripts": {
@@ -17,7 +17,7 @@
     "async-es": "2.0.1",
     "bluebird": "3.4.6",
     "csv-parse": "1.1.7",
-    "ddf-time-utils": "0.1.4",
+    "ddf-time-utils": "0.1.6",
     "fetch-polyfill": "0.8.2",
     "lodash": "4.15.0",
     "mingo": "0.7.0",
