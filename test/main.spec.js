@@ -262,6 +262,36 @@ test.cb('joins query by one year', t => {
   });
 });
 
+test.cb('joins query by all period', t => {
+  const ddf = new Ddf(GLOBALIS_PATH, backendFileReader);
+  const request = {
+    from: 'datapoints',
+    animatable: 'time',
+    select: {
+      key: ['geo', 'time'],
+      value: ['life_expectancy_years', 'income_per_person_gdppercapita_ppp_inflation_adjusted', 'population_total']
+    },
+    where: {$and: [{geo: '$geo'}]},
+    join: {
+      $geo: {
+        key: 'geo',
+        where: {'is--country': true}
+      }
+    },
+    order_by: 'time'
+  };
+
+  ddf.ddfRequest(request, (err, data) => {
+    const EXPECTED_RECORDS_COUNT = 68121;
+
+    t.false(!!err);
+    t.is(data.length, EXPECTED_RECORDS_COUNT);
+
+    t.pass();
+    t.end();
+  });
+});
+
 test('read method', t => {
   const readerObject = getDDFCsvReaderObject();
   const request = {

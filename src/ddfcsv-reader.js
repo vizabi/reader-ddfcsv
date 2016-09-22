@@ -45,7 +45,7 @@ export default function prepareDDFCsvReaderObject(defaultFileReader) {
             _this._data = _this._parsers ? prettifyData(data) : data;
 
             if (logger && logger.log) {
-              logger.log(JSON.stringify(queryPar), _this._data);
+              logger.log(JSON.stringify(queryPar), _this._data.length, _this._data);
             }
 
             resolve();

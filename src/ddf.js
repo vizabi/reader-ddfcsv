@@ -9,8 +9,11 @@ import parallel from 'async-es/parallel';
 
 import cloneDeep from 'lodash/cloneDeep';
 import isArray from 'lodash/isArray';
+import isEmpty from 'lodash/isEmpty';
 import isObject from 'lodash/isObject';
+import isString from 'lodash/isString';
 import flatten from 'lodash/flatten';
+import sortBy from 'lodash/sortBy';
 import startsWith from 'lodash/startsWith';
 import uniq from 'lodash/uniq';
 
@@ -23,12 +26,12 @@ const ADAPTERS = {
   datapoints: DataPointAdapter
 };
 
-function postProcessing(data) {
+function postProcessing(requestParam, data) {
   if (!isArray(data)) {
     return data;
   }
 
-  return data.map(record => {
+  let processedData = data.map(record => {
     Object.keys(record).forEach(key => {
       if (isObject(record[key])) {
         record[key] = JSON.stringify(record[key]);
@@ -37,6 +40,12 @@ function postProcessing(data) {
 
     return record;
   });
+
+  if (!isEmpty(requestParam.order_by) && isString(requestParam.order_by)) {
+    processedData = sortBy(processedData, requestParam.order_by);
+  }
+
+  return processedData;
 }
 
 export class Ddf {
@@ -163,7 +172,7 @@ export class Ddf {
 
       parallel(fileActions, (err, results) => onRequestProcessed(
         err,
-        postProcessing(ddfTypeAdapter.getFinalData(results, normRequest)))
+        postProcessing(requestParam, ddfTypeAdapter.getFinalData(results, normRequest)))
       );
     });
   }

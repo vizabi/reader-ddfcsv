@@ -88,7 +88,7 @@ export class DataPointAdapter {
         const timeDescriptor = getTimeDescriptor(record[keyToTransform]);
 
         if (timeDescriptor) {
-          if (timeDescriptor.type !== this.requestNormalizer.timeType) {
+          if (this.requestNormalizer.timeType && timeDescriptor.type !== this.requestNormalizer.timeType) {
             isRecordAvailable = false;
             break;
           }
