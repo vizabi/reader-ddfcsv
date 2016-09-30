@@ -1,8 +1,10 @@
 import {ContentManager} from './content-manager';
 import {ConceptAdapter} from './adapters/concept-adapter';
 import {EntityAdapter} from './adapters/entity-adapter';
+import {EntitySchemaAdapter} from './adapters/entity-schema-adapter';
 import {JoinsAdapter} from './adapters/joins-adapter';
 import {DataPointAdapter} from './adapters/datapoint-adapter';
+import {DataPointSchemaAdapter} from './adapters/datapoint-schema-adapter';
 import {RequestNormalizer} from './request-normalizer';
 
 import parallel from 'async-es/parallel';
@@ -11,7 +13,6 @@ import cloneDeep from 'lodash/cloneDeep';
 import isArray from 'lodash/isArray';
 import isEmpty from 'lodash/isEmpty';
 import isObject from 'lodash/isObject';
-import isString from 'lodash/isString';
 import flatten from 'lodash/flatten';
 import sortBy from 'lodash/sortBy';
 import startsWith from 'lodash/startsWith';
@@ -22,8 +23,10 @@ const contentManager = new ContentManager();
 const ADAPTERS = {
   concepts: ConceptAdapter,
   entities: EntityAdapter,
+  entitiesSchema: EntitySchemaAdapter,
   joins: JoinsAdapter,
-  datapoints: DataPointAdapter
+  datapoints: DataPointAdapter,
+  datapointsSchema: DataPointSchemaAdapter
 };
 
 function postProcessing(requestParam, data) {
@@ -41,7 +44,7 @@ function postProcessing(requestParam, data) {
     return record;
   });
 
-  if (!isEmpty(requestParam.order_by) && isString(requestParam.order_by)) {
+  if (!isEmpty(requestParam.order_by) && isArray(requestParam.order_by)) {
     processedData = sortBy(processedData, requestParam.order_by);
   }
 
@@ -56,6 +59,10 @@ export class Ddf {
     if (this.ddfPath[this.ddfPath.length - 1] !== '/') {
       this.ddfPath += '/';
     }
+  }
+
+  getContentManager() {
+    return contentManager;
   }
 
   getIndex(onIndexLoaded) {
