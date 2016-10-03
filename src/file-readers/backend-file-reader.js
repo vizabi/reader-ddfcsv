@@ -1,6 +1,8 @@
 import fs from 'fs';
 import csvParse from 'csv-parse';
 import compact from 'lodash/compact';
+import head from 'lodash/head';
+import split from 'lodash/split';
 
 const cache = {};
 
@@ -15,7 +17,7 @@ export class BackendFileReader {
       return;
     }
 
-    const fileStream = fs.createReadStream(filePath);
+    const fileStream = fs.createReadStream(filePath, {encoding: 'utf8'});
     const parser = csvParse({columns: true}, (err, contentSource) => {
       let content = null;
 
@@ -36,5 +38,21 @@ export class BackendFileReader {
     });
 
     fileStream.pipe(parser);
+  }
+
+  getFileSchema(filePath, onFileRead) {
+    fs.readFile(filePath, (err, content) => {
+      if (err) {
+        onFileRead(err);
+        return;
+      }
+
+      const arrayContent = split(content.toString(), '\n');
+      const firstRecord = head(arrayContent);
+      const header = split(firstRecord, ',');
+      const recordCount = arrayContent.length - 1;
+
+      onFileRead(null, {filePath, header, recordCount});
+    });
   }
 }
