@@ -4,15 +4,15 @@ import * as Mingo from 'mingo';
 
 import cloneDeep from 'lodash/cloneDeep';
 import head from 'lodash/head';
-import includes from 'lodash/includes';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import isInteger from 'lodash/isInteger';
 import intersection from 'lodash/intersection';
 import keys from 'lodash/keys';
+import map from 'lodash/map';
 import reduce from 'lodash/reduce';
-import split from 'lodash/split';
 import values from 'lodash/values';
+import {getResourcesFilteredBy} from './shared';
 
 const timeUtils = require('ddf-time-utils');
 
@@ -40,20 +40,21 @@ export class DataPointAdapter {
     return this;
   }
 
-  getExpectedIndexData(request, indexData) {
-    return indexData
-      .filter(indexRecord => {
-        const indexKeyAsArray = split(indexRecord.key, ',');
+  getDataPackageFilteredBySelect(request, dataPackageContent) {
+    const matchByKeyAndValue = (dataPackage, record) => {
+      const isMatchedByKey = isEqual(request.select.key, record.schema.primaryKey);
+      const fields = map(record.schema.fields, 'name');
+      const isMatchedByValue = !isEmpty(intersection(fields, request.select.value));
 
-        return isEqual(request.select.key, indexKeyAsArray) &&
-          includes(request.select.value, indexRecord.value);
-      });
+      return isMatchedByKey && isMatchedByValue;
+    };
+
+    return getResourcesFilteredBy(dataPackageContent, matchByKeyAndValue);
   }
 
   getNormalizedRequest(requestParam, onRequestNormalized) {
     const request = cloneDeep(requestParam);
-    const entityUtils =
-      new EntityUtils(this.contentManager, this.reader, this.ddfPath, request.where);
+    const entityUtils = new EntityUtils(this.contentManager, this.reader, this.ddfPath, request.where);
 
     entityUtils.transformConditionByDomain((err, transformedCondition) => {
       request.where = transformedCondition;
@@ -63,10 +64,9 @@ export class DataPointAdapter {
   }
 
   getRecordTransformer(request) {
-    const measures =
-      this.contentManager.concepts
-        .filter(conceptRecord => conceptRecord.concept_type === 'measure')
-        .map(conceptRecord => conceptRecord.concept);
+    const measures = this.contentManager.concepts
+      .filter(conceptRecord => conceptRecord.concept_type === 'measure')
+      .map(conceptRecord => conceptRecord.concept);
     const expectedMeasures = intersection(measures, request.select.value);
     const times = this.contentManager.concepts
       .filter(conceptRecord => conceptRecord.concept_type === 'time')
@@ -116,28 +116,39 @@ export class DataPointAdapter {
     };
   }
 
+  isTimeConcept(conceptName) {
+    return this.contentManager.conceptTypeHash[conceptName] === 'time';
+  }
+
+  isMeasureConcept(conceptName) {
+    return this.contentManager.conceptTypeHash[conceptName] === 'measure';
+  }
+
+  isEntitySetConcept(conceptName) {
+    return this.contentManager.conceptTypeHash[conceptName] === 'entity_set';
+  }
+
+  isDomainRelatedConcept(conceptName) {
+    const container = this.contentManager.conceptTypeHash;
+
+    return container[conceptName] === 'entity_domain' || this.isEntitySetConcept(conceptName);
+  }
+
   getEntityFieldByFirstRecord(record) {
-    return head(Object.keys(record)
-      .filter(recordKey =>
-      this.contentManager.conceptTypeHash[recordKey] === 'entity_domain' ||
-      this.contentManager.conceptTypeHash[recordKey] === 'entity_set'));
+    return Object.keys(record).find(conceptName => this.isDomainRelatedConcept(conceptName));
   }
 
   getTimeFieldByFirstRecord(record) {
-    return head(Object.keys(record)
-      .filter(recordKey =>
-      this.contentManager.conceptTypeHash[recordKey] === 'time'));
+    return Object.keys(record).find(conceptName => this.isTimeConcept(conceptName));
   }
 
   getMeasureFieldByFirstRecord(record) {
-    return head(Object.keys(record)
-      .filter(recordKey =>
-      this.contentManager.conceptTypeHash[recordKey] === 'measure'));
+    return Object.keys(record).find(conceptName => this.isMeasureConcept(conceptName));
   }
 
   getFileActions(expectedFiles) {
     return expectedFiles.map(file => onFileRead => {
-      this.reader.read(`${this.ddfPath}${file}`, (err, data) => {
+      this.reader.readCSV(`${this.ddfPath}${file}`, (err, data) => {
         if (err || isEmpty(data)) {
           onFileRead(err, [], {});
           return;
@@ -162,6 +173,7 @@ export class DataPointAdapter {
       fields,
       (currentProjection, field) => {
         currentProjection[field] = 1;
+
         return currentProjection;
       },
       {});
@@ -176,7 +188,7 @@ export class DataPointAdapter {
 
       let entityKey = result.entityField;
 
-      if (this.contentManager.conceptTypeHash[result.entityField] === 'entity_set') {
+      if (this.isEntitySetConcept(result.entityField)) {
         entityKey = this.contentManager.domainHash[result.entityField];
       }
 
@@ -200,19 +212,16 @@ export class DataPointAdapter {
     const query = new Mingo.Query(request.where, projection);
     const data = values(dataHash);
     const timeKeys = keys(timeValuesHash);
-    const filteredData = query
-      .find(data)
-      .all()
-      .map(record => {
-        for (const timeKey of timeKeys) {
-          if (isInteger(record[timeKey])) {
-            record[timeKey] = `${timeValuesHash[timeKey][record[timeKey]]}`;
-            break;
-          }
+    const filteredData = query.find(data).all().map(record => {
+      for (const timeKey of timeKeys) {
+        if (isInteger(record[timeKey])) {
+          record[timeKey] = `${timeValuesHash[timeKey][record[timeKey]]}`;
+          break;
         }
+      }
 
-        return record;
-      });
+      return record;
+    });
 
     return filteredData;
   }

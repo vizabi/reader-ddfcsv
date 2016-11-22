@@ -1,14 +1,14 @@
 {
   "name": "vizabi-ddfcsv-reader",
-  "version": "0.4.18",
+  "version": "0.4.19",
   "description": "Vizabi DDFcsv reader",
   "main": "dist/bundle.js",
   "scripts": {
-    "test": "npm run build && ./node_modules/.bin/ava \"test/**/*.spec.js\"",
-    "n-test": "./node_modules/.bin/webpack && ./node_modules/.bin/ava \"test/**/*.spec.js\"",
-    "test-prod": "npm run eslint && PROD_ENV=1 ./node_modules/.bin/webpack && ./node_modules/.bin/ava \"test/**/*.spec.js\"",
-    "build": "npm run eslint && ./node_modules/.bin/webpack && WEB_ENV=1 ./node_modules/.bin/webpack",
-    "eslint": "./node_modules/.bin/eslint --ignore-path .gitignore --ext js --fix . .config",
+    "test": "npm run build && mocha --timeout 200000 \"test/**/*.spec.js\"",
+    "n-test": "webpack && mocha --timeout 200000 \"test/**/*.spec.js\"",
+    "test-prod": "npm run eslint && PROD_ENV=1 webpack && mocha --timeout 200000 \"test/**/*.spec.js\"",
+    "build": "npm run eslint && webpack && WEB_ENV=1 webpack",
+    "eslint": "eslint --ignore-path .gitignore --ext js --fix . .config",
     "prepublish": "npm run eslint && PROD_ENV=1 webpack"
   },
   "author": "Vyacheslav Chub<vyacheslav.chub@valor-software.com>",
@@ -24,10 +24,10 @@
     "traverse": "0.6.6"
   },
   "devDependencies": {
-    "ava": "0.16.0",
     "babel": "6.0.15",
     "babel-loader": "6.2.5",
     "babel-preset-es2015": "6.1.2",
+    "chai": "3.5.0",
     "eslint": "3.4.0",
     "eslint-config-valorsoft": "0.1.0",
     "karma": "1.2.0",
@@ -35,7 +35,10 @@
     "karma-cli": "1.0.1",
     "karma-fixture": "0.2.1-1",
     "karma-phantomjs-launcher": "1.0.2",
+    "mocha": "3.1.2",
     "phantomjs": "2.1.7",
+    "sinon": "1.17.6",
+    "sinon-chai": "2.8.0",
     "webpack": "1.12.3"
   }
 }

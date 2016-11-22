@@ -1,5 +1,5 @@
 import isEqual from 'lodash/isEqual';
-import split from 'lodash/split';
+import {getResourcesFilteredBy} from './shared';
 
 export class DataPointSchemaAdapter {
   constructor(contentManager, reader, ddfPath) {
@@ -14,9 +14,9 @@ export class DataPointSchemaAdapter {
     return this;
   }
 
-  getExpectedIndexData(request, indexData) {
-    return indexData
-      .filter(indexRecord => isEqual(request.select.key, split(indexRecord.key, ',')));
+  getDataPackageFilteredBySelect(request, dataPackageContent) {
+    return getResourcesFilteredBy(dataPackageContent, (dataPackage, record) =>
+      isEqual(request.select.key, record.schema.primaryKey));
   }
 
   getNormalizedRequest(requestParam, onRequestNormalized) {

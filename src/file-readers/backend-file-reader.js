@@ -11,7 +11,7 @@ export class BackendFileReader {
     this.recordTransformer = recordTransformer;
   }
 
-  read(filePath, onFileRead) {
+  readCSV(filePath, onFileRead) {
     if (cache[filePath]) {
       onFileRead(null, cache[filePath]);
       return;
@@ -22,10 +22,7 @@ export class BackendFileReader {
       let content = null;
 
       if (this.recordTransformer) {
-        content = compact(
-          contentSource
-            .map(record => this.recordTransformer(record))
-        );
+        content = compact(contentSource.map(record => this.recordTransformer(record)));
       }
 
       if (!this.recordTransformer) {
@@ -38,6 +35,21 @@ export class BackendFileReader {
     });
 
     fileStream.pipe(parser);
+  }
+
+  readJSON(filePath, onFileRead) {
+    fs.readFile(filePath, 'utf-8', (err, data) => {
+      if (err) {
+        onFileRead(err);
+        return;
+      }
+
+      try {
+        onFileRead(null, JSON.parse(data));
+      } catch (jsonErr) {
+        onFileRead(jsonErr);
+      }
+    });
   }
 
   getFileSchema(filePath, onFileRead) {

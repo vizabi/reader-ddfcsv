@@ -1,45 +1,91 @@
-import test from 'ava';
-import {_} from 'lodash';
-import {getDDFCsvReaderObject} from '../dist/bundle';
+const chai = require('chai');
+const sinonChai = require('sinon-chai');
+const expect = chai.expect;
+
+const _ = require('lodash');
+const api = require('../dist/bundle');
+const getDDFCsvReaderObject = api.getDDFCsvReaderObject;
 
 /* eslint-disable camelcase */
 
-const GLOBALIS_PATH = './fixtures/systema_globalis';
+const GLOBALIS_PATH = './test/fixtures/systema_globalis';
 
-test('read method', t => {
-  const readerObject = getDDFCsvReaderObject();
-  const request = {
-    select: {
-      key: ['concept'],
-      value: [
-        'concept_type', 'name', 'unit', 'color'
-      ]
-    },
-    from: 'concepts',
-    where: {
-      $and: [
-        {concept_type: {$eq: 'entity_set'}}
-      ]
-    }
-  };
+chai.use(sinonChai);
 
-  readerObject.init({path: GLOBALIS_PATH});
+describe('when reader checking', () => {
+  it('result for concepts reading should be expected', () => {
+    const readerObject = getDDFCsvReaderObject();
+    const request = {
+      select: {
+        key: ['concept'],
+        value: [
+          'concept_type', 'name', 'unit', 'color'
+        ]
+      },
+      from: 'concepts',
+      where: {
+        $and: [
+          {concept_type: {$eq: 'entity_set'}}
+        ]
+      }
+    };
 
-  const pro = readerObject.read(request);
+    readerObject.init({path: GLOBALIS_PATH});
 
-  return pro.then(data => {
-    const EXPECTED_RECORDS_COUNT = 9;
-    const EXPECTED_FIELDS_COUNT = 5;
+    const pro = readerObject.read(request);
 
-    t.is(data.length, EXPECTED_RECORDS_COUNT);
+    return pro.then(data => {
+      const EXPECTED_RECORDS_COUNT = 9;
+      const EXPECTED_FIELDS_COUNT = 5;
 
-    const firstRecord = _.head(data);
-    const keys = Object.keys(firstRecord);
+      expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
 
-    t.is(keys.length, EXPECTED_FIELDS_COUNT);
+      const firstRecord = _.head(data);
+      const keys = Object.keys(firstRecord);
 
-    keys.forEach(key => {
-      t.true(_.includes(request.select.key, key) || _.includes(request.select.value, key));
+      expect(keys.length).to.equal(EXPECTED_FIELDS_COUNT);
+
+      keys.forEach(key => {
+        expect(_.includes(request.select.key, key) || _.includes(request.select.value, key)).to.be.true;
+      });
+    });
+  });
+
+  it('result for concepts - entity sets reading should be expected', () => {
+    const readerObject = getDDFCsvReaderObject();
+    const request = {
+      select: {
+        key: ['concept'],
+        value: [
+          'concept_type', 'name'
+        ]
+      },
+      from: 'concepts',
+      where: {
+        $and: [
+          {concept_type: {$eq: 'entity_set'}}
+        ]
+      }
+    };
+
+    readerObject.init({path: GLOBALIS_PATH});
+
+    const pro = readerObject.read(request);
+
+    return pro.then(data => {
+      const EXPECTED_RECORDS_COUNT = 9;
+      const EXPECTED_FIELDS_COUNT = 3;
+
+      expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
+
+      const firstRecord = _.head(data);
+      const keys = Object.keys(firstRecord);
+
+      expect(keys.length).to.equal(EXPECTED_FIELDS_COUNT);
+
+      keys.forEach(key => {
+        expect(_.includes(request.select.key, key) || _.includes(request.select.value, key)).to.be.true;
+      });
     });
   });
 });

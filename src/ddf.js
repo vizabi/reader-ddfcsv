@@ -65,52 +65,49 @@ export class Ddf {
     return contentManager;
   }
 
-  getIndex(onIndexLoaded) {
-    const indexFileName = `${this.ddfPath}ddf--index.csv`;
+  getDataPackage(onDataPackageLoaded) {
+    const dataPackageFileName = `${this.ddfPath}datapackage.json`;
 
-    this.reader.read(indexFileName, (indexError, indexData) => {
-      if (indexError) {
-        onIndexLoaded(indexError);
+    this.reader.readJSON(dataPackageFileName, (dataPackageError, dataPackageData) => {
+      if (dataPackageError) {
+        onDataPackageLoaded(dataPackageError);
         return;
       }
 
-      contentManager.index = indexData;
+      contentManager.dataPackage = dataPackageData;
 
       this.getConcepts((conceptsError, conceptsData) => {
         if (conceptsError) {
-          onIndexLoaded(conceptsError);
+          onDataPackageLoaded(conceptsError);
           return;
         }
 
         contentManager.concepts = conceptsData;
         contentManager.domainHash = {};
-        conceptsData
-          .filter(concept => concept.concept_type === 'entity_set')
-          .forEach(concept => {
-            contentManager.domainHash[concept.concept] = concept.domain;
-          });
+        conceptsData.filter(concept => concept.concept_type === 'entity_set').forEach(concept => {
+          contentManager.domainHash[concept.concept] = concept.domain;
+        });
         contentManager.conceptTypeHash = {};
-        conceptsData
-          .forEach(concept => {
-            contentManager.conceptTypeHash[concept.concept] = concept.concept_type;
-          });
+        conceptsData.forEach(concept => {
+          contentManager.conceptTypeHash[concept.concept] = concept.concept_type;
+        });
         contentManager.timeConcepts = conceptsData
           .filter(concept => concept.concept_type === 'time')
           .map(concept => concept.concept);
 
-        onIndexLoaded(null, contentManager.index);
+        onDataPackageLoaded(null, contentManager.dataPackage);
       });
     });
   }
 
   getConcepts(onConceptsLoaded) {
     const conceptFiles = uniq(
-      contentManager.index
-        .filter(record => record.key === 'concept')
-        .map(record => record.file)
+      contentManager.dataPackage.resources
+        .filter(record => record.schema.primaryKey === 'concept')
+        .map(record => record.path)
     );
     const actions = conceptFiles.map(file => onFileRead => {
-      this.reader.read(`${this.ddfPath}${file}`, (err, data) => onFileRead(err, data));
+      this.reader.readCSV(`${this.ddfPath}${file}`, (err, data) => onFileRead(err, data));
     });
 
     parallel(actions, (err, results) => onConceptsLoaded(err, flatten(results)));
@@ -140,28 +137,26 @@ export class Ddf {
   /* eslint-enable no-invalid-this */
 
   getJoinProcessors(requestParam, relationKeysDescriptors) {
-    return relationKeysDescriptors
-      .map(relationKeyDescriptor => onJoinProcessed => {
-        if (!requestParam.join || !requestParam.join[relationKeyDescriptor.value]) {
-          onJoinProcessed(new Error(`join for relation ${relationKeyDescriptor.value} is not found!`));
-          return;
-        }
+    return relationKeysDescriptors.map(relationKeyDescriptor => onJoinProcessed => {
+      if (!requestParam.join || !requestParam.join[relationKeyDescriptor.value]) {
+        onJoinProcessed(new Error(`join for relation ${relationKeyDescriptor.value} is not found!`));
+        return;
+      }
 
-        const joinRequest = cloneDeep(requestParam.join[relationKeyDescriptor.value]);
+      const joinRequest = cloneDeep(requestParam.join[relationKeyDescriptor.value]);
 
-        joinRequest.from = 'joins';
+      joinRequest.from = 'joins';
 
-        this.processRequest(joinRequest, null, (err, condition) =>
-          onJoinProcessed(err, {relationKeyDescriptor, condition}));
-      });
+      this.processRequest(joinRequest, null, (err, condition) =>
+        onJoinProcessed(err, {relationKeyDescriptor, condition}));
+    });
   }
 
   processRequest(requestParam, requestNormalizer, onRequestProcessed) {
     const request = cloneDeep(requestParam);
 
     const ddfTypeAdapter =
-      new ADAPTERS[request.from](contentManager, this.reader, this.ddfPath)
-        .addRequestNormalizer(requestNormalizer);
+      new ADAPTERS[request.from](contentManager, this.reader, this.ddfPath).addRequestNormalizer(requestNormalizer);
 
     ddfTypeAdapter.getNormalizedRequest(request, (normError, normRequest) => {
       if (normError) {
@@ -169,9 +164,9 @@ export class Ddf {
         return;
       }
 
-      const expectedIndexData =
-        ddfTypeAdapter.getExpectedIndexData(normRequest, contentManager.index);
-      const expectedFiles = uniq(expectedIndexData.map(indexRecord => indexRecord.file));
+      const expectedDataPackage =
+        ddfTypeAdapter.getDataPackageFilteredBySelect(normRequest, contentManager.dataPackage);
+      const expectedFiles = uniq(expectedDataPackage.map(dataPackageRecord => dataPackageRecord.path));
 
       this.reader.setRecordTransformer(ddfTypeAdapter.getRecordTransformer(normRequest));
 
@@ -185,9 +180,9 @@ export class Ddf {
   }
 
   ddfRequest(requestParam, onDdfRequestProcessed) {
-    this.getIndex(indexErr => {
-      if (indexErr) {
-        onDdfRequestProcessed(indexErr);
+    this.getDataPackage(dataPackageErr => {
+      if (dataPackageErr) {
+        onDdfRequestProcessed(dataPackageErr);
         return;
       }
 
