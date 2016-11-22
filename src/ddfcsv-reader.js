@@ -10,13 +10,11 @@ export default function prepareDDFCsvReaderObject(defaultFileReader) {
       init(reader_info) {
         var fileReader = externalFileReader || defaultFileReader;
 
-        this._data = [];
         this._ddfPath = reader_info.path;
-        this._parsers = reader_info.parsers;
         this.ddf = new Ddf(this._ddfPath, fileReader);
       },
 
-      read(queryPar) {
+      read(queryPar, parsers) {
         var _this = this;
 
         function prettifyData(data) {
@@ -24,8 +22,8 @@ export default function prepareDDFCsvReaderObject(defaultFileReader) {
             const keys = Object.keys(record);
 
             keys.forEach(key => {
-              if (_this._parsers[key]) {
-                record[key] = _this._parsers[key](record[key]);
+              if (parsers[key]) {
+                record[key] = parsers[key](record[key]);
               }
             });
 
@@ -42,19 +40,15 @@ export default function prepareDDFCsvReaderObject(defaultFileReader) {
               return;
             }
 
-            _this._data = _this._parsers ? prettifyData(data) : data;
+            data = parsers ? prettifyData(data) : data;
 
             if (logger && logger.log) {
-              logger.log(JSON.stringify(queryPar), _this._data.length, _this._data);
+              logger.log(JSON.stringify(queryPar), data.length, data);
             }
 
-            resolve();
+            resolve(data);
           });
         });
-      },
-
-      getData() {
-        return this._data;
       }
     };
   };

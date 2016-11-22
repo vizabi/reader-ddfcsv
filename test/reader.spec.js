@@ -27,10 +27,9 @@ test('read method', t => {
 
   const pro = readerObject.read(request);
 
-  return pro.then(() => {
+  return pro.then(data => {
     const EXPECTED_RECORDS_COUNT = 9;
     const EXPECTED_FIELDS_COUNT = 5;
-    const data = readerObject.getData();
 
     t.is(data.length, EXPECTED_RECORDS_COUNT);
 
