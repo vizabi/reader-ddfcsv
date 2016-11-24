@@ -10,6 +10,7 @@ import includes from 'lodash/includes';
 import isEmpty from 'lodash/isEmpty';
 import startsWith from 'lodash/startsWith';
 import uniq from 'lodash/uniq';
+import {getResourcesFilteredBy} from './shared';
 
 const traverse = require('traverse');
 
@@ -64,10 +65,9 @@ export class EntityAdapter {
     return this;
   }
 
-  getExpectedIndexData(request, indexData) {
-    return indexData
-      .filter(indexRecord => includes(request.select.key, indexRecord.key) &&
-      includes(request.select.value, indexRecord.value));
+  getDataPackageFilteredBySelect(request, dataPackageContent) {
+    return getResourcesFilteredBy(dataPackageContent, (dataPackage, record) =>
+      includes(request.select.key, record.schema.primaryKey));
   }
 
   getDomainDescriptorsByRequestKeys(requestKey) {
@@ -80,8 +80,7 @@ export class EntityAdapter {
 
   getNormalizedRequest(requestParam, onRequestNormalized) {
     const request = cloneDeep(requestParam);
-    const allEntitySets = this.contentManager.concepts
-      .filter(concept => concept.concept_type === 'entity_set');
+    const allEntitySets = this.contentManager.concepts.filter(concept => concept.concept_type === 'entity_set');
     const relatedEntitySetsNames = flatten(
       requestParam.select.key
         .map(key => allEntitySets
@@ -130,7 +129,7 @@ export class EntityAdapter {
 
   getFileActions(expectedFiles) {
     return expectedFiles.map(file => onFileRead => {
-      this.reader.read(`${this.ddfPath}${file}`,
+      this.reader.readCSV(`${this.ddfPath}${file}`,
         (err, data) => onFileRead(err, data));
     });
   }

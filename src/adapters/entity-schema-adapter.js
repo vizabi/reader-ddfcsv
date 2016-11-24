@@ -1,4 +1,5 @@
 import includes from 'lodash/includes';
+import {getResourcesFilteredBy} from './shared';
 
 export class EntitySchemaAdapter {
   constructor(contentManager, reader, ddfPath) {
@@ -13,9 +14,9 @@ export class EntitySchemaAdapter {
     return this;
   }
 
-  getExpectedIndexData(request, indexData) {
-    return indexData
-      .filter(indexRecord => includes(request.select.key, indexRecord.key));
+  getDataPackageFilteredBySelect(request, dataPackageContent) {
+    return getResourcesFilteredBy(dataPackageContent, (dataPackage, record) =>
+      includes(request.select.key, record.schema.primaryKey));
   }
 
   getNormalizedRequest(requestParam, onRequestNormalized) {

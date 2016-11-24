@@ -1,0 +1,6 @@
+concept,name,concept_type,indicator_url
+name,Name,string,
+time,Time,time,
+life_expectancy_at_birth_years,Life expectancy at birth (years),measure,https://github.com/open-numbers/ddf--gapminder--life_expectancy
+geo,Country,entity_domain,
+indicator_url,Indicator URL,string,

@@ -32,35 +32,29 @@ export class EntityUtils {
     const conditionBranchActions = [];
 
     conditionBranchActions.push(onConditionPartProcessed => {
-      const fileActions = expectedFiles
-        .map(file =>
-          onFileRead =>
-            this.reader
-              .read(`${this.ddfPath}${file}`, (err, data) => onFileRead(err, data)));
+      const fileActions = expectedFiles.map(file => onFileRead => {
+        this.reader.readCSV(`${this.ddfPath}${file}`, onFileRead);
+      });
 
-      parallel(fileActions,
-        (fileError, fileResults) => {
-          const aggregatedFileData = flatten(fileResults);
-          const queryByEntitiesFiles =
-            new Mingo.Query({[conditionDescriptor.criteria]: conditionDescriptor.value});
-          const expectedEntitiesData = queryByEntitiesFiles
-            .find(aggregatedFileData)
-            .all();
+      parallel(fileActions, (fileError, fileResults) => {
+        const aggregatedFileData = flatten(fileResults);
+        const queryByEntitiesFiles = new Mingo.Query({[conditionDescriptor.criteria]: conditionDescriptor.value});
+        const expectedEntitiesData = queryByEntitiesFiles.find(aggregatedFileData).all();
 
-          if (!isEmpty(expectedEntitiesData)) {
-            const firstRecord = head(expectedEntitiesData);
-            const key = head(Object.keys(firstRecord));
-            const expectedData = expectedEntitiesData.map(record => record[key]);
+        if (!isEmpty(expectedEntitiesData)) {
+          const firstRecord = head(expectedEntitiesData);
+          const key = head(Object.keys(firstRecord));
+          const expectedData = expectedEntitiesData.map(record => record[key]);
 
-            conditionDescriptor.keyForCondition = '$or';
-            conditionDescriptor.valueForCondition = [
-              {[key]: {$in: expectedData}},
-              {[conditionDescriptor.domain]: {$in: expectedData}}
-            ];
-          }
+          conditionDescriptor.keyForCondition = '$or';
+          conditionDescriptor.valueForCondition = [
+            {[key]: {$in: expectedData}},
+            {[conditionDescriptor.domain]: {$in: expectedData}}
+          ];
+        }
 
-          onConditionPartProcessed(fileError);
-        });
+        onConditionPartProcessed(fileError);
+      });
     });
 
     return conditionBranchActions;
@@ -88,10 +82,8 @@ export class EntityUtils {
   conditionPostProcess(conditionToTraverse, conditionsDescriptors) {
     function processConditionBranch() {
       if (includes(this.key, '.') && this.isLeaf && isBoolean(this.node)) {
-        const {keyForCondition, valueForCondition} =
-          head(conditionsDescriptors
-            .filter(expectedConditionDescriptor =>
-              isEqual(expectedConditionDescriptor.path, this.path)));
+        const {keyForCondition, valueForCondition} = conditionsDescriptors.find(expectedConditionDescriptor =>
+          isEqual(expectedConditionDescriptor.path, this.path));
 
         this.path[this.path.length - 1] = keyForCondition;
         conditionToTraverse.set(this.path, valueForCondition);
@@ -116,20 +108,16 @@ export class EntityUtils {
       () => count < conditionsDescriptors.length,
       onBranchReady => {
         const conditionDescriptor = conditionsDescriptors[count++];
-        const expectedEntities =
-          this.contentManager.concepts
-            .filter(concept => concept.domain === conditionDescriptor.domain)
-            .map(concept => concept.concept);
+        const expectedEntities = this.contentManager.concepts
+          .filter(concept => concept.domain === conditionDescriptor.domain)
+          .map(concept => concept.concept);
         const expectedFiles = uniq(
-          this.contentManager.index
-            .filter(indexRecord => includes(expectedEntities, indexRecord.key))
-            .map(indexRecord => indexRecord.file)
+          this.contentManager.dataPackage.resources
+            .filter(dataPackageRecord => includes(expectedEntities, dataPackageRecord.schema.primaryKey))
+            .map(dataPackageRecord => dataPackageRecord.path)
         );
 
-        parallel(
-          this.getConditionBranchActions(expectedFiles, conditionDescriptor),
-          err => onBranchReady(err)
-        );
+        parallel(this.getConditionBranchActions(expectedFiles, conditionDescriptor), err => onBranchReady(err));
       },
       err => {
         this.conditionPostProcess(conditionToTraverse, conditionsDescriptors);

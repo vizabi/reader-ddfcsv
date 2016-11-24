@@ -12,7 +12,7 @@ export class FrontendFileReader {
     this.recordTransformer = recordTransformer;
   }
 
-  read(filePath, onFileRead) {
+  readCSV(filePath, onFileRead) {
     if (cache[filePath]) {
       onFileRead(null, cache[filePath]);
       return;
@@ -30,16 +30,33 @@ export class FrontendFileReader {
           let content = json;
 
           if (this.recordTransformer) {
-            content = compact(
-              content
-                .map(record => this.recordTransformer(record))
-            );
+            content = compact(content.map(record => this.recordTransformer(record)));
           }
 
           cache[filePath] = content;
 
           onFileRead(null, cache[filePath]);
         });
+      })
+      .catch(err => {
+        onFileRead(err || `${filePath} read error`);
+      });
+  }
+
+  readJSON(filePath, onFileRead) {
+    if (cache[filePath]) {
+      onFileRead(null, cache[filePath]);
+      return;
+    }
+
+    fetch(filePath)
+      .then(response => response.text())
+      .then(text => {
+        try {
+          onFileRead(null, JSON.parse(text));
+        } catch (jsonError) {
+          onFileRead(jsonError);
+        }
       })
       .catch(err => {
         onFileRead(err || `${filePath} read error`);

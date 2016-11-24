@@ -9,6 +9,7 @@ import replace from 'lodash/replace';
 import includes from 'lodash/includes';
 import uniq from 'lodash/uniq';
 import startsWith from 'lodash/startsWith';
+import {getResourcesFilteredBy} from './shared';
 
 const traverse = require('traverse');
 
@@ -60,20 +61,21 @@ export class JoinsAdapter {
     return this;
   }
 
-  getExpectedIndexData(request, indexData) {
-    return indexData
-      .filter(indexRecord => includes(request.key, indexRecord.key));
+  getDataPackageFilteredBySelect(request, dataPackageContent) {
+    return getResourcesFilteredBy(dataPackageContent, (dataPackage, record) =>
+      includes(request.key, record.schema.primaryKey));
   }
 
   getNormalizedRequest(requestParam, onRequestNormalized) {
     const request = cloneDeep(requestParam);
-    const allEntitySets = this.contentManager.concepts
-      .filter(concept => concept.concept_type === 'entity_set');
+    const allEntitySets = this.contentManager.concepts.filter(concept => concept.concept_type === 'entity_set');
     const synonimicConceptIds = getSynonimicConceptIds(request.where);
-    const relatedEntitySetsNames = flatten(allEntitySets
-      .filter(entitySet => entitySet.domain === requestParam.key)
-      .filter(entitySet => includes(synonimicConceptIds, entitySet.concept))
-      .map(entitySet => entitySet.concept));
+    const relatedEntitySetsNames = flatten(
+      allEntitySets
+        .filter(entitySet => entitySet.domain === requestParam.key)
+        .filter(entitySet => includes(synonimicConceptIds, entitySet.concept))
+        .map(entitySet => entitySet.concept)
+    );
 
     this.synonimicConceptIds = synonimicConceptIds;
 
@@ -89,7 +91,7 @@ export class JoinsAdapter {
 
   getFileActions(expectedFiles) {
     return expectedFiles.map(file => onFileRead => {
-      this.reader.read(`${this.ddfPath}${file}`,
+      this.reader.readCSV(`${this.ddfPath}${file}`,
         (err, data) => onFileRead(err, data));
     });
   }
@@ -136,26 +138,24 @@ export class JoinsAdapter {
       request.key,
       (currentProjection, field) => {
         currentProjection[field] = 1;
+
         return currentProjection;
       },
       {});
     const query = new Mingo.Query(request.where, projection);
     const expectedIds = this.synonimicConceptIds.concat(keys(projection));
-    const relatedData = query
-      .find(data)
-      .all()
-      .map(record => {
-        let value = null;
+    const relatedData = query.find(data).all().map(record => {
+      let value = null;
 
-        for (const expectedId of expectedIds) {
-          if (record[expectedId]) {
-            value = record[expectedId];
-            break;
-          }
+      for (const expectedId of expectedIds) {
+        if (record[expectedId]) {
+          value = record[expectedId];
+          break;
         }
+      }
 
-        return value;
-      });
+      return value;
+    });
 
     return this.getArrayBasedCondition(relatedData, request) ||
       this.getTimeBasedCondition(relatedData, request);

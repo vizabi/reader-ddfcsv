@@ -5,6 +5,7 @@ import flatten from 'lodash/flatten';
 import reduce from 'lodash/reduce';
 import includes from 'lodash/includes';
 import isEmpty from 'lodash/isEmpty';
+import {getResourcesFilteredBy} from './shared';
 
 export class ConceptAdapter {
   constructor(contentManager, reader, ddfPath) {
@@ -19,10 +20,9 @@ export class ConceptAdapter {
     return this;
   }
 
-  getExpectedIndexData(request, indexData) {
-    return indexData
-      .filter(indexRecord => includes(request.select.key, indexRecord.key) &&
-      includes(request.select.value, indexRecord.value));
+  getDataPackageFilteredBySelect(request, dataPackageContent) {
+    return getResourcesFilteredBy(dataPackageContent, (dataPackage, record) =>
+      includes(request.select.key, record.schema.primaryKey));
   }
 
   getNormalizedRequest(requestParam, onRequestNormalized) {
@@ -50,8 +50,7 @@ export class ConceptAdapter {
 
   getFileActions(expectedFiles) {
     return expectedFiles.map(file => onFileRead => {
-      this.reader.read(`${this.ddfPath}${file}`,
-        (err, data) => onFileRead(err, data));
+      this.reader.readCSV(`${this.ddfPath}${file}`, onFileRead);
     });
   }
 
@@ -62,6 +61,7 @@ export class ConceptAdapter {
       fields,
       (currentProjection, field) => {
         currentProjection[field] = 1;
+
         return currentProjection;
       },
       {});
