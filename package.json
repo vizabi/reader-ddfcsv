@@ -1,6 +1,6 @@
 {
   "name": "vizabi-ddfcsv-reader",
-  "version": "0.4.19",
+  "version": "0.5.0",
   "description": "Vizabi DDFcsv reader",
   "main": "dist/bundle.js",
   "scripts": {
@@ -14,31 +14,32 @@
   "author": "Vyacheslav Chub<vyacheslav.chub@valor-software.com>",
   "license": "GPL-3.0",
   "dependencies": {
-    "async-es": "2.0.1",
+    "async-es": "2.1.4",
     "bluebird": "3.4.6",
     "csv-parse": "1.1.7",
     "ddf-time-utils": "0.1.6",
     "fetch-polyfill": "0.8.2",
-    "lodash": "4.15.0",
-    "mingo": "0.7.0",
+    "lodash": "4.17.2",
+    "mingo": "0.8.0",
     "traverse": "0.6.6"
   },
   "devDependencies": {
-    "babel": "6.0.15",
-    "babel-loader": "6.2.5",
-    "babel-preset-es2015": "6.1.2",
+    "babel": "6.5.2",
+    "babel-core": "6.18.2",
+    "babel-loader": "6.2.8",
+    "babel-preset-es2015": "6.18.0",
     "chai": "3.5.0",
-    "eslint": "3.4.0",
+    "eslint": "3.10.2",
     "eslint-config-valorsoft": "0.1.0",
-    "karma": "1.2.0",
+    "karma": "1.3.0",
     "karma-chrome-launcher": "2.0.0",
     "karma-cli": "1.0.1",
-    "karma-fixture": "0.2.1-1",
+    "karma-fixture": "0.2.6",
     "karma-phantomjs-launcher": "1.0.2",
     "mocha": "3.1.2",
     "phantomjs": "2.1.7",
     "sinon": "1.17.6",
     "sinon-chai": "2.8.0",
-    "webpack": "1.12.3"
+    "webpack": "1.13.3"
   }
 }
