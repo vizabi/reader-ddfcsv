@@ -1,10 +1,11 @@
+import cloneDeep from 'lodash/cloneDeep';
 import includes from 'lodash/includes';
 import {getResourcesFilteredBy} from './shared';
 
 export class EntitySchemaAdapter {
   constructor(contentManager, reader, ddfPath) {
     this.contentManager = contentManager;
-    this.reader = reader;
+    this.reader = cloneDeep(reader);
     this.ddfPath = ddfPath;
   }
 

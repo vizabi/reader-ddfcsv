@@ -1,10 +1,11 @@
+import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
 import {getResourcesFilteredBy} from './shared';
 
 export class DataPointSchemaAdapter {
   constructor(contentManager, reader, ddfPath) {
     this.contentManager = contentManager;
-    this.reader = reader;
+    this.reader = cloneDeep(reader);
     this.ddfPath = ddfPath;
   }
 

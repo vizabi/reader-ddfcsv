@@ -10,7 +10,7 @@ import {getResourcesFilteredBy} from './shared';
 export class ConceptAdapter {
   constructor(contentManager, reader, ddfPath) {
     this.contentManager = contentManager;
-    this.reader = reader;
+    this.reader = cloneDeep(reader);
     this.ddfPath = ddfPath;
   }
 

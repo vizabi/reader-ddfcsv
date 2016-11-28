@@ -168,7 +168,7 @@ export class Ddf {
         ddfTypeAdapter.getDataPackageFilteredBySelect(normRequest, contentManager.dataPackage);
       const expectedFiles = uniq(expectedDataPackage.map(dataPackageRecord => dataPackageRecord.path));
 
-      this.reader.setRecordTransformer(ddfTypeAdapter.getRecordTransformer(normRequest));
+      ddfTypeAdapter.reader.setRecordTransformer(ddfTypeAdapter.getRecordTransformer(normRequest));
 
       const fileActions = ddfTypeAdapter.getFileActions(expectedFiles);
 

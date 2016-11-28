@@ -4,8 +4,6 @@ const csvParse = require('csv-parse');
 
 require('fetch-polyfill');
 
-const cache = {};
-
 /* eslint-disable no-undef */
 export class FrontendFileReader {
   setRecordTransformer(recordTransformer) {
@@ -13,11 +11,6 @@ export class FrontendFileReader {
   }
 
   readCSV(filePath, onFileRead) {
-    if (cache[filePath]) {
-      onFileRead(null, cache[filePath]);
-      return;
-    }
-
     fetch(filePath)
       .then(response => response.text())
       .then(text => {
@@ -33,9 +26,7 @@ export class FrontendFileReader {
             content = compact(content.map(record => this.recordTransformer(record)));
           }
 
-          cache[filePath] = content;
-
-          onFileRead(null, cache[filePath]);
+          onFileRead(null, content);
         });
       })
       .catch(err => {
@@ -44,11 +35,6 @@ export class FrontendFileReader {
   }
 
   readJSON(filePath, onFileRead) {
-    if (cache[filePath]) {
-      onFileRead(null, cache[filePath]);
-      return;
-    }
-
     fetch(filePath)
       .then(response => response.text())
       .then(text => {

@@ -30,7 +30,7 @@ function getTimeDescriptor(time) {
 export class DataPointAdapter {
   constructor(contentManager, reader, ddfPath) {
     this.contentManager = contentManager;
-    this.reader = reader;
+    this.reader = cloneDeep(reader);
     this.ddfPath = ddfPath;
   }
 

@@ -10,6 +10,7 @@ import includes from 'lodash/includes';
 import isEmpty from 'lodash/isEmpty';
 import startsWith from 'lodash/startsWith';
 import uniq from 'lodash/uniq';
+import values from 'lodash/values';
 import {getResourcesFilteredBy} from './shared';
 
 const traverse = require('traverse');
@@ -55,7 +56,7 @@ function getNormalizedBoolean(conditionParam) {
 export class EntityAdapter {
   constructor(contentManager, reader, ddfPath) {
     this.contentManager = contentManager;
-    this.reader = reader;
+    this.reader = cloneDeep(reader);
     this.ddfPath = ddfPath;
   }
 
@@ -104,22 +105,16 @@ export class EntityAdapter {
     const isTruth = value => value === 'true' || value === 'TRUE';
 
     return record => {
-      // entity set to domain
       if (!isEmpty(this.domainDescriptors)) {
         for (const domainDescriptor of this.domainDescriptors) {
           if (isTruth(record[`is--${domainDescriptor.key}`]) && isEmpty(record[domainDescriptor.domain])) {
             record[domainDescriptor.domain] = record[domainDescriptor.key];
-            break;
+            continue;
           }
-        }
-      }
 
-      // domain to entity set
-      for (const requestValue of this.request.select.value) {
-        const domain = this.contentManager.domainHash[requestValue];
-
-        if (isEmpty(record[requestValue]) && !isEmpty(record[domain])) {
-          record[requestValue] = record[domain];
+          if (isEmpty(record[domainDescriptor.key]) && !isEmpty(record[domainDescriptor.domain])) {
+            record[domainDescriptor.key] = record[domainDescriptor.domain];
+          }
         }
       }
 

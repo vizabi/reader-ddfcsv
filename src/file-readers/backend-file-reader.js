@@ -4,21 +4,19 @@ import compact from 'lodash/compact';
 import head from 'lodash/head';
 import split from 'lodash/split';
 
-const cache = {};
-
 export class BackendFileReader {
   setRecordTransformer(recordTransformer) {
     this.recordTransformer = recordTransformer;
   }
 
   readCSV(filePath, onFileRead) {
-    if (cache[filePath]) {
-      onFileRead(null, cache[filePath]);
-      return;
-    }
-
     const fileStream = fs.createReadStream(filePath, {encoding: 'utf8'});
     const parser = csvParse({columns: true}, (err, contentSource) => {
+      if (err) {
+        onFileRead(err);
+        return;
+      }
+
       let content = null;
 
       if (this.recordTransformer) {
@@ -29,9 +27,7 @@ export class BackendFileReader {
         content = contentSource;
       }
 
-      cache[filePath] = content;
-
-      onFileRead(err, cache[filePath]);
+      onFileRead(err, content);
     });
 
     fileStream.pipe(parser);

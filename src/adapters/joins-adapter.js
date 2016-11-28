@@ -51,7 +51,7 @@ function getSynonimicConceptIds(conditionParam) {
 export class JoinsAdapter {
   constructor(contentManager, reader, ddfPath) {
     this.contentManager = contentManager;
-    this.reader = reader;
+    this.reader = cloneDeep(reader);
     this.ddfPath = ddfPath;
   }
 
