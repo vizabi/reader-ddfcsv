@@ -11,6 +11,7 @@ const BackendFileReader = api.BackendFileReader;
 
 const backendFileReader = new BackendFileReader();
 const GLOBALIS_PATH = './test/fixtures/systema_globalis';
+const GLOBALIS_TINY_PATH = './test/fixtures/systema_globalis_tiny';
 
 chai.use(sinonChai);
 
@@ -203,6 +204,67 @@ describe('when data points checking', () => {
 
       expect(!!err).to.be.false;
       expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
+
+      done();
+    });
+  });
+
+  it('query by "ago" country should be processed correctly', done => {
+    const ddf = new Ddf(GLOBALIS_TINY_PATH, backendFileReader);
+    const request = {
+      language: 'en',
+      from: 'datapoints',
+      animatable: 'time',
+      select: {
+        key: [
+          'geo',
+          'time'
+        ],
+        value: [
+          'sg_population',
+          'sg_gdp_p_cap_const_ppp2011_dollar',
+          'sg_gini'
+        ]
+      },
+      where: {
+        $and: [
+          {geo: '$geo'},
+          {time: '$time'}
+        ]
+      },
+      join: {
+        $geo: {
+          key: 'geo',
+          where: {
+            'is--country': true,
+            geo: {
+              $in: [
+                'ago'
+              ]
+            }
+          }
+        },
+        $time: {
+          key: 'time',
+          where: {
+            time: {
+              $gte: '1800',
+              $lte: '2015'
+            }
+          }
+        }
+      },
+      order_by: [
+        'time'
+      ]
+    };
+
+    ddf.ddfRequest(request, (err, data) => {
+      const EXPECTED_RECORDS_COUNT = 216;
+
+      expect(!!err).to.be.false;
+      expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
+
 
       done();
     });

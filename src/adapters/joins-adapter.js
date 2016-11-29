@@ -46,6 +46,24 @@ function getSynonimicConceptIds(conditionParam) {
   return uniq(result);
 }
 
+function getSynonimicCondition(conditionParam, synonimicConceptIds, allEntityDomains) {
+  const result = {};
+
+  keys(conditionParam).forEach(key => {
+    if (!includes(allEntityDomains, key) || isEmpty(synonimicConceptIds)) {
+      result[key] = conditionParam[key];
+      return;
+    }
+
+    result.$or = [{[key]: conditionParam[key]}];
+    synonimicConceptIds.forEach(synonimicConceptId => {
+      result.$or.push({[synonimicConceptId]: conditionParam[key]});
+    });
+  });
+
+  return result;
+}
+
 /* eslint-enable no-invalid-this */
 
 export class JoinsAdapter {
@@ -69,6 +87,8 @@ export class JoinsAdapter {
   getNormalizedRequest(requestParam, onRequestNormalized) {
     const request = cloneDeep(requestParam);
     const allEntitySets = this.contentManager.concepts.filter(concept => concept.concept_type === 'entity_set');
+    const allEntityDomains = this.contentManager.concepts
+      .filter(concept => concept.concept_type === 'entity_domain').map(concept => concept.concept);
     const synonimicConceptIds = getSynonimicConceptIds(request.where);
     const relatedEntitySetsNames = flatten(
       allEntitySets
@@ -80,7 +100,7 @@ export class JoinsAdapter {
     this.synonimicConceptIds = synonimicConceptIds;
 
     request.key = [request.key].concat(relatedEntitySetsNames);
-    request.where = getNormalizedBoolean(request.where);
+    request.where = getSynonimicCondition(getNormalizedBoolean(request.where), synonimicConceptIds, allEntityDomains);
 
     onRequestNormalized(null, request);
   }
