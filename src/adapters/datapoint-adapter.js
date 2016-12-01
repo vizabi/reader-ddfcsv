@@ -187,8 +187,10 @@ export class DataPointAdapter {
       const measureKey = result.measureField;
 
       let entityKey = result.entityField;
+      let entitySetKey = null;
 
       if (this.isEntitySetConcept(result.entityField)) {
+        entitySetKey = entityKey;
         entityKey = this.contentManager.domainHash[result.entityField];
       }
 
@@ -203,6 +205,10 @@ export class DataPointAdapter {
           request.select.value.forEach(measure => {
             dataHash[holderKey][measure] = null;
           });
+
+          if (entitySetKey) {
+            dataHash[holderKey][entitySetKey] = record[result.entityField];
+          }
         }
 
         dataHash[holderKey][measureKey] = record[measureKey];
