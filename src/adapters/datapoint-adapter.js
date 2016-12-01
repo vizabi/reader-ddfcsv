@@ -32,6 +32,17 @@ export class DataPointAdapter {
     this.contentManager = contentManager;
     this.reader = cloneDeep(reader);
     this.ddfPath = ddfPath;
+    this.entitySetsHash = {};
+
+    keys(this.contentManager.domainHash).forEach(entitySet => {
+      const entityDomain = this.contentManager.domainHash[entitySet];
+
+      if (!this.entitySetsHash[entityDomain]) {
+        this.entitySetsHash[entityDomain] = [];
+      }
+
+      this.entitySetsHash[entityDomain].push(entitySet);
+    });
   }
 
   addRequestNormalizer(requestNormalizer) {
@@ -41,15 +52,28 @@ export class DataPointAdapter {
   }
 
   getDataPackageFilteredBySelect(request, dataPackageContent) {
-    const matchByKeyAndValue = (dataPackage, record) => {
-      const isMatchedByKey = isEqual(request.select.key, record.schema.primaryKey);
+    const matchByValue = (dataPackage, record) => {
       const fields = map(record.schema.fields, 'name');
-      const isMatchedByValue = !isEmpty(intersection(fields, request.select.value));
 
-      return isMatchedByKey && isMatchedByValue;
+      return !isEmpty(intersection(fields, request.select.value));
+    };
+    const matchByEntityAndValue = (dataPackage, record) => {
+      const isMatchedByKey = isEqual(request.select.key, record.schema.primaryKey);
+
+      return isMatchedByKey && matchByValue(dataPackage, record);
+    };
+    const matchByEntityDomainAndValue = (dataPackage, record) => {
+      const isMatchedByDomain = !isEmpty(intersection(keys(this.entitySetsHash), request.select.key));
+
+      return isMatchedByDomain && matchByValue(dataPackage, record);
     };
 
-    return getResourcesFilteredBy(dataPackageContent, matchByKeyAndValue);
+    let result = getResourcesFilteredBy(dataPackageContent, matchByEntityAndValue);
+
+    if (isEmpty(result)) {
+      result = getResourcesFilteredBy(dataPackageContent, matchByEntityDomainAndValue);
+    }
+    return result;
   }
 
   getNormalizedRequest(requestParam, onRequestNormalized) {
