@@ -1,10 +1,11 @@
-import fs from 'fs';
-import csvParse from 'csv-parse';
-import compact from 'lodash/compact';
-import head from 'lodash/head';
-import split from 'lodash/split';
+import * as fs from 'fs';
+import * as csvParse from 'csv-parse';
+import {compact, head, split} from 'lodash';
+import {IReader} from './reader';
 
-export class BackendFileReader {
+export class BackendFileReader implements IReader {
+  public recordTransformer: Function;
+
   setRecordTransformer(recordTransformer) {
     this.recordTransformer = recordTransformer;
   }

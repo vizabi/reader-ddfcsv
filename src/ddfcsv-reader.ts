@@ -1,22 +1,18 @@
-/* eslint-disable */
-
-import cloneDeep from 'lodash/cloneDeep';
+import {cloneDeep} from 'lodash';
 import {Ddf} from './ddf';
-const Promise = require('bluebird');
+import {IReader} from './file-readers/reader';
+import * as Promise from 'bluebird';
 
-export default function prepareDDFCsvReaderObject(defaultFileReader) {
-  return function (externalFileReader, logger) {
+export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
+  return function (externalFileReader?: IReader, logger?: any) {
     return {
       init(reader_info) {
-        var fileReader = externalFileReader || defaultFileReader;
+        const fileReader = externalFileReader || defaultFileReader;
 
-        this._ddfPath = reader_info.path;
-        this.ddf = new Ddf(this._ddfPath, fileReader);
+        this.ddf = new Ddf(reader_info.path, fileReader);
       },
 
       read(queryPar, parsers) {
-        var _this = this;
-
         function prettifyData(data) {
           return data.map(record => {
             const keys = Object.keys(record);
@@ -31,10 +27,10 @@ export default function prepareDDFCsvReaderObject(defaultFileReader) {
           });
         }
 
-        return new Promise(function (resolve, reject) {
-          var query = cloneDeep(queryPar);
+        return new Promise((resolve, reject) => {
+          const query = cloneDeep(queryPar);
 
-          _this.ddf.ddfRequest(query, function (err, data) {
+          this.ddf.ddfRequest(query, function (err, data) {
             if (err) {
               reject(err);
               return;

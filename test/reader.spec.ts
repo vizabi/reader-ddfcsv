@@ -1,16 +1,9 @@
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import * as chai from 'chai';
+import * as _ from 'lodash';
+import {getDDFCsvReaderObject} from '../src/index';
+
 const expect = chai.expect;
-
-const _ = require('lodash');
-const api = require('../dist/bundle');
-const getDDFCsvReaderObject = api.getDDFCsvReaderObject;
-
-/* eslint-disable camelcase */
-
 const GLOBALIS_PATH = './test/fixtures/systema_globalis';
-
-chai.use(sinonChai);
 
 describe('when reader checking', () => {
   it('result for concepts reading should be expected', () => {

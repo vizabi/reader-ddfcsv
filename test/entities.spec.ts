@@ -1,18 +1,11 @@
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const expect = chai.expect;
-
-const api = require('../dist/bundle');
-const Ddf = api.Ddf;
-const BackendFileReader = api.BackendFileReader;
-
-/* eslint-disable camelcase */
+import * as chai from 'chai';
+import {BackendFileReader, Ddf} from '../src/index';
 
 const backendFileReader = new BackendFileReader();
 const GLOBALIS_PATH = './test/fixtures/systema_globalis';
 const GLOBALIS_TINY_PATH = './test/fixtures/systema_globalis_tiny';
 
-chai.use(sinonChai);
+const expect = chai.expect;
 
 describe('when entities checking', () => {
   it('plain query should be processed correctly', done => {

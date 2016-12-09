@@ -1,23 +1,26 @@
-import parallel from 'async-es/parallel';
-import whilst from 'async-es/whilst';
+import {parallel, whilst} from 'async';
+import {
+  cloneDeep,
+  head,
+  flatten,
+  includes,
+  isBoolean,
+  isEmpty,
+  isEqual,
+  split,
+  uniq
+} from 'lodash';
+import {ContentManager} from './content-manager';
+import {IReader} from './file-readers/reader';
+import * as traverse from 'traverse';
 
-import * as Mingo from 'mingo';
-
-import cloneDeep from 'lodash/cloneDeep';
-import head from 'lodash/head';
-import flatten from 'lodash/flatten';
-import includes from 'lodash/includes';
-import isBoolean from 'lodash/isBoolean';
-import isEmpty from 'lodash/isEmpty';
-import isEqual from 'lodash/isEqual';
-import split from 'lodash/split';
-import uniq from 'lodash/uniq';
-
-const traverse = require('traverse');
+const Mingo = require('mingo');
 
 export class EntityUtils {
-
-  /* eslint-disable max-params */
+  public contentManager: ContentManager;
+  public reader: IReader;
+  public ddfPath: string;
+  public condition: any;
 
   constructor(contentManager, reader, ddfPath, condition) {
     this.contentManager = contentManager;
@@ -25,8 +28,6 @@ export class EntityUtils {
     this.ddfPath = ddfPath;
     this.condition = condition;
   }
-
-  /* eslint-enable max-params */
 
   getConditionBranchActions(expectedFiles, conditionDescriptor) {
     const conditionBranchActions = [];
@@ -60,8 +61,6 @@ export class EntityUtils {
     return conditionBranchActions;
   }
 
-  /* eslint-disable no-invalid-this */
-
   getConditionsDescriptors(conditionToTraverse) {
     const expectedConditionsDescriptors = [];
 
@@ -94,8 +93,6 @@ export class EntityUtils {
 
     conditionToTraverse.forEach(processConditionBranch);
   }
-
-  /* eslint-enable no-invalid-this */
 
   transformConditionByDomain(onConditionTransformed) {
     const condition = cloneDeep(this.condition);

@@ -1,23 +1,22 @@
-/* eslint-disable */
-
-import * as Mingo from 'mingo';
-
-import compact from 'lodash/compact';
-import cloneDeep from 'lodash/cloneDeep';
-import flatten from 'lodash/flatten';
-import reduce from 'lodash/reduce';
-import includes from 'lodash/includes';
-import isEmpty from 'lodash/isEmpty';
-import startsWith from 'lodash/startsWith';
-import uniq from 'lodash/uniq';
-import values from 'lodash/values';
+import {
+  compact,
+  cloneDeep,
+  flatten,
+  reduce,
+  includes,
+  isEmpty,
+  startsWith,
+  uniq
+} from 'lodash';
 import {getResourcesFilteredBy} from './shared';
+import {ContentManager} from '../content-manager';
+import {IReader} from '../file-readers/reader';
+import {RequestNormalizer} from '../request-normalizer';
+import * as traverse from 'traverse';
+import {IDdfAdapter} from './adapter';
 
-const traverse = require('traverse');
-
+const Mingo = require('mingo');
 const VALUE_WITH_PREFIX_REGEX = /^.*\./;
-
-/* eslint-disable no-invalid-this */
 
 function getCroppedKeys(conditionParam) {
   const condition = cloneDeep(conditionParam);
@@ -51,9 +50,14 @@ function getNormalizedBoolean(conditionParam) {
   return condition;
 }
 
-/* eslint-enable no-invalid-this */
+export class EntityAdapter implements IDdfAdapter {
+  public contentManager: ContentManager;
+  public reader: IReader;
+  public ddfPath: string;
+  public requestNormalizer: RequestNormalizer;
+  public domainDescriptors: Array<any>;
+  public request: any;
 
-export class EntityAdapter {
   constructor(contentManager, reader, ddfPath) {
     this.contentManager = contentManager;
     this.reader = cloneDeep(reader);
@@ -134,7 +138,7 @@ export class EntityAdapter {
     const fields = request.select.key.concat(request.select.value);
     const projection = reduce(
       fields,
-      (currentProjection, field) => {
+      (currentProjection, field: string) => {
         currentProjection[field] = 1;
         return currentProjection;
       },

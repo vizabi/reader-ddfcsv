@@ -1,6 +1,9 @@
 .idea
 
 dist
+lib
+*js
+!webpack.config.js
 
 # Logs
 logs
