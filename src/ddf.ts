@@ -6,20 +6,22 @@ import {JoinsAdapter} from './adapters/joins-adapter';
 import {DataPointAdapter} from './adapters/datapoint-adapter';
 import {DataPointSchemaAdapter} from './adapters/datapoint-schema-adapter';
 import {RequestNormalizer} from './request-normalizer';
+import {IReader} from './file-readers/reader';
+import {IDdfAdapter} from './adapters/adapter';
+import {parallel} from 'async';
+import {
+  cloneDeep,
+  isArray,
+  isEmpty,
+  isObject,
+  flatten,
+  sortBy,
+  startsWith,
+  uniq
+} from 'lodash';
+import * as traverse from 'traverse';
 
-import parallel from 'async-es/parallel';
-
-import cloneDeep from 'lodash/cloneDeep';
-import isArray from 'lodash/isArray';
-import isEmpty from 'lodash/isEmpty';
-import isObject from 'lodash/isObject';
-import flatten from 'lodash/flatten';
-import sortBy from 'lodash/sortBy';
-import startsWith from 'lodash/startsWith';
-import uniq from 'lodash/uniq';
-
-const traverse = require('traverse');
-const contentManager = new ContentManager();
+const contentManager: ContentManager = new ContentManager();
 const ADAPTERS = {
   concepts: ConceptAdapter,
   entities: EntityAdapter,
@@ -52,6 +54,9 @@ function postProcessing(requestParam, data) {
 }
 
 export class Ddf {
+  public ddfPath: string;
+  public reader: IReader;
+
   constructor(ddfPath, reader) {
     this.ddfPath = ddfPath;
     this.reader = cloneDeep(reader);
@@ -61,11 +66,11 @@ export class Ddf {
     }
   }
 
-  getContentManager() {
+  getContentManager(): ContentManager {
     return contentManager;
   }
 
-  getDataPackage(onDataPackageLoaded) {
+  getDataPackage(onDataPackageLoaded: Function) {
     const dataPackageFileName = `${this.ddfPath}datapackage.json`;
 
     this.reader.readJSON(dataPackageFileName, (dataPackageError, dataPackageData) => {
@@ -100,7 +105,7 @@ export class Ddf {
     });
   }
 
-  getConcepts(onConceptsLoaded) {
+  getConcepts(onConceptsLoaded: Function) {
     const conceptFiles = uniq(
       contentManager.dataPackage.resources
         .filter(record => record.schema.primaryKey === 'concept')
@@ -113,9 +118,7 @@ export class Ddf {
     parallel(actions, (err, results) => onConceptsLoaded(err, flatten(results)));
   }
 
-  /* eslint-disable no-invalid-this */
-
-  getRelationKeysDescriptors(requestParam) {
+  getRelationKeysDescriptors(requestParam: any): Array<any> {
     const condition = cloneDeep(requestParam.where);
     const conditionToTraverse = traverse(condition);
     const relationKeysDescriptors = [];
@@ -134,9 +137,7 @@ export class Ddf {
     return relationKeysDescriptors;
   }
 
-  /* eslint-enable no-invalid-this */
-
-  getJoinProcessors(requestParam, relationKeysDescriptors) {
+  getJoinProcessors(requestParam: any, relationKeysDescriptors: Array<any>) {
     return relationKeysDescriptors.map(relationKeyDescriptor => onJoinProcessed => {
       if (!requestParam.join || !requestParam.join[relationKeyDescriptor.value]) {
         onJoinProcessed(new Error(`join for relation ${relationKeyDescriptor.value} is not found!`));
@@ -152,10 +153,10 @@ export class Ddf {
     });
   }
 
-  processRequest(requestParam, requestNormalizer, onRequestProcessed) {
+  processRequest(requestParam: any, requestNormalizer: RequestNormalizer, onRequestProcessed: Function) {
     const request = cloneDeep(requestParam);
 
-    const ddfTypeAdapter =
+    const ddfTypeAdapter: IDdfAdapter =
       new ADAPTERS[request.from](contentManager, this.reader, this.ddfPath).addRequestNormalizer(requestNormalizer);
 
     ddfTypeAdapter.getNormalizedRequest(request, (normError, normRequest) => {
@@ -164,8 +165,7 @@ export class Ddf {
         return;
       }
 
-      const expectedDataPackage =
-        ddfTypeAdapter.getDataPackageFilteredBySelect(normRequest, contentManager.dataPackage);
+      const expectedDataPackage = ddfTypeAdapter.getDataPackageFilteredBySelect(normRequest, contentManager.dataPackage);
       const expectedFiles = uniq(expectedDataPackage.map(dataPackageRecord => dataPackageRecord.path));
 
       ddfTypeAdapter.reader.setRecordTransformer(ddfTypeAdapter.getRecordTransformer(normRequest));
@@ -179,7 +179,7 @@ export class Ddf {
     });
   }
 
-  ddfRequest(requestParam, onDdfRequestProcessed) {
+  ddfRequest(requestParam: any, onDdfRequestProcessed: Function) {
     this.getDataPackage(dataPackageErr => {
       if (dataPackageErr) {
         onDdfRequestProcessed(dataPackageErr);
@@ -196,9 +196,9 @@ export class Ddf {
           return;
         }
 
-        const normalRequestCondition = traverse(request.where);
+        const normalRequestCondition: any = traverse(request.where);
 
-        results.forEach(result => {
+        results.forEach((result: any) => {
           normalRequestCondition.set(result.relationKeyDescriptor.path, result.condition);
         });
 

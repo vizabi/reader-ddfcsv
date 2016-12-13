@@ -1,19 +1,22 @@
-import * as Mingo from 'mingo';
-
-import cloneDeep from 'lodash/cloneDeep';
-import flatten from 'lodash/flatten';
-import isEmpty from 'lodash/isEmpty';
-import keys from 'lodash/keys';
-import reduce from 'lodash/reduce';
-import replace from 'lodash/replace';
-import includes from 'lodash/includes';
-import uniq from 'lodash/uniq';
-import startsWith from 'lodash/startsWith';
+import {
+  cloneDeep,
+  flatten,
+  isEmpty,
+  keys,
+  reduce,
+  replace,
+  includes,
+  uniq,
+  startsWith
+} from 'lodash';
 import {getResourcesFilteredBy} from './shared';
+import * as traverse from 'traverse';
+import {ContentManager} from '../content-manager';
+import {IReader} from '../file-readers/reader';
+import {RequestNormalizer} from '../request-normalizer';
+import {IDdfAdapter} from './adapter';
 
-const traverse = require('traverse');
-
-/* eslint-disable no-invalid-this */
+const Mingo = require('mingo');
 
 function getNormalizedBoolean(conditionParam) {
   const condition = cloneDeep(conditionParam);
@@ -47,7 +50,7 @@ function getSynonimicConceptIds(conditionParam) {
 }
 
 function getSynonimicCondition(conditionParam, synonimicConceptIds, allEntityDomains) {
-  const result = {};
+  const result: any = {};
 
   keys(conditionParam).forEach(key => {
     if (!includes(allEntityDomains, key) || isEmpty(synonimicConceptIds)) {
@@ -55,18 +58,23 @@ function getSynonimicCondition(conditionParam, synonimicConceptIds, allEntityDom
       return;
     }
 
-    result.$or = [{[key]: conditionParam[key]}];
+    result['$or'] = [{[key]: conditionParam[key]}];
+
     synonimicConceptIds.forEach(synonimicConceptId => {
-      result.$or.push({[synonimicConceptId]: conditionParam[key]});
+      result['$or'].push({[synonimicConceptId]: conditionParam[key]});
     });
   });
 
   return result;
 }
 
-/* eslint-enable no-invalid-this */
+export class JoinsAdapter implements IDdfAdapter {
+  public contentManager: ContentManager;
+  public reader: IReader;
+  public ddfPath: string;
+  public requestNormalizer: RequestNormalizer;
+  public synonimicConceptIds: Array<string>;
 
-export class JoinsAdapter {
   constructor(contentManager, reader, ddfPath) {
     this.contentManager = contentManager;
     this.reader = cloneDeep(reader);
@@ -156,7 +164,7 @@ export class JoinsAdapter {
     const data = flatten(results);
     const projection = reduce(
       request.key,
-      (currentProjection, field) => {
+      (currentProjection, field: string) => {
         currentProjection[field] = 1;
 
         return currentProjection;

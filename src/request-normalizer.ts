@@ -1,17 +1,18 @@
-import cloneDeep from 'lodash/cloneDeep';
-import includes from 'lodash/includes';
-import head from 'lodash/head';
-import slice from 'lodash/slice';
-import uniq from 'lodash/uniq';
+import {
+  cloneDeep,
+  includes,
+  head,
+  slice,
+  uniq
+} from 'lodash';
+import * as traverse from 'traverse';
+import * as timeUtils from 'ddf-time-utils';
+import {ContentManager} from './content-manager';
 
-const traverse = require('traverse');
-const timeUtils = require('ddf-time-utils');
 const COMPARISONS_OPERATORS = ['$gt', '$gte', '$lt', '$lte'];
 
-/* eslint-disable no-invalid-this */
-
 function getCorrectedTime(request, contentManager) {
-  const requestToTraverse = traverse(request);
+  const requestToTraverse: any = traverse(request);
   // const ERROR = 'Time conditions are not correct: time types are not same';
 
   let timeTypes = [];
@@ -53,7 +54,7 @@ function getCorrectedTime(request, contentManager) {
 // ugly hack remove it later
 
 function getCorrectAndClause(request) {
-  const requestToTraverse = traverse(request);
+  const requestToTraverse: any = traverse(request);
 
   function processConditionBranch() {
     if (this.key === '$and' && this.node.length === 1) {
@@ -66,9 +67,13 @@ function getCorrectAndClause(request) {
   return requestToTraverse.value;
 }
 
-/* eslint-enable no-invalid-this */
-
 export class RequestNormalizer {
+  public request: any;
+  public requestCopy: any;
+  public contentManager: ContentManager;
+  public error: any;
+  public timeType: any;
+
   constructor(requestParam, contentManager) {
     this.request = cloneDeep(requestParam);
     this.requestCopy = cloneDeep(requestParam);

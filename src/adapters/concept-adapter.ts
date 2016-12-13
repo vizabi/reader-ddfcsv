@@ -1,13 +1,18 @@
-import * as Mingo from 'mingo';
-
-import cloneDeep from 'lodash/cloneDeep';
-import flatten from 'lodash/flatten';
-import reduce from 'lodash/reduce';
-import includes from 'lodash/includes';
-import isEmpty from 'lodash/isEmpty';
+import {cloneDeep, flatten, reduce, includes, isEmpty} from 'lodash';
 import {getResourcesFilteredBy} from './shared';
+import {ContentManager} from '../content-manager';
+import {IReader} from '../file-readers/reader';
+import {RequestNormalizer} from '../request-normalizer';
+import {IDdfAdapter} from './adapter';
 
-export class ConceptAdapter {
+const Mingo = require('mingo');
+
+export class ConceptAdapter implements IDdfAdapter {
+  public contentManager: ContentManager;
+  public reader: IReader;
+  public ddfPath: string;
+  public requestNormalizer: RequestNormalizer;
+
   constructor(contentManager, reader, ddfPath) {
     this.contentManager = contentManager;
     this.reader = cloneDeep(reader);
@@ -20,7 +25,7 @@ export class ConceptAdapter {
     return this;
   }
 
-  getDataPackageFilteredBySelect(request, dataPackageContent) {
+  getDataPackageFilteredBySelect(request, dataPackageContent): any {
     return getResourcesFilteredBy(dataPackageContent, (dataPackage, record) =>
       includes(request.select.key, record.schema.primaryKey));
   }
@@ -31,9 +36,7 @@ export class ConceptAdapter {
     onRequestNormalized(null, request);
   }
 
-  /* eslint-disable no-empty */
-
-  getRecordTransformer() {
+  getRecordTransformer(): any {
     return record => {
       if (record.color && !isEmpty(record.color)) {
         try {
@@ -46,20 +49,18 @@ export class ConceptAdapter {
     };
   }
 
-  /* eslint-enable no-empty */
-
-  getFileActions(expectedFiles) {
+  getFileActions(expectedFiles): Array<any> {
     return expectedFiles.map(file => onFileRead => {
       this.reader.readCSV(`${this.ddfPath}${file}`, onFileRead);
     });
   }
 
-  getFinalData(results, request) {
+  getFinalData(results, request): Array<any> {
     const data = flatten(results);
     const fields = request.select.key.concat(request.select.value);
     const projection = reduce(
       fields,
-      (currentProjection, field) => {
+      (currentProjection, field: string) => {
         currentProjection[field] = 1;
 
         return currentProjection;

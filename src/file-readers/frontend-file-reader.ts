@@ -1,11 +1,14 @@
-import compact from 'lodash/compact';
-
-const csvParse = require('csv-parse');
+import {compact} from 'lodash';
+import * as csvParse from 'csv-parse';
+import {IReader} from './reader';
 
 require('fetch-polyfill');
 
-/* eslint-disable no-undef */
-export class FrontendFileReader {
+declare var fetch;
+
+export class FrontendFileReader implements IReader {
+  public recordTransformer: Function;
+
   setRecordTransformer(recordTransformer) {
     this.recordTransformer = recordTransformer;
   }
@@ -47,5 +50,8 @@ export class FrontendFileReader {
       .catch(err => {
         onFileRead(err || `${filePath} read error`);
       });
+  }
+
+  getFileSchema(filePath, onFileRead) {
   }
 }

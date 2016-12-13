@@ -1,20 +1,24 @@
 import {EntityUtils} from '../entity-utils';
-
-import * as Mingo from 'mingo';
-
-import cloneDeep from 'lodash/cloneDeep';
-import head from 'lodash/head';
-import isEmpty from 'lodash/isEmpty';
-import isEqual from 'lodash/isEqual';
-import isInteger from 'lodash/isInteger';
-import intersection from 'lodash/intersection';
-import keys from 'lodash/keys';
-import map from 'lodash/map';
-import reduce from 'lodash/reduce';
-import values from 'lodash/values';
+import {
+  cloneDeep,
+  head,
+  isEmpty,
+  isEqual,
+  isInteger,
+  intersection,
+  keys,
+  map,
+  reduce,
+  values
+} from 'lodash';
 import {getResourcesFilteredBy} from './shared';
+import * as timeUtils from 'ddf-time-utils';
+import {ContentManager} from '../content-manager';
+import {IReader} from '../file-readers/reader';
+import {RequestNormalizer} from '../request-normalizer';
+import {IDdfAdapter} from './adapter';
 
-const timeUtils = require('ddf-time-utils');
+const Mingo = require('mingo');
 
 const timeValuesHash = {};
 const timeDescriptorHash = {};
@@ -27,7 +31,13 @@ function getTimeDescriptor(time) {
   return timeDescriptorHash[time];
 }
 
-export class DataPointAdapter {
+export class DataPointAdapter implements IDdfAdapter {
+  public contentManager: ContentManager;
+  public reader: IReader;
+  public ddfPath: string;
+  public requestNormalizer: RequestNormalizer;
+  public entitySetsHash: any;
+
   constructor(contentManager, reader, ddfPath) {
     this.contentManager = contentManager;
     this.reader = cloneDeep(reader);
@@ -103,8 +113,6 @@ export class DataPointAdapter {
       }
     };
 
-    /* eslint-disable max-statements */
-
     const transformTimes = record => {
       let isRecordAvailable = true;
 
@@ -128,8 +136,6 @@ export class DataPointAdapter {
 
       return isRecordAvailable;
     };
-
-    /* eslint-enable max-statements */
 
     return record => {
       transformNumbers(record);
@@ -188,14 +194,12 @@ export class DataPointAdapter {
     });
   }
 
-  /* eslint-disable no-console */
-
   getFinalData(results, request) {
     const dataHash = [];
     const fields = request.select.key.concat(request.select.value);
     const projection = reduce(
       fields,
-      (currentProjection, field) => {
+      (currentProjection, field: string) => {
         currentProjection[field] = 1;
 
         return currentProjection;
