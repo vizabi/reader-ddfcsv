@@ -28,7 +28,7 @@ describe('when reader checking', () => {
     const pro = readerObject.read(request);
 
     return pro.then(data => {
-      const EXPECTED_RECORDS_COUNT = 9;
+      const EXPECTED_RECORDS_COUNT = 8;
       const EXPECTED_FIELDS_COUNT = 5;
 
       expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
@@ -66,7 +66,7 @@ describe('when reader checking', () => {
     const pro = readerObject.read(request);
 
     return pro.then(data => {
-      const EXPECTED_RECORDS_COUNT = 9;
+      const EXPECTED_RECORDS_COUNT = 8;
       const EXPECTED_FIELDS_COUNT = 3;
 
       expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);

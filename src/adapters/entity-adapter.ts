@@ -71,8 +71,12 @@ export class EntityAdapter implements IDdfAdapter {
   }
 
   getDataPackageFilteredBySelect(request, dataPackageContent) {
+    const domain = this.contentManager.domainHash[request.select.key];
+    const isFieldPresent = (record, fieldIs) => !!record.schema.fields.find(field => field.name === `is--${fieldIs}`);
+
     return getResourcesFilteredBy(dataPackageContent, (dataPackage, record) =>
-      includes(request.select.key, record.schema.primaryKey));
+    includes(request.select.key, record.schema.primaryKey) ||
+    (includes(domain, record.schema.primaryKey) && isFieldPresent(record, request.select.key)));
   }
 
   getDomainDescriptorsByRequestKeys(requestKey) {

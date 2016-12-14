@@ -27,7 +27,7 @@ describe('when data points checking', () => {
     };
 
     ddf.ddfRequest(request, (err, data) => {
-      const EXPECTED_RECORDS_COUNT = 47930;
+      const EXPECTED_RECORDS_COUNT = 54533;
       const EXPECTED_FIELDS_COUNT = 5;
 
       expect(!!err).to.be.false;
@@ -86,7 +86,7 @@ describe('when data points checking', () => {
     };
 
     ddf.ddfRequest(request, (err, data) => {
-      const EXPECTED_RECORDS_COUNT = 1349;
+      const EXPECTED_RECORDS_COUNT = 1448;
       const EXPECTED_FIELDS_COUNT = 4;
 
       expect(!!err).to.be.false;
@@ -141,7 +141,7 @@ describe('when data points checking', () => {
     };
 
     ddf.ddfRequest(request, (err, data) => {
-      const EXPECTED_RECORDS_COUNT = 232;
+      const EXPECTED_RECORDS_COUNT = 233;
 
       expect(!!err).to.be.false;
       expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
@@ -170,7 +170,7 @@ describe('when data points checking', () => {
     };
 
     ddf.ddfRequest(request, (err, data) => {
-      const EXPECTED_RECORDS_COUNT = 68121;
+      const EXPECTED_RECORDS_COUNT = 87828;
 
       expect(!!err).to.be.false;
       expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);

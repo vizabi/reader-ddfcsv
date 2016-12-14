@@ -26,7 +26,7 @@ describe('when concepts checking', () => {
     };
 
     ddf.ddfRequest(request, (err, data) => {
-      const EXPECTED_RECORDS_COUNT = 9;
+      const EXPECTED_RECORDS_COUNT = 8;
       const EXPECTED_FIELDS_COUNT = 5;
 
       expect(!!err).to.be.false;

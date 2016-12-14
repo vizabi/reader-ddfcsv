@@ -92,7 +92,7 @@ describe('when entities checking', () => {
     };
 
     ddf.ddfRequest(request, (err, data) => {
-      const EXPECTED_RECORDS_COUNT = 1;
+      const EXPECTED_RECORDS_COUNT = 4;
 
       expect(!!err).to.be.false;
       expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
@@ -122,6 +122,40 @@ describe('when entities checking', () => {
       data.forEach(record => {
         expect(!!record.world_4region).to.be.true;
       });
+
+      done();
+    });
+  });
+
+
+  it('domain as primary key based query should be processed correctly', done => {
+    const ddf = new Ddf(GLOBALIS_PATH, backendFileReader);
+    const request = {
+      language: "en",
+      from: "entities",
+      animatable: false,
+      select: {
+        key: [
+          'world_4region'
+        ],
+        value: [
+          'name',
+          'rank',
+          'shape_lores_svg'
+        ]
+      },
+      where: {},
+      join: {},
+      order_by: [
+        'rank'
+      ]
+    };
+
+    ddf.ddfRequest(request, (err, data) => {
+      const EXPECTED_RECORDS_COUNT = 4;
+
+      expect(!!err).to.be.false;
+      expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
 
       done();
     });
