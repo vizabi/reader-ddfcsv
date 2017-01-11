@@ -30,6 +30,7 @@
     "fetch-polyfill": "0.8.2",
     "lodash-es": "4.17.2",
     "mingo": "0.8.0",
+    "papaparse": "^4.1.2",
     "traverse": "0.6.6"
   },
   "devDependencies": {
