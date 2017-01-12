@@ -170,7 +170,7 @@ export class JoinsAdapter implements IDdfAdapter {
         return currentProjection;
       },
       {});
-    const query = new Mingo.Query(request.where, projection);
+    const query = new Mingo.Query(request.where);
     const expectedIds = this.synonimicConceptIds.concat(keys(projection));
     const relatedData = query.find(data).all().map(record => {
       let value = null;

@@ -36,15 +36,19 @@ function postProcessing(requestParam, data) {
     return data;
   }
 
-  let processedData = data.map(record => {
-    Object.keys(record).forEach(key => {
-      if (isObject(record[key])) {
-        record[key] = JSON.stringify(record[key]);
-      }
-    });
+  let processedData = data;
 
-    return record;
-  });
+  if (requestParam.from === 'concepts') {
+    processedData = data.map(record => {
+      Object.keys(record).forEach(key => {
+        if (isObject(record[key])) {
+          record[key] = JSON.stringify(record[key]);
+        }
+      });
+
+      return record;
+    });
+  }
 
   if (!isEmpty(requestParam.order_by) && isArray(requestParam.order_by)) {
     processedData = sortBy(processedData, requestParam.order_by);
