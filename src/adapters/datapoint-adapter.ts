@@ -243,18 +243,25 @@ export class DataPointAdapter implements IDdfAdapter {
       });
     });
 
-    const query = new Mingo.Query(request.where, projection);
+    const query = new Mingo.Query(request.where);
     const data = values(dataHash);
     const timeKeys = keys(timeValuesHash);
     const filteredData = query.find(data).all().map(record => {
+      const resultRecord = {};
+      const projectionKeys = keys(projection);
+
+      for (const projectionKey of projectionKeys) {
+        resultRecord[projectionKey] = record[projectionKey];
+      }
+
       for (const timeKey of timeKeys) {
         if (isInteger(record[timeKey])) {
-          record[timeKey] = `${timeValuesHash[timeKey][record[timeKey]]}`;
+          resultRecord[timeKey] = `${timeValuesHash[timeKey][record[timeKey]]}`;
           break;
         }
       }
 
-      return record;
+      return resultRecord;
     });
 
     return filteredData;
