@@ -4,7 +4,7 @@ import {
   head,
   isEmpty,
   isEqual,
-  includes,
+  isInteger,
   intersection,
   keys,
   map,
@@ -98,9 +98,21 @@ export class DataPointAdapter implements IDdfAdapter {
   }
 
   getRecordTransformer(request) {
+    const measures = this.contentManager.concepts
+      .filter(conceptRecord => conceptRecord.concept_type === 'measure')
+      .map(conceptRecord => conceptRecord.concept);
+    const expectedMeasures = intersection(measures, request.select.value);
     const times = this.contentManager.concepts
       .filter(conceptRecord => conceptRecord.concept_type === 'time')
       .map(conceptRecord => conceptRecord.concept);
+    const transformNumbers = record => {
+      for (const keyToTransform of expectedMeasures) {
+        if (record[keyToTransform] && record[keyToTransform]) {
+          record[keyToTransform] = Number(record[keyToTransform]);
+        }
+      }
+    };
+
     const transformTimes = record => {
       let isRecordAvailable = true;
 
@@ -126,6 +138,8 @@ export class DataPointAdapter implements IDdfAdapter {
     };
 
     return record => {
+      transformNumbers(record);
+
       const isRecordAvailable = transformTimes(record);
 
       return isRecordAvailable ? record : null;
@@ -192,9 +206,9 @@ export class DataPointAdapter implements IDdfAdapter {
       },
       {});
 
-    for (const result of results) {
+    results.forEach(result => {
       if (isEmpty(result.data)) {
-        continue;
+        return;
       }
 
       const timeKey = result.timeField;
@@ -208,7 +222,7 @@ export class DataPointAdapter implements IDdfAdapter {
         entityKey = this.contentManager.domainHash[result.entityField];
       }
 
-      for (const record of result.data) {
+      result.data.forEach(record => {
         const holderKey = `${record[result.entityField]},${record[result.timeField]}`;
 
         if (!dataHash[holderKey]) {
@@ -216,10 +230,9 @@ export class DataPointAdapter implements IDdfAdapter {
             [entityKey]: record[result.entityField],
             [timeKey]: record[result.timeField]
           };
-
-          for (const measure of request.select.value) {
+          request.select.value.forEach(measure => {
             dataHash[holderKey][measure] = null;
-          }
+          });
 
           if (entitySetKey) {
             dataHash[holderKey][entitySetKey] = record[result.entityField];
@@ -227,8 +240,8 @@ export class DataPointAdapter implements IDdfAdapter {
         }
 
         dataHash[holderKey][measureKey] = record[measureKey];
-      }
-    }
+      });
+    });
 
     const query = new Mingo.Query(request.where);
     const data = values(dataHash);
@@ -238,12 +251,14 @@ export class DataPointAdapter implements IDdfAdapter {
       const projectionKeys = keys(projection);
 
       for (const projectionKey of projectionKeys) {
-        if (includes(timeKeys, projectionKey)) {
-          resultRecord[projectionKey] = `${timeValuesHash[projectionKey][record[projectionKey]]}`;
-          continue;
-        }
-
         resultRecord[projectionKey] = record[projectionKey];
+      }
+
+      for (const timeKey of timeKeys) {
+        if (isInteger(record[timeKey])) {
+          resultRecord[timeKey] = `${timeValuesHash[timeKey][record[timeKey]]}`;
+          break;
+        }
       }
 
       return resultRecord;
