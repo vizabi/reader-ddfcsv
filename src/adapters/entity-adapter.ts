@@ -2,6 +2,7 @@ import {
   compact,
   cloneDeep,
   flatten,
+  keys,
   reduce,
   includes,
   isEmpty,
@@ -111,6 +112,9 @@ export class EntityAdapter implements IDdfAdapter {
 
   getRecordTransformer() {
     const isTruth = value => value === 'true' || value === 'TRUE';
+    const measures = this.contentManager.concepts
+      .filter(conceptRecord => conceptRecord.concept_type === 'measure')
+      .map(conceptRecord => conceptRecord.concept);
 
     return record => {
       if (!isEmpty(this.domainDescriptors)) {
@@ -123,6 +127,18 @@ export class EntityAdapter implements IDdfAdapter {
           if (isEmpty(record[domainDescriptor.key]) && !isEmpty(record[domainDescriptor.domain])) {
             record[domainDescriptor.key] = record[domainDescriptor.domain];
           }
+        }
+      }
+
+      const recordKeys = keys(record);
+
+      for (const key of recordKeys) {
+        if (includes(measures, key) && record[key]) {
+          record[key] = Number(record[key]);
+        }
+
+        if (includes(measures, key) && !record[key]) {
+          record[key] = null;
         }
       }
 

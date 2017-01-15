@@ -1,4 +1,5 @@
 import * as chai from 'chai';
+import {isNumber} from 'lodash';
 import {BackendFileReader, Ddf} from '../src/index';
 
 const backendFileReader = new BackendFileReader();
@@ -15,7 +16,7 @@ describe('when entities checking', () => {
       animatable: 'time',
       select: {
         key: ['geo'],
-        value: ['name', 'world_4region']
+        value: ['name', 'world_4region', 'latitude', 'longitude']
       },
       where: {'is--country': true},
       grouping: {},
@@ -30,6 +31,14 @@ describe('when entities checking', () => {
 
       data.forEach(record => {
         expect(record.geo).to.equal(record.country);
+
+        if (record.longitude !== null) {
+          expect(isNumber(record.longitude)).to.be.true;
+        }
+
+        if (record.latitude !== null) {
+          expect(isNumber(record.latitude)).to.be.true;
+        }
       });
 
       done();
