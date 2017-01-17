@@ -92,15 +92,14 @@ export class JoinsAdapter implements IDdfAdapter {
       includes(request.key, record.schema.primaryKey));
   }
 
-  getNormalizedRequest(requestParam, onRequestNormalized) {
-    const request = cloneDeep(requestParam);
+  getNormalizedRequest(request, onRequestNormalized) {
     const allEntitySets = this.contentManager.concepts.filter(concept => concept.concept_type === 'entity_set');
     const allEntityDomains = this.contentManager.concepts
       .filter(concept => concept.concept_type === 'entity_domain').map(concept => concept.concept);
     const synonimicConceptIds = getSynonimicConceptIds(request.where);
     const relatedEntitySetsNames = flatten(
       allEntitySets
-        .filter(entitySet => entitySet.domain === requestParam.key)
+        .filter(entitySet => entitySet.domain === request.key)
         .filter(entitySet => includes(synonimicConceptIds, entitySet.concept))
         .map(entitySet => entitySet.concept)
     );

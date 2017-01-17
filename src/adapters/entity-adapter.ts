@@ -36,8 +36,7 @@ function getCroppedKeys(conditionParam) {
   return condition;
 }
 
-function getNormalizedBoolean(conditionParam) {
-  const condition = cloneDeep(conditionParam);
+function getNormalizedBoolean(condition) {
   const conditionToTraverse = traverse(condition);
 
   function processConditionBranch() {
@@ -88,11 +87,10 @@ export class EntityAdapter implements IDdfAdapter {
     ));
   }
 
-  getNormalizedRequest(requestParam, onRequestNormalized) {
-    const request = cloneDeep(requestParam);
+  getNormalizedRequest(request, onRequestNormalized) {
     const allEntitySets = this.contentManager.concepts.filter(concept => concept.concept_type === 'entity_set');
     const relatedEntitySetsNames = flatten(
-      requestParam.select.key
+      request.select.key
         .map(key => allEntitySets
           .filter(entitySet => entitySet.domain === key)
           .map(entitySet => entitySet.concept))

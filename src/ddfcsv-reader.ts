@@ -13,6 +13,8 @@ export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
       },
 
       read(queryPar, parsers) {
+        const query = cloneDeep(queryPar);
+
         function prettifyData(data) {
           return data.map(record => {
             const keys = Object.keys(record);
@@ -28,8 +30,6 @@ export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
         }
 
         return new Promise((resolve, reject) => {
-          const query = cloneDeep(queryPar);
-
           this.ddf.ddfRequest(query, function (err, data) {
             if (err) {
               reject(err);

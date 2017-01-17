@@ -86,8 +86,7 @@ export class DataPointAdapter implements IDdfAdapter {
     return result;
   }
 
-  getNormalizedRequest(requestParam, onRequestNormalized) {
-    const request = cloneDeep(requestParam);
+  getNormalizedRequest(request, onRequestNormalized) {
     const entityUtils = new EntityUtils(this.contentManager, this.reader, this.ddfPath, request.where);
 
     entityUtils.transformConditionByDomain((err, transformedCondition) => {

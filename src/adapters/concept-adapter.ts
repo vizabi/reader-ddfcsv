@@ -30,9 +30,7 @@ export class ConceptAdapter implements IDdfAdapter {
       includes(request.select.key, record.schema.primaryKey));
   }
 
-  getNormalizedRequest(requestParam, onRequestNormalized) {
-    const request = cloneDeep(requestParam);
-
+  getNormalizedRequest(request, onRequestNormalized) {
     onRequestNormalized(null, request);
   }
 
