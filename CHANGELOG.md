@@ -1,3 +1,8 @@
+<a name="0.6.8"></a>
+## [0.6.8](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v0.6.7...v0.6.8) (2017-01-17)
+
+
+
 <a name="0.6.7"></a>
 ## [0.6.7](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v0.6.6...v0.6.7) (2017-01-15)
 
