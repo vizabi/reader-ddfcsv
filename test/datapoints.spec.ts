@@ -5,6 +5,7 @@ import {BackendFileReader, Ddf} from '../src/index';
 const backendFileReader = new BackendFileReader();
 const GLOBALIS_PATH = './test/fixtures/systema_globalis';
 const GLOBALIS_TINY_PATH = './test/fixtures/systema_globalis_tiny';
+const POP_WPP_PATH = './test/fixtures/population_wpp';
 
 const expect = chai.expect;
 
@@ -258,6 +259,56 @@ describe('when data points checking', () => {
       expect(!!err).to.be.false;
       expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
 
+      done();
+    });
+  });
+
+  it('query by gender, age, and country with code 900 should be processed correctly', done => {
+    const ddf = new Ddf(POP_WPP_PATH, backendFileReader);
+    const request = {
+      language: 'en',
+      from: 'datapoints',
+      animatable: 'year',
+      select: {
+        key: [
+          'country_code',
+          'year',
+          'gender',
+          'age'
+        ],
+        value: [
+          'population'
+        ]
+      },
+      where: {
+        $and: [
+          {
+            country_code: '$country_code'
+          }
+        ]
+      },
+      join: {
+        $country_code: {
+          key: 'country_code',
+          where: {
+            country_code: {
+              $in: [
+                '900'
+              ]
+            }
+          }
+        }
+      },
+      order_by: [
+        'year'
+      ]
+    };
+
+    ddf.ddfRequest(request, (err, data) => {
+      const EXPECTED_RECORDS_COUNT = 28902;
+
+      expect(!!err).to.be.false;
+      expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
 
       done();
     });
