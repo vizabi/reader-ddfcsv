@@ -75,6 +75,8 @@ export class JoinsAdapter implements IDdfAdapter {
   public requestNormalizer: RequestNormalizer;
   public synonimicConceptIds: Array<string>;
 
+  private dataPackageContent;
+
   constructor(contentManager, reader, ddfPath) {
     this.contentManager = contentManager;
     this.reader = cloneDeep(reader);
@@ -88,8 +90,16 @@ export class JoinsAdapter implements IDdfAdapter {
   }
 
   getDataPackageFilteredBySelect(request, dataPackageContent) {
-    return getResourcesFilteredBy(dataPackageContent, (dataPackage, record) =>
-      includes(request.key, record.schema.primaryKey));
+    this.dataPackageContent = dataPackageContent;
+
+    return getResourcesFilteredBy(dataPackageContent, (dataPackage, record) => {
+      return includes(request.key, record.schema.primaryKey) ||
+        includes(request.key, this.contentManager.domainHash[record.schema.primaryKey]);
+    });
+  }
+
+  isEntitySetConcept(conceptName) {
+    return this.contentManager.conceptTypeHash[conceptName] === 'entity_set';
   }
 
   getNormalizedRequest(request, onRequestNormalized) {
@@ -119,7 +129,7 @@ export class JoinsAdapter implements IDdfAdapter {
   getFileActions(expectedFiles) {
     return expectedFiles.map(file => onFileRead => {
       this.reader.readCSV(`${this.ddfPath}${file}`,
-        (err, data) => onFileRead(err, data));
+        (err, data) => onFileRead(err, {file, data}));
     });
   }
 
@@ -159,8 +169,33 @@ export class JoinsAdapter implements IDdfAdapter {
     return result;
   }
 
+  getPrimaryKeyByFile(file: string): string & Array<string> {
+    const primaryKeyHash = {};
+
+    for (const resource of this.dataPackageContent.resources) {
+      primaryKeyHash[resource.path] = resource.schema.primaryKey;
+    }
+
+    return primaryKeyHash[file];
+  }
+
   getFinalData(results, request) {
-    const data = flatten(results);
+    const data = [];
+
+    for (const result of results) {
+      const primaryKey = this.getPrimaryKeyByFile(result.file);
+      const domain = this.contentManager.domainHash[primaryKey];
+      const tempData = flatten(result.data);
+
+      for (const record of tempData) {
+        if (domain) {
+          record[domain] = record[primaryKey];
+        }
+
+        data.push(record);
+      }
+    }
+
     const projection = reduce(
       request.key,
       (currentProjection, field: string) => {

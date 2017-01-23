@@ -224,13 +224,7 @@ export class DataPointAdapter implements IDdfAdapter {
     let result: string = '';
 
     for (const entityDescriptor of entityDescriptors) {
-      if (entityDescriptor.entity) {
-        result += record[entityDescriptor.entity] + ',';
-      }
-
-      if (!entityDescriptor.entity) {
-        result += record[entityDescriptor.domain] + ',';
-      }
+      result += record[entityDescriptor.entity || entityDescriptor.domain] + ',';
     }
 
     return result;

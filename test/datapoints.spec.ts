@@ -313,4 +313,54 @@ describe('when data points checking', () => {
       done();
     });
   });
+
+  it('query by foo should be processed correctly', done => {
+    const ddf = new Ddf(GLOBALIS_TINY_PATH, backendFileReader);
+    const request = {
+      language: 'en',
+      from: 'datapoints',
+      animatable: 'time',
+      select: {
+        key: [
+          'geo',
+          'time'
+        ],
+        value: [
+          'population_total'
+        ]
+      },
+      where: {
+        $and: [
+          {
+            geo: '$geo'
+          }
+        ]
+      },
+      join: {
+        $geo: {
+          key: 'geo',
+          where: {
+            world_4region: {
+              $in: [
+                'americas',
+                'asia'
+              ]
+            }
+          }
+        }
+      },
+      order_by: [
+        'time'
+      ]
+    };
+
+    ddf.ddfRequest(request, (err, data) => {
+      const EXPECTED_RECORDS_COUNT = 42849;
+
+      expect(!!err).to.be.false;
+      expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
+
+      done();
+    });
+  });
 });
