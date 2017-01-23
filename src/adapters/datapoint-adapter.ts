@@ -31,6 +31,29 @@ function getTimeDescriptor(time) {
   return timeDescriptorHash[time];
 }
 
+export class EntityDescriptor {
+  public contentManager: ContentManager;
+  public domain: string;
+  public entity: string;
+
+  constructor(entity: string, contentManager: ContentManager) {
+    this.contentManager = contentManager;
+
+    if (this.isEntitySetConcept(entity)) {
+      this.domain = this.contentManager.domainHash[entity];
+      this.entity = entity;
+    }
+
+    if (!this.isEntitySetConcept(entity)) {
+      this.domain = entity;
+    }
+  }
+
+  isEntitySetConcept(conceptName) {
+    return this.contentManager.conceptTypeHash[conceptName] === 'entity_set';
+  }
+}
+
 export class DataPointAdapter implements IDdfAdapter {
   public contentManager: ContentManager;
   public reader: IReader;
@@ -163,15 +186,15 @@ export class DataPointAdapter implements IDdfAdapter {
     return container[conceptName] === 'entity_domain' || this.isEntitySetConcept(conceptName);
   }
 
-  getEntityFieldByFirstRecord(record) {
-    return Object.keys(record).find(conceptName => this.isDomainRelatedConcept(conceptName));
+  getEntityFieldsByFirstRecord(record): Array<string> {
+    return Object.keys(record).filter(conceptName => this.isDomainRelatedConcept(conceptName));
   }
 
-  getTimeFieldByFirstRecord(record) {
+  getTimeFieldByFirstRecord(record): string {
     return Object.keys(record).find(conceptName => this.isTimeConcept(conceptName));
   }
 
-  getMeasureFieldByFirstRecord(record) {
+  getMeasureFieldByFirstRecord(record): string {
     return Object.keys(record).find(conceptName => this.isMeasureConcept(conceptName));
   }
 
@@ -184,13 +207,27 @@ export class DataPointAdapter implements IDdfAdapter {
         }
 
         const firstRecord = head(data);
-        const entityField = this.getEntityFieldByFirstRecord(firstRecord);
+        const entityFields = this.getEntityFieldsByFirstRecord(firstRecord);
         const timeField = this.getTimeFieldByFirstRecord(firstRecord);
         const measureField = this.getMeasureFieldByFirstRecord(firstRecord);
 
-        onFileRead(null, {data, entityField, timeField, measureField});
+        onFileRead(null, {data, entityFields, timeField, measureField});
       });
     });
+  }
+
+  getEntityDescriptors(entities: Array<string>): Array<EntityDescriptor> {
+    return entities.map(entity => new EntityDescriptor(entity, this.contentManager));
+  }
+
+  getEntitiesHolderKey(record: any, entityDescriptors: Array<EntityDescriptor>): string {
+    let result: string = '';
+
+    for (const entityDescriptor of entityDescriptors) {
+      result += record[entityDescriptor.entity || entityDescriptor.domain] + ',';
+    }
+
+    return result;
   }
 
   getFinalData(results, request) {
@@ -213,29 +250,28 @@ export class DataPointAdapter implements IDdfAdapter {
       const timeKey = result.timeField;
       const measureKey = result.measureField;
 
-      let entityKey = result.entityField;
-      let entitySetKey = null;
-
-      if (this.isEntitySetConcept(result.entityField)) {
-        entitySetKey = entityKey;
-        entityKey = this.contentManager.domainHash[result.entityField];
-      }
+      const entityDescriptors = this.getEntityDescriptors(result.entityFields);
 
       result.data.forEach(record => {
-        const holderKey = `${record[result.entityField]},${record[result.timeField]}`;
+        const holderKey = `${this.getEntitiesHolderKey(record, entityDescriptors)},${record[result.timeField]}`;
 
         if (!dataHash[holderKey]) {
           dataHash[holderKey] = {
-            [entityKey]: record[result.entityField],
             [timeKey]: record[result.timeField]
           };
+          entityDescriptors.forEach(entityDescriptor => {
+            if (entityDescriptor.entity) {
+              dataHash[holderKey][entityDescriptor.entity] = record[entityDescriptor.entity];
+              dataHash[holderKey][entityDescriptor.domain] = record[entityDescriptor.entity];
+            }
+
+            if (!entityDescriptor.entity) {
+              dataHash[holderKey][entityDescriptor.domain] = record[entityDescriptor.domain];
+            }
+          });
           request.select.value.forEach(measure => {
             dataHash[holderKey][measure] = null;
           });
-
-          if (entitySetKey) {
-            dataHash[holderKey][entitySetKey] = record[result.entityField];
-          }
         }
 
         dataHash[holderKey][measureKey] = record[measureKey];
