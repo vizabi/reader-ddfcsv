@@ -1,5 +1,5 @@
 import {compact} from 'lodash';
-import * as csvParse from 'csv-parse';
+import * as csvParse from 'papaparse';
 import {IReader} from './reader';
 
 require('fetch-polyfill');
@@ -17,20 +17,23 @@ export class FrontendFileReader implements IReader {
     fetch(filePath)
       .then(response => response.text())
       .then(text => {
-        csvParse(text, {columns: true}, (err, json) => {
-          if (err) {
-            onFileRead(err);
-            return;
-          }
-
-          let content = json;
-
-          if (this.recordTransformer) {
-            content = compact(content.map(record => this.recordTransformer(record)));
-          }
-
-          onFileRead(null, content);
+        const {errors, data} = csvParse.parse(text, {
+          header: true,
+          skipEmptyLines: true
         });
+
+        if (errors.length) {
+          onFileRead(errors);
+          return;
+        }
+
+        let content = data;
+
+        if (this.recordTransformer) {
+          content = compact(content.map(record => this.recordTransformer(record)));
+        }
+
+        onFileRead(null, content);
       })
       .catch(err => {
         onFileRead(err || `${filePath} read error`);
