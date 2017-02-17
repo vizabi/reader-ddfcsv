@@ -45,6 +45,43 @@ describe('when entities checking', () => {
     });
   });
 
+  it('plain query for "ar-SA" language should be processed correctly', done => {
+    const ddf = new Ddf(GLOBALIS_PATH, backendFileReader);
+    const request = {
+      language: 'ar-SA',
+      from: 'entities',
+      animatable: 'time',
+      select: {
+        key: ['geo'],
+        value: ['name', 'world_4region', 'latitude', 'longitude']
+      },
+      where: {'is--country': true},
+      grouping: {},
+      orderBy: null
+    };
+
+    ddf.ddfRequest(request, (err, data) => {
+      const EXPECTED_RECORDS_COUNT = 275;
+
+      expect(!!err).to.be.false;
+      expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
+
+      data.forEach(record => {
+        expect(record.geo).to.equal(record.country);
+
+        if (record.longitude !== null) {
+          expect(isNumber(record.longitude)).to.be.true;
+        }
+
+        if (record.latitude !== null) {
+          expect(isNumber(record.latitude)).to.be.true;
+        }
+      });
+
+      done();
+    });
+  });
+
   it('shapes query should be processed correctly', done => {
     const ddf = new Ddf(GLOBALIS_PATH, backendFileReader);
     const request = {

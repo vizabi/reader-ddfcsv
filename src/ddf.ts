@@ -92,17 +92,34 @@ export class Ddf {
         }
 
         contentManager.concepts = conceptsData;
+
+        contentManager.domainConcepts = [];
+        contentManager.entitySetConcepts = [];
+        contentManager.timeConcepts = [];
+        contentManager.measureConcepts = [];
         contentManager.domainHash = {};
-        conceptsData.filter(concept => concept.concept_type === 'entity_set').forEach(concept => {
-          contentManager.domainHash[concept.concept] = concept.domain;
-        });
         contentManager.conceptTypeHash = {};
-        conceptsData.forEach(concept => {
-          contentManager.conceptTypeHash[concept.concept] = concept.concept_type;
-        });
-        contentManager.timeConcepts = conceptsData
-          .filter(concept => concept.concept_type === 'time')
-          .map(concept => concept.concept);
+
+        for (let currentConcept of conceptsData) {
+          if (currentConcept.concept_type === 'entity_domain') {
+            contentManager.domainConcepts.push(currentConcept.concept);
+          }
+
+          if (currentConcept.concept_type === 'entity_set') {
+            contentManager.entitySetConcepts.push(currentConcept.concept);
+            contentManager.domainHash[currentConcept.concept] = currentConcept.domain;
+          }
+
+          if (currentConcept.concept_type === 'time') {
+            contentManager.timeConcepts.push(currentConcept.concept);
+          }
+
+          if (currentConcept.concept_type === 'measure') {
+            contentManager.measureConcepts.push(currentConcept.concept);
+          }
+
+          contentManager.conceptTypeHash[currentConcept.concept] = currentConcept.concept_type;
+        }
 
         onDataPackageLoaded(null, contentManager.dataPackage);
       });
@@ -159,7 +176,6 @@ export class Ddf {
 
   processRequest(requestParam: any, requestNormalizer: RequestNormalizer, onRequestProcessed: Function) {
     const request = cloneDeep(requestParam);
-
     const ddfTypeAdapter: IDdfAdapter =
       new ADAPTERS[request.from](contentManager, this.reader, this.ddfPath).addRequestNormalizer(requestNormalizer);
 
@@ -174,7 +190,7 @@ export class Ddf {
 
       ddfTypeAdapter.reader.setRecordTransformer(ddfTypeAdapter.getRecordTransformer(normRequest));
 
-      const fileActions = ddfTypeAdapter.getFileActions(expectedFiles);
+      const fileActions = ddfTypeAdapter.getFileActions(expectedFiles, request);
 
       parallel(fileActions, (err, results) => onRequestProcessed(
         err,

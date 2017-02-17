@@ -6,6 +6,7 @@ import {
   isEqual,
   isInteger,
   intersection,
+  includes,
   keys,
   map,
   reduce,
@@ -57,13 +58,18 @@ export class EntityDescriptor {
 export class DataPointAdapter implements IDdfAdapter {
   public contentManager: ContentManager;
   public reader: IReader;
+  public translationReader: IReader;
   public ddfPath: string;
   public requestNormalizer: RequestNormalizer;
   public entitySetsHash: any;
+  public request: any;
+
+  private recordsDescriptor: any = {};
 
   constructor(contentManager, reader, ddfPath) {
     this.contentManager = contentManager;
     this.reader = cloneDeep(reader);
+    this.translationReader = cloneDeep(reader);
     this.ddfPath = ddfPath;
     this.entitySetsHash = {};
 
@@ -114,9 +120,38 @@ export class DataPointAdapter implements IDdfAdapter {
 
     entityUtils.transformConditionByDomain((err, transformedCondition) => {
       request.where = transformedCondition;
+      this.request = request;
 
       onRequestNormalized(err, request);
     });
+  }
+
+  constructRecordDescriptor(record: any, filePath: string) {
+    if (!this.recordsDescriptor[filePath]) {
+      const recordKeys = keys(record);
+
+      let mainEntitiesKey: Array<string> = [];
+      let mainTimeKey = null;
+
+      for (const key of recordKeys) {
+        if (includes(this.contentManager.domainConcepts, key)) {
+          mainEntitiesKey.push(key);
+        }
+
+        if (includes(this.contentManager.entitySetConcepts, key)) {
+          mainEntitiesKey.push(key);
+        }
+
+        if (includes(this.contentManager.timeConcepts, key)) {
+          mainTimeKey = key;
+        }
+      }
+
+      const entityDescriptors = this.getEntityDescriptors(mainEntitiesKey);
+      const mainKey = `${this.getEntitiesHolderKey(record, entityDescriptors)},${record[mainTimeKey]}`;
+
+      this.recordsDescriptor[filePath] = {mainKey, translationHash: {}};
+    }
   }
 
   getRecordTransformer(request) {
@@ -159,12 +194,38 @@ export class DataPointAdapter implements IDdfAdapter {
       return isRecordAvailable;
     };
 
-    return record => {
+    return (record: any, filePath: string) => {
+      const recordKeys = keys(record);
+      const isTranslationExists = key =>
+      this.recordsDescriptor[filePath] &&
+      this.recordsDescriptor[filePath].translationHash &&
+      this.recordsDescriptor[filePath].translationHash[record[this.recordsDescriptor[filePath].mainKey]] &&
+      this.recordsDescriptor[filePath].translationHash[record[this.recordsDescriptor[filePath].mainKey]][key];
+
+      this.constructRecordDescriptor(record, filePath);
+
+      for (const key of recordKeys) {
+        if (isTranslationExists(key)) {
+          record[key] = this.recordsDescriptor[filePath].translationHash[record[this.recordsDescriptor[filePath].mainKey]][key];
+        }
+      }
+
       transformNumbers(record);
 
       const isRecordAvailable = transformTimes(record);
 
       return isRecordAvailable ? record : null;
+    };
+  }
+
+  getTranslationRecordTransformer() {
+    return (record: any, filePath: string) => {
+      const dataFilePath = filePath.replace(new RegExp(`lang/${this.request.language}/`), '');
+
+      this.constructRecordDescriptor(record, dataFilePath);
+      this.recordsDescriptor[dataFilePath].translationHash[record[this.recordsDescriptor[dataFilePath].mainKey]] = record;
+
+      return record;
     };
   }
 
@@ -200,19 +261,24 @@ export class DataPointAdapter implements IDdfAdapter {
 
   getFileActions(expectedFiles) {
     return expectedFiles.map(file => onFileRead => {
-      this.reader.readCSV(`${this.ddfPath}${file}`, (err, data) => {
-        if (err || isEmpty(data)) {
-          onFileRead(err, [], {});
-          return;
-        }
 
-        const firstRecord = head(data);
-        const entityFields = this.getEntityFieldsByFirstRecord(firstRecord);
-        const timeField = this.getTimeFieldByFirstRecord(firstRecord);
-        const measureField = this.getMeasureFieldByFirstRecord(firstRecord);
+      this.translationReader.setRecordTransformer(this.getTranslationRecordTransformer());
+      this.translationReader.readCSV(`${this.ddfPath}lang/${this.request.language}/${file}`,
+        () => {
+          this.reader.readCSV(`${this.ddfPath}${file}`, (err, data) => {
+            if (err || isEmpty(data)) {
+              onFileRead(err, [], {});
+              return;
+            }
 
-        onFileRead(null, {data, entityFields, timeField, measureField});
-      });
+            const firstRecord = head(data);
+            const entityFields = this.getEntityFieldsByFirstRecord(firstRecord);
+            const timeField = this.getTimeFieldByFirstRecord(firstRecord);
+            const measureField = this.getMeasureFieldByFirstRecord(firstRecord);
+
+            onFileRead(null, {data, entityFields, timeField, measureField});
+          });
+        });
     });
   }
 

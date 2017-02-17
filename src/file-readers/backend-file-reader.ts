@@ -12,6 +12,9 @@ export class BackendFileReader implements IReader {
 
   readCSV(filePath, onFileRead) {
     const fileStream = fs.createReadStream(filePath, {encoding: 'utf8'});
+
+    fileStream.on('error', onFileRead);
+
     const parser = csvParse({columns: true}, (err, contentSource) => {
       if (err) {
         onFileRead(err);
@@ -21,7 +24,7 @@ export class BackendFileReader implements IReader {
       let content = null;
 
       if (this.recordTransformer) {
-        content = compact(contentSource.map(record => this.recordTransformer(record)));
+        content = compact(contentSource.map(record => this.recordTransformer(record, filePath)));
       }
 
       if (!this.recordTransformer) {
