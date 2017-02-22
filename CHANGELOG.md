@@ -1,3 +1,13 @@
+<a name="0.7.0"></a>
+# [0.7.0](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v0.6.9...v0.7.0) (2017-02-22)
+
+
+### Features
+
+* **general:** translations functionality providing ([20e298e](https://github.com/vizabi/vizabi-ddfcsv-reader/commit/20e298e)), closes [#15](https://github.com/vizabi/vizabi-ddfcsv-reader/issues/15)
+
+
+
 <a name="0.6.9"></a>
 ## [0.6.9](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v0.6.8...v0.6.9) (2017-01-23)
 
