@@ -194,7 +194,7 @@ describe('when data points checking', () => {
     };
 
     ddf.ddfRequest(request, (err, data) => {
-      const EXPECTED_RECORDS_COUNT = 532;
+      const EXPECTED_RECORDS_COUNT = 530;
 
       expect(!!err).to.be.false;
       expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);

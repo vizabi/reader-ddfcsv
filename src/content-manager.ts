@@ -5,6 +5,9 @@ export class ContentManager {
   public concepts: Array<any>;
   public entities: Array<any>;
   public timeConcepts: Array<any>;
+  public domainConcepts: Array<any>;
+  public entitySetConcepts: Array<any>;
+  public measureConcepts: Array<any>;
   public domainHash: any;
 
   constructor() {

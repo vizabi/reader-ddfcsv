@@ -53,14 +53,18 @@ function getNormalizedBoolean(condition) {
 export class EntityAdapter implements IDdfAdapter {
   public contentManager: ContentManager;
   public reader: IReader;
+  public translationReader: IReader;
   public ddfPath: string;
   public requestNormalizer: RequestNormalizer;
   public domainDescriptors: Array<any>;
   public request: any;
 
+  private recordsDescriptor: any = {};
+
   constructor(contentManager, reader, ddfPath) {
     this.contentManager = contentManager;
     this.reader = cloneDeep(reader);
+    this.translationReader = cloneDeep(reader);
     this.ddfPath = ddfPath;
   }
 
@@ -108,13 +112,55 @@ export class EntityAdapter implements IDdfAdapter {
     onRequestNormalized(null, request);
   }
 
+  constructRecordDescriptor(record: any, filePath: string) {
+    if (!this.recordsDescriptor[filePath]) {
+      const recordKeys = keys(record);
+
+      let mainKey = null;
+
+      for (const key of recordKeys) {
+        if (includes(this.contentManager.domainConcepts, key)) {
+          mainKey = key;
+          break;
+        }
+
+        if (includes(this.contentManager.entitySetConcepts, key)) {
+          mainKey = key;
+          break;
+        }
+      }
+
+      this.recordsDescriptor[filePath] = {mainKey, translationHash: {}};
+    }
+  }
+
   getRecordTransformer() {
     const isTruth = value => value === 'true' || value === 'TRUE';
-    const measures = this.contentManager.concepts
-      .filter(conceptRecord => conceptRecord.concept_type === 'measure')
-      .map(conceptRecord => conceptRecord.concept);
 
-    return record => {
+    return (record: any, filePath: string) => {
+      const recordKeys = keys(record);
+      const isTranslationExists = key =>
+      this.recordsDescriptor[filePath] &&
+      this.recordsDescriptor[filePath].translationHash &&
+      this.recordsDescriptor[filePath].translationHash[record[this.recordsDescriptor[filePath].mainKey]] &&
+      this.recordsDescriptor[filePath].translationHash[record[this.recordsDescriptor[filePath].mainKey]][key];
+
+      this.constructRecordDescriptor(record, filePath);
+
+      for (const key of recordKeys) {
+        if (includes(this.contentManager.measureConcepts, key) && record[key]) {
+          record[key] = Number(record[key]);
+        }
+
+        if (includes(this.contentManager.measureConcepts, key) && !record[key]) {
+          record[key] = null;
+        }
+
+        if (isTranslationExists(key)) {
+          record[key] = this.recordsDescriptor[filePath].translationHash[record[this.recordsDescriptor[filePath].mainKey]][key];
+        }
+      }
+
       if (!isEmpty(this.domainDescriptors)) {
         for (const domainDescriptor of this.domainDescriptors) {
           if (isTruth(record[`is--${domainDescriptor.key}`]) && isEmpty(record[domainDescriptor.domain])) {
@@ -128,26 +174,28 @@ export class EntityAdapter implements IDdfAdapter {
         }
       }
 
-      const recordKeys = keys(record);
+      return record;
+    };
+  }
 
-      for (const key of recordKeys) {
-        if (includes(measures, key) && record[key]) {
-          record[key] = Number(record[key]);
-        }
+  getTranslationRecordTransformer() {
+    return (record: any, filePath: string) => {
+      const dataFilePath = filePath.replace(new RegExp(`lang/${this.request.language}/`), '');
 
-        if (includes(measures, key) && !record[key]) {
-          record[key] = null;
-        }
-      }
+      this.constructRecordDescriptor(record, dataFilePath);
+      this.recordsDescriptor[dataFilePath].translationHash[record[this.recordsDescriptor[dataFilePath].mainKey]] = record;
 
       return record;
     };
   }
 
-  getFileActions(expectedFiles) {
+  getFileActions(expectedFiles, request) {
     return expectedFiles.map(file => onFileRead => {
-      this.reader.readCSV(`${this.ddfPath}${file}`,
-        (err, data) => onFileRead(err, data));
+      this.translationReader.setRecordTransformer(this.getTranslationRecordTransformer());
+      this.translationReader.readCSV(`${this.ddfPath}lang/${request.language}/${file}`,
+        () => {
+          this.reader.readCSV(`${this.ddfPath}${file}`, onFileRead);
+        });
     });
   }
 

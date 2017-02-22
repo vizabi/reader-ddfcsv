@@ -1,4 +1,4 @@
-import {cloneDeep, flatten, reduce, includes, isEmpty} from 'lodash';
+import {cloneDeep, flatten, keys, reduce, includes, isEmpty} from 'lodash';
 import {getResourcesFilteredBy} from './shared';
 import {ContentManager} from '../content-manager';
 import {IReader} from '../file-readers/reader';
@@ -10,12 +10,17 @@ const Mingo = require('mingo');
 export class ConceptAdapter implements IDdfAdapter {
   public contentManager: ContentManager;
   public reader: IReader;
+  public translationReader: IReader;
   public ddfPath: string;
   public requestNormalizer: RequestNormalizer;
+  public request: any;
+
+  private recordsDescriptor: any = {};
 
   constructor(contentManager, reader, ddfPath) {
     this.contentManager = contentManager;
     this.reader = cloneDeep(reader);
+    this.translationReader = cloneDeep(reader);
     this.ddfPath = ddfPath;
   }
 
@@ -31,11 +36,19 @@ export class ConceptAdapter implements IDdfAdapter {
   }
 
   getNormalizedRequest(request, onRequestNormalized) {
+    this.request = request;
+
     onRequestNormalized(null, request);
   }
 
   getRecordTransformer(): any {
-    return record => {
+    return (record: any, filePath: string) => {
+      const isTranslationExists = key =>
+      this.recordsDescriptor[filePath] &&
+      this.recordsDescriptor[filePath].translationHash &&
+      this.recordsDescriptor[filePath].translationHash[record.concept] &&
+      this.recordsDescriptor[filePath].translationHash[record.concept][key];
+
       if (record.color && !isEmpty(record.color)) {
         try {
           record.color = JSON.parse(record.color);
@@ -43,13 +56,39 @@ export class ConceptAdapter implements IDdfAdapter {
         }
       }
 
+      const recordKeys = keys(record);
+
+      for (const key of recordKeys) {
+        if (isTranslationExists(key)) {
+          record[key] = this.recordsDescriptor[filePath].translationHash[record.concept][key];
+        }
+      }
+
       return record;
     };
   }
 
-  getFileActions(expectedFiles): Array<any> {
+  getTranslationRecordTransformer() {
+    return (record: any, filePath: string) => {
+      const dataFilePath = filePath.replace(new RegExp(`lang/${this.request.language}/`), '');
+
+      if (!this.recordsDescriptor[dataFilePath]) {
+        this.recordsDescriptor[dataFilePath] = {translationHash: {}};
+      }
+
+      this.recordsDescriptor[dataFilePath].translationHash[record.concept] = record;
+
+      return record;
+    };
+  }
+
+  getFileActions(expectedFiles, request): Array<any> {
     return expectedFiles.map(file => onFileRead => {
-      this.reader.readCSV(`${this.ddfPath}${file}`, onFileRead);
+      this.translationReader.setRecordTransformer(this.getTranslationRecordTransformer());
+      this.translationReader.readCSV(`${this.ddfPath}lang/${request.language}/${file}`,
+        () => {
+          this.reader.readCSV(`${this.ddfPath}${file}`, onFileRead);
+        });
     });
   }
 

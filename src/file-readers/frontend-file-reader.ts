@@ -26,7 +26,7 @@ export class FrontendFileReader implements IReader {
           let content = json;
 
           if (this.recordTransformer) {
-            content = compact(content.map(record => this.recordTransformer(record)));
+            content = compact(content.map(record => this.recordTransformer(record, filePath)));
           }
 
           onFileRead(null, content);
