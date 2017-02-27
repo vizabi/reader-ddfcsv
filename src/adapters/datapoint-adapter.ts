@@ -259,27 +259,32 @@ export class DataPointAdapter implements IDdfAdapter {
     return Object.keys(record).find(conceptName => this.isMeasureConcept(conceptName));
   }
 
-  getFileActions(expectedFiles) {
-    return expectedFiles.map(file => onFileRead => {
+  getFileActions(expectedFiles, request) {
+    const readData = (file, onFileRead) => {
+      this.reader.readCSV(`${this.ddfPath}${file}`, (err, data) => {
+        if (err || isEmpty(data)) {
+          onFileRead(err, [], {});
+          return;
+        }
 
+        const firstRecord = head(data);
+        const entityFields = this.getEntityFieldsByFirstRecord(firstRecord);
+        const timeField = this.getTimeFieldByFirstRecord(firstRecord);
+        const measureField = this.getMeasureFieldByFirstRecord(firstRecord);
+
+        onFileRead(null, {data, entityFields, timeField, measureField});
+      });
+    };
+    const translationsFileActions = () => expectedFiles.map(file => onFileRead => {
       this.translationReader.setRecordTransformer(this.getTranslationRecordTransformer());
       this.translationReader.readCSV(`${this.ddfPath}lang/${this.request.language}/${file}`,
-        () => {
-          this.reader.readCSV(`${this.ddfPath}${file}`, (err, data) => {
-            if (err || isEmpty(data)) {
-              onFileRead(err, [], {});
-              return;
-            }
-
-            const firstRecord = head(data);
-            const entityFields = this.getEntityFieldsByFirstRecord(firstRecord);
-            const timeField = this.getTimeFieldByFirstRecord(firstRecord);
-            const measureField = this.getMeasureFieldByFirstRecord(firstRecord);
-
-            onFileRead(null, {data, entityFields, timeField, measureField});
-          });
-        });
+        () => readData(file, onFileRead));
     });
+    const noTranslationsFileActions = () => expectedFiles.map(file => onFileRead => readData(file, onFileRead));
+    const isTranslationActionsNeeded = includes(this.contentManager.translationIds, request.language);
+    const fileActions = isTranslationActionsNeeded ? translationsFileActions : noTranslationsFileActions;
+
+    return fileActions();
   }
 
   getEntityDescriptors(entities: Array<string>): Array<EntityDescriptor> {

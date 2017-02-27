@@ -1,6 +1,5 @@
 .idea
 
-dist
 lib
 *js
 !webpack.config.js
