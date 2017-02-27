@@ -190,13 +190,21 @@ export class EntityAdapter implements IDdfAdapter {
   }
 
   getFileActions(expectedFiles, request) {
-    return expectedFiles.map(file => onFileRead => {
+    const translationsFileActions = () => expectedFiles.map(file => onFileRead => {
       this.translationReader.setRecordTransformer(this.getTranslationRecordTransformer());
       this.translationReader.readCSV(`${this.ddfPath}lang/${request.language}/${file}`,
         () => {
           this.reader.readCSV(`${this.ddfPath}${file}`, onFileRead);
         });
     });
+    const noTranslationsFileActions = () => expectedFiles.map(file => onFileRead => {
+      this.reader.readCSV(`${this.ddfPath}${file}`, onFileRead);
+    });
+
+    const isTranslationActionsNeeded = includes(this.contentManager.translationIds, request.language);
+    const fileActions = isTranslationActionsNeeded ? translationsFileActions : noTranslationsFileActions;
+
+    return fileActions();
   }
 
   getFinalData(results, request) {

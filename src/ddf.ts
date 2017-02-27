@@ -83,7 +83,7 @@ export class Ddf {
         return;
       }
 
-      contentManager.dataPackage = dataPackageData;
+      contentManager.setDataPackage(dataPackageData);
 
       this.getConcepts((conceptsError, conceptsData) => {
         if (conceptsError) {
