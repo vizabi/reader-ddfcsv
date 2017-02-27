@@ -2,7 +2,7 @@
   "name": "vizabi-ddfcsv-reader",
   "version": "0.7.1",
   "description": "Vizabi DDFcsv reader",
-  "main": "dist/bundle.js",
+  "main": "dist/vizabi-ddfcsv-reader-node.js",
   "scripts": {
     "test": "mocha --compilers ts:ts-node/register --timeout 200000 test/**/*.spec.ts",
     "n-test": "mocha --compilers ts:ts-node/register --timeout 200000 test/**/*.spec.ts",

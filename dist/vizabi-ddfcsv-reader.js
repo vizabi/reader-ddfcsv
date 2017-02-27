@@ -50001,4 +50001,4 @@ var DDFCsvReader =
 
 /***/ }
 /******/ ]);
-//# sourceMappingURL=bundle.web.js.map
+//# sourceMappingURL=vizabi-ddfcsv-reader.js.map

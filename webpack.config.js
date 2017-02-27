@@ -11,7 +11,7 @@ const config = {
   devtool: 'source-map',
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: 'vizabi-ddfcsv-reader-node.js',
     libraryTarget: 'commonjs2'
   },
   module: {
@@ -35,7 +35,7 @@ const config = {
 if (WEB) {
   config.entry['main-backend'] = './lib/index-web.js';
   config.target = 'web';
-  config.output.filename = 'bundle.web.js';
+  config.output.filename = 'vizabi-ddfcsv-reader.js';
   config.output.libraryTarget = 'var';
   config.output.library = 'DDFCsvReader';
 }
