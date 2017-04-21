@@ -3,10 +3,8 @@ node_js:
   - "6"
 script:
   - npm run-script test-travis
+  - npm run deploy
 
-
-after_success:
-  .cicd/beta_npm_ver.js
 
 deploy:
   provider: npm
