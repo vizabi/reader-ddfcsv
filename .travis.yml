@@ -1,6 +1,14 @@
 language: node_js
 node_js:
   - "6"
+addons:
+  apt:
+    packages:
+    - python-pip
+
+before_install:
+- sudo pip install s3cmd
+
 script:
   - npm run-script test-travis
   - npm run deploy
