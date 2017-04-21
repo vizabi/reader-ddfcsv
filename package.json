@@ -1,6 +1,6 @@
 {
   "name": "vizabi-ddfcsv-reader",
-  "version": "0.8.0",
+  "version": "0.8.2",
   "description": "Vizabi DDFcsv reader",
   "main": "dist/vizabi-ddfcsv-reader-node.js",
   "scripts": {
@@ -13,7 +13,8 @@
     "preversion": "npm test",
     "version": "npm run changelog && git add CHANGELOG.md",
     "postversion": "git push origin master && git push --tags && npm run github-release",
-    "prepublish": "npm run build && PROD_ENV=1 webpack"
+    "prepublish": "npm run build && PROD_ENV=1 webpack",
+    "deploy": "node deploy.js"
   },
   "author": "Vyacheslav Chub<vyacheslav.chub@valor-software.com>",
   "license": "GPL-3.0",
@@ -42,15 +43,17 @@
     "babel-loader": "6.2.10",
     "babel-preset-es2015": "6.18.0",
     "chai": "3.5.0",
-    "mocha": "3.2.0",
-    "ts-node": "2.0.0",
-    "typescript": "2.1.4",
-    "webpack": "1.14.0",
     "codecov": "1.0.1",
     "compare-version": "0.1.2",
     "conventional-changelog": "1.1.0",
     "conventional-changelog-cli": "1.2.0",
     "conventional-github-releaser": "1.1.3",
-    "istanbul": "0.4.5"
+    "istanbul": "0.4.5",
+    "mocha": "3.2.0",
+    "rimraf": "2.6.1",
+    "shelljs": "0.7.7",
+    "ts-node": "2.0.0",
+    "typescript": "2.1.4",
+    "webpack": "1.14.0"
   }
 }

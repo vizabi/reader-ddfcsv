@@ -1,12 +1,19 @@
 language: node_js
+sudo: true
 node_js:
   - "6"
+addons:
+  apt:
+    packages:
+    - python-pip
+
+before_install:
+- sudo pip install s3cmd
+
 script:
   - npm run-script test-travis
+  - npm run deploy
 
-
-after_success:
-  .cicd/beta_npm_ver.js
 
 deploy:
   provider: npm

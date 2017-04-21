@@ -4,6 +4,7 @@ lib
 *js
 !dist/*js
 !webpack.config.js
+!deploy.js
 
 # Logs
 logs
