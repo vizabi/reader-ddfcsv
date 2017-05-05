@@ -1,8 +1,7 @@
 import * as chai from 'chai';
 import * as _ from 'lodash';
-import {BackendFileReader, Ddf} from '../src/index';
+import { BackendFileReader, Ddf } from '../src/index';
 
-const backendFileReader = new BackendFileReader();
 const GLOBALIS_PATH = './test/fixtures/systema_globalis';
 const GLOBALIS_TINY_PATH = './test/fixtures/systema_globalis_tiny';
 const POP_WPP_PATH = './test/fixtures/population_wpp';
@@ -10,6 +9,14 @@ const POP_WPP_PATH = './test/fixtures/population_wpp';
 const expect = chai.expect;
 
 describe('when data points checking', () => {
+  let backendFileReader;
+
+  beforeEach((done) => {
+    backendFileReader = new BackendFileReader();
+
+    done();
+  });
+
   it('plain query should be processed correctly', done => {
     const ddf = new Ddf(GLOBALIS_PATH, backendFileReader);
     const request = {
@@ -359,6 +366,31 @@ describe('when data points checking', () => {
 
       expect(!!err).to.be.false;
       expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
+
+      done();
+    });
+  });
+
+  it('should consume files with many indicators in different columns', done => {
+    const ddf = new Ddf('./test/fixtures/ddf--bubbles-3', backendFileReader);
+    const request = {
+      language: 'en',
+      from: 'datapoints',
+      animatable: 'time',
+      select: {
+        key: ['country', 'time'],
+        value: ['gdp_per_capita', 'life_expectancy', 'population']
+      },
+      where: {},
+      join: {},
+      orderBy: ['time']
+    };
+    const EXPECTED_FULL_RECORDS_COUNT = 41124;
+
+    ddf.ddfRequest(request, (err, data) => {
+      const fullData = data.filter(record => record['gdp_per_capita'] && record['life_expectancy'] && record['population']);
+
+      expect(fullData.length).to.equal(EXPECTED_FULL_RECORDS_COUNT);
 
       done();
     });
