@@ -1,4 +1,4 @@
-import {EntityUtils} from '../entity-utils';
+import { EntityUtils } from '../entity-utils';
 import {
   cloneDeep,
   head,
@@ -12,12 +12,12 @@ import {
   reduce,
   values
 } from 'lodash';
-import {getResourcesFilteredBy} from './shared';
+import { getResourcesFilteredBy } from './shared';
 import * as timeUtils from 'ddf-time-utils';
-import {ContentManager} from '../content-manager';
-import {IReader} from '../file-readers/reader';
-import {RequestNormalizer} from '../request-normalizer';
-import {IDdfAdapter} from './adapter';
+import { ContentManager } from '../content-manager';
+import { IReader } from '../file-readers/reader';
+import { RequestNormalizer } from '../request-normalizer';
+import { IDdfAdapter } from './adapter';
 
 const Mingo = require('mingo');
 
@@ -247,7 +247,7 @@ export class DataPointAdapter implements IDdfAdapter {
     return container[conceptName] === 'entity_domain' || this.isEntitySetConcept(conceptName);
   }
 
-  getEntityFieldsByFirstRecord(record): Array<string> {
+  getEntityFieldsByFirstRecord(record): string[] {
     return Object.keys(record).filter(conceptName => this.isDomainRelatedConcept(conceptName));
   }
 
@@ -255,8 +255,8 @@ export class DataPointAdapter implements IDdfAdapter {
     return Object.keys(record).find(conceptName => this.isTimeConcept(conceptName));
   }
 
-  getMeasureFieldByFirstRecord(record): string {
-    return Object.keys(record).find(conceptName => this.isMeasureConcept(conceptName));
+  getMeasureFieldsByFirstRecord(record): string[] {
+    return Object.keys(record).filter(conceptName => this.isMeasureConcept(conceptName));
   }
 
   getFileActions(expectedFiles, request) {
@@ -270,9 +270,9 @@ export class DataPointAdapter implements IDdfAdapter {
         const firstRecord = head(data);
         const entityFields = this.getEntityFieldsByFirstRecord(firstRecord);
         const timeField = this.getTimeFieldByFirstRecord(firstRecord);
-        const measureField = this.getMeasureFieldByFirstRecord(firstRecord);
+        const measureFields = this.getMeasureFieldsByFirstRecord(firstRecord);
 
-        onFileRead(null, {data, entityFields, timeField, measureField});
+        onFileRead(null, {data, entityFields, timeField, measureFields});
       });
     };
     const translationsFileActions = () => expectedFiles.map(file => onFileRead => {
@@ -319,8 +319,6 @@ export class DataPointAdapter implements IDdfAdapter {
       }
 
       const timeKey = result.timeField;
-      const measureKey = result.measureField;
-
       const entityDescriptors = this.getEntityDescriptors(result.entityFields);
 
       result.data.forEach(record => {
@@ -345,7 +343,9 @@ export class DataPointAdapter implements IDdfAdapter {
           });
         }
 
-        dataHash[holderKey][measureKey] = record[measureKey];
+        for (let measureField of result.measureFields) {
+          dataHash[holderKey][measureField] = record[measureField];
+        }
       });
     });
 
