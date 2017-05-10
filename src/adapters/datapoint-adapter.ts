@@ -4,15 +4,14 @@ import {
   head,
   isEmpty,
   isEqual,
+  isArray,
   isInteger,
   intersection,
   includes,
   keys,
-  map,
   reduce,
   values
 } from 'lodash';
-import { getResourcesFilteredBy } from './shared';
 import * as timeUtils from 'ddf-time-utils';
 import { ContentManager } from '../content-manager';
 import { IReader } from '../file-readers/reader';
@@ -91,27 +90,28 @@ export class DataPointAdapter implements IDdfAdapter {
   }
 
   getDataPackageFilteredBySelect(request, dataPackageContent) {
-    const matchByValue = (dataPackage, record) => {
-      const fields = map(record.schema.fields, 'name');
+    const result = [];
 
-      return !isEmpty(intersection(fields, request.select.value));
-    };
-    const matchByEntityAndValue = (dataPackage, record) => {
-      const isMatchedByKey = isEqual(request.select.key, record.schema.primaryKey);
+    for (let dataPackageRecord of dataPackageContent.resources) {
+      if (isArray(dataPackageRecord.schema.primaryKey)) {
+        const domainBasedPrimaryKey = [];
 
-      return isMatchedByKey && matchByValue(dataPackage, record);
-    };
-    const matchByEntityDomainAndValue = (dataPackage, record) => {
-      const isMatchedByDomain = !isEmpty(intersection(keys(this.entitySetsHash), request.select.key));
+        for (const aConcept of dataPackageRecord.schema.primaryKey) {
+          const domain = this.contentManager.domainHash[aConcept];
 
-      return isMatchedByDomain && matchByValue(dataPackage, record);
-    };
+          domainBasedPrimaryKey.push(domain || aConcept);
+        }
 
-    let result = getResourcesFilteredBy(dataPackageContent, matchByEntityAndValue);
+        const matchByPrimaryKey = isEqual(domainBasedPrimaryKey.sort(), request.select.key.sort());
+        const fields = dataPackageRecord.schema.fields.map(field => field.name);
+        const matchByValue = !isEmpty(intersection(request.select.value, fields));
 
-    if (isEmpty(result)) {
-      result = getResourcesFilteredBy(dataPackageContent, matchByEntityDomainAndValue);
+        if (matchByPrimaryKey && matchByValue) {
+          result.push(dataPackageRecord);
+        }
+      }
     }
+
     return result;
   }
 
