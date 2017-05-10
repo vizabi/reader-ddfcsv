@@ -390,7 +390,81 @@ describe('when data points checking', () => {
     ddf.ddfRequest(request, (err, data) => {
       const fullData = data.filter(record => record['gdp_per_capita'] && record['life_expectancy'] && record['population']);
 
+      expect(!!err).to.be.false;
       expect(fullData.length).to.equal(EXPECTED_FULL_RECORDS_COUNT);
+
+      done();
+    });
+  });
+
+  it('multidimentional dataset reading should return expected result', done => {
+    const ddf = new Ddf('./test/fixtures/ddf--gapminder--population', backendFileReader);
+    const request = {
+      language: 'en',
+      from: 'datapoints',
+      animatable: 'year',
+      select: {
+        key: [
+          'geo',
+          'year',
+          'age'
+        ],
+        value: [
+          'population'
+        ]
+      },
+      where: {
+        $and: [
+          {
+            geo: '$geo'
+          },
+          {
+            year: '$year'
+          },
+          {
+            age: '$age'
+          }
+        ]
+      },
+      join: {
+        $geo: {
+          key: 'geo',
+          where: {
+            geo: {
+              $in: [
+                'world'
+              ]
+            }
+          }
+        },
+        $year: {
+          key: 'year',
+          where: {
+            year: '2017'
+          }
+        },
+        $age: {
+          key: 'age',
+          where: {
+            age: {
+              $nin: [
+                '80plus',
+                '100plus'
+              ]
+            }
+          }
+        }
+      },
+      order_by: [
+        'year'
+      ]
+    };
+    const EXPECTED_RECORDS_COUNT = 100;
+
+    ddf.ddfRequest(request, (err, data) => {
+
+      expect(!!err).to.be.false;
+      expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
 
       done();
     });

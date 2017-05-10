@@ -20798,7 +20798,6 @@ var DDFCsvReader =
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var entity_utils_1 = __webpack_require__(14);
 	var lodash_1 = __webpack_require__(3);
-	var shared_1 = __webpack_require__(7);
 	var timeUtils = __webpack_require__(19);
 	var Mingo = __webpack_require__(8);
 	var timeValuesHash = {};
@@ -20866,35 +20865,74 @@ var DDFCsvReader =
 	    }, {
 	        key: "getDataPackageFilteredBySelect",
 	        value: function getDataPackageFilteredBySelect(request, dataPackageContent) {
-	            var _this2 = this;
+	            var result = [];
+	            var _iteratorNormalCompletion = true;
+	            var _didIteratorError = false;
+	            var _iteratorError = undefined;
 	
-	            var matchByValue = function matchByValue(dataPackage, record) {
-	                var fields = lodash_1.map(record.schema.fields, 'name');
-	                return !lodash_1.isEmpty(lodash_1.intersection(fields, request.select.value));
-	            };
-	            var matchByEntityAndValue = function matchByEntityAndValue(dataPackage, record) {
-	                var isMatchedByKey = lodash_1.isEqual(request.select.key, record.schema.primaryKey);
-	                return isMatchedByKey && matchByValue(dataPackage, record);
-	            };
-	            var matchByEntityDomainAndValue = function matchByEntityDomainAndValue(dataPackage, record) {
-	                var isMatchedByDomain = !lodash_1.isEmpty(lodash_1.intersection(lodash_1.keys(_this2.entitySetsHash), request.select.key));
-	                return isMatchedByDomain && matchByValue(dataPackage, record);
-	            };
-	            var result = shared_1.getResourcesFilteredBy(dataPackageContent, matchByEntityAndValue);
-	            if (lodash_1.isEmpty(result)) {
-	                result = shared_1.getResourcesFilteredBy(dataPackageContent, matchByEntityDomainAndValue);
+	            try {
+	                for (var _iterator = dataPackageContent.resources[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                    var dataPackageRecord = _step.value;
+	
+	                    if (lodash_1.isArray(dataPackageRecord.schema.primaryKey)) {
+	                        var domainBasedPrimaryKey = [];
+	                        var _iteratorNormalCompletion2 = true;
+	                        var _didIteratorError2 = false;
+	                        var _iteratorError2 = undefined;
+	
+	                        try {
+	                            for (var _iterator2 = dataPackageRecord.schema.primaryKey[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                                var aConcept = _step2.value;
+	
+	                                var domain = this.contentManager.domainHash[aConcept];
+	                                domainBasedPrimaryKey.push(domain || aConcept);
+	                            }
+	                        } catch (err) {
+	                            _didIteratorError2 = true;
+	                            _iteratorError2 = err;
+	                        } finally {
+	                            try {
+	                                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                                    _iterator2.return();
+	                                }
+	                            } finally {
+	                                if (_didIteratorError2) {
+	                                    throw _iteratorError2;
+	                                }
+	                            }
+	                        }
+	
+	                        if (lodash_1.isEqual(domainBasedPrimaryKey.sort(), request.select.key.sort())) {
+	                            result.push(dataPackageRecord);
+	                        }
+	                    }
+	                }
+	            } catch (err) {
+	                _didIteratorError = true;
+	                _iteratorError = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion && _iterator.return) {
+	                        _iterator.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError) {
+	                        throw _iteratorError;
+	                    }
+	                }
 	            }
+	
 	            return result;
 	        }
 	    }, {
 	        key: "getNormalizedRequest",
 	        value: function getNormalizedRequest(request, onRequestNormalized) {
-	            var _this3 = this;
+	            var _this2 = this;
 	
 	            var entityUtils = new entity_utils_1.EntityUtils(this.contentManager, this.reader, this.ddfPath, request.where);
 	            entityUtils.transformConditionByDomain(function (err, transformedCondition) {
 	                request.where = transformedCondition;
-	                _this3.request = request;
+	                _this2.request = request;
 	                onRequestNormalized(err, request);
 	            });
 	        }
@@ -20905,13 +20943,13 @@ var DDFCsvReader =
 	                var recordKeys = lodash_1.keys(record);
 	                var mainEntitiesKey = [];
 	                var mainTimeKey = null;
-	                var _iteratorNormalCompletion = true;
-	                var _didIteratorError = false;
-	                var _iteratorError = undefined;
+	                var _iteratorNormalCompletion3 = true;
+	                var _didIteratorError3 = false;
+	                var _iteratorError3 = undefined;
 	
 	                try {
-	                    for (var _iterator = recordKeys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                        var key = _step.value;
+	                    for (var _iterator3 = recordKeys[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	                        var key = _step3.value;
 	
 	                        if (lodash_1.includes(this.contentManager.domainConcepts, key)) {
 	                            mainEntitiesKey.push(key);
@@ -20921,93 +20959,6 @@ var DDFCsvReader =
 	                        }
 	                        if (lodash_1.includes(this.contentManager.timeConcepts, key)) {
 	                            mainTimeKey = key;
-	                        }
-	                    }
-	                } catch (err) {
-	                    _didIteratorError = true;
-	                    _iteratorError = err;
-	                } finally {
-	                    try {
-	                        if (!_iteratorNormalCompletion && _iterator.return) {
-	                            _iterator.return();
-	                        }
-	                    } finally {
-	                        if (_didIteratorError) {
-	                            throw _iteratorError;
-	                        }
-	                    }
-	                }
-	
-	                var entityDescriptors = this.getEntityDescriptors(mainEntitiesKey);
-	                var mainKey = this.getEntitiesHolderKey(record, entityDescriptors) + "," + record[mainTimeKey];
-	                this.recordsDescriptor[filePath] = { mainKey: mainKey, translationHash: {} };
-	            }
-	        }
-	    }, {
-	        key: "getRecordTransformer",
-	        value: function getRecordTransformer(request) {
-	            var _this4 = this;
-	
-	            var measures = this.contentManager.concepts.filter(function (conceptRecord) {
-	                return conceptRecord.concept_type === 'measure';
-	            }).map(function (conceptRecord) {
-	                return conceptRecord.concept;
-	            });
-	            var expectedMeasures = lodash_1.intersection(measures, request.select.value);
-	            var times = this.contentManager.concepts.filter(function (conceptRecord) {
-	                return conceptRecord.concept_type === 'time';
-	            }).map(function (conceptRecord) {
-	                return conceptRecord.concept;
-	            });
-	            var transformNumbers = function transformNumbers(record) {
-	                var _iteratorNormalCompletion2 = true;
-	                var _didIteratorError2 = false;
-	                var _iteratorError2 = undefined;
-	
-	                try {
-	                    for (var _iterator2 = expectedMeasures[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	                        var keyToTransform = _step2.value;
-	
-	                        if (record[keyToTransform] && record[keyToTransform]) {
-	                            record[keyToTransform] = Number(record[keyToTransform]);
-	                        }
-	                    }
-	                } catch (err) {
-	                    _didIteratorError2 = true;
-	                    _iteratorError2 = err;
-	                } finally {
-	                    try {
-	                        if (!_iteratorNormalCompletion2 && _iterator2.return) {
-	                            _iterator2.return();
-	                        }
-	                    } finally {
-	                        if (_didIteratorError2) {
-	                            throw _iteratorError2;
-	                        }
-	                    }
-	                }
-	            };
-	            var transformTimes = function transformTimes(record) {
-	                var isRecordAvailable = true;
-	                var _iteratorNormalCompletion3 = true;
-	                var _didIteratorError3 = false;
-	                var _iteratorError3 = undefined;
-	
-	                try {
-	                    for (var _iterator3 = times[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-	                        var keyToTransform = _step3.value;
-	
-	                        var timeDescriptor = getTimeDescriptor(record[keyToTransform]);
-	                        if (timeDescriptor) {
-	                            if (_this4.requestNormalizer.timeType && timeDescriptor.type !== _this4.requestNormalizer.timeType) {
-	                                isRecordAvailable = false;
-	                                break;
-	                            }
-	                            if (!timeValuesHash[keyToTransform]) {
-	                                timeValuesHash[keyToTransform] = {};
-	                            }
-	                            timeValuesHash[keyToTransform][timeDescriptor.time] = record[keyToTransform];
-	                            record[keyToTransform] = timeDescriptor.time;
 	                        }
 	                    }
 	                } catch (err) {
@@ -21025,24 +20976,38 @@ var DDFCsvReader =
 	                    }
 	                }
 	
-	                return isRecordAvailable;
-	            };
-	            return function (record, filePath) {
-	                var recordKeys = lodash_1.keys(record);
-	                var isTranslationExists = function isTranslationExists(key) {
-	                    return _this4.recordsDescriptor[filePath] && _this4.recordsDescriptor[filePath].translationHash && _this4.recordsDescriptor[filePath].translationHash[record[_this4.recordsDescriptor[filePath].mainKey]] && _this4.recordsDescriptor[filePath].translationHash[record[_this4.recordsDescriptor[filePath].mainKey]][key];
-	                };
-	                _this4.constructRecordDescriptor(record, filePath);
+	                var entityDescriptors = this.getEntityDescriptors(mainEntitiesKey);
+	                var mainKey = this.getEntitiesHolderKey(record, entityDescriptors) + "," + record[mainTimeKey];
+	                this.recordsDescriptor[filePath] = { mainKey: mainKey, translationHash: {} };
+	            }
+	        }
+	    }, {
+	        key: "getRecordTransformer",
+	        value: function getRecordTransformer(request) {
+	            var _this3 = this;
+	
+	            var measures = this.contentManager.concepts.filter(function (conceptRecord) {
+	                return conceptRecord.concept_type === 'measure';
+	            }).map(function (conceptRecord) {
+	                return conceptRecord.concept;
+	            });
+	            var expectedMeasures = lodash_1.intersection(measures, request.select.value);
+	            var times = this.contentManager.concepts.filter(function (conceptRecord) {
+	                return conceptRecord.concept_type === 'time';
+	            }).map(function (conceptRecord) {
+	                return conceptRecord.concept;
+	            });
+	            var transformNumbers = function transformNumbers(record) {
 	                var _iteratorNormalCompletion4 = true;
 	                var _didIteratorError4 = false;
 	                var _iteratorError4 = undefined;
 	
 	                try {
-	                    for (var _iterator4 = recordKeys[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-	                        var key = _step4.value;
+	                    for (var _iterator4 = expectedMeasures[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+	                        var keyToTransform = _step4.value;
 	
-	                        if (isTranslationExists(key)) {
-	                            record[key] = _this4.recordsDescriptor[filePath].translationHash[record[_this4.recordsDescriptor[filePath].mainKey]][key];
+	                        if (record[keyToTransform] && record[keyToTransform]) {
+	                            record[keyToTransform] = Number(record[keyToTransform]);
 	                        }
 	                    }
 	                } catch (err) {
@@ -21059,6 +21024,79 @@ var DDFCsvReader =
 	                        }
 	                    }
 	                }
+	            };
+	            var transformTimes = function transformTimes(record) {
+	                var isRecordAvailable = true;
+	                var _iteratorNormalCompletion5 = true;
+	                var _didIteratorError5 = false;
+	                var _iteratorError5 = undefined;
+	
+	                try {
+	                    for (var _iterator5 = times[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+	                        var keyToTransform = _step5.value;
+	
+	                        var timeDescriptor = getTimeDescriptor(record[keyToTransform]);
+	                        if (timeDescriptor) {
+	                            if (_this3.requestNormalizer.timeType && timeDescriptor.type !== _this3.requestNormalizer.timeType) {
+	                                isRecordAvailable = false;
+	                                break;
+	                            }
+	                            if (!timeValuesHash[keyToTransform]) {
+	                                timeValuesHash[keyToTransform] = {};
+	                            }
+	                            timeValuesHash[keyToTransform][timeDescriptor.time] = record[keyToTransform];
+	                            record[keyToTransform] = timeDescriptor.time;
+	                        }
+	                    }
+	                } catch (err) {
+	                    _didIteratorError5 = true;
+	                    _iteratorError5 = err;
+	                } finally {
+	                    try {
+	                        if (!_iteratorNormalCompletion5 && _iterator5.return) {
+	                            _iterator5.return();
+	                        }
+	                    } finally {
+	                        if (_didIteratorError5) {
+	                            throw _iteratorError5;
+	                        }
+	                    }
+	                }
+	
+	                return isRecordAvailable;
+	            };
+	            return function (record, filePath) {
+	                var recordKeys = lodash_1.keys(record);
+	                var isTranslationExists = function isTranslationExists(key) {
+	                    return _this3.recordsDescriptor[filePath] && _this3.recordsDescriptor[filePath].translationHash && _this3.recordsDescriptor[filePath].translationHash[record[_this3.recordsDescriptor[filePath].mainKey]] && _this3.recordsDescriptor[filePath].translationHash[record[_this3.recordsDescriptor[filePath].mainKey]][key];
+	                };
+	                _this3.constructRecordDescriptor(record, filePath);
+	                var _iteratorNormalCompletion6 = true;
+	                var _didIteratorError6 = false;
+	                var _iteratorError6 = undefined;
+	
+	                try {
+	                    for (var _iterator6 = recordKeys[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+	                        var key = _step6.value;
+	
+	                        if (isTranslationExists(key)) {
+	                            record[key] = _this3.recordsDescriptor[filePath].translationHash[record[_this3.recordsDescriptor[filePath].mainKey]][key];
+	                        }
+	                    }
+	                } catch (err) {
+	                    _didIteratorError6 = true;
+	                    _iteratorError6 = err;
+	                } finally {
+	                    try {
+	                        if (!_iteratorNormalCompletion6 && _iterator6.return) {
+	                            _iterator6.return();
+	                        }
+	                    } finally {
+	                        if (_didIteratorError6) {
+	                            throw _iteratorError6;
+	                        }
+	                    }
+	                }
 	
 	                transformNumbers(record);
 	                var isRecordAvailable = transformTimes(record);
@@ -21068,12 +21106,12 @@ var DDFCsvReader =
 	    }, {
 	        key: "getTranslationRecordTransformer",
 	        value: function getTranslationRecordTransformer() {
-	            var _this5 = this;
+	            var _this4 = this;
 	
 	            return function (record, filePath) {
-	                var dataFilePath = filePath.replace(new RegExp("lang/" + _this5.request.language + "/"), '');
-	                _this5.constructRecordDescriptor(record, dataFilePath);
-	                _this5.recordsDescriptor[dataFilePath].translationHash[record[_this5.recordsDescriptor[dataFilePath].mainKey]] = record;
+	                var dataFilePath = filePath.replace(new RegExp("lang/" + _this4.request.language + "/"), '');
+	                _this4.constructRecordDescriptor(record, dataFilePath);
+	                _this4.recordsDescriptor[dataFilePath].translationHash[record[_this4.recordsDescriptor[dataFilePath].mainKey]] = record;
 	                return record;
 	            };
 	        }
@@ -21101,53 +21139,53 @@ var DDFCsvReader =
 	    }, {
 	        key: "getEntityFieldsByFirstRecord",
 	        value: function getEntityFieldsByFirstRecord(record) {
-	            var _this6 = this;
+	            var _this5 = this;
 	
 	            return Object.keys(record).filter(function (conceptName) {
-	                return _this6.isDomainRelatedConcept(conceptName);
+	                return _this5.isDomainRelatedConcept(conceptName);
 	            });
 	        }
 	    }, {
 	        key: "getTimeFieldByFirstRecord",
 	        value: function getTimeFieldByFirstRecord(record) {
-	            var _this7 = this;
+	            var _this6 = this;
 	
 	            return Object.keys(record).find(function (conceptName) {
-	                return _this7.isTimeConcept(conceptName);
+	                return _this6.isTimeConcept(conceptName);
 	            });
 	        }
 	    }, {
 	        key: "getMeasureFieldsByFirstRecord",
 	        value: function getMeasureFieldsByFirstRecord(record) {
-	            var _this8 = this;
+	            var _this7 = this;
 	
 	            return Object.keys(record).filter(function (conceptName) {
-	                return _this8.isMeasureConcept(conceptName);
+	                return _this7.isMeasureConcept(conceptName);
 	            });
 	        }
 	    }, {
 	        key: "getFileActions",
 	        value: function getFileActions(expectedFiles, request) {
-	            var _this9 = this;
+	            var _this8 = this;
 	
 	            var readData = function readData(file, onFileRead) {
-	                _this9.reader.readCSV("" + _this9.ddfPath + file, function (err, data) {
+	                _this8.reader.readCSV("" + _this8.ddfPath + file, function (err, data) {
 	                    if (err || lodash_1.isEmpty(data)) {
 	                        onFileRead(err, [], {});
 	                        return;
 	                    }
 	                    var firstRecord = lodash_1.head(data);
-	                    var entityFields = _this9.getEntityFieldsByFirstRecord(firstRecord);
-	                    var timeField = _this9.getTimeFieldByFirstRecord(firstRecord);
-	                    var measureFields = _this9.getMeasureFieldsByFirstRecord(firstRecord);
+	                    var entityFields = _this8.getEntityFieldsByFirstRecord(firstRecord);
+	                    var timeField = _this8.getTimeFieldByFirstRecord(firstRecord);
+	                    var measureFields = _this8.getMeasureFieldsByFirstRecord(firstRecord);
 	                    onFileRead(null, { data: data, entityFields: entityFields, timeField: timeField, measureFields: measureFields });
 	                });
 	            };
 	            var translationsFileActions = function translationsFileActions() {
 	                return expectedFiles.map(function (file) {
 	                    return function (onFileRead) {
-	                        _this9.translationReader.setRecordTransformer(_this9.getTranslationRecordTransformer());
-	                        _this9.translationReader.readCSV(_this9.ddfPath + "lang/" + _this9.request.language + "/" + file, function () {
+	                        _this8.translationReader.setRecordTransformer(_this8.getTranslationRecordTransformer());
+	                        _this8.translationReader.readCSV(_this8.ddfPath + "lang/" + _this8.request.language + "/" + file, function () {
 	                            return readData(file, onFileRead);
 	                        });
 	                    };
@@ -21167,37 +21205,37 @@ var DDFCsvReader =
 	    }, {
 	        key: "getEntityDescriptors",
 	        value: function getEntityDescriptors(entities) {
-	            var _this10 = this;
+	            var _this9 = this;
 	
 	            return entities.map(function (entity) {
-	                return new EntityDescriptor(entity, _this10.contentManager);
+	                return new EntityDescriptor(entity, _this9.contentManager);
 	            });
 	        }
 	    }, {
 	        key: "getEntitiesHolderKey",
 	        value: function getEntitiesHolderKey(record, entityDescriptors) {
 	            var result = '';
-	            var _iteratorNormalCompletion5 = true;
-	            var _didIteratorError5 = false;
-	            var _iteratorError5 = undefined;
+	            var _iteratorNormalCompletion7 = true;
+	            var _didIteratorError7 = false;
+	            var _iteratorError7 = undefined;
 	
 	            try {
-	                for (var _iterator5 = entityDescriptors[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-	                    var entityDescriptor = _step5.value;
+	                for (var _iterator7 = entityDescriptors[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+	                    var entityDescriptor = _step7.value;
 	
 	                    result += record[entityDescriptor.entity || entityDescriptor.domain] + ',';
 	                }
 	            } catch (err) {
-	                _didIteratorError5 = true;
-	                _iteratorError5 = err;
+	                _didIteratorError7 = true;
+	                _iteratorError7 = err;
 	            } finally {
 	                try {
-	                    if (!_iteratorNormalCompletion5 && _iterator5.return) {
-	                        _iterator5.return();
+	                    if (!_iteratorNormalCompletion7 && _iterator7.return) {
+	                        _iterator7.return();
 	                    }
 	                } finally {
-	                    if (_didIteratorError5) {
-	                        throw _iteratorError5;
+	                    if (_didIteratorError7) {
+	                        throw _iteratorError7;
 	                    }
 	                }
 	            }
@@ -21207,7 +21245,7 @@ var DDFCsvReader =
 	    }, {
 	        key: "getFinalData",
 	        value: function getFinalData(results, request) {
-	            var _this11 = this;
+	            var _this10 = this;
 	
 	            var dataHash = [];
 	            var fields = request.select.key.concat(request.select.value);
@@ -21220,9 +21258,9 @@ var DDFCsvReader =
 	                    return;
 	                }
 	                var timeKey = result.timeField;
-	                var entityDescriptors = _this11.getEntityDescriptors(result.entityFields);
+	                var entityDescriptors = _this10.getEntityDescriptors(result.entityFields);
 	                result.data.forEach(function (record) {
-	                    var holderKey = _this11.getEntitiesHolderKey(record, entityDescriptors) + "," + record[result.timeField];
+	                    var holderKey = _this10.getEntitiesHolderKey(record, entityDescriptors) + "," + record[result.timeField];
 	                    if (!dataHash[holderKey]) {
 	                        dataHash[holderKey] = _defineProperty({}, timeKey, record[result.timeField]);
 	                        entityDescriptors.forEach(function (entityDescriptor) {
@@ -21238,27 +21276,27 @@ var DDFCsvReader =
 	                            dataHash[holderKey][measure] = null;
 	                        });
 	                    }
-	                    var _iteratorNormalCompletion6 = true;
-	                    var _didIteratorError6 = false;
-	                    var _iteratorError6 = undefined;
+	                    var _iteratorNormalCompletion8 = true;
+	                    var _didIteratorError8 = false;
+	                    var _iteratorError8 = undefined;
 	
 	                    try {
-	                        for (var _iterator6 = result.measureFields[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-	                            var measureField = _step6.value;
+	                        for (var _iterator8 = result.measureFields[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+	                            var measureField = _step8.value;
 	
 	                            dataHash[holderKey][measureField] = record[measureField];
 	                        }
 	                    } catch (err) {
-	                        _didIteratorError6 = true;
-	                        _iteratorError6 = err;
+	                        _didIteratorError8 = true;
+	                        _iteratorError8 = err;
 	                    } finally {
 	                        try {
-	                            if (!_iteratorNormalCompletion6 && _iterator6.return) {
-	                                _iterator6.return();
+	                            if (!_iteratorNormalCompletion8 && _iterator8.return) {
+	                                _iterator8.return();
 	                            }
 	                        } finally {
-	                            if (_didIteratorError6) {
-	                                throw _iteratorError6;
+	                            if (_didIteratorError8) {
+	                                throw _iteratorError8;
 	                            }
 	                        }
 	                    }
@@ -21270,38 +21308,38 @@ var DDFCsvReader =
 	            var filteredData = query.find(data).all().map(function (record) {
 	                var resultRecord = {};
 	                var projectionKeys = lodash_1.keys(projection);
-	                var _iteratorNormalCompletion7 = true;
-	                var _didIteratorError7 = false;
-	                var _iteratorError7 = undefined;
+	                var _iteratorNormalCompletion9 = true;
+	                var _didIteratorError9 = false;
+	                var _iteratorError9 = undefined;
 	
 	                try {
-	                    for (var _iterator7 = projectionKeys[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-	                        var projectionKey = _step7.value;
+	                    for (var _iterator9 = projectionKeys[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+	                        var projectionKey = _step9.value;
 	
 	                        resultRecord[projectionKey] = record[projectionKey];
 	                    }
 	                } catch (err) {
-	                    _didIteratorError7 = true;
-	                    _iteratorError7 = err;
+	                    _didIteratorError9 = true;
+	                    _iteratorError9 = err;
 	                } finally {
 	                    try {
-	                        if (!_iteratorNormalCompletion7 && _iterator7.return) {
-	                            _iterator7.return();
+	                        if (!_iteratorNormalCompletion9 && _iterator9.return) {
+	                            _iterator9.return();
 	                        }
 	                    } finally {
-	                        if (_didIteratorError7) {
-	                            throw _iteratorError7;
+	                        if (_didIteratorError9) {
+	                            throw _iteratorError9;
 	                        }
 	                    }
 	                }
 	
-	                var _iteratorNormalCompletion8 = true;
-	                var _didIteratorError8 = false;
-	                var _iteratorError8 = undefined;
+	                var _iteratorNormalCompletion10 = true;
+	                var _didIteratorError10 = false;
+	                var _iteratorError10 = undefined;
 	
 	                try {
-	                    for (var _iterator8 = timeKeys[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
-	                        var timeKey = _step8.value;
+	                    for (var _iterator10 = timeKeys[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
+	                        var timeKey = _step10.value;
 	
 	                        if (lodash_1.isInteger(record[timeKey])) {
 	                            resultRecord[timeKey] = "" + timeValuesHash[timeKey][record[timeKey]];
@@ -21309,16 +21347,16 @@ var DDFCsvReader =
 	                        }
 	                    }
 	                } catch (err) {
-	                    _didIteratorError8 = true;
-	                    _iteratorError8 = err;
+	                    _didIteratorError10 = true;
+	                    _iteratorError10 = err;
 	                } finally {
 	                    try {
-	                        if (!_iteratorNormalCompletion8 && _iterator8.return) {
-	                            _iterator8.return();
+	                        if (!_iteratorNormalCompletion10 && _iterator10.return) {
+	                            _iterator10.return();
 	                        }
 	                    } finally {
-	                        if (_didIteratorError8) {
-	                            throw _iteratorError8;
+	                        if (_didIteratorError10) {
+	                            throw _iteratorError10;
 	                        }
 	                    }
 	                }
