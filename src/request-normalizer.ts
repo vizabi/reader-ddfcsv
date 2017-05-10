@@ -7,7 +7,7 @@ import {
 } from 'lodash';
 import * as traverse from 'traverse';
 import * as timeUtils from 'ddf-time-utils';
-import {ContentManager} from './content-manager';
+import { ContentManager } from './content-manager';
 
 const COMPARISONS_OPERATORS = ['$gt', '$gte', '$lt', '$lte'];
 
@@ -51,6 +51,33 @@ function getCorrectedTime(request, contentManager) {
   return {error, timeType, request: requestToTraverse.value};
 }
 
+function getCorrectedBoolean(request, contentManager) {
+  const requestToTraverse: any = traverse(request);
+
+  function processConditionBranch() {
+    const processBoolean = value => {
+      requestToTraverse.set(this.path, value === true ? 'TRUE' : 'FALSE');
+    };
+
+    if (includes(contentManager.booleanConcepts, this.key) && this.isLeaf) {
+      processBoolean(this.node);
+    }
+
+    if (includes(COMPARISONS_OPERATORS, this.key)) {
+      const parentIndexOffset = 2;
+      const parentKey = this.path[this.path.length - parentIndexOffset];
+
+      if (includes(contentManager.booleanConcepts, parentKey)) {
+        processBoolean(this.node);
+      }
+    }
+  }
+
+  requestToTraverse.forEach(processConditionBranch);
+
+  return requestToTraverse.value;
+}
+
 // ugly hack remove it later
 
 function getCorrectAndClause(request) {
@@ -92,6 +119,7 @@ export class RequestNormalizer {
 
     this.request = correctedTimeDescriptor.request;
     this.request = getCorrectAndClause(this.request);
+    this.request = getCorrectedBoolean(this.request, this.contentManager);
 
     this.timeType = correctedTimeDescriptor.timeType;
 
