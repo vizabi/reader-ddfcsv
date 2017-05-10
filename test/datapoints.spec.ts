@@ -469,4 +469,64 @@ describe('when data points checking', () => {
       done();
     });
   });
+
+
+  it('query with boolean condition should be processed correctly', done => {
+    const ddf = new Ddf('./test/fixtures/presentation_set', backendFileReader);
+    const request = {
+      language: 'en',
+      from: 'datapoints',
+      animatable: 'time',
+      select: {
+        key: [
+          'geo',
+          'time'
+        ],
+        value: [
+          'income_per_person_gdppercapita_ppp_inflation_adjusted',
+          'life_expectancy_years',
+          'population_total'
+        ]
+      },
+      where: {
+        $and: [
+          {
+            geo: '$geo'
+          },
+          {
+            time: '$time'
+          }
+        ]
+      },
+      join: {
+        $geo: {
+          key: 'geo',
+          where: {
+            'un_state': true
+          }
+        },
+        $time: {
+          key: 'time',
+          where: {
+            time: {
+              $gte: '1800',
+              $lte: '2015'
+            }
+          }
+        }
+      },
+      order_by: [
+        'time'
+      ]
+    };
+
+    const EXPECTED_RECORDS_COUNT = 42120;
+
+    ddf.ddfRequest(request, (err, data) => {
+      expect(!!err).to.be.false;
+      expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
+
+      done();
+    });
+  });
 });

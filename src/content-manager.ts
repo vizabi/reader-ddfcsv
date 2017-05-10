@@ -1,16 +1,17 @@
-import {isArray} from 'lodash';
+import { isArray } from 'lodash';
 
 export class ContentManager {
   public conceptTypeHash: any;
   public CACHE: any;
   public dataPackage: any;
-  public translationIds: Array<string> = [];
-  public concepts: Array<any>;
-  public entities: Array<any>;
-  public timeConcepts: Array<any>;
-  public domainConcepts: Array<any>;
-  public entitySetConcepts: Array<any>;
-  public measureConcepts: Array<any>;
+  public translationIds: string[] = [];
+  public concepts: any[];
+  public entities: any[];
+  public timeConcepts: any[];
+  public booleanConcepts: any[];
+  public domainConcepts: any[];
+  public entitySetConcepts: any[];
+  public measureConcepts: any[];
   public domainHash: any;
 
   constructor() {

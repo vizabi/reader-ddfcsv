@@ -96,6 +96,7 @@ export class Ddf {
         contentManager.domainConcepts = [];
         contentManager.entitySetConcepts = [];
         contentManager.timeConcepts = [];
+        contentManager.booleanConcepts = [];
         contentManager.measureConcepts = [];
         contentManager.domainHash = {};
         contentManager.conceptTypeHash = {};
@@ -112,6 +113,10 @@ export class Ddf {
 
           if (currentConcept.concept_type === 'time') {
             contentManager.timeConcepts.push(currentConcept.concept);
+          }
+
+          if (currentConcept.concept_type === 'boolean') {
+            contentManager.booleanConcepts.push(currentConcept.concept);
           }
 
           if (currentConcept.concept_type === 'measure') {

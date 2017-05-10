@@ -1,6 +1,6 @@
 import * as chai from 'chai';
-import {isNumber} from 'lodash';
-import {BackendFileReader, Ddf} from '../src/index';
+import { isNumber } from 'lodash';
+import { BackendFileReader, Ddf } from '../src/index';
 
 const backendFileReader = new BackendFileReader();
 const GLOBALIS_PATH = './test/fixtures/systema_globalis';
@@ -199,6 +199,44 @@ describe('when entities checking', () => {
 
     ddf.ddfRequest(request, (err, data) => {
       const EXPECTED_RECORDS_COUNT = 4;
+
+      expect(!!err).to.be.false;
+      expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
+
+      done();
+    });
+  });
+
+  it('query with boolean condition should be processed correctly', done => {
+    const ddf = new Ddf('./test/fixtures/presentation_set', backendFileReader);
+    const request = {
+      language: 'en',
+      from: 'entities',
+      animatable: 'time',
+      select: {
+        key: [
+          'geo'
+        ],
+        value: [
+          'name',
+          'world_4region'
+        ]
+      },
+      where: {
+        $and: [
+          {
+            'un_state': true
+          }
+        ]
+      },
+      join: {},
+      order_by: [
+        'rank'
+      ]
+    };
+
+    ddf.ddfRequest(request, (err, data) => {
+      const EXPECTED_RECORDS_COUNT = 195;
 
       expect(!!err).to.be.false;
       expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
