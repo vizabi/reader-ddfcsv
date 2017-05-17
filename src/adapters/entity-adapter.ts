@@ -9,12 +9,12 @@ import {
   startsWith,
   uniq
 } from 'lodash';
-import {getResourcesFilteredBy} from './shared';
 import {ContentManager} from '../content-manager';
 import {IReader} from '../file-readers/reader';
 import {RequestNormalizer} from '../request-normalizer';
 import * as traverse from 'traverse';
 import {IDdfAdapter} from './adapter';
+import { getSchemaDetailsByKey } from './shared';
 
 const Mingo = require('mingo');
 const VALUE_WITH_PREFIX_REGEX = /^.*\./;
@@ -74,13 +74,8 @@ export class EntityAdapter implements IDdfAdapter {
     return this;
   }
 
-  getDataPackageFilteredBySelect(request, dataPackageContent) {
-    const domain = this.contentManager.domainHash[request.select.key];
-    const isFieldPresent = (record, fieldIs) => !!record.schema.fields.find(field => field.name === `is--${fieldIs}`);
-
-    return getResourcesFilteredBy(dataPackageContent, (dataPackage, record) =>
-    includes(request.select.key, record.schema.primaryKey) ||
-    (includes(domain, record.schema.primaryKey) && isFieldPresent(record, request.select.key)));
+  getExpectedSchemaDetails(request, dataPackageContent) {
+    return getSchemaDetailsByKey(request, dataPackageContent, 'entities');
   }
 
   getDomainDescriptorsByRequestKeys(requestKey) {

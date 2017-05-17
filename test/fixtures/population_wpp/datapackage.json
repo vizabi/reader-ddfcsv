@@ -1,34 +1,38 @@
 {
-    "name": "ddf--unpop--wpp_pop",
-    "title": "Population by age group from WPP",
+    "name": "population_wpp",
+    "title": "population_wpp",
     "description": "",
-    "license": "BSD-3",
-    "author": "Gapminder",
+    "version": "0.0.1",
+    "language": {
+        "id": "en",
+        "name": "English"
+    },
+    "translations": [],
+    "license": "",
+    "author": "",
     "resources": [
         {
             "path": "ddf--concepts.csv",
             "name": "ddf--concepts",
             "schema": {
-                "primaryKey": "concept",
                 "fields": [
+                    {
+                        "name": "concept"
+                    },
                     {
                         "name": "concept_type"
                     },
                     {
                         "name": "name"
                     }
-                ]
+                ],
+                "primaryKey": "concept"
             }
         },
         {
             "path": "ddf--datapoints--population--by--country_code-900--year--age.csv",
             "name": "ddf--datapoints--population--by--country_code-900--year--age",
             "schema": {
-                "primaryKey": [
-                    "country_code",
-                    "year",
-                    "age"
-                ],
                 "fields": [
                     {
                         "name": "country_code",
@@ -47,6 +51,11 @@
                     {
                         "name": "population"
                     }
+                ],
+                "primaryKey": [
+                    "country_code",
+                    "year",
+                    "age"
                 ]
             }
         },
@@ -54,12 +63,6 @@
             "path": "ddf--datapoints--population--by--country_code-900--year--gender--age.csv",
             "name": "ddf--datapoints--population--by--country_code-900--year--gender--age",
             "schema": {
-                "primaryKey": [
-                    "country_code",
-                    "year",
-                    "gender",
-                    "age"
-                ],
                 "fields": [
                     {
                         "name": "country_code",
@@ -81,6 +84,12 @@
                     {
                         "name": "population"
                     }
+                ],
+                "primaryKey": [
+                    "country_code",
+                    "year",
+                    "gender",
+                    "age"
                 ]
             }
         },
@@ -88,11 +97,6 @@
             "path": "ddf--datapoints--population--by--country_code-903--year--age.csv",
             "name": "ddf--datapoints--population--by--country_code-903--year--age",
             "schema": {
-                "primaryKey": [
-                    "country_code",
-                    "year",
-                    "age"
-                ],
                 "fields": [
                     {
                         "name": "country_code",
@@ -111,6 +115,11 @@
                     {
                         "name": "population"
                     }
+                ],
+                "primaryKey": [
+                    "country_code",
+                    "year",
+                    "age"
                 ]
             }
         },
@@ -118,12 +127,6 @@
             "path": "ddf--datapoints--population--by--country_code-903--year--gender--age.csv",
             "name": "ddf--datapoints--population--by--country_code-903--year--gender--age",
             "schema": {
-                "primaryKey": [
-                    "country_code",
-                    "year",
-                    "gender",
-                    "age"
-                ],
                 "fields": [
                     {
                         "name": "country_code",
@@ -145,6 +148,12 @@
                     {
                         "name": "population"
                     }
+                ],
+                "primaryKey": [
+                    "country_code",
+                    "year",
+                    "gender",
+                    "age"
                 ]
             }
         },
@@ -152,11 +161,6 @@
             "path": "ddf--datapoints--population--by--country_code-904--year--age.csv",
             "name": "ddf--datapoints--population--by--country_code-904--year--age",
             "schema": {
-                "primaryKey": [
-                    "country_code",
-                    "year",
-                    "age"
-                ],
                 "fields": [
                     {
                         "name": "country_code",
@@ -175,6 +179,11 @@
                     {
                         "name": "population"
                     }
+                ],
+                "primaryKey": [
+                    "country_code",
+                    "year",
+                    "age"
                 ]
             }
         },
@@ -182,12 +191,6 @@
             "path": "ddf--datapoints--population--by--country_code-904--year--gender--age.csv",
             "name": "ddf--datapoints--population--by--country_code-904--year--gender--age",
             "schema": {
-                "primaryKey": [
-                    "country_code",
-                    "year",
-                    "gender",
-                    "age"
-                ],
                 "fields": [
                     {
                         "name": "country_code",
@@ -209,6 +212,12 @@
                     {
                         "name": "population"
                     }
+                ],
+                "primaryKey": [
+                    "country_code",
+                    "year",
+                    "gender",
+                    "age"
                 ]
             }
         },
@@ -216,11 +225,6 @@
             "path": "ddf--datapoints--population--by--country_code-905--year--age.csv",
             "name": "ddf--datapoints--population--by--country_code-905--year--age",
             "schema": {
-                "primaryKey": [
-                    "country_code",
-                    "year",
-                    "age"
-                ],
                 "fields": [
                     {
                         "name": "country_code",
@@ -239,6 +243,11 @@
                     {
                         "name": "population"
                     }
+                ],
+                "primaryKey": [
+                    "country_code",
+                    "year",
+                    "age"
                 ]
             }
         },
@@ -246,12 +255,6 @@
             "path": "ddf--datapoints--population--by--country_code-905--year--gender--age.csv",
             "name": "ddf--datapoints--population--by--country_code-905--year--gender--age",
             "schema": {
-                "primaryKey": [
-                    "country_code",
-                    "year",
-                    "gender",
-                    "age"
-                ],
                 "fields": [
                     {
                         "name": "country_code",
@@ -273,6 +276,12 @@
                     {
                         "name": "population"
                     }
+                ],
+                "primaryKey": [
+                    "country_code",
+                    "year",
+                    "gender",
+                    "age"
                 ]
             }
         },
@@ -280,11 +289,6 @@
             "path": "ddf--datapoints--population--by--country_code-908--year--age.csv",
             "name": "ddf--datapoints--population--by--country_code-908--year--age",
             "schema": {
-                "primaryKey": [
-                    "country_code",
-                    "year",
-                    "age"
-                ],
                 "fields": [
                     {
                         "name": "country_code",
@@ -303,6 +307,11 @@
                     {
                         "name": "population"
                     }
+                ],
+                "primaryKey": [
+                    "country_code",
+                    "year",
+                    "age"
                 ]
             }
         },
@@ -310,12 +319,6 @@
             "path": "ddf--datapoints--population--by--country_code-908--year--gender--age.csv",
             "name": "ddf--datapoints--population--by--country_code-908--year--gender--age",
             "schema": {
-                "primaryKey": [
-                    "country_code",
-                    "year",
-                    "gender",
-                    "age"
-                ],
                 "fields": [
                     {
                         "name": "country_code",
@@ -337,6 +340,12 @@
                     {
                         "name": "population"
                     }
+                ],
+                "primaryKey": [
+                    "country_code",
+                    "year",
+                    "gender",
+                    "age"
                 ]
             }
         },
@@ -344,11 +353,6 @@
             "path": "ddf--datapoints--population--by--country_code-909--year--age.csv",
             "name": "ddf--datapoints--population--by--country_code-909--year--age",
             "schema": {
-                "primaryKey": [
-                    "country_code",
-                    "year",
-                    "age"
-                ],
                 "fields": [
                     {
                         "name": "country_code",
@@ -367,6 +371,11 @@
                     {
                         "name": "population"
                     }
+                ],
+                "primaryKey": [
+                    "country_code",
+                    "year",
+                    "age"
                 ]
             }
         },
@@ -374,12 +383,6 @@
             "path": "ddf--datapoints--population--by--country_code-909--year--gender--age.csv",
             "name": "ddf--datapoints--population--by--country_code-909--year--gender--age",
             "schema": {
-                "primaryKey": [
-                    "country_code",
-                    "year",
-                    "gender",
-                    "age"
-                ],
                 "fields": [
                     {
                         "name": "country_code",
@@ -401,6 +404,12 @@
                     {
                         "name": "population"
                     }
+                ],
+                "primaryKey": [
+                    "country_code",
+                    "year",
+                    "gender",
+                    "age"
                 ]
             }
         },
@@ -408,11 +417,6 @@
             "path": "ddf--datapoints--population--by--country_code-935--year--age.csv",
             "name": "ddf--datapoints--population--by--country_code-935--year--age",
             "schema": {
-                "primaryKey": [
-                    "country_code",
-                    "year",
-                    "age"
-                ],
                 "fields": [
                     {
                         "name": "country_code",
@@ -431,6 +435,11 @@
                     {
                         "name": "population"
                     }
+                ],
+                "primaryKey": [
+                    "country_code",
+                    "year",
+                    "age"
                 ]
             }
         },
@@ -438,12 +447,6 @@
             "path": "ddf--datapoints--population--by--country_code-935--year--gender--age.csv",
             "name": "ddf--datapoints--population--by--country_code-935--year--gender--age",
             "schema": {
-                "primaryKey": [
-                    "country_code",
-                    "year",
-                    "gender",
-                    "age"
-                ],
                 "fields": [
                     {
                         "name": "country_code",
@@ -465,6 +468,12 @@
                     {
                         "name": "population"
                     }
+                ],
+                "primaryKey": [
+                    "country_code",
+                    "year",
+                    "gender",
+                    "age"
                 ]
             }
         },
@@ -472,37 +481,134 @@
             "path": "ddf--entities--age.csv",
             "name": "ddf--entities--age",
             "schema": {
-                "primaryKey": "age",
                 "fields": [
+                    {
+                        "name": "age"
+                    },
                     {
                         "name": "name"
                     }
-                ]
+                ],
+                "primaryKey": "age"
             }
         },
         {
             "path": "ddf--entities--country_code.csv",
             "name": "ddf--entities--country_code",
             "schema": {
-                "primaryKey": "country_code",
                 "fields": [
                     {
                         "name": "name"
+                    },
+                    {
+                        "name": "country_code"
                     }
-                ]
+                ],
+                "primaryKey": "country_code"
             }
         },
         {
             "path": "ddf--entities--gender.csv",
             "name": "ddf--entities--gender",
             "schema": {
-                "primaryKey": "gender",
                 "fields": [
+                    {
+                        "name": "gender"
+                    },
                     {
                         "name": "name"
                     }
-                ]
+                ],
+                "primaryKey": "gender"
             }
         }
-    ]
+    ],
+    "ddfSchema": {
+        "datapoints": [
+            {
+                "primaryKey": [
+                    "age",
+                    "country_code",
+                    "year"
+                ],
+                "value": "population",
+                "resources": [
+                    "ddf--datapoints--population--by--country_code-900--year--age",
+                    "ddf--datapoints--population--by--country_code-903--year--age",
+                    "ddf--datapoints--population--by--country_code-904--year--age",
+                    "ddf--datapoints--population--by--country_code-905--year--age",
+                    "ddf--datapoints--population--by--country_code-908--year--age",
+                    "ddf--datapoints--population--by--country_code-909--year--age",
+                    "ddf--datapoints--population--by--country_code-935--year--age"
+                ]
+            },
+            {
+                "primaryKey": [
+                    "age",
+                    "country_code",
+                    "gender",
+                    "year"
+                ],
+                "value": "population",
+                "resources": [
+                    "ddf--datapoints--population--by--country_code-900--year--gender--age",
+                    "ddf--datapoints--population--by--country_code-903--year--gender--age",
+                    "ddf--datapoints--population--by--country_code-904--year--gender--age",
+                    "ddf--datapoints--population--by--country_code-905--year--gender--age",
+                    "ddf--datapoints--population--by--country_code-908--year--gender--age",
+                    "ddf--datapoints--population--by--country_code-909--year--gender--age",
+                    "ddf--datapoints--population--by--country_code-935--year--gender--age"
+                ]
+            }
+        ],
+        "entities": [
+            {
+                "primaryKey": [
+                    "age"
+                ],
+                "value": "name",
+                "resources": [
+                    "ddf--entities--age"
+                ]
+            },
+            {
+                "primaryKey": [
+                    "country_code"
+                ],
+                "value": "name",
+                "resources": [
+                    "ddf--entities--country_code"
+                ]
+            },
+            {
+                "primaryKey": [
+                    "gender"
+                ],
+                "value": "name",
+                "resources": [
+                    "ddf--entities--gender"
+                ]
+            }
+        ],
+        "concepts": [
+            {
+                "primaryKey": [
+                    "concept"
+                ],
+                "value": "concept_type",
+                "resources": [
+                    "ddf--concepts"
+                ]
+            },
+            {
+                "primaryKey": [
+                    "concept"
+                ],
+                "value": "name",
+                "resources": [
+                    "ddf--concepts"
+                ]
+            }
+        ]
+    }
 }

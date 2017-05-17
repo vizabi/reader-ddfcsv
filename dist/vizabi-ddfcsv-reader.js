@@ -25752,7 +25752,7 @@ var DDFCsvReader =
 	            }).map(function (entitySet) {
 	                return entitySet.concept;
 	            }));
-	            this.synonimicConceptIds = synonimicConceptIds;
+	            this.synonymicConceptIds = synonimicConceptIds;
 	            request.key = [request.key].concat(relatedEntitySetsNames);
 	            request.where = getSynonimicCondition(getNormalizedBoolean(request.where), synonimicConceptIds, allEntityDomains);
 	            onRequestNormalized(null, request);
@@ -25923,7 +25923,7 @@ var DDFCsvReader =
 	                return currentProjection;
 	            }, {});
 	            var query = new Mingo.Query(request.where);
-	            var expectedIds = this.synonimicConceptIds.concat(lodash_1.keys(projection));
+	            var expectedIds = this.synonymicConceptIds.concat(lodash_1.keys(projection));
 	            var relatedData = query.find(data).all().map(function (record) {
 	                var value = null;
 	                var _iteratorNormalCompletion4 = true;

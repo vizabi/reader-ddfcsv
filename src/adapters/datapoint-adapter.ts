@@ -3,8 +3,6 @@ import {
   cloneDeep,
   head,
   isEmpty,
-  isEqual,
-  isArray,
   isInteger,
   intersection,
   includes,
@@ -17,6 +15,7 @@ import { ContentManager } from '../content-manager';
 import { IReader } from '../file-readers/reader';
 import { RequestNormalizer } from '../request-normalizer';
 import { IDdfAdapter } from './adapter';
+import { getSchemaDetailsByKeyValue } from './shared';
 
 const Mingo = require('mingo');
 
@@ -89,30 +88,8 @@ export class DataPointAdapter implements IDdfAdapter {
     return this;
   }
 
-  getDataPackageFilteredBySelect(request, dataPackageContent) {
-    const result = [];
-
-    for (let dataPackageRecord of dataPackageContent.resources) {
-      if (isArray(dataPackageRecord.schema.primaryKey)) {
-        const domainBasedPrimaryKey = [];
-
-        for (const aConcept of dataPackageRecord.schema.primaryKey) {
-          const domain = this.contentManager.domainHash[aConcept];
-
-          domainBasedPrimaryKey.push(domain || aConcept);
-        }
-
-        const matchByPrimaryKey = isEqual(domainBasedPrimaryKey.sort(), request.select.key.sort());
-        const fields = dataPackageRecord.schema.fields.map(field => field.name);
-        const matchByValue = !isEmpty(intersection(request.select.value, fields));
-
-        if (matchByPrimaryKey && matchByValue) {
-          result.push(dataPackageRecord);
-        }
-      }
-    }
-
-    return result;
+  getExpectedSchemaDetails(request, dataPackageContent) {
+    return getSchemaDetailsByKeyValue(request, dataPackageContent, 'datapoints');
   }
 
   getNormalizedRequest(request, onRequestNormalized) {

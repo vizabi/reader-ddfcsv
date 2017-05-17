@@ -1,9 +1,9 @@
-import {isEqual, cloneDeep} from 'lodash';
-import {getResourcesFilteredBy} from './shared';
-import {ContentManager} from '../content-manager';
-import {IReader} from '../file-readers/reader';
-import {RequestNormalizer} from '../request-normalizer';
-import {IDdfAdapter} from './adapter';
+import { cloneDeep } from 'lodash';
+import { getSchemaDetailsByKey } from './shared';
+import { ContentManager } from '../content-manager';
+import { IReader } from '../file-readers/reader';
+import { RequestNormalizer } from '../request-normalizer';
+import { IDdfAdapter } from './adapter';
 
 export class DataPointSchemaAdapter implements IDdfAdapter {
   public contentManager: ContentManager;
@@ -23,9 +23,8 @@ export class DataPointSchemaAdapter implements IDdfAdapter {
     return this;
   }
 
-  getDataPackageFilteredBySelect(request, dataPackageContent) {
-    return getResourcesFilteredBy(dataPackageContent, (dataPackage, record) =>
-      isEqual(request.select.key, record.schema.primaryKey));
+  getExpectedSchemaDetails(request, dataPackageContent) {
+    return getSchemaDetailsByKey(request, dataPackageContent, 'datapoints');
   }
 
   getNormalizedRequest(requestParam, onRequestNormalized) {

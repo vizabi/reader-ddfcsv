@@ -1,20 +1,21 @@
-import {ContentManager} from './content-manager';
-import {ConceptAdapter} from './adapters/concept-adapter';
-import {EntityAdapter} from './adapters/entity-adapter';
-import {EntitySchemaAdapter} from './adapters/entity-schema-adapter';
-import {JoinsAdapter} from './adapters/joins-adapter';
-import {DataPointAdapter} from './adapters/datapoint-adapter';
-import {DataPointSchemaAdapter} from './adapters/datapoint-schema-adapter';
-import {RequestNormalizer} from './request-normalizer';
-import {IReader} from './file-readers/reader';
-import {IDdfAdapter} from './adapters/adapter';
-import {parallel} from 'async';
+import { ContentManager } from './content-manager';
+import { ConceptAdapter } from './adapters/concept-adapter';
+import { EntityAdapter } from './adapters/entity-adapter';
+import { EntitySchemaAdapter } from './adapters/entity-schema-adapter';
+import { JoinsAdapter } from './adapters/joins-adapter';
+import { DataPointAdapter } from './adapters/datapoint-adapter';
+import { DataPointSchemaAdapter } from './adapters/datapoint-schema-adapter';
+import { RequestNormalizer } from './request-normalizer';
+import { IReader } from './file-readers/reader';
+import { IDdfAdapter } from './adapters/adapter';
+import { parallel } from 'async';
 import {
   cloneDeep,
   isArray,
   isEmpty,
   isObject,
   flatten,
+  flattenDeep,
   sortBy,
   startsWith,
   uniq
@@ -91,40 +92,45 @@ export class Ddf {
           return;
         }
 
-        contentManager.concepts = conceptsData;
+        const resetHashes = () => {
+          contentManager.concepts = conceptsData;
+          contentManager.empty();
+        };
+        const fillConceptHashes = () => {
+          for (let currentConcept of conceptsData) {
+            if (currentConcept.concept_type === 'entity_domain') {
+              contentManager.domainConcepts.push(currentConcept.concept);
+            }
 
-        contentManager.domainConcepts = [];
-        contentManager.entitySetConcepts = [];
-        contentManager.timeConcepts = [];
-        contentManager.booleanConcepts = [];
-        contentManager.measureConcepts = [];
-        contentManager.domainHash = {};
-        contentManager.conceptTypeHash = {};
+            if (currentConcept.concept_type === 'entity_set') {
+              contentManager.entitySetConcepts.push(currentConcept.concept);
+              contentManager.domainHash[currentConcept.concept] = currentConcept.domain;
+            }
 
-        for (let currentConcept of conceptsData) {
-          if (currentConcept.concept_type === 'entity_domain') {
-            contentManager.domainConcepts.push(currentConcept.concept);
+            if (currentConcept.concept_type === 'time') {
+              contentManager.timeConcepts.push(currentConcept.concept);
+            }
+
+            if (currentConcept.concept_type === 'boolean') {
+              contentManager.booleanConcepts.push(currentConcept.concept);
+            }
+
+            if (currentConcept.concept_type === 'measure') {
+              contentManager.measureConcepts.push(currentConcept.concept);
+            }
+
+            contentManager.conceptTypeHash[currentConcept.concept] = currentConcept.concept_type;
           }
-
-          if (currentConcept.concept_type === 'entity_set') {
-            contentManager.entitySetConcepts.push(currentConcept.concept);
-            contentManager.domainHash[currentConcept.concept] = currentConcept.domain;
+        };
+        const fillNameHash = () => {
+          for (let resource of dataPackageData.resources) {
+            contentManager.nameHash[resource.name] = resource.path;
           }
+        };
 
-          if (currentConcept.concept_type === 'time') {
-            contentManager.timeConcepts.push(currentConcept.concept);
-          }
-
-          if (currentConcept.concept_type === 'boolean') {
-            contentManager.booleanConcepts.push(currentConcept.concept);
-          }
-
-          if (currentConcept.concept_type === 'measure') {
-            contentManager.measureConcepts.push(currentConcept.concept);
-          }
-
-          contentManager.conceptTypeHash[currentConcept.concept] = currentConcept.concept_type;
-        }
+        resetHashes();
+        fillConceptHashes();
+        fillNameHash();
 
         onDataPackageLoaded(null, contentManager.dataPackage);
       });
@@ -190,8 +196,9 @@ export class Ddf {
         return;
       }
 
-      const expectedDataPackage = ddfTypeAdapter.getDataPackageFilteredBySelect(normRequest, contentManager.dataPackage);
-      const expectedFiles = uniq(expectedDataPackage.map(dataPackageRecord => dataPackageRecord.path));
+      const expectedSchemaDetails = ddfTypeAdapter.getExpectedSchemaDetails(normRequest, contentManager.dataPackage);
+      const expectedFiles = uniq(flattenDeep(expectedSchemaDetails.map(ddfSchemaRecord => ddfSchemaRecord.resources)))
+        .map((resource: string) => contentManager.nameHash[resource]);
 
       ddfTypeAdapter.reader.setRecordTransformer(ddfTypeAdapter.getRecordTransformer(normRequest));
 

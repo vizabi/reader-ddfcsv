@@ -1,9 +1,9 @@
-import {cloneDeep, includes} from 'lodash';
-import {getResourcesFilteredBy} from './shared';
-import {ContentManager} from '../content-manager';
-import {IReader} from '../file-readers/reader';
-import {RequestNormalizer} from '../request-normalizer';
-import {IDdfAdapter} from './adapter';
+import { cloneDeep } from 'lodash';
+import { ContentManager } from '../content-manager';
+import { IReader } from '../file-readers/reader';
+import { RequestNormalizer } from '../request-normalizer';
+import { IDdfAdapter } from './adapter';
+import { getSchemaDetailsByKey } from './shared';
 
 export class EntitySchemaAdapter implements IDdfAdapter {
   public contentManager: ContentManager;
@@ -23,9 +23,8 @@ export class EntitySchemaAdapter implements IDdfAdapter {
     return this;
   }
 
-  getDataPackageFilteredBySelect(request, dataPackageContent) {
-    return getResourcesFilteredBy(dataPackageContent, (dataPackage, record) =>
-      includes(request.select.key, record.schema.primaryKey));
+  getExpectedSchemaDetails(request, dataPackageContent) {
+    return getSchemaDetailsByKey(request, dataPackageContent, 'entities');
   }
 
   getNormalizedRequest(requestParam, onRequestNormalized) {

@@ -9,12 +9,12 @@ import {
   uniq,
   startsWith
 } from 'lodash';
-import {getResourcesFilteredBy} from './shared';
 import * as traverse from 'traverse';
-import {ContentManager} from '../content-manager';
-import {IReader} from '../file-readers/reader';
-import {RequestNormalizer} from '../request-normalizer';
-import {IDdfAdapter} from './adapter';
+import { ContentManager } from '../content-manager';
+import { IReader } from '../file-readers/reader';
+import { RequestNormalizer } from '../request-normalizer';
+import { IDdfAdapter } from './adapter';
+import { getSchemaDetailsByKey } from './shared';
 
 const Mingo = require('mingo');
 
@@ -33,7 +33,7 @@ function getNormalizedBoolean(conditionParam) {
   return condition;
 }
 
-function getSynonimicConceptIds(conditionParam) {
+function getSynonymicConceptIds(conditionParam) {
   const condition = cloneDeep(conditionParam);
   const conditionToTraverse = traverse(condition);
   const result = [];
@@ -49,7 +49,7 @@ function getSynonimicConceptIds(conditionParam) {
   return uniq(result);
 }
 
-function getSynonimicCondition(conditionParam, synonimicConceptIds, allEntityDomains) {
+function getSynonymicCondition(conditionParam, synonimicConceptIds, allEntityDomains) {
   const result: any = {};
 
   keys(conditionParam).forEach(key => {
@@ -60,8 +60,8 @@ function getSynonimicCondition(conditionParam, synonimicConceptIds, allEntityDom
 
     result['$or'] = [{[key]: conditionParam[key]}];
 
-    synonimicConceptIds.forEach(synonimicConceptId => {
-      result['$or'].push({[synonimicConceptId]: conditionParam[key]});
+    synonimicConceptIds.forEach(synonymicConceptId => {
+      result['$or'].push({[synonymicConceptId]: conditionParam[key]});
     });
   });
 
@@ -73,9 +73,7 @@ export class JoinsAdapter implements IDdfAdapter {
   public reader: IReader;
   public ddfPath: string;
   public requestNormalizer: RequestNormalizer;
-  public synonimicConceptIds: Array<string>;
-
-  private dataPackageContent;
+  public synonymicConceptIds: Array<string>;
 
   constructor(contentManager, reader, ddfPath) {
     this.contentManager = contentManager;
@@ -89,13 +87,8 @@ export class JoinsAdapter implements IDdfAdapter {
     return this;
   }
 
-  getDataPackageFilteredBySelect(request, dataPackageContent) {
-    this.dataPackageContent = dataPackageContent;
-
-    return getResourcesFilteredBy(dataPackageContent, (dataPackage, record) => {
-      return includes(request.key, record.schema.primaryKey) ||
-        includes(request.key, this.contentManager.domainHash[record.schema.primaryKey]);
-    });
+  getExpectedSchemaDetails(request, dataPackageContent) {
+    return getSchemaDetailsByKey(request, dataPackageContent, 'entities');
   }
 
   isEntitySetConcept(conceptName) {
@@ -106,18 +99,18 @@ export class JoinsAdapter implements IDdfAdapter {
     const allEntitySets = this.contentManager.concepts.filter(concept => concept.concept_type === 'entity_set');
     const allEntityDomains = this.contentManager.concepts
       .filter(concept => concept.concept_type === 'entity_domain').map(concept => concept.concept);
-    const synonimicConceptIds = getSynonimicConceptIds(request.where);
+    const synonymicConceptIds = getSynonymicConceptIds(request.where);
     const relatedEntitySetsNames = flatten(
       allEntitySets
         .filter(entitySet => entitySet.domain === request.key)
-        .filter(entitySet => includes(synonimicConceptIds, entitySet.concept))
+        .filter(entitySet => includes(synonymicConceptIds, entitySet.concept))
         .map(entitySet => entitySet.concept)
     );
 
-    this.synonimicConceptIds = synonimicConceptIds;
+    this.synonymicConceptIds = synonymicConceptIds;
 
     request.key = [request.key].concat(relatedEntitySetsNames);
-    request.where = getSynonimicCondition(getNormalizedBoolean(request.where), synonimicConceptIds, allEntityDomains);
+    request.where = getSynonymicCondition(getNormalizedBoolean(request.where), synonymicConceptIds, allEntityDomains);
 
     onRequestNormalized(null, request);
   }
@@ -172,7 +165,7 @@ export class JoinsAdapter implements IDdfAdapter {
   getPrimaryKeyByFile(file: string): string & Array<string> {
     const primaryKeyHash = {};
 
-    for (const resource of this.dataPackageContent.resources) {
+    for (const resource of this.contentManager.dataPackage.resources) {
       primaryKeyHash[resource.path] = resource.schema.primaryKey;
     }
 
@@ -205,7 +198,7 @@ export class JoinsAdapter implements IDdfAdapter {
       },
       {});
     const query = new Mingo.Query(request.where);
-    const expectedIds = this.synonimicConceptIds.concat(keys(projection));
+    const expectedIds = this.synonymicConceptIds.concat(keys(projection));
     const relatedData = query.find(data).all().map(record => {
       let value = null;
 
