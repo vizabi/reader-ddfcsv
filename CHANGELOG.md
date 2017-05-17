@@ -1,3 +1,13 @@
+<a name="0.9.0"></a>
+# [0.9.0](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v0.8.3...v0.9.0) (2017-05-17)
+
+
+### Features
+
+* **general:** ddfSchema supporting ([3ec6eb0](https://github.com/vizabi/vizabi-ddfcsv-reader/commit/3ec6eb0)), closes [#38](https://github.com/vizabi/vizabi-ddfcsv-reader/issues/38)
+
+
+
 <a name="0.8.3"></a>
 ## [0.8.3](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v0.8.0...v0.8.3) (2017-05-10)
 
