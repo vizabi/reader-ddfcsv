@@ -138,7 +138,7 @@ describe('when entities checking', () => {
     };
 
     ddf.ddfRequest(request, (err, data) => {
-      const EXPECTED_RECORDS_COUNT = 4;
+      const EXPECTED_RECORDS_COUNT = 8;
 
       expect(!!err).to.be.false;
       expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);

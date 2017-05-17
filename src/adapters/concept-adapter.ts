@@ -1,9 +1,9 @@
-import {cloneDeep, flatten, keys, reduce, includes, isEmpty} from 'lodash';
-import {getResourcesFilteredBy} from './shared';
-import {ContentManager} from '../content-manager';
-import {IReader} from '../file-readers/reader';
-import {RequestNormalizer} from '../request-normalizer';
-import {IDdfAdapter} from './adapter';
+import { cloneDeep, flatten, keys, reduce, includes, isEmpty } from 'lodash';
+import { ContentManager } from '../content-manager';
+import { IReader } from '../file-readers/reader';
+import { RequestNormalizer } from '../request-normalizer';
+import { IDdfAdapter } from './adapter';
+import { getSchemaDetailsByKey } from './shared';
 
 const Mingo = require('mingo');
 
@@ -30,9 +30,8 @@ export class ConceptAdapter implements IDdfAdapter {
     return this;
   }
 
-  getDataPackageFilteredBySelect(request, dataPackageContent): any {
-    return getResourcesFilteredBy(dataPackageContent, (dataPackage, record) =>
-      includes(request.select.key, record.schema.primaryKey));
+  getExpectedSchemaDetails(request, dataPackageContent): any {
+    return getSchemaDetailsByKey(request, dataPackageContent, 'concepts');
   }
 
   getNormalizedRequest(request, onRequestNormalized) {

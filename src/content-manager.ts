@@ -13,6 +13,7 @@ export class ContentManager {
   public entitySetConcepts: any[];
   public measureConcepts: any[];
   public domainHash: any;
+  public nameHash: any;
 
   constructor() {
     this.conceptTypeHash = {};
@@ -31,6 +32,17 @@ export class ContentManager {
     this.entities = null;
     this.CACHE.FILE_CACHED = {};
     this.CACHE.FILE_REQUESTED = {};
+  }
+
+  empty() {
+    this.domainConcepts = [];
+    this.entitySetConcepts = [];
+    this.timeConcepts = [];
+    this.booleanConcepts = [];
+    this.measureConcepts = [];
+    this.domainHash = {};
+    this.conceptTypeHash = {};
+    this.nameHash = {};
   }
 
   public setDataPackage(dataPackageData) {
