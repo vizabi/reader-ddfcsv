@@ -141,55 +141,81 @@ var DDFCsvReader =
 	                        onDataPackageLoaded(conceptsError);
 	                        return;
 	                    }
-	                    contentManager.concepts = conceptsData;
-	                    contentManager.domainConcepts = [];
-	                    contentManager.entitySetConcepts = [];
-	                    contentManager.timeConcepts = [];
-	                    contentManager.booleanConcepts = [];
-	                    contentManager.measureConcepts = [];
-	                    contentManager.domainHash = {};
-	                    contentManager.conceptTypeHash = {};
-	                    var _iteratorNormalCompletion = true;
-	                    var _didIteratorError = false;
-	                    var _iteratorError = undefined;
+	                    var resetHashes = function resetHashes() {
+	                        contentManager.concepts = conceptsData;
+	                        contentManager.empty();
+	                    };
+	                    var fillConceptHashes = function fillConceptHashes() {
+	                        var _iteratorNormalCompletion = true;
+	                        var _didIteratorError = false;
+	                        var _iteratorError = undefined;
 	
-	                    try {
-	                        for (var _iterator = conceptsData[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                            var currentConcept = _step.value;
-	
-	                            if (currentConcept.concept_type === 'entity_domain') {
-	                                contentManager.domainConcepts.push(currentConcept.concept);
-	                            }
-	                            if (currentConcept.concept_type === 'entity_set') {
-	                                contentManager.entitySetConcepts.push(currentConcept.concept);
-	                                contentManager.domainHash[currentConcept.concept] = currentConcept.domain;
-	                            }
-	                            if (currentConcept.concept_type === 'time') {
-	                                contentManager.timeConcepts.push(currentConcept.concept);
-	                            }
-	                            if (currentConcept.concept_type === 'boolean') {
-	                                contentManager.booleanConcepts.push(currentConcept.concept);
-	                            }
-	                            if (currentConcept.concept_type === 'measure') {
-	                                contentManager.measureConcepts.push(currentConcept.concept);
-	                            }
-	                            contentManager.conceptTypeHash[currentConcept.concept] = currentConcept.concept_type;
-	                        }
-	                    } catch (err) {
-	                        _didIteratorError = true;
-	                        _iteratorError = err;
-	                    } finally {
 	                        try {
-	                            if (!_iteratorNormalCompletion && _iterator.return) {
-	                                _iterator.return();
+	                            for (var _iterator = conceptsData[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                                var currentConcept = _step.value;
+	
+	                                if (currentConcept.concept_type === 'entity_domain') {
+	                                    contentManager.domainConcepts.push(currentConcept.concept);
+	                                }
+	                                if (currentConcept.concept_type === 'entity_set') {
+	                                    contentManager.entitySetConcepts.push(currentConcept.concept);
+	                                    contentManager.domainHash[currentConcept.concept] = currentConcept.domain;
+	                                }
+	                                if (currentConcept.concept_type === 'time') {
+	                                    contentManager.timeConcepts.push(currentConcept.concept);
+	                                }
+	                                if (currentConcept.concept_type === 'boolean') {
+	                                    contentManager.booleanConcepts.push(currentConcept.concept);
+	                                }
+	                                if (currentConcept.concept_type === 'measure') {
+	                                    contentManager.measureConcepts.push(currentConcept.concept);
+	                                }
+	                                contentManager.conceptTypeHash[currentConcept.concept] = currentConcept.concept_type;
 	                            }
+	                        } catch (err) {
+	                            _didIteratorError = true;
+	                            _iteratorError = err;
 	                        } finally {
-	                            if (_didIteratorError) {
-	                                throw _iteratorError;
+	                            try {
+	                                if (!_iteratorNormalCompletion && _iterator.return) {
+	                                    _iterator.return();
+	                                }
+	                            } finally {
+	                                if (_didIteratorError) {
+	                                    throw _iteratorError;
+	                                }
 	                            }
 	                        }
-	                    }
+	                    };
+	                    var fillNameHash = function fillNameHash() {
+	                        var _iteratorNormalCompletion2 = true;
+	                        var _didIteratorError2 = false;
+	                        var _iteratorError2 = undefined;
 	
+	                        try {
+	                            for (var _iterator2 = dataPackageData.resources[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                                var resource = _step2.value;
+	
+	                                contentManager.nameHash[resource.name] = resource.path;
+	                            }
+	                        } catch (err) {
+	                            _didIteratorError2 = true;
+	                            _iteratorError2 = err;
+	                        } finally {
+	                            try {
+	                                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                                    _iterator2.return();
+	                                }
+	                            } finally {
+	                                if (_didIteratorError2) {
+	                                    throw _iteratorError2;
+	                                }
+	                            }
+	                        }
+	                    };
+	                    resetHashes();
+	                    fillConceptHashes();
+	                    fillNameHash();
 	                    onDataPackageLoaded(null, contentManager.dataPackage);
 	                });
 	            });
@@ -261,10 +287,12 @@ var DDFCsvReader =
 	                    onRequestProcessed(normError);
 	                    return;
 	                }
-	                var expectedDataPackage = ddfTypeAdapter.getDataPackageFilteredBySelect(normRequest, contentManager.dataPackage);
-	                var expectedFiles = lodash_1.uniq(expectedDataPackage.map(function (dataPackageRecord) {
-	                    return dataPackageRecord.path;
-	                }));
+	                var expectedSchemaDetails = ddfTypeAdapter.getExpectedSchemaDetails(normRequest, contentManager.dataPackage);
+	                var expectedFiles = lodash_1.uniq(lodash_1.flattenDeep(expectedSchemaDetails.map(function (ddfSchemaRecord) {
+	                    return ddfSchemaRecord.resources;
+	                }))).map(function (resource) {
+	                    return contentManager.nameHash[resource];
+	                });
 	                ddfTypeAdapter.reader.setRecordTransformer(ddfTypeAdapter.getRecordTransformer(normRequest));
 	                var fileActions = ddfTypeAdapter.getFileActions(expectedFiles, request);
 	                async_1.parallel(fileActions, function (err, results) {
@@ -342,6 +370,18 @@ var DDFCsvReader =
 	            this.entities = null;
 	            this.CACHE.FILE_CACHED = {};
 	            this.CACHE.FILE_REQUESTED = {};
+	        }
+	    }, {
+	        key: "empty",
+	        value: function empty() {
+	            this.domainConcepts = [];
+	            this.entitySetConcepts = [];
+	            this.timeConcepts = [];
+	            this.booleanConcepts = [];
+	            this.measureConcepts = [];
+	            this.domainHash = {};
+	            this.conceptTypeHash = {};
+	            this.nameHash = {};
 	        }
 	    }, {
 	        key: "setDataPackage",
@@ -15998,11 +16038,9 @@ var DDFCsvReader =
 	            return this;
 	        }
 	    }, {
-	        key: "getDataPackageFilteredBySelect",
-	        value: function getDataPackageFilteredBySelect(request, dataPackageContent) {
-	            return shared_1.getResourcesFilteredBy(dataPackageContent, function (dataPackage, record) {
-	                return lodash_1.includes(request.select.key, record.schema.primaryKey);
-	            });
+	        key: "getExpectedSchemaDetails",
+	        value: function getExpectedSchemaDetails(request, dataPackageContent) {
+	            return shared_1.getSchemaDetailsByKey(request, dataPackageContent, 'concepts');
 	        }
 	    }, {
 	        key: "getNormalizedRequest",
@@ -16116,17 +16154,25 @@ var DDFCsvReader =
 
 /***/ },
 /* 7 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
-	function getResourcesFilteredBy(dataPackage, selectionCriteria) {
-	    return dataPackage.resources.filter(function (record) {
-	        return selectionCriteria(dataPackage, record);
+	var lodash_1 = __webpack_require__(3);
+	exports.getSchemaDetailsByKeyValue = function (request, dataPackageContent, type) {
+	    return dataPackageContent.ddfSchema[type].filter(function (resource) {
+	        var hasKey = lodash_1.intersection(request.select.key, resource.primaryKey).length === request.select.key.length && request.select.key.length === resource.primaryKey.length;
+	        var hasValue = lodash_1.includes(request.select.value, resource.value);
+	        return hasKey && hasValue;
 	    });
-	}
-	exports.getResourcesFilteredBy = getResourcesFilteredBy;
+	};
+	exports.getSchemaDetailsByKey = function (request, dataPackageContent, type) {
+	    return dataPackageContent.ddfSchema[type].filter(function (resource) {
+	        var key = request.key || request.select.key;
+	        return !lodash_1.isEmpty(lodash_1.intersection(key, resource.primaryKey));
+	    });
+	};
 
 /***/ },
 /* 8 */
@@ -19461,9 +19507,8 @@ var DDFCsvReader =
 	var Stream = __webpack_require__(17);
 	/*</replacement>*/
 	
-	var Buffer = __webpack_require__(18).Buffer;
 	/*<replacement>*/
-	var bufferShim = __webpack_require__(21);
+	var Buffer = __webpack_require__(18).Buffer;
 	/*</replacement>*/
 	
 	/*<replacement>*/
@@ -19596,7 +19641,7 @@ var DDFCsvReader =
 	  if (!state.objectMode && typeof chunk === 'string') {
 	    encoding = encoding || state.defaultEncoding;
 	    if (encoding !== state.encoding) {
-	      chunk = bufferShim.from(chunk, encoding);
+	      chunk = Buffer.from(chunk, encoding);
 	      encoding = '';
 	    }
 	  }
@@ -19916,7 +19961,7 @@ var DDFCsvReader =
 	
 	  var doEnd = (!pipeOpts || pipeOpts.end !== false) && dest !== process.stdout && dest !== process.stderr;
 	
-	  var endFn = doEnd ? onend : cleanup;
+	  var endFn = doEnd ? onend : unpipe;
 	  if (state.endEmitted) processNextTick(endFn);else src.once('end', endFn);
 	
 	  dest.on('unpipe', onunpipe);
@@ -19949,7 +19994,7 @@ var DDFCsvReader =
 	    dest.removeListener('error', onerror);
 	    dest.removeListener('unpipe', onunpipe);
 	    src.removeListener('end', onend);
-	    src.removeListener('end', cleanup);
+	    src.removeListener('end', unpipe);
 	    src.removeListener('data', ondata);
 	
 	    cleanedUp = true;
@@ -20306,7 +20351,7 @@ var DDFCsvReader =
 	// This function is designed to be inlinable, so please take care when making
 	// changes to the function body.
 	function copyFromBuffer(n, list) {
-	  var ret = bufferShim.allocUnsafe(n);
+	  var ret = Buffer.allocUnsafe(n);
 	  var p = list.head;
 	  var c = 1;
 	  p.data.copy(ret);
@@ -20631,6 +20676,14 @@ var DDFCsvReader =
 /* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	module.exports = __webpack_require__(19);
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/* WEBPACK VAR INJECTION */(function(global) {/*!
 	 * The buffer module from node.js, for the browser.
 	 *
@@ -20641,8 +20694,8 @@ var DDFCsvReader =
 	
 	'use strict';
 	
-	var base64 = __webpack_require__(19);
-	var ieee754 = __webpack_require__(20);
+	var base64 = __webpack_require__(20);
+	var ieee754 = __webpack_require__(21);
 	var isArray = __webpack_require__(16);
 	
 	exports.Buffer = Buffer;
@@ -20673,12 +20726,12 @@ var DDFCsvReader =
 	 * We detect these buggy browsers and set `Buffer.TYPED_ARRAY_SUPPORT` to `false` so they
 	 * get the Object implementation, which is slower but behaves correctly.
 	 */
-	Buffer.TYPED_ARRAY_SUPPORT = global.TYPED_ARRAY_SUPPORT !== undefined ? global.TYPED_ARRAY_SUPPORT : typedArraySupport();
+	Buffer.TYPED_ARRAY_SUPPORT = global.TYPED_ARRAY_SUPPORT !== undefined ? global.TYPED_ARRAY_SUPPORT : typedArraySupport
 	
 	/*
 	 * Export kMaxLength after typed array support is determined.
 	 */
-	exports.kMaxLength = kMaxLength();
+	();exports.kMaxLength = kMaxLength();
 	
 	function typedArraySupport() {
 	  try {
@@ -21612,7 +21665,8 @@ var DDFCsvReader =
 	function decodeCodePointsArray(codePoints) {
 	  var len = codePoints.length;
 	  if (len <= MAX_ARGUMENTS_LENGTH) {
-	    return String.fromCharCode.apply(String, codePoints); // avoid extra slice()
+	    return String.fromCharCode.apply(String, codePoints // avoid extra slice()
+	    );
 	  }
 	
 	  // Decode in chunks to avoid "call stack size exceeded".
@@ -22240,9 +22294,9 @@ var DDFCsvReader =
 	
 	function base64clean(str) {
 	  // Node strips out invalid characters like \n and \t from the string, base64-js does not
-	  str = stringtrim(str).replace(INVALID_BASE64_RE, '');
+	  str = stringtrim(str).replace(INVALID_BASE64_RE, ''
 	  // Node converts strings with length < 2 to ''
-	  if (str.length < 2) return '';
+	  );if (str.length < 2) return '';
 	  // Node allows for non-padded base64 strings (missing trailing ===), base64-js does not
 	  while (str.length % 4 !== 0) {
 	    str = str + '=';
@@ -22268,10 +22322,10 @@ var DDFCsvReader =
 	  var bytes = [];
 	
 	  for (var i = 0; i < length; ++i) {
-	    codePoint = string.charCodeAt(i);
+	    codePoint = string.charCodeAt(i
 	
 	    // is surrogate component
-	    if (codePoint > 0xD7FF && codePoint < 0xE000) {
+	    );if (codePoint > 0xD7FF && codePoint < 0xE000) {
 	      // last char was a lead
 	      if (!leadSurrogate) {
 	        // no lead yet
@@ -22371,7 +22425,7 @@ var DDFCsvReader =
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22490,7 +22544,7 @@ var DDFCsvReader =
 	}
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -22579,120 +22633,6 @@ var DDFCsvReader =
 	
 	  buffer[offset + i - d] |= s * 128;
 	};
-
-/***/ },
-/* 21 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
-	
-	var buffer = __webpack_require__(18);
-	var Buffer = buffer.Buffer;
-	var SlowBuffer = buffer.SlowBuffer;
-	var MAX_LEN = buffer.kMaxLength || 2147483647;
-	exports.alloc = function alloc(size, fill, encoding) {
-	  if (typeof Buffer.alloc === 'function') {
-	    return Buffer.alloc(size, fill, encoding);
-	  }
-	  if (typeof encoding === 'number') {
-	    throw new TypeError('encoding must not be number');
-	  }
-	  if (typeof size !== 'number') {
-	    throw new TypeError('size must be a number');
-	  }
-	  if (size > MAX_LEN) {
-	    throw new RangeError('size is too large');
-	  }
-	  var enc = encoding;
-	  var _fill = fill;
-	  if (_fill === undefined) {
-	    enc = undefined;
-	    _fill = 0;
-	  }
-	  var buf = new Buffer(size);
-	  if (typeof _fill === 'string') {
-	    var fillBuf = new Buffer(_fill, enc);
-	    var flen = fillBuf.length;
-	    var i = -1;
-	    while (++i < size) {
-	      buf[i] = fillBuf[i % flen];
-	    }
-	  } else {
-	    buf.fill(_fill);
-	  }
-	  return buf;
-	};
-	exports.allocUnsafe = function allocUnsafe(size) {
-	  if (typeof Buffer.allocUnsafe === 'function') {
-	    return Buffer.allocUnsafe(size);
-	  }
-	  if (typeof size !== 'number') {
-	    throw new TypeError('size must be a number');
-	  }
-	  if (size > MAX_LEN) {
-	    throw new RangeError('size is too large');
-	  }
-	  return new Buffer(size);
-	};
-	exports.from = function from(value, encodingOrOffset, length) {
-	  if (typeof Buffer.from === 'function' && (!global.Uint8Array || Uint8Array.from !== Buffer.from)) {
-	    return Buffer.from(value, encodingOrOffset, length);
-	  }
-	  if (typeof value === 'number') {
-	    throw new TypeError('"value" argument must not be a number');
-	  }
-	  if (typeof value === 'string') {
-	    return new Buffer(value, encodingOrOffset);
-	  }
-	  if (typeof ArrayBuffer !== 'undefined' && value instanceof ArrayBuffer) {
-	    var offset = encodingOrOffset;
-	    if (arguments.length === 1) {
-	      return new Buffer(value);
-	    }
-	    if (typeof offset === 'undefined') {
-	      offset = 0;
-	    }
-	    var len = length;
-	    if (typeof len === 'undefined') {
-	      len = value.byteLength - offset;
-	    }
-	    if (offset >= value.byteLength) {
-	      throw new RangeError('\'offset\' is out of bounds');
-	    }
-	    if (len > value.byteLength - offset) {
-	      throw new RangeError('\'length\' is out of bounds');
-	    }
-	    return new Buffer(value.slice(offset, offset + len));
-	  }
-	  if (Buffer.isBuffer(value)) {
-	    var out = new Buffer(value.length);
-	    value.copy(out, 0, 0, value.length);
-	    return out;
-	  }
-	  if (value) {
-	    if (Array.isArray(value) || typeof ArrayBuffer !== 'undefined' && value.buffer instanceof ArrayBuffer || 'length' in value) {
-	      return new Buffer(value);
-	    }
-	    if (value.type === 'Buffer' && Array.isArray(value.data)) {
-	      return new Buffer(value.data);
-	    }
-	  }
-	
-	  throw new TypeError('First argument must be a string, Buffer, ' + 'ArrayBuffer, Array, or array-like object.');
-	};
-	exports.allocUnsafeSlow = function allocUnsafeSlow(size) {
-	  if (typeof Buffer.allocUnsafeSlow === 'function') {
-	    return Buffer.allocUnsafeSlow(size);
-	  }
-	  if (typeof size !== 'number') {
-	    throw new TypeError('size must be a number');
-	  }
-	  if (size >= MAX_LEN) {
-	    throw new RangeError('size is too large');
-	  }
-	  return new SlowBuffer(size);
-	};
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
 /* 22 */
@@ -22805,7 +22745,7 @@ var DDFCsvReader =
 	function objectToString(o) {
 	  return Object.prototype.toString.call(o);
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19).Buffer))
 
 /***/ },
 /* 23 */
@@ -22819,9 +22759,9 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	var Buffer = __webpack_require__(18).Buffer;
 	/*<replacement>*/
-	var bufferShim = __webpack_require__(21);
+	
+	var Buffer = __webpack_require__(18).Buffer;
 	/*</replacement>*/
 	
 	module.exports = BufferList;
@@ -22869,9 +22809,9 @@ var DDFCsvReader =
 	};
 	
 	BufferList.prototype.concat = function (n) {
-	  if (this.length === 0) return bufferShim.alloc(0);
+	  if (this.length === 0) return Buffer.alloc(0);
 	  if (this.length === 1) return this.head.data;
-	  var ret = bufferShim.allocUnsafe(n >>> 0);
+	  var ret = Buffer.allocUnsafe(n >>> 0);
 	  var p = this.head;
 	  var i = 0;
 	  while (p) {
@@ -23003,9 +22943,8 @@ var DDFCsvReader =
 	var Stream = __webpack_require__(17);
 	/*</replacement>*/
 	
-	var Buffer = __webpack_require__(18).Buffer;
 	/*<replacement>*/
-	var bufferShim = __webpack_require__(21);
+	var Buffer = __webpack_require__(18).Buffer;
 	/*</replacement>*/
 	
 	util.inherits(Writable, Stream);
@@ -23261,7 +23200,7 @@ var DDFCsvReader =
 	
 	function decodeChunk(state, chunk, encoding) {
 	  if (!state.objectMode && state.decodeStrings !== false && typeof chunk === 'string') {
-	    chunk = bufferShim.from(chunk, encoding);
+	    chunk = Buffer.from(chunk, encoding);
 	  }
 	  return chunk;
 	}
@@ -23841,7 +23780,6 @@ var DDFCsvReader =
 	'use strict';
 	
 	var Buffer = __webpack_require__(18).Buffer;
-	var bufferShim = __webpack_require__(21);
 	
 	var isEncoding = Buffer.isEncoding || function (encoding) {
 	  encoding = '' + encoding;
@@ -23918,7 +23856,7 @@ var DDFCsvReader =
 	  }
 	  this.lastNeed = 0;
 	  this.lastTotal = 0;
-	  this.lastChar = bufferShim.allocUnsafe(nb);
+	  this.lastChar = Buffer.allocUnsafe(nb);
 	}
 	
 	StringDecoder.prototype.write = function (buf) {
@@ -24970,8 +24908,8 @@ var DDFCsvReader =
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var lodash_1 = __webpack_require__(3);
-	var shared_1 = __webpack_require__(7);
 	var traverse = __webpack_require__(41);
+	var shared_1 = __webpack_require__(7);
 	var Mingo = __webpack_require__(8);
 	var VALUE_WITH_PREFIX_REGEX = /^.*\./;
 	function getCroppedKeys(conditionParam) {
@@ -25016,17 +24954,9 @@ var DDFCsvReader =
 	            return this;
 	        }
 	    }, {
-	        key: "getDataPackageFilteredBySelect",
-	        value: function getDataPackageFilteredBySelect(request, dataPackageContent) {
-	            var domain = this.contentManager.domainHash[request.select.key];
-	            var isFieldPresent = function isFieldPresent(record, fieldIs) {
-	                return !!record.schema.fields.find(function (field) {
-	                    return field.name === "is--" + fieldIs;
-	                });
-	            };
-	            return shared_1.getResourcesFilteredBy(dataPackageContent, function (dataPackage, record) {
-	                return lodash_1.includes(request.select.key, record.schema.primaryKey) || lodash_1.includes(domain, record.schema.primaryKey) && isFieldPresent(record, request.select.key);
-	            });
+	        key: "getExpectedSchemaDetails",
+	        value: function getExpectedSchemaDetails(request, dataPackageContent) {
+	            return shared_1.getSchemaDetailsByKey(request, dataPackageContent, 'entities');
 	        }
 	    }, {
 	        key: "getDomainDescriptorsByRequestKeys",
@@ -25605,11 +25535,9 @@ var DDFCsvReader =
 	            return this;
 	        }
 	    }, {
-	        key: "getDataPackageFilteredBySelect",
-	        value: function getDataPackageFilteredBySelect(request, dataPackageContent) {
-	            return shared_1.getResourcesFilteredBy(dataPackageContent, function (dataPackage, record) {
-	                return lodash_1.includes(request.select.key, record.schema.primaryKey);
-	            });
+	        key: "getExpectedSchemaDetails",
+	        value: function getExpectedSchemaDetails(request, dataPackageContent) {
+	            return shared_1.getSchemaDetailsByKey(request, dataPackageContent, 'entities');
 	        }
 	    }, {
 	        key: "getNormalizedRequest",
@@ -25662,8 +25590,8 @@ var DDFCsvReader =
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var lodash_1 = __webpack_require__(3);
-	var shared_1 = __webpack_require__(7);
 	var traverse = __webpack_require__(41);
+	var shared_1 = __webpack_require__(7);
 	var Mingo = __webpack_require__(8);
 	function getNormalizedBoolean(conditionParam) {
 	    var condition = lodash_1.cloneDeep(conditionParam);
@@ -25676,7 +25604,7 @@ var DDFCsvReader =
 	    conditionToTraverse.forEach(processConditionBranch);
 	    return condition;
 	}
-	function getSynonimicConceptIds(conditionParam) {
+	function getSynonymicConceptIds(conditionParam) {
 	    var condition = lodash_1.cloneDeep(conditionParam);
 	    var conditionToTraverse = traverse(condition);
 	    var result = [];
@@ -25688,7 +25616,7 @@ var DDFCsvReader =
 	    conditionToTraverse.forEach(processConditionBranch);
 	    return lodash_1.uniq(result);
 	}
-	function getSynonimicCondition(conditionParam, synonimicConceptIds, allEntityDomains) {
+	function getSynonymicCondition(conditionParam, synonimicConceptIds, allEntityDomains) {
 	    var result = {};
 	    lodash_1.keys(conditionParam).forEach(function (key) {
 	        if (!lodash_1.includes(allEntityDomains, key) || lodash_1.isEmpty(synonimicConceptIds)) {
@@ -25696,8 +25624,8 @@ var DDFCsvReader =
 	            return;
 	        }
 	        result['$or'] = [_defineProperty({}, key, conditionParam[key])];
-	        synonimicConceptIds.forEach(function (synonimicConceptId) {
-	            result['$or'].push(_defineProperty({}, synonimicConceptId, conditionParam[key]));
+	        synonimicConceptIds.forEach(function (synonymicConceptId) {
+	            result['$or'].push(_defineProperty({}, synonymicConceptId, conditionParam[key]));
 	        });
 	    });
 	    return result;
@@ -25719,14 +25647,9 @@ var DDFCsvReader =
 	            return this;
 	        }
 	    }, {
-	        key: "getDataPackageFilteredBySelect",
-	        value: function getDataPackageFilteredBySelect(request, dataPackageContent) {
-	            var _this = this;
-	
-	            this.dataPackageContent = dataPackageContent;
-	            return shared_1.getResourcesFilteredBy(dataPackageContent, function (dataPackage, record) {
-	                return lodash_1.includes(request.key, record.schema.primaryKey) || lodash_1.includes(request.key, _this.contentManager.domainHash[record.schema.primaryKey]);
-	            });
+	        key: "getExpectedSchemaDetails",
+	        value: function getExpectedSchemaDetails(request, dataPackageContent) {
+	            return shared_1.getSchemaDetailsByKey(request, dataPackageContent, 'entities');
 	        }
 	    }, {
 	        key: "isEntitySetConcept",
@@ -25744,17 +25667,17 @@ var DDFCsvReader =
 	            }).map(function (concept) {
 	                return concept.concept;
 	            });
-	            var synonimicConceptIds = getSynonimicConceptIds(request.where);
+	            var synonymicConceptIds = getSynonymicConceptIds(request.where);
 	            var relatedEntitySetsNames = lodash_1.flatten(allEntitySets.filter(function (entitySet) {
 	                return entitySet.domain === request.key;
 	            }).filter(function (entitySet) {
-	                return lodash_1.includes(synonimicConceptIds, entitySet.concept);
+	                return lodash_1.includes(synonymicConceptIds, entitySet.concept);
 	            }).map(function (entitySet) {
 	                return entitySet.concept;
 	            }));
-	            this.synonymicConceptIds = synonimicConceptIds;
+	            this.synonymicConceptIds = synonymicConceptIds;
 	            request.key = [request.key].concat(relatedEntitySetsNames);
-	            request.where = getSynonimicCondition(getNormalizedBoolean(request.where), synonimicConceptIds, allEntityDomains);
+	            request.where = getSynonymicCondition(getNormalizedBoolean(request.where), synonymicConceptIds, allEntityDomains);
 	            onRequestNormalized(null, request);
 	        }
 	    }, {
@@ -25765,11 +25688,11 @@ var DDFCsvReader =
 	    }, {
 	        key: "getFileActions",
 	        value: function getFileActions(expectedFiles) {
-	            var _this2 = this;
+	            var _this = this;
 	
 	            return expectedFiles.map(function (file) {
 	                return function (onFileRead) {
-	                    _this2.reader.readCSV("" + _this2.ddfPath + file, function (err, data) {
+	                    _this.reader.readCSV("" + _this.ddfPath + file, function (err, data) {
 	                        return onFileRead(err, { file: file, data: data });
 	                    });
 	                };
@@ -25838,7 +25761,7 @@ var DDFCsvReader =
 	            var _iteratorError2 = undefined;
 	
 	            try {
-	                for (var _iterator2 = this.dataPackageContent.resources[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                for (var _iterator2 = this.contentManager.dataPackage.resources[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
 	                    var resource = _step2.value;
 	
 	                    primaryKeyHash[resource.path] = resource.schema.primaryKey;
@@ -25981,6 +25904,7 @@ var DDFCsvReader =
 	var entity_utils_1 = __webpack_require__(45);
 	var lodash_1 = __webpack_require__(3);
 	var timeUtils = __webpack_require__(47);
+	var shared_1 = __webpack_require__(7);
 	var Mingo = __webpack_require__(8);
 	var timeValuesHash = {};
 	var timeDescriptorHash = {};
@@ -26045,71 +25969,9 @@ var DDFCsvReader =
 	            return this;
 	        }
 	    }, {
-	        key: "getDataPackageFilteredBySelect",
-	        value: function getDataPackageFilteredBySelect(request, dataPackageContent) {
-	            var result = [];
-	            var _iteratorNormalCompletion = true;
-	            var _didIteratorError = false;
-	            var _iteratorError = undefined;
-	
-	            try {
-	                for (var _iterator = dataPackageContent.resources[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                    var dataPackageRecord = _step.value;
-	
-	                    if (lodash_1.isArray(dataPackageRecord.schema.primaryKey)) {
-	                        var domainBasedPrimaryKey = [];
-	                        var _iteratorNormalCompletion2 = true;
-	                        var _didIteratorError2 = false;
-	                        var _iteratorError2 = undefined;
-	
-	                        try {
-	                            for (var _iterator2 = dataPackageRecord.schema.primaryKey[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	                                var aConcept = _step2.value;
-	
-	                                var domain = this.contentManager.domainHash[aConcept];
-	                                domainBasedPrimaryKey.push(domain || aConcept);
-	                            }
-	                        } catch (err) {
-	                            _didIteratorError2 = true;
-	                            _iteratorError2 = err;
-	                        } finally {
-	                            try {
-	                                if (!_iteratorNormalCompletion2 && _iterator2.return) {
-	                                    _iterator2.return();
-	                                }
-	                            } finally {
-	                                if (_didIteratorError2) {
-	                                    throw _iteratorError2;
-	                                }
-	                            }
-	                        }
-	
-	                        var matchByPrimaryKey = lodash_1.isEqual(domainBasedPrimaryKey.sort(), request.select.key.sort());
-	                        var fields = dataPackageRecord.schema.fields.map(function (field) {
-	                            return field.name;
-	                        });
-	                        var matchByValue = !lodash_1.isEmpty(lodash_1.intersection(request.select.value, fields));
-	                        if (matchByPrimaryKey && matchByValue) {
-	                            result.push(dataPackageRecord);
-	                        }
-	                    }
-	                }
-	            } catch (err) {
-	                _didIteratorError = true;
-	                _iteratorError = err;
-	            } finally {
-	                try {
-	                    if (!_iteratorNormalCompletion && _iterator.return) {
-	                        _iterator.return();
-	                    }
-	                } finally {
-	                    if (_didIteratorError) {
-	                        throw _iteratorError;
-	                    }
-	                }
-	            }
-	
-	            return result;
+	        key: "getExpectedSchemaDetails",
+	        value: function getExpectedSchemaDetails(request, dataPackageContent) {
+	            return shared_1.getSchemaDetailsByKeyValue(request, dataPackageContent, 'datapoints');
 	        }
 	    }, {
 	        key: "getNormalizedRequest",
@@ -26130,13 +25992,13 @@ var DDFCsvReader =
 	                var recordKeys = lodash_1.keys(record);
 	                var mainEntitiesKey = [];
 	                var mainTimeKey = null;
-	                var _iteratorNormalCompletion3 = true;
-	                var _didIteratorError3 = false;
-	                var _iteratorError3 = undefined;
+	                var _iteratorNormalCompletion = true;
+	                var _didIteratorError = false;
+	                var _iteratorError = undefined;
 	
 	                try {
-	                    for (var _iterator3 = recordKeys[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-	                        var key = _step3.value;
+	                    for (var _iterator = recordKeys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                        var key = _step.value;
 	
 	                        if (lodash_1.includes(this.contentManager.domainConcepts, key)) {
 	                            mainEntitiesKey.push(key);
@@ -26149,16 +26011,16 @@ var DDFCsvReader =
 	                        }
 	                    }
 	                } catch (err) {
-	                    _didIteratorError3 = true;
-	                    _iteratorError3 = err;
+	                    _didIteratorError = true;
+	                    _iteratorError = err;
 	                } finally {
 	                    try {
-	                        if (!_iteratorNormalCompletion3 && _iterator3.return) {
-	                            _iterator3.return();
+	                        if (!_iteratorNormalCompletion && _iterator.return) {
+	                            _iterator.return();
 	                        }
 	                    } finally {
-	                        if (_didIteratorError3) {
-	                            throw _iteratorError3;
+	                        if (_didIteratorError) {
+	                            throw _iteratorError;
 	                        }
 	                    }
 	                }
@@ -26185,42 +26047,42 @@ var DDFCsvReader =
 	                return conceptRecord.concept;
 	            });
 	            var transformNumbers = function transformNumbers(record) {
-	                var _iteratorNormalCompletion4 = true;
-	                var _didIteratorError4 = false;
-	                var _iteratorError4 = undefined;
+	                var _iteratorNormalCompletion2 = true;
+	                var _didIteratorError2 = false;
+	                var _iteratorError2 = undefined;
 	
 	                try {
-	                    for (var _iterator4 = expectedMeasures[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-	                        var keyToTransform = _step4.value;
+	                    for (var _iterator2 = expectedMeasures[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                        var keyToTransform = _step2.value;
 	
 	                        if (record[keyToTransform] && record[keyToTransform]) {
 	                            record[keyToTransform] = Number(record[keyToTransform]);
 	                        }
 	                    }
 	                } catch (err) {
-	                    _didIteratorError4 = true;
-	                    _iteratorError4 = err;
+	                    _didIteratorError2 = true;
+	                    _iteratorError2 = err;
 	                } finally {
 	                    try {
-	                        if (!_iteratorNormalCompletion4 && _iterator4.return) {
-	                            _iterator4.return();
+	                        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                            _iterator2.return();
 	                        }
 	                    } finally {
-	                        if (_didIteratorError4) {
-	                            throw _iteratorError4;
+	                        if (_didIteratorError2) {
+	                            throw _iteratorError2;
 	                        }
 	                    }
 	                }
 	            };
 	            var transformTimes = function transformTimes(record) {
 	                var isRecordAvailable = true;
-	                var _iteratorNormalCompletion5 = true;
-	                var _didIteratorError5 = false;
-	                var _iteratorError5 = undefined;
+	                var _iteratorNormalCompletion3 = true;
+	                var _didIteratorError3 = false;
+	                var _iteratorError3 = undefined;
 	
 	                try {
-	                    for (var _iterator5 = times[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-	                        var keyToTransform = _step5.value;
+	                    for (var _iterator3 = times[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	                        var keyToTransform = _step3.value;
 	
 	                        var timeDescriptor = getTimeDescriptor(record[keyToTransform]);
 	                        if (timeDescriptor) {
@@ -26236,16 +26098,16 @@ var DDFCsvReader =
 	                        }
 	                    }
 	                } catch (err) {
-	                    _didIteratorError5 = true;
-	                    _iteratorError5 = err;
+	                    _didIteratorError3 = true;
+	                    _iteratorError3 = err;
 	                } finally {
 	                    try {
-	                        if (!_iteratorNormalCompletion5 && _iterator5.return) {
-	                            _iterator5.return();
+	                        if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	                            _iterator3.return();
 	                        }
 	                    } finally {
-	                        if (_didIteratorError5) {
-	                            throw _iteratorError5;
+	                        if (_didIteratorError3) {
+	                            throw _iteratorError3;
 	                        }
 	                    }
 	                }
@@ -26258,29 +26120,29 @@ var DDFCsvReader =
 	                    return _this3.recordsDescriptor[filePath] && _this3.recordsDescriptor[filePath].translationHash && _this3.recordsDescriptor[filePath].translationHash[record[_this3.recordsDescriptor[filePath].mainKey]] && _this3.recordsDescriptor[filePath].translationHash[record[_this3.recordsDescriptor[filePath].mainKey]][key];
 	                };
 	                _this3.constructRecordDescriptor(record, filePath);
-	                var _iteratorNormalCompletion6 = true;
-	                var _didIteratorError6 = false;
-	                var _iteratorError6 = undefined;
+	                var _iteratorNormalCompletion4 = true;
+	                var _didIteratorError4 = false;
+	                var _iteratorError4 = undefined;
 	
 	                try {
-	                    for (var _iterator6 = recordKeys[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-	                        var key = _step6.value;
+	                    for (var _iterator4 = recordKeys[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+	                        var key = _step4.value;
 	
 	                        if (isTranslationExists(key)) {
 	                            record[key] = _this3.recordsDescriptor[filePath].translationHash[record[_this3.recordsDescriptor[filePath].mainKey]][key];
 	                        }
 	                    }
 	                } catch (err) {
-	                    _didIteratorError6 = true;
-	                    _iteratorError6 = err;
+	                    _didIteratorError4 = true;
+	                    _iteratorError4 = err;
 	                } finally {
 	                    try {
-	                        if (!_iteratorNormalCompletion6 && _iterator6.return) {
-	                            _iterator6.return();
+	                        if (!_iteratorNormalCompletion4 && _iterator4.return) {
+	                            _iterator4.return();
 	                        }
 	                    } finally {
-	                        if (_didIteratorError6) {
-	                            throw _iteratorError6;
+	                        if (_didIteratorError4) {
+	                            throw _iteratorError4;
 	                        }
 	                    }
 	                }
@@ -26402,27 +26264,27 @@ var DDFCsvReader =
 	        key: "getEntitiesHolderKey",
 	        value: function getEntitiesHolderKey(record, entityDescriptors) {
 	            var result = '';
-	            var _iteratorNormalCompletion7 = true;
-	            var _didIteratorError7 = false;
-	            var _iteratorError7 = undefined;
+	            var _iteratorNormalCompletion5 = true;
+	            var _didIteratorError5 = false;
+	            var _iteratorError5 = undefined;
 	
 	            try {
-	                for (var _iterator7 = entityDescriptors[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-	                    var entityDescriptor = _step7.value;
+	                for (var _iterator5 = entityDescriptors[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+	                    var entityDescriptor = _step5.value;
 	
 	                    result += record[entityDescriptor.entity || entityDescriptor.domain] + ',';
 	                }
 	            } catch (err) {
-	                _didIteratorError7 = true;
-	                _iteratorError7 = err;
+	                _didIteratorError5 = true;
+	                _iteratorError5 = err;
 	            } finally {
 	                try {
-	                    if (!_iteratorNormalCompletion7 && _iterator7.return) {
-	                        _iterator7.return();
+	                    if (!_iteratorNormalCompletion5 && _iterator5.return) {
+	                        _iterator5.return();
 	                    }
 	                } finally {
-	                    if (_didIteratorError7) {
-	                        throw _iteratorError7;
+	                    if (_didIteratorError5) {
+	                        throw _iteratorError5;
 	                    }
 	                }
 	            }
@@ -26463,27 +26325,27 @@ var DDFCsvReader =
 	                            dataHash[holderKey][measure] = null;
 	                        });
 	                    }
-	                    var _iteratorNormalCompletion8 = true;
-	                    var _didIteratorError8 = false;
-	                    var _iteratorError8 = undefined;
+	                    var _iteratorNormalCompletion6 = true;
+	                    var _didIteratorError6 = false;
+	                    var _iteratorError6 = undefined;
 	
 	                    try {
-	                        for (var _iterator8 = result.measureFields[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
-	                            var measureField = _step8.value;
+	                        for (var _iterator6 = result.measureFields[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+	                            var measureField = _step6.value;
 	
 	                            dataHash[holderKey][measureField] = record[measureField];
 	                        }
 	                    } catch (err) {
-	                        _didIteratorError8 = true;
-	                        _iteratorError8 = err;
+	                        _didIteratorError6 = true;
+	                        _iteratorError6 = err;
 	                    } finally {
 	                        try {
-	                            if (!_iteratorNormalCompletion8 && _iterator8.return) {
-	                                _iterator8.return();
+	                            if (!_iteratorNormalCompletion6 && _iterator6.return) {
+	                                _iterator6.return();
 	                            }
 	                        } finally {
-	                            if (_didIteratorError8) {
-	                                throw _iteratorError8;
+	                            if (_didIteratorError6) {
+	                                throw _iteratorError6;
 	                            }
 	                        }
 	                    }
@@ -26495,38 +26357,38 @@ var DDFCsvReader =
 	            var filteredData = query.find(data).all().map(function (record) {
 	                var resultRecord = {};
 	                var projectionKeys = lodash_1.keys(projection);
-	                var _iteratorNormalCompletion9 = true;
-	                var _didIteratorError9 = false;
-	                var _iteratorError9 = undefined;
+	                var _iteratorNormalCompletion7 = true;
+	                var _didIteratorError7 = false;
+	                var _iteratorError7 = undefined;
 	
 	                try {
-	                    for (var _iterator9 = projectionKeys[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
-	                        var projectionKey = _step9.value;
+	                    for (var _iterator7 = projectionKeys[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+	                        var projectionKey = _step7.value;
 	
 	                        resultRecord[projectionKey] = record[projectionKey];
 	                    }
 	                } catch (err) {
-	                    _didIteratorError9 = true;
-	                    _iteratorError9 = err;
+	                    _didIteratorError7 = true;
+	                    _iteratorError7 = err;
 	                } finally {
 	                    try {
-	                        if (!_iteratorNormalCompletion9 && _iterator9.return) {
-	                            _iterator9.return();
+	                        if (!_iteratorNormalCompletion7 && _iterator7.return) {
+	                            _iterator7.return();
 	                        }
 	                    } finally {
-	                        if (_didIteratorError9) {
-	                            throw _iteratorError9;
+	                        if (_didIteratorError7) {
+	                            throw _iteratorError7;
 	                        }
 	                    }
 	                }
 	
-	                var _iteratorNormalCompletion10 = true;
-	                var _didIteratorError10 = false;
-	                var _iteratorError10 = undefined;
+	                var _iteratorNormalCompletion8 = true;
+	                var _didIteratorError8 = false;
+	                var _iteratorError8 = undefined;
 	
 	                try {
-	                    for (var _iterator10 = timeKeys[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
-	                        var timeKey = _step10.value;
+	                    for (var _iterator8 = timeKeys[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+	                        var timeKey = _step8.value;
 	
 	                        if (lodash_1.isInteger(record[timeKey])) {
 	                            resultRecord[timeKey] = "" + timeValuesHash[timeKey][record[timeKey]];
@@ -26534,16 +26396,16 @@ var DDFCsvReader =
 	                        }
 	                    }
 	                } catch (err) {
-	                    _didIteratorError10 = true;
-	                    _iteratorError10 = err;
+	                    _didIteratorError8 = true;
+	                    _iteratorError8 = err;
 	                } finally {
 	                    try {
-	                        if (!_iteratorNormalCompletion10 && _iterator10.return) {
-	                            _iterator10.return();
+	                        if (!_iteratorNormalCompletion8 && _iterator8.return) {
+	                            _iterator8.return();
 	                        }
 	                    } finally {
-	                        if (_didIteratorError10) {
-	                            throw _iteratorError10;
+	                        if (_didIteratorError8) {
+	                            throw _iteratorError8;
 	                        }
 	                    }
 	                }
@@ -28497,9 +28359,9 @@ var DDFCsvReader =
 	    // prevent global pollution for namespaces
 	    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
 	    // bind timers to global for call from export context
-	    : IS_BIND && own ? ctx(out, global)
+	    : IS_BIND && own ? ctx(out, global
 	    // wrap global constructors for prevent change them in library
-	    : IS_WRAP && target[key] == out ? function (C) {
+	    ) : IS_WRAP && target[key] == out ? function (C) {
 	      var F = function F(a, b, c) {
 	        if (this instanceof C) {
 	          switch (arguments.length) {
@@ -29298,9 +29160,9 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	var $export = __webpack_require__(54);
+	var $export = __webpack_require__(54
 	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-	$export($export.S, 'Object', { create: __webpack_require__(92) });
+	);$export($export.S, 'Object', { create: __webpack_require__(92) });
 
 /***/ },
 /* 101 */
@@ -43655,11 +43517,9 @@ var DDFCsvReader =
 	            return this;
 	        }
 	    }, {
-	        key: "getDataPackageFilteredBySelect",
-	        value: function getDataPackageFilteredBySelect(request, dataPackageContent) {
-	            return shared_1.getResourcesFilteredBy(dataPackageContent, function (dataPackage, record) {
-	                return lodash_1.isEqual(request.select.key, record.schema.primaryKey);
-	            });
+	        key: "getExpectedSchemaDetails",
+	        value: function getExpectedSchemaDetails(request, dataPackageContent) {
+	            return shared_1.getSchemaDetailsByKey(request, dataPackageContent, 'datapoints');
 	        }
 	    }, {
 	        key: "getNormalizedRequest",
@@ -44439,7 +44299,7 @@ var DDFCsvReader =
 	  }
 	  return results;
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18).Buffer, __webpack_require__(14)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19).Buffer, __webpack_require__(14)))
 
 /***/ },
 /* 229 */

@@ -529,4 +529,66 @@ describe('when data points checking', () => {
       done();
     });
   });
+
+  it('query with static assets should be processed correctly', done => {
+    const ddf = new Ddf('./test/fixtures/static-assets', backendFileReader);
+    const request = {
+      language: 'en',
+      from: 'datapoints',
+      animatable: 'time',
+      select: {
+        key: [
+          'geo',
+          'time'
+        ],
+        value: [
+          'income_mountains'
+        ]
+      },
+      where: {
+        $and: [
+          {
+            geo: '$geo'
+          },
+          {
+            time: '$time'
+          }
+        ]
+      },
+      join: {
+        $geo: {
+          key: 'geo',
+          where: {
+            geo: {
+              $in: [
+                'world'
+              ]
+            }
+          }
+        },
+        $time: {
+          key: 'time',
+          where: {
+            time: '2015'
+          }
+        }
+      },
+      order_by: [
+        'time'
+      ]
+    };
+
+    ddf.ddfRequest(request, (err, data) => {
+      const EXPECTED_RESULT = {
+        geo: 'world',
+        time: '2015',
+        income_mountains: '{"yMax": 2.57e+9, "shape": [0, 0, 0, 0, 6.52e+6, 3.54e+7, 8.27e+7, 1.45e+8, 2.16e+8, 2.91e+8, 3.65e+8, 4.36e+8, 5.06e+8, 5.83e+8, 6.77e+8, 7.99e+8, 9.62e+8, 1.17e+9, 1.41e+9, 1.67e+9, 1.93e+9, 2.17e+9, 2.37e+9, 2.51e+9, 2.57e+9, 2.56e+9, 2.49e+9, 2.38e+9, 2.23e+9, 2.07e+9, 1.90e+9, 1.73e+9, 1.57e+9, 1.41e+9, 1.25e+9, 1.08e+9, 9.01e+8, 7.26e+8, 5.62e+8, 4.17e+8, 2.96e+8, 2.03e+8, 1.34e+8, 8.66e+7, 5.45e+7, 3.36e+7, 2.02e+7, 1.19e+7, 6.86e+6, 3.84e+6, 2.10e+6, 2.10e+6]}'
+      };
+
+      expect(!!err).to.be.false;
+      expect(_.isEqual(_.head(data), EXPECTED_RESULT)).to.be.true;
+
+      done();
+    });
+  });
 });
