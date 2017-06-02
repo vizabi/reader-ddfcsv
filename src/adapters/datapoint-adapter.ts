@@ -211,7 +211,7 @@ export class DataPointAdapter implements IDdfAdapter {
   }
 
   isMeasureConcept(conceptName) {
-    return this.contentManager.conceptTypeHash[conceptName] === 'measure';
+    return this.contentManager.conceptTypeHash[conceptName] === 'measure' || this.contentManager.conceptTypeHash[conceptName] === 'string';
   }
 
   isEntitySetConcept(conceptName) {
