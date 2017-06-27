@@ -162,7 +162,7 @@ export class JoinsAdapter implements IDdfAdapter {
     return result;
   }
 
-  getPrimaryKeyByFile(file: string): string & Array<string> {
+  getPrimaryKeyByFile(file: string): string & string[] {
     const primaryKeyHash = {};
 
     for (const resource of this.contentManager.dataPackage.resources) {
@@ -174,16 +174,19 @@ export class JoinsAdapter implements IDdfAdapter {
 
   getFinalData(results, request) {
     const data = [];
+    const files = new Set();
 
     for (const result of results) {
       const primaryKey = this.getPrimaryKeyByFile(result.file);
       const domain = this.contentManager.domainHash[primaryKey];
-      const tempData = flatten(result.data);
+      const tempData: any[] = flatten(result.data);
 
       for (const record of tempData) {
         if (domain) {
           record[domain] = record[primaryKey];
         }
+
+        record.$$file = result.file;
 
         data.push(record);
       }
@@ -209,10 +212,15 @@ export class JoinsAdapter implements IDdfAdapter {
         }
       }
 
+      files.add(record.$$file);
+
       return value;
     });
 
-    return this.getArrayBasedCondition(relatedData, request) ||
-      this.getTimeBasedCondition(relatedData, request);
+    return {
+      files: Array.from(files),
+      data: this.getArrayBasedCondition(relatedData, request) ||
+      this.getTimeBasedCondition(relatedData, request)
+    };
   }
 }
