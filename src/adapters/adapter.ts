@@ -7,6 +7,6 @@ export interface IDdfAdapter {
   getExpectedSchemaDetails(request: any, dataPackageContent: any): any;
   getNormalizedRequest(requestParam: any, onRequestNormalized: Function);
   getRecordTransformer(request?: any): Function;
-  getFileActions(expectedFiles: Array<any>, request?: any): Array<any>;
-  getFinalData(results, request: any): Array<any>
+  getFileActions(expectedFiles: any[], request?: any): Array<any>;
+  getFinalData(results, request: any): any
 }

@@ -119,31 +119,13 @@ describe('when data points checking', () => {
       from: 'datapoints',
       animatable: 'time',
       select: {
-        key: [
-          'geo',
-          'time'
-        ],
-        value: [
-          'life_expectancy_years',
-          'income_per_person_gdppercapita_ppp_inflation_adjusted',
-          'population_total'
-        ]
+        key: ['geo', 'time'],
+        value: ['life_expectancy_years', 'income_per_person_gdppercapita_ppp_inflation_adjusted', 'population_total']
       },
-      where: {
-        $and: [
-          {geo: '$geo'},
-          {time: '$time'}
-        ]
-      },
+      where: {$and: [{geo: '$geo'}, {time: '$time'}]},
       join: {
-        $geo: {
-          key: 'geo',
-          where: {'is--country': true}
-        },
-        $time: {
-          key: 'time',
-          where: {time: '2015'}
-        }
+        $geo: {key: 'geo', where: {'is--country': true}},
+        $time: {key: 'time', where: {time: '2015'}}
       },
       order_by: 'time'
     };
@@ -217,47 +199,17 @@ describe('when data points checking', () => {
       from: 'datapoints',
       animatable: 'time',
       select: {
-        key: [
-          'geo',
-          'time'
-        ],
-        value: [
-          'sg_population',
-          'sg_gdp_p_cap_const_ppp2011_dollar',
-          'sg_gini'
-        ]
+        key: ['geo', 'time'],
+        value: ['sg_population', 'sg_gdp_p_cap_const_ppp2011_dollar', 'sg_gini']
       },
       where: {
-        $and: [
-          {geo: '$geo'},
-          {time: '$time'}
-        ]
+        $and: [{geo: '$geo'}, {time: '$time'}]
       },
       join: {
-        $geo: {
-          key: 'geo',
-          where: {
-            'is--country': true,
-            geo: {
-              $in: [
-                'ago'
-              ]
-            }
-          }
-        },
-        $time: {
-          key: 'time',
-          where: {
-            time: {
-              $gte: '1800',
-              $lte: '2015'
-            }
-          }
-        }
+        $geo: {key: 'geo', where: {'is--country': true, geo: {$in: ['ago']}}},
+        $time: {key: 'time', where: {time: {$gte: '1800', $lte: '2015'}}}
       },
-      order_by: [
-        'time'
-      ]
+      order_by: ['time']
     };
 
     ddf.ddfRequest(request, (err, data) => {
@@ -277,38 +229,16 @@ describe('when data points checking', () => {
       from: 'datapoints',
       animatable: 'year',
       select: {
-        key: [
-          'country_code',
-          'year',
-          'gender',
-          'age'
-        ],
-        value: [
-          'population'
-        ]
+        key: ['country_code', 'year', 'gender', 'age'],
+        value: ['population']
       },
       where: {
-        $and: [
-          {
-            country_code: '$country_code'
-          }
-        ]
+        $and: [{country_code: '$country_code'}]
       },
       join: {
-        $country_code: {
-          key: 'country_code',
-          where: {
-            country_code: {
-              $in: [
-                '900'
-              ]
-            }
-          }
-        }
+        $country_code: {key: 'country_code', where: {country_code: {$in: ['900']}}}
       },
-      order_by: [
-        'year'
-      ]
+      order_by: ['year']
     };
 
     ddf.ddfRequest(request, (err, data) => {
@@ -328,37 +258,16 @@ describe('when data points checking', () => {
       from: 'datapoints',
       animatable: 'time',
       select: {
-        key: [
-          'geo',
-          'time'
-        ],
-        value: [
-          'population_total'
-        ]
+        key: ['geo', 'time'],
+        value: ['population_total']
       },
       where: {
-        $and: [
-          {
-            geo: '$geo'
-          }
-        ]
+        $and: [{geo: '$geo'}]
       },
       join: {
-        $geo: {
-          key: 'geo',
-          where: {
-            world_4region: {
-              $in: [
-                'americas',
-                'asia'
-              ]
-            }
-          }
-        }
+        $geo: {key: 'geo', where: {world_4region: {$in: ['americas', 'asia']}}}
       },
-      order_by: [
-        'time'
-      ]
+      order_by: ['time']
     };
 
     ddf.ddfRequest(request, (err, data) => {
@@ -398,66 +307,24 @@ describe('when data points checking', () => {
   });
 
   it('multidimentional dataset reading should return expected result', done => {
-    const ddf = new Ddf('./test/fixtures/ddf--gapminder--population', backendFileReader);
+    const ddf = new Ddf('./test/fixtures/ddf--gapminder--population.big', backendFileReader);
     const request = {
       language: 'en',
       from: 'datapoints',
       animatable: 'year',
       select: {
-        key: [
-          'geo',
-          'year',
-          'age'
-        ],
-        value: [
-          'population'
-        ]
+        key: ['geo', 'year', 'age'],
+        value: ['population']
       },
       where: {
-        $and: [
-          {
-            geo: '$geo'
-          },
-          {
-            year: '$year'
-          },
-          {
-            age: '$age'
-          }
-        ]
+        $and: [{geo: '$geo'}, {year: '$year'}, {age: '$age'}]
       },
       join: {
-        $geo: {
-          key: 'geo',
-          where: {
-            geo: {
-              $in: [
-                'world'
-              ]
-            }
-          }
-        },
-        $year: {
-          key: 'year',
-          where: {
-            year: '2017'
-          }
-        },
-        $age: {
-          key: 'age',
-          where: {
-            age: {
-              $nin: [
-                '80plus',
-                '100plus'
-              ]
-            }
-          }
-        }
+        $geo: {key: 'geo', where: {geo: {$in: ['world']}}},
+        $year: {key: 'year', where: {year: '2017'}},
+        $age: {key: 'age', where: {age: {$nin: ['80plus', '100plus']}}}
       },
-      order_by: [
-        'year'
-      ]
+      order_by: ['year']
     };
     const EXPECTED_RECORDS_COUNT = 100;
 
@@ -478,46 +345,17 @@ describe('when data points checking', () => {
       from: 'datapoints',
       animatable: 'time',
       select: {
-        key: [
-          'geo',
-          'time'
-        ],
-        value: [
-          'income_per_person_gdppercapita_ppp_inflation_adjusted',
-          'life_expectancy_years',
-          'population_total'
-        ]
+        key: ['geo', 'time'],
+        value: ['income_per_person_gdppercapita_ppp_inflation_adjusted', 'life_expectancy_years', 'population_total']
       },
       where: {
-        $and: [
-          {
-            geo: '$geo'
-          },
-          {
-            time: '$time'
-          }
-        ]
+        $and: [{geo: '$geo'}, {time: '$time'}]
       },
       join: {
-        $geo: {
-          key: 'geo',
-          where: {
-            'un_state': true
-          }
-        },
-        $time: {
-          key: 'time',
-          where: {
-            time: {
-              $gte: '1800',
-              $lte: '2015'
-            }
-          }
-        }
+        $geo: {key: 'geo', where: {'un_state': true}},
+        $time: {key: 'time', where: {time: {$gte: '1800', $lte: '2015'}}}
       },
-      order_by: [
-        'time'
-      ]
+      order_by: ['time']
     };
 
     const EXPECTED_RECORDS_COUNT = 42120;
@@ -537,45 +375,17 @@ describe('when data points checking', () => {
       from: 'datapoints',
       animatable: 'time',
       select: {
-        key: [
-          'geo',
-          'time'
-        ],
-        value: [
-          'income_mountains'
-        ]
+        key: ['geo', 'time'],
+        value: ['income_mountains']
       },
       where: {
-        $and: [
-          {
-            geo: '$geo'
-          },
-          {
-            time: '$time'
-          }
-        ]
+        $and: [{geo: '$geo'}, {time: '$time'}]
       },
       join: {
-        $geo: {
-          key: 'geo',
-          where: {
-            geo: {
-              $in: [
-                'world'
-              ]
-            }
-          }
-        },
-        $time: {
-          key: 'time',
-          where: {
-            time: '2015'
-          }
-        }
+        $geo: {key: 'geo', where: {geo: {$in: ['world']}}},
+        $time: {key: 'time', where: {time: '2015'}}
       },
-      order_by: [
-        'time'
-      ]
+      order_by: ['time']
     };
 
     ddf.ddfRequest(request, (err, data) => {
@@ -587,6 +397,36 @@ describe('when data points checking', () => {
 
       expect(!!err).to.be.false;
       expect(_.isEqual(_.head(data), EXPECTED_RESULT)).to.be.true;
+
+      done();
+    });
+  });
+
+  it('query with join and world4region should be processed correctly', done => {
+    const ddf = new Ddf('./test/fixtures/ddf--gapminder--population.big', backendFileReader);
+    const request = {
+      language: 'en',
+      from: 'datapoints',
+      animatable: 'year',
+      select: {
+        key: ['geo', 'year', 'age'],
+        value: ['population']
+      },
+      where: {
+        $and: [{geo: '$geo'}, {age: '$age'}]
+      },
+      join: {
+        $geo: {key: 'geo', where: {geo: {$in: ['world']}}},
+        $age: {key: 'age', where: {age: {$nin: ['80plus', '100plus']}}}
+      },
+      order_by: ['year']
+    };
+
+    const EXPECTED_RECORDS_COUNT = 14300;
+
+    ddf.ddfRequest(request, (err, data) => {
+      expect(!!err).to.be.false;
+      expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
 
       done();
     });

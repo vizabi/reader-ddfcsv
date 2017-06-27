@@ -107,7 +107,7 @@ export class DataPointAdapter implements IDdfAdapter {
     if (!this.recordsDescriptor[filePath]) {
       const recordKeys = keys(record);
 
-      let mainEntitiesKey: Array<string> = [];
+      let mainEntitiesKey: string[] = [];
       let mainTimeKey = null;
 
       for (const key of recordKeys) {
@@ -174,10 +174,10 @@ export class DataPointAdapter implements IDdfAdapter {
     return (record: any, filePath: string) => {
       const recordKeys = keys(record);
       const isTranslationExists = key =>
-      this.recordsDescriptor[filePath] &&
-      this.recordsDescriptor[filePath].translationHash &&
-      this.recordsDescriptor[filePath].translationHash[record[this.recordsDescriptor[filePath].mainKey]] &&
-      this.recordsDescriptor[filePath].translationHash[record[this.recordsDescriptor[filePath].mainKey]][key];
+        this.recordsDescriptor[filePath] &&
+        this.recordsDescriptor[filePath].translationHash &&
+        this.recordsDescriptor[filePath].translationHash[record[this.recordsDescriptor[filePath].mainKey]] &&
+        this.recordsDescriptor[filePath].translationHash[record[this.recordsDescriptor[filePath].mainKey]][key];
 
       this.constructRecordDescriptor(record, filePath);
 
@@ -237,6 +237,8 @@ export class DataPointAdapter implements IDdfAdapter {
   }
 
   getFileActions(expectedFiles, request) {
+    const files = !isEmpty(this.contentManager.dataPointFilesToProcessing) ? this.contentManager.dataPointFilesToProcessing : expectedFiles;
+
     const readData = (file, onFileRead) => {
       this.reader.readCSV(`${this.ddfPath}${file}`, (err, data) => {
         if (err || isEmpty(data)) {
@@ -252,23 +254,23 @@ export class DataPointAdapter implements IDdfAdapter {
         onFileRead(null, {data, entityFields, timeField, measureFields});
       });
     };
-    const translationsFileActions = () => expectedFiles.map(file => onFileRead => {
+    const translationsFileActions = () => files.map(file => onFileRead => {
       this.translationReader.setRecordTransformer(this.getTranslationRecordTransformer());
       this.translationReader.readCSV(`${this.ddfPath}lang/${this.request.language}/${file}`,
         () => readData(file, onFileRead));
     });
-    const noTranslationsFileActions = () => expectedFiles.map(file => onFileRead => readData(file, onFileRead));
+    const noTranslationsFileActions = () => files.map(file => onFileRead => readData(file, onFileRead));
     const isTranslationActionsNeeded = includes(this.contentManager.translationIds, request.language);
     const fileActions = isTranslationActionsNeeded ? translationsFileActions : noTranslationsFileActions;
 
     return fileActions();
   }
 
-  getEntityDescriptors(entities: Array<string>): Array<EntityDescriptor> {
+  getEntityDescriptors(entities: string[]): EntityDescriptor[] {
     return entities.map(entity => new EntityDescriptor(entity, this.contentManager));
   }
 
-  getEntitiesHolderKey(record: any, entityDescriptors: Array<EntityDescriptor>): string {
+  getEntitiesHolderKey(record: any, entityDescriptors: EntityDescriptor[]): string {
     let result: string = '';
 
     for (const entityDescriptor of entityDescriptors) {

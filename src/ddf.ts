@@ -14,6 +14,7 @@ import {
   isArray,
   isEmpty,
   isObject,
+  intersection,
   flatten,
   flattenDeep,
   sortBy,
@@ -30,6 +31,40 @@ const ADAPTERS = {
   joins: JoinsAdapter,
   datapoints: DataPointAdapter,
   datapointsSchema: DataPointSchemaAdapter
+};
+
+const isEntitySet = concept => contentManager.conceptTypeHash[concept] === 'entity_set';
+const isEntityDomain = concept => contentManager.conceptTypeHash[concept] === 'entity_domain';
+const isEntity = concept => isEntitySet(concept) || isEntityDomain(concept);
+const getFilesToProcessing = (files: string[]) => {
+  const expectedHeadersCollection = [];
+
+  for (let file of files) {
+    const expectedDataPackageResources = contentManager.dataPackage.resources.filter(resource =>
+      resource.path === file).map(resource => resource.schema.fields);
+    const allExpectedDataPackageFields = flattenDeep(expectedDataPackageResources).map((field: any) =>
+      field.name.replace(/is--/, '')).filter(concept => isEntity(concept));
+    const isDomainPresent = allExpectedDataPackageFields.filter(concept => isEntityDomain(concept)).length > 0;
+    const isEntitySetPresent = allExpectedDataPackageFields.filter(concept => isEntitySet(concept)).length > 0;
+    const expectedDataPackageFields = allExpectedDataPackageFields.filter(concept =>
+      (isEntitySetPresent && isDomainPresent && isEntitySet(concept)) || (!isEntitySetPresent && isEntityDomain(concept)));
+
+    expectedHeadersCollection.push(...expectedDataPackageFields);
+  }
+
+  const expectedHeaders = uniq(expectedHeadersCollection);
+
+  contentManager.dataPointFilesToProcessing = contentManager.dataPackage.resources
+    .filter(resource => {
+      if (!isArray(resource.schema.primaryKey)) {
+        return false;
+      }
+
+      const entityParts = resource.schema.primaryKey.filter(concept => isEntity(concept));
+
+      return intersection(expectedHeaders, entityParts).length >= entityParts.length;
+    })
+    .map(resource => resource.path);
 };
 
 function postProcessing(requestParam, data) {
@@ -169,7 +204,7 @@ export class Ddf {
     return relationKeysDescriptors;
   }
 
-  getJoinProcessors(requestParam: any, relationKeysDescriptors: Array<any>) {
+  getJoinProcessors(requestParam: any, relationKeysDescriptors: any[]) {
     return relationKeysDescriptors.map(relationKeyDescriptor => onJoinProcessed => {
       if (!requestParam.join || !requestParam.join[relationKeyDescriptor.value]) {
         onJoinProcessed(new Error(`join for relation ${relationKeyDescriptor.value} is not found!`));
@@ -222,19 +257,23 @@ export class Ddf {
       const request = requestNormalizer.getNormalized();
       const relationKeysDescriptors = this.getRelationKeysDescriptors(request);
 
-      parallel(this.getJoinProcessors(request, relationKeysDescriptors), (err, results) => {
+      parallel(this.getJoinProcessors(request, relationKeysDescriptors), (err, results: any) => {
         if (err) {
           onDdfRequestProcessed(err);
           return;
         }
 
         const normalRequestCondition: any = traverse(request.where);
+        const files = [];
 
         results.forEach((result: any) => {
-          normalRequestCondition.set(result.relationKeyDescriptor.path, result.condition);
+          normalRequestCondition.set(result.relationKeyDescriptor.path, result.condition.data);
+          files.push(...result.condition.files);
         });
 
         request.where = normalRequestCondition.value;
+
+        getFilesToProcessing(files);
 
         this.processRequest(request, requestNormalizer, (mainError, data) => {
           onDdfRequestProcessed(mainError, data);

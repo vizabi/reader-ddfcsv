@@ -14,6 +14,7 @@ export class ContentManager {
   public measureConcepts: any[];
   public domainHash: any;
   public nameHash: any;
+  public dataPointFilesToProcessing: string[] = [];
 
   constructor() {
     this.conceptTypeHash = {};
@@ -40,6 +41,7 @@ export class ContentManager {
     this.timeConcepts = [];
     this.booleanConcepts = [];
     this.measureConcepts = [];
+    this.dataPointFilesToProcessing = [];
     this.domainHash = {};
     this.conceptTypeHash = {};
     this.nameHash = {};
