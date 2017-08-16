@@ -68,6 +68,9 @@ export class GithubFileReader implements IReader {
     });
   }
 
+  readText(filePath, onFileRead) {
+  }
+
   getFileSchema(filePath, onFileRead) {
     readViaHttp(filePath, (contentError, content) => {
       if (contentError) {

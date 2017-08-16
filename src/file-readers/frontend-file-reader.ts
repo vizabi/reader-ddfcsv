@@ -1,6 +1,6 @@
-import {compact} from 'lodash';
+import { compact } from 'lodash';
 import * as csvParse from 'csv-parse';
-import {IReader} from './reader';
+import { IReader } from './reader';
 
 require('fetch-polyfill');
 
@@ -46,6 +46,17 @@ export class FrontendFileReader implements IReader {
         } catch (jsonError) {
           onFileRead(jsonError);
         }
+      })
+      .catch(err => {
+        onFileRead(err || `${filePath} read error`);
+      });
+  }
+
+  readText(filePath, onFileRead) {
+    fetch(filePath)
+      .then(response => response.text())
+      .then(text => {
+        onFileRead(null, text);
       })
       .catch(err => {
         onFileRead(err || `${filePath} read error`);

@@ -6,7 +6,7 @@ const expect = chai.expect;
 const GLOBALIS_PATH = './test/fixtures/systema_globalis';
 const GITHUB_GLOBALIS_PATH = 'https://raw.githubusercontent.com/buchslava/ddf--gapminder--systema_globalis/master';
 
-describe('when reader checking', () => {
+describe(`when reader's read method checking`, () => {
   it('result for concepts reading should be expected', () => {
     const readerObject = getDDFCsvReaderObject();
     const request = {
@@ -120,5 +120,4 @@ describe('when reader checking', () => {
       });
     });
   });
-
 });

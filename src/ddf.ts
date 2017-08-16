@@ -110,6 +110,14 @@ export class Ddf {
     return contentManager;
   }
 
+  getAsset(path: string, isJsonAsset: boolean, onAssetReady: Function) {
+    if (isJsonAsset) {
+      this.reader.readJSON(path, onAssetReady);
+    } else {
+      this.reader.readText(path, onAssetReady);
+    }
+  }
+
   getDataPackage(onDataPackageLoaded: Function) {
     const dataPackageFileName = `${this.ddfPath}datapackage.json`;
 
