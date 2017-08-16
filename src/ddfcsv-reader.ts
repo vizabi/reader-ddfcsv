@@ -1,15 +1,32 @@
-import {cloneDeep} from 'lodash';
-import {Ddf} from './ddf';
-import {IReader} from './file-readers/reader';
+import { cloneDeep, trimEnd, trimStart, endsWith } from 'lodash';
+import { Ddf } from './ddf';
+import { IReader } from './file-readers/reader';
 import * as Promise from 'bluebird';
 
 export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
   return function (externalFileReader?: IReader, logger?: any) {
     return {
-      init(reader_info) {
+      init(readerInfo) {
         const fileReader = externalFileReader || defaultFileReader;
 
-        this.ddf = new Ddf(reader_info.path, fileReader);
+        this.ddf = new Ddf(readerInfo.path, fileReader);
+      },
+
+      getAsset(asset, options: any = {}) {
+        const trimmedDdfPath = trimEnd(this.ddf.ddfPath, '/');
+        const trimmedAsset = trimStart(asset, '/');
+        const isJsonAsset = endsWith(trimmedAsset, '.json');
+
+        return new Promise((resolve, reject) => {
+          this.ddf.getAsset(`${trimmedDdfPath}/${trimmedAsset}`, isJsonAsset, (err, data) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+
+            resolve(data);
+          });
+        });
       },
 
       read(queryPar, parsers) {

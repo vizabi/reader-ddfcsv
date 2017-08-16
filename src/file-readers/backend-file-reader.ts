@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as csvParse from 'csv-parse';
-import {compact, head, split} from 'lodash';
-import {IReader} from './reader';
+import { compact, head, split } from 'lodash';
+import { IReader } from './reader';
 
 export class BackendFileReader implements IReader {
   public recordTransformer: Function;
@@ -49,6 +49,17 @@ export class BackendFileReader implements IReader {
       } catch (jsonErr) {
         onFileRead(jsonErr);
       }
+    });
+  }
+
+  readText(filePath, onFileRead) {
+    fs.readFile(filePath, (err, content) => {
+      if (err) {
+        onFileRead(err);
+        return;
+      }
+
+      onFileRead(null, content.toString());
     });
   }
 

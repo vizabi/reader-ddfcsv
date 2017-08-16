@@ -1,0 +1,7 @@
+concept,concept_type,domain
+geo,entity_domain,
+global,entity_set,geo
+time,time,
+income_mountains,string,
+topojson,string,
+domain,string,

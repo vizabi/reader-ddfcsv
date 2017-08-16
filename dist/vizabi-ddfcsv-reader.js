@@ -199,6 +199,15 @@ var DDFCsvReader =
 	            return contentManager;
 	        }
 	    }, {
+	        key: "getAsset",
+	        value: function getAsset(path, isJsonAsset, onAssetReady) {
+	            if (isJsonAsset) {
+	                this.reader.readJSON(path, onAssetReady);
+	            } else {
+	                this.reader.readText(path, onAssetReady);
+	            }
+	        }
+	    }, {
 	        key: "getDataPackage",
 	        value: function getDataPackage(onDataPackageLoaded) {
 	            var _this = this;
@@ -19556,7 +19565,7 @@ var DDFCsvReader =
 /* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {// Copyright Joyent, Inc. and other Node contributors.
+	/* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
 	//
 	// Permission is hereby granted, free of charge, to any person obtaining a
 	// copy of this software and associated documentation files (the
@@ -19612,11 +19621,12 @@ var DDFCsvReader =
 	// properly optimized away early in Ignition+TurboFan.
 	/*<replacement>*/
 	var Buffer = __webpack_require__(18).Buffer;
+	var OurUint8Array = global.Uint8Array || function () {};
 	function _uint8ArrayToBuffer(chunk) {
 	  return Buffer.from(chunk);
 	}
 	function _isUint8Array(obj) {
-	  return Object.prototype.toString.call(obj) === '[object Uint8Array]' || Buffer.isBuffer(obj);
+	  return Buffer.isBuffer(obj) || obj instanceof OurUint8Array;
 	}
 	/*</replacement>*/
 	
@@ -19811,7 +19821,7 @@ var DDFCsvReader =
 	    if (er) {
 	      stream.emit('error', er);
 	    } else if (state.objectMode || chunk && chunk.length > 0) {
-	      if (typeof chunk !== 'string' && Object.getPrototypeOf(chunk) !== Buffer.prototype && !state.objectMode) {
+	      if (typeof chunk !== 'string' && !state.objectMode && Object.getPrototypeOf(chunk) !== Buffer.prototype) {
 	        chunk = _uint8ArrayToBuffer(chunk);
 	      }
 	
@@ -20562,7 +20572,7 @@ var DDFCsvReader =
 	  }
 	  return -1;
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(14)))
 
 /***/ },
 /* 14 */
@@ -23257,7 +23267,7 @@ var DDFCsvReader =
 /* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process, setImmediate) {// Copyright Joyent, Inc. and other Node contributors.
+	/* WEBPACK VAR INJECTION */(function(process, setImmediate, global) {// Copyright Joyent, Inc. and other Node contributors.
 	//
 	// Permission is hereby granted, free of charge, to any person obtaining a
 	// copy of this software and associated documentation files (the
@@ -23339,11 +23349,12 @@ var DDFCsvReader =
 	
 	/*<replacement>*/
 	var Buffer = __webpack_require__(18).Buffer;
+	var OurUint8Array = global.Uint8Array || function () {};
 	function _uint8ArrayToBuffer(chunk) {
 	  return Buffer.from(chunk);
 	}
 	function _isUint8Array(obj) {
-	  return Object.prototype.toString.call(obj) === '[object Uint8Array]' || Buffer.isBuffer(obj);
+	  return Buffer.isBuffer(obj) || obj instanceof OurUint8Array;
 	}
 	/*</replacement>*/
 	
@@ -23920,7 +23931,7 @@ var DDFCsvReader =
 	  this.end();
 	  cb(err);
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14), __webpack_require__(28).setImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14), __webpack_require__(28).setImmediate, (function() { return this; }())))
 
 /***/ },
 /* 28 */
@@ -44263,6 +44274,17 @@ var DDFCsvReader =
 	            });
 	        }
 	    }, {
+	        key: "readText",
+	        value: function readText(filePath, onFileRead) {
+	            fetch(filePath).then(function (response) {
+	                return response.text();
+	            }).then(function (text) {
+	                onFileRead(null, text);
+	            }).catch(function (err) {
+	                onFileRead(err || filePath + " read error");
+	            });
+	        }
+	    }, {
 	        key: "getFileSchema",
 	        value: function getFileSchema(filePath, onFileRead) {}
 	    }]);
@@ -45205,12 +45227,30 @@ var DDFCsvReader =
 	function prepareDDFCsvReaderObject(defaultFileReader) {
 	    return function (externalFileReader, logger) {
 	        return {
-	            init: function init(reader_info) {
+	            init: function init(readerInfo) {
 	                var fileReader = externalFileReader || defaultFileReader;
-	                this.ddf = new ddf_1.Ddf(reader_info.path, fileReader);
+	                this.ddf = new ddf_1.Ddf(readerInfo.path, fileReader);
+	            },
+	            getAsset: function getAsset(asset) {
+	                var _this = this;
+	
+	                var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	
+	                var trimmedDdfPath = lodash_1.trimEnd(this.ddf.ddfPath, '/');
+	                var trimmedAsset = lodash_1.trimStart(asset, '/');
+	                var isJsonAsset = lodash_1.endsWith(trimmedAsset, '.json');
+	                return new Promise(function (resolve, reject) {
+	                    _this.ddf.getAsset(trimmedDdfPath + "/" + trimmedAsset, isJsonAsset, function (err, data) {
+	                        if (err) {
+	                            reject(err);
+	                            return;
+	                        }
+	                        resolve(data);
+	                    });
+	                });
 	            },
 	            read: function read(queryPar, parsers) {
-	                var _this = this;
+	                var _this2 = this;
 	
 	                var query = lodash_1.cloneDeep(queryPar);
 	                function prettifyData(data) {
@@ -45225,7 +45265,7 @@ var DDFCsvReader =
 	                    });
 	                }
 	                return new Promise(function (resolve, reject) {
-	                    _this.ddf.ddfRequest(query, function (err, data) {
+	                    _this2.ddf.ddfRequest(query, function (err, data) {
 	                        if (err) {
 	                            reject(err);
 	                            return;

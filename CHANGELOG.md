@@ -1,3 +1,13 @@
+<a name="0.10.0"></a>
+# [0.10.0](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v0.9.1...v0.10.0) (2017-08-16)
+
+
+### Features
+
+* **general:** implement asset functionality ([f6be478](https://github.com/vizabi/vizabi-ddfcsv-reader/commit/f6be478)), closes [#45](https://github.com/vizabi/vizabi-ddfcsv-reader/issues/45)
+
+
+
 <a name="0.9.2"></a>
 ## [0.9.2](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v0.9.1...v0.9.2) (2017-06-27)
 
