@@ -244,4 +244,35 @@ describe('when entities checking', () => {
       done();
     });
   });
+
+  it('query with boolean condition should be processed correctly', done => {
+    const ddf = new Ddf('./test/fixtures/sankey', backendFileReader);
+    const request = {
+      language: 'en',
+      from: 'entities',
+      animatable: false,
+      select: {
+        key: [
+          'phase_from'
+        ],
+        value: [
+          'name'
+        ]
+      },
+      where: {},
+      join: {},
+      order_by: [
+        'rank'
+      ]
+    };
+
+    ddf.ddfRequest(request, (err, data) => {
+      const EXPECTED_RECORDS_COUNT = 23;
+
+      expect(!!err).to.be.false;
+      expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
+
+      done();
+    });
+  });
 });
