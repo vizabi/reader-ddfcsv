@@ -2,6 +2,8 @@ import {
   cloneDeep,
   includes,
   head,
+  keys,
+  difference,
   slice,
   uniq
 } from 'lodash';
@@ -123,6 +125,27 @@ export class RequestNormalizer {
 
     this.timeType = correctedTimeDescriptor.timeType;
 
+    this.replenishJoins();
+
     return this.request;
+  }
+
+  replenishJoins() {
+    if (this.request.join && this.request.where && this.request.where.$and) {
+      const missingJoinEntities = this.getMissingJoinEntities();
+
+      for (let missingJoinEntity of missingJoinEntities) {
+        this.request.where.$and.push({[missingJoinEntity]: `$${missingJoinEntity}`});
+        this.request.join[`$${missingJoinEntity}`] = {key: missingJoinEntity, where: {}};
+      }
+    }
+  }
+
+  private getMissingJoinEntities() {
+    const keysFromJoin = keys(this.request.join).map(joinKey => this.request.join[joinKey].key);
+    const keysFromSelect = this.request.select.key;
+
+    return difference(keysFromSelect, keysFromJoin).filter(key =>
+      includes(this.contentManager.domainConcepts, key) || includes(this.contentManager.entitySetConcepts, key));
   }
 }

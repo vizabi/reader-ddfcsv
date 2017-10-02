@@ -44108,6 +44108,8 @@ var DDFCsvReader =
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -44199,7 +44201,53 @@ var DDFCsvReader =
 	            this.request = getCorrectAndClause(this.request);
 	            this.request = getCorrectedBoolean(this.request, this.contentManager);
 	            this.timeType = correctedTimeDescriptor.timeType;
+	            this.replenishJoins();
 	            return this.request;
+	        }
+	    }, {
+	        key: "replenishJoins",
+	        value: function replenishJoins() {
+	            if (this.request.join && this.request.where && this.request.where.$and) {
+	                var missingJoinEntities = this.getMissingJoinEntities();
+	                var _iteratorNormalCompletion = true;
+	                var _didIteratorError = false;
+	                var _iteratorError = undefined;
+	
+	                try {
+	                    for (var _iterator = missingJoinEntities[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                        var missingJoinEntity = _step.value;
+	
+	                        this.request.where.$and.push(_defineProperty({}, missingJoinEntity, "$" + missingJoinEntity));
+	                        this.request.join["$" + missingJoinEntity] = { key: missingJoinEntity, where: {} };
+	                    }
+	                } catch (err) {
+	                    _didIteratorError = true;
+	                    _iteratorError = err;
+	                } finally {
+	                    try {
+	                        if (!_iteratorNormalCompletion && _iterator.return) {
+	                            _iterator.return();
+	                        }
+	                    } finally {
+	                        if (_didIteratorError) {
+	                            throw _iteratorError;
+	                        }
+	                    }
+	                }
+	            }
+	        }
+	    }, {
+	        key: "getMissingJoinEntities",
+	        value: function getMissingJoinEntities() {
+	            var _this3 = this;
+	
+	            var keysFromJoin = lodash_1.keys(this.request.join).map(function (joinKey) {
+	                return _this3.request.join[joinKey].key;
+	            });
+	            var keysFromSelect = this.request.select.key;
+	            return lodash_1.difference(keysFromSelect, keysFromJoin).filter(function (key) {
+	                return lodash_1.includes(_this3.contentManager.domainConcepts, key) || lodash_1.includes(_this3.contentManager.entitySetConcepts, key);
+	            });
 	        }
 	    }]);
 	
