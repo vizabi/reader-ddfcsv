@@ -1,5 +1,6 @@
 import { ContentManager } from './content-manager';
 import { ConceptAdapter } from './adapters/concept-adapter';
+import { ConceptSchemaAdapter } from './adapters/concept-schema-adapter';
 import { EntityAdapter } from './adapters/entity-adapter';
 import { EntitySchemaAdapter } from './adapters/entity-schema-adapter';
 import { JoinsAdapter } from './adapters/joins-adapter';
@@ -26,11 +27,12 @@ import * as traverse from 'traverse';
 const contentManager: ContentManager = new ContentManager();
 const ADAPTERS = {
   concepts: ConceptAdapter,
+  'concepts.schema': ConceptSchemaAdapter,
   entities: EntityAdapter,
-  entitiesSchema: EntitySchemaAdapter,
+  'entities.schema': EntitySchemaAdapter,
   joins: JoinsAdapter,
   datapoints: DataPointAdapter,
-  datapointsSchema: DataPointSchemaAdapter
+  'datapoints.schema': DataPointSchemaAdapter
 };
 
 const isEntitySet = concept => contentManager.conceptTypeHash[concept] === 'entity_set';

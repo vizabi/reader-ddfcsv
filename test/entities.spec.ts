@@ -124,29 +124,6 @@ describe('when entities checking', () => {
     });
   });
 
-  it('schema query should be processed correctly', done => {
-    const ddf = new Ddf(GLOBALIS_PATH, backendFileReader);
-    const request = {
-      from: 'entitiesSchema',
-      select: {
-        key: ['geo', 'country'],
-        value: []
-      },
-      where: {},
-      grouping: {},
-      orderBy: null
-    };
-
-    ddf.ddfRequest(request, (err, data) => {
-      const EXPECTED_RECORDS_COUNT = 8;
-
-      expect(!!err).to.be.false;
-      expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
-
-      done();
-    });
-  });
-
   it('query for "world_4region" should be processed correctly', done => {
     const ddf = new Ddf(GLOBALIS_TINY_PATH, backendFileReader);
     const request = {

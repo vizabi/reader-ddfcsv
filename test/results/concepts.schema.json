@@ -1,0 +1,74 @@
+[
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "concept"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "concept_type"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "domain"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "indicator_url"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "color"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "scales"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "drill_up"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "unit"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "interpolation"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "description"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "tags"
+  }
+]
