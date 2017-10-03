@@ -50,10 +50,10 @@ var DDFCsvReader =
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var ddf_1 = __webpack_require__(1);
 	exports.Ddf = ddf_1.Ddf;
-	var frontend_file_reader_1 = __webpack_require__(228);
-	var frontend_file_reader_2 = __webpack_require__(228);
+	var frontend_file_reader_1 = __webpack_require__(229);
+	var frontend_file_reader_2 = __webpack_require__(229);
 	exports.FrontendFileReader = frontend_file_reader_2.FrontendFileReader;
-	var ddfcsv_reader_1 = __webpack_require__(231);
+	var ddfcsv_reader_1 = __webpack_require__(232);
 	exports.getDDFCsvReaderObject = ddfcsv_reader_1.prepareDDFCsvReaderObject(new frontend_file_reader_1.FrontendFileReader());
 
 /***/ },
@@ -71,23 +71,25 @@ var DDFCsvReader =
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var content_manager_1 = __webpack_require__(2);
 	var concept_adapter_1 = __webpack_require__(6);
-	var entity_adapter_1 = __webpack_require__(41);
-	var entity_schema_adapter_1 = __webpack_require__(43);
-	var joins_adapter_1 = __webpack_require__(44);
-	var datapoint_adapter_1 = __webpack_require__(45);
-	var datapoint_schema_adapter_1 = __webpack_require__(226);
-	var request_normalizer_1 = __webpack_require__(227);
-	var async_1 = __webpack_require__(47);
+	var concept_schema_adapter_1 = __webpack_require__(41);
+	var entity_adapter_1 = __webpack_require__(42);
+	var entity_schema_adapter_1 = __webpack_require__(44);
+	var joins_adapter_1 = __webpack_require__(45);
+	var datapoint_adapter_1 = __webpack_require__(46);
+	var datapoint_schema_adapter_1 = __webpack_require__(227);
+	var request_normalizer_1 = __webpack_require__(228);
+	var async_1 = __webpack_require__(48);
 	var lodash_1 = __webpack_require__(3);
-	var traverse = __webpack_require__(42);
+	var traverse = __webpack_require__(43);
 	var contentManager = new content_manager_1.ContentManager();
 	var ADAPTERS = {
 	    concepts: concept_adapter_1.ConceptAdapter,
+	    'concepts.schema': concept_schema_adapter_1.ConceptSchemaAdapter,
 	    entities: entity_adapter_1.EntityAdapter,
-	    entitiesSchema: entity_schema_adapter_1.EntitySchemaAdapter,
+	    'entities.schema': entity_schema_adapter_1.EntitySchemaAdapter,
 	    joins: joins_adapter_1.JoinsAdapter,
 	    datapoints: datapoint_adapter_1.DataPointAdapter,
-	    datapointsSchema: datapoint_schema_adapter_1.DataPointSchemaAdapter
+	    'datapoints.schema': datapoint_schema_adapter_1.DataPointSchemaAdapter
 	};
 	var isEntitySet = function isEntitySet(concept) {
 	    return contentManager.conceptTypeHash[concept] === 'entity_set';
@@ -25443,7 +25445,124 @@ var DDFCsvReader =
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var lodash_1 = __webpack_require__(3);
-	var traverse = __webpack_require__(42);
+	
+	var ConceptSchemaAdapter = function () {
+	    function ConceptSchemaAdapter(contentManager, reader, ddfPath) {
+	        _classCallCheck(this, ConceptSchemaAdapter);
+	
+	        this.contentManager = contentManager;
+	        this.reader = lodash_1.cloneDeep(reader);
+	        this.ddfPath = ddfPath;
+	    }
+	
+	    _createClass(ConceptSchemaAdapter, [{
+	        key: "addRequestNormalizer",
+	        value: function addRequestNormalizer(requestNormalizer) {
+	            this.requestNormalizer = requestNormalizer;
+	            return this;
+	        }
+	    }, {
+	        key: "getExpectedSchemaDetails",
+	        value: function getExpectedSchemaDetails(request, dataPackageContent) {
+	            var isConcept = function isConcept(record) {
+	                return record.schema.primaryKey === 'concept';
+	            };
+	            this.baseData = [];
+	            this.conceptsFromDataPackage = dataPackageContent.resources.filter(function (record) {
+	                return isConcept(record);
+	            });
+	            var _iteratorNormalCompletion = true;
+	            var _didIteratorError = false;
+	            var _iteratorError = undefined;
+	
+	            try {
+	                for (var _iterator = this.conceptsFromDataPackage[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                    var record = _step.value;
+	                    var _iteratorNormalCompletion2 = true;
+	                    var _didIteratorError2 = false;
+	                    var _iteratorError2 = undefined;
+	
+	                    try {
+	                        for (var _iterator2 = record.schema.fields[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                            var field = _step2.value;
+	
+	                            this.baseData.push({ key: [record.schema.primaryKey], value: field.name });
+	                        }
+	                    } catch (err) {
+	                        _didIteratorError2 = true;
+	                        _iteratorError2 = err;
+	                    } finally {
+	                        try {
+	                            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                                _iterator2.return();
+	                            }
+	                        } finally {
+	                            if (_didIteratorError2) {
+	                                throw _iteratorError2;
+	                            }
+	                        }
+	                    }
+	                }
+	            } catch (err) {
+	                _didIteratorError = true;
+	                _iteratorError = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion && _iterator.return) {
+	                        _iterator.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError) {
+	                        throw _iteratorError;
+	                    }
+	                }
+	            }
+	
+	            return this.conceptsFromDataPackage;
+	        }
+	    }, {
+	        key: "getNormalizedRequest",
+	        value: function getNormalizedRequest(requestParam, onRequestNormalized) {
+	            this.request = requestParam;
+	            onRequestNormalized(null, requestParam);
+	        }
+	    }, {
+	        key: "getRecordTransformer",
+	        value: function getRecordTransformer() {
+	            return function (record) {
+	                return record;
+	            };
+	        }
+	    }, {
+	        key: "getFileActions",
+	        value: function getFileActions() {
+	            return [];
+	        }
+	    }, {
+	        key: "getFinalData",
+	        value: function getFinalData(results) {
+	            return this.baseData;
+	        }
+	    }]);
+	
+	    return ConceptSchemaAdapter;
+	}();
+	
+	exports.ConceptSchemaAdapter = ConceptSchemaAdapter;
+
+/***/ },
+/* 42 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var lodash_1 = __webpack_require__(3);
+	var traverse = __webpack_require__(43);
 	var shared_1 = __webpack_require__(7);
 	var Mingo = __webpack_require__(8);
 	var VALUE_WITH_PREFIX_REGEX = /^.*\./;
@@ -25709,7 +25828,7 @@ var DDFCsvReader =
 	exports.EntityAdapter = EntityAdapter;
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -26041,7 +26160,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26052,7 +26171,6 @@ var DDFCsvReader =
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var lodash_1 = __webpack_require__(3);
-	var shared_1 = __webpack_require__(7);
 	
 	var EntitySchemaAdapter = function () {
 	    function EntitySchemaAdapter(contentManager, reader, ddfPath) {
@@ -26072,11 +26190,66 @@ var DDFCsvReader =
 	    }, {
 	        key: "getExpectedSchemaDetails",
 	        value: function getExpectedSchemaDetails(request, dataPackageContent) {
-	            return shared_1.getSchemaDetailsByKey(request, dataPackageContent, 'entities');
+	            var isEntity = function isEntity(record) {
+	                return !lodash_1.isArray(record.schema.primaryKey) && record.schema.primaryKey !== 'concept';
+	            };
+	            this.baseData = [];
+	            this.entitiesFromDataPackage = dataPackageContent.resources.filter(function (record) {
+	                return isEntity(record);
+	            });
+	            var _iteratorNormalCompletion = true;
+	            var _didIteratorError = false;
+	            var _iteratorError = undefined;
+	
+	            try {
+	                for (var _iterator = this.entitiesFromDataPackage[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                    var record = _step.value;
+	                    var _iteratorNormalCompletion2 = true;
+	                    var _didIteratorError2 = false;
+	                    var _iteratorError2 = undefined;
+	
+	                    try {
+	                        for (var _iterator2 = record.schema.fields[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                            var field = _step2.value;
+	
+	                            this.baseData.push({ key: [record.schema.primaryKey], value: field.name });
+	                        }
+	                    } catch (err) {
+	                        _didIteratorError2 = true;
+	                        _iteratorError2 = err;
+	                    } finally {
+	                        try {
+	                            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                                _iterator2.return();
+	                            }
+	                        } finally {
+	                            if (_didIteratorError2) {
+	                                throw _iteratorError2;
+	                            }
+	                        }
+	                    }
+	                }
+	            } catch (err) {
+	                _didIteratorError = true;
+	                _iteratorError = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion && _iterator.return) {
+	                        _iterator.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError) {
+	                        throw _iteratorError;
+	                    }
+	                }
+	            }
+	
+	            return this.entitiesFromDataPackage;
 	        }
 	    }, {
 	        key: "getNormalizedRequest",
 	        value: function getNormalizedRequest(requestParam, onRequestNormalized) {
+	            this.request = requestParam;
 	            onRequestNormalized(null, requestParam);
 	        }
 	    }, {
@@ -26088,21 +26261,13 @@ var DDFCsvReader =
 	        }
 	    }, {
 	        key: "getFileActions",
-	        value: function getFileActions(expectedFiles) {
-	            var _this = this;
-	
-	            return expectedFiles.map(function (file) {
-	                return function (onFileRead) {
-	                    _this.reader.getFileSchema("" + _this.ddfPath + file, function (err, data) {
-	                        return onFileRead(err, data);
-	                    });
-	                };
-	            });
+	        value: function getFileActions() {
+	            return [];
 	        }
 	    }, {
 	        key: "getFinalData",
 	        value: function getFinalData(results) {
-	            return results;
+	            return this.baseData;
 	        }
 	    }]);
 	
@@ -26112,7 +26277,7 @@ var DDFCsvReader =
 	exports.EntitySchemaAdapter = EntitySchemaAdapter;
 
 /***/ },
-/* 44 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26125,7 +26290,7 @@ var DDFCsvReader =
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var lodash_1 = __webpack_require__(3);
-	var traverse = __webpack_require__(42);
+	var traverse = __webpack_require__(43);
 	var shared_1 = __webpack_require__(7);
 	var Mingo = __webpack_require__(8);
 	function getNormalizedBoolean(conditionParam) {
@@ -26430,7 +26595,7 @@ var DDFCsvReader =
 	exports.JoinsAdapter = JoinsAdapter;
 
 /***/ },
-/* 45 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26442,9 +26607,9 @@ var DDFCsvReader =
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
-	var entity_utils_1 = __webpack_require__(46);
+	var entity_utils_1 = __webpack_require__(47);
 	var lodash_1 = __webpack_require__(3);
-	var timeUtils = __webpack_require__(48);
+	var timeUtils = __webpack_require__(49);
 	var shared_1 = __webpack_require__(7);
 	var Mingo = __webpack_require__(8);
 	var timeValuesHash = {};
@@ -26964,7 +27129,7 @@ var DDFCsvReader =
 	exports.DataPointAdapter = DataPointAdapter;
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26978,9 +27143,9 @@ var DDFCsvReader =
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
-	var async_1 = __webpack_require__(47);
+	var async_1 = __webpack_require__(48);
 	var lodash_1 = __webpack_require__(3);
-	var traverse = __webpack_require__(42);
+	var traverse = __webpack_require__(43);
 	var Mingo = __webpack_require__(8);
 	
 	var EntityUtils = function () {
@@ -27100,7 +27265,7 @@ var DDFCsvReader =
 	exports.EntityUtils = EntityUtils;
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, setImmediate, process, module) {'use strict';
@@ -28333,7 +28498,7 @@ var DDFCsvReader =
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(28).setImmediate, __webpack_require__(14), __webpack_require__(4)(module)))
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28342,11 +28507,11 @@ var DDFCsvReader =
 	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
-	var _Symbol = __webpack_require__(49);
-	var Object = __webpack_require__(100);
+	var _Symbol = __webpack_require__(50);
+	var Object = __webpack_require__(101);
 	
 	var _ = __webpack_require__(3);
-	var moment = __webpack_require__(123);
+	var moment = __webpack_require__(124);
 	
 	var TWO_DIGITS_MIN_NUMBER = 10;
 	var MAX_MONTH = 12;
@@ -28560,17 +28725,17 @@ var DDFCsvReader =
 	exports.TIME_TYPES_DDF_COMPATIBLE = TIME_TYPES_DDF_COMPATIBLE;
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	__webpack_require__(50);
-	__webpack_require__(99);
-	module.exports = __webpack_require__(56).Symbol;
+	__webpack_require__(51);
+	__webpack_require__(100);
+	module.exports = __webpack_require__(57).Symbol;
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28578,31 +28743,31 @@ var DDFCsvReader =
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
-	var global = __webpack_require__(51),
-	    has = __webpack_require__(52),
-	    DESCRIPTORS = __webpack_require__(53),
-	    $export = __webpack_require__(55),
-	    redefine = __webpack_require__(67),
-	    META = __webpack_require__(68).KEY,
-	    $fails = __webpack_require__(54),
-	    shared = __webpack_require__(70),
-	    setToStringTag = __webpack_require__(71),
-	    uid = __webpack_require__(69),
-	    wks = __webpack_require__(72),
-	    wksExt = __webpack_require__(73),
-	    wksDefine = __webpack_require__(74),
-	    keyOf = __webpack_require__(76),
-	    enumKeys = __webpack_require__(89),
-	    isArray = __webpack_require__(92),
-	    anObject = __webpack_require__(61),
-	    toIObject = __webpack_require__(79),
-	    toPrimitive = __webpack_require__(65),
-	    createDesc = __webpack_require__(66),
-	    _create = __webpack_require__(93),
-	    gOPNExt = __webpack_require__(96),
-	    $GOPD = __webpack_require__(98),
-	    $DP = __webpack_require__(60),
-	    $keys = __webpack_require__(77),
+	var global = __webpack_require__(52),
+	    has = __webpack_require__(53),
+	    DESCRIPTORS = __webpack_require__(54),
+	    $export = __webpack_require__(56),
+	    redefine = __webpack_require__(68),
+	    META = __webpack_require__(69).KEY,
+	    $fails = __webpack_require__(55),
+	    shared = __webpack_require__(71),
+	    setToStringTag = __webpack_require__(72),
+	    uid = __webpack_require__(70),
+	    wks = __webpack_require__(73),
+	    wksExt = __webpack_require__(74),
+	    wksDefine = __webpack_require__(75),
+	    keyOf = __webpack_require__(77),
+	    enumKeys = __webpack_require__(90),
+	    isArray = __webpack_require__(93),
+	    anObject = __webpack_require__(62),
+	    toIObject = __webpack_require__(80),
+	    toPrimitive = __webpack_require__(66),
+	    createDesc = __webpack_require__(67),
+	    _create = __webpack_require__(94),
+	    gOPNExt = __webpack_require__(97),
+	    $GOPD = __webpack_require__(99),
+	    $DP = __webpack_require__(61),
+	    $keys = __webpack_require__(78),
 	    gOPD = $GOPD.f,
 	    dP = $DP.f,
 	    gOPN = gOPNExt.f,
@@ -28728,11 +28893,11 @@ var DDFCsvReader =
 	
 	  $GOPD.f = $getOwnPropertyDescriptor;
 	  $DP.f = $defineProperty;
-	  __webpack_require__(97).f = gOPNExt.f = $getOwnPropertyNames;
-	  __webpack_require__(91).f = $propertyIsEnumerable;
-	  __webpack_require__(90).f = $getOwnPropertySymbols;
+	  __webpack_require__(98).f = gOPNExt.f = $getOwnPropertyNames;
+	  __webpack_require__(92).f = $propertyIsEnumerable;
+	  __webpack_require__(91).f = $getOwnPropertySymbols;
 	
-	  if (DESCRIPTORS && !__webpack_require__(75)) {
+	  if (DESCRIPTORS && !__webpack_require__(76)) {
 	    redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
 	  }
 	
@@ -28810,7 +28975,7 @@ var DDFCsvReader =
 	});
 	
 	// 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
-	$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(59)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
+	$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(60)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
 	// 19.4.3.5 Symbol.prototype[@@toStringTag]
 	setToStringTag($Symbol, 'Symbol');
 	// 20.2.1.9 Math[@@toStringTag]
@@ -28819,7 +28984,7 @@ var DDFCsvReader =
 	setToStringTag(global.JSON, 'JSON', true);
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -28829,7 +28994,7 @@ var DDFCsvReader =
 	if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -28840,20 +29005,20 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 53 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	// Thank's IE8 for his funny defineProperty
-	module.exports = !__webpack_require__(54)(function () {
+	module.exports = !__webpack_require__(55)(function () {
 	  return Object.defineProperty({}, 'a', { get: function get() {
 	      return 7;
 	    } }).a != 7;
 	});
 
 /***/ },
-/* 54 */
+/* 55 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -28867,15 +29032,15 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 55 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var global = __webpack_require__(51),
-	    core = __webpack_require__(56),
-	    ctx = __webpack_require__(57),
-	    hide = __webpack_require__(59),
+	var global = __webpack_require__(52),
+	    core = __webpack_require__(57),
+	    ctx = __webpack_require__(58),
+	    hide = __webpack_require__(60),
 	    PROTOTYPE = 'prototype';
 	
 	var $export = function $export(type, name, source) {
@@ -28940,7 +29105,7 @@ var DDFCsvReader =
 	module.exports = $export;
 
 /***/ },
-/* 56 */
+/* 57 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -28949,13 +29114,13 @@ var DDFCsvReader =
 	if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 
 /***/ },
-/* 57 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	// optional / simple context binding
-	var aFunction = __webpack_require__(58);
+	var aFunction = __webpack_require__(59);
 	module.exports = function (fn, that, length) {
 	  aFunction(fn);
 	  if (that === undefined) return fn;
@@ -28979,7 +29144,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 58 */
+/* 59 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -28990,14 +29155,14 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var dP = __webpack_require__(60),
-	    createDesc = __webpack_require__(66);
-	module.exports = __webpack_require__(53) ? function (object, key, value) {
+	var dP = __webpack_require__(61),
+	    createDesc = __webpack_require__(67);
+	module.exports = __webpack_require__(54) ? function (object, key, value) {
 	  return dP.f(object, key, createDesc(1, value));
 	} : function (object, key, value) {
 	  object[key] = value;
@@ -29005,17 +29170,17 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 60 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var anObject = __webpack_require__(61),
-	    IE8_DOM_DEFINE = __webpack_require__(63),
-	    toPrimitive = __webpack_require__(65),
+	var anObject = __webpack_require__(62),
+	    IE8_DOM_DEFINE = __webpack_require__(64),
+	    toPrimitive = __webpack_require__(66),
 	    dP = Object.defineProperty;
 	
-	exports.f = __webpack_require__(53) ? Object.defineProperty : function defineProperty(O, P, Attributes) {
+	exports.f = __webpack_require__(54) ? Object.defineProperty : function defineProperty(O, P, Attributes) {
 	  anObject(O);
 	  P = toPrimitive(P, true);
 	  anObject(Attributes);
@@ -29028,19 +29193,19 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 61 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var isObject = __webpack_require__(62);
+	var isObject = __webpack_require__(63);
 	module.exports = function (it) {
 	  if (!isObject(it)) throw TypeError(it + ' is not an object!');
 	  return it;
 	};
 
 /***/ },
-/* 62 */
+/* 63 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29052,25 +29217,25 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 63 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	module.exports = !__webpack_require__(53) && !__webpack_require__(54)(function () {
-	  return Object.defineProperty(__webpack_require__(64)('div'), 'a', { get: function get() {
-	      return 7;
-	    } }).a != 7;
-	});
-
-/***/ },
 /* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var isObject = __webpack_require__(62),
-	    document = __webpack_require__(51).document
+	module.exports = !__webpack_require__(54) && !__webpack_require__(55)(function () {
+	  return Object.defineProperty(__webpack_require__(65)('div'), 'a', { get: function get() {
+	      return 7;
+	    } }).a != 7;
+	});
+
+/***/ },
+/* 65 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var isObject = __webpack_require__(63),
+	    document = __webpack_require__(52).document
 	// in old IE typeof document.createElement is 'object'
 	,
 	    is = isObject(document) && isObject(document.createElement);
@@ -29079,13 +29244,13 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 65 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	// 7.1.1 ToPrimitive(input [, PreferredType])
-	var isObject = __webpack_require__(62);
+	var isObject = __webpack_require__(63);
 	// instead of the ES6 spec version, we didn't implement @@toPrimitive case
 	// and the second argument - flag - preferred type is a string
 	module.exports = function (it, S) {
@@ -29098,7 +29263,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 66 */
+/* 67 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -29113,30 +29278,30 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 67 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	module.exports = __webpack_require__(59);
+	module.exports = __webpack_require__(60);
 
 /***/ },
-/* 68 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
-	var META = __webpack_require__(69)('meta'),
-	    isObject = __webpack_require__(62),
-	    has = __webpack_require__(52),
-	    setDesc = __webpack_require__(60).f,
+	var META = __webpack_require__(70)('meta'),
+	    isObject = __webpack_require__(63),
+	    has = __webpack_require__(53),
+	    setDesc = __webpack_require__(61).f,
 	    id = 0;
 	var isExtensible = Object.isExtensible || function () {
 	  return true;
 	};
-	var FREEZE = !__webpack_require__(54)(function () {
+	var FREEZE = !__webpack_require__(55)(function () {
 	  return isExtensible(Object.preventExtensions({}));
 	});
 	var setMeta = function setMeta(it) {
@@ -29183,7 +29348,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 69 */
+/* 70 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29195,30 +29360,16 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 70 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var global = __webpack_require__(51),
-	    SHARED = '__core-js_shared__',
-	    store = global[SHARED] || (global[SHARED] = {});
-	module.exports = function (key) {
-	  return store[key] || (store[key] = {});
-	};
-
-/***/ },
 /* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var def = __webpack_require__(60).f,
-	    has = __webpack_require__(52),
-	    TAG = __webpack_require__(72)('toStringTag');
-	
-	module.exports = function (it, tag, stat) {
-	  if (it && !has(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
+	var global = __webpack_require__(52),
+	    SHARED = '__core-js_shared__',
+	    store = global[SHARED] || (global[SHARED] = {});
+	module.exports = function (key) {
+	  return store[key] || (store[key] = {});
 	};
 
 /***/ },
@@ -29227,9 +29378,23 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	var store = __webpack_require__(70)('wks'),
-	    uid = __webpack_require__(69),
-	    _Symbol = __webpack_require__(51).Symbol,
+	var def = __webpack_require__(61).f,
+	    has = __webpack_require__(53),
+	    TAG = __webpack_require__(73)('toStringTag');
+	
+	module.exports = function (it, tag, stat) {
+	  if (it && !has(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
+	};
+
+/***/ },
+/* 73 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var store = __webpack_require__(71)('wks'),
+	    uid = __webpack_require__(70),
+	    _Symbol = __webpack_require__(52).Symbol,
 	    USE_SYMBOL = typeof _Symbol == 'function';
 	
 	var $exports = module.exports = function (name) {
@@ -29239,31 +29404,31 @@ var DDFCsvReader =
 	$exports.store = store;
 
 /***/ },
-/* 73 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	exports.f = __webpack_require__(72);
-
-/***/ },
 /* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var global = __webpack_require__(51),
-	    core = __webpack_require__(56),
-	    LIBRARY = __webpack_require__(75),
-	    wksExt = __webpack_require__(73),
-	    defineProperty = __webpack_require__(60).f;
+	exports.f = __webpack_require__(73);
+
+/***/ },
+/* 75 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var global = __webpack_require__(52),
+	    core = __webpack_require__(57),
+	    LIBRARY = __webpack_require__(76),
+	    wksExt = __webpack_require__(74),
+	    defineProperty = __webpack_require__(61).f;
 	module.exports = function (name) {
 	  var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
 	  if (name.charAt(0) != '_' && !(name in $Symbol)) defineProperty($Symbol, name, { value: wksExt.f(name) });
 	};
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -29271,13 +29436,13 @@ var DDFCsvReader =
 	module.exports = true;
 
 /***/ },
-/* 76 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var getKeys = __webpack_require__(77),
-	    toIObject = __webpack_require__(79);
+	var getKeys = __webpack_require__(78),
+	    toIObject = __webpack_require__(80);
 	module.exports = function (object, el) {
 	  var O = toIObject(object),
 	      keys = getKeys(O),
@@ -29290,29 +29455,29 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 77 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-	var $keys = __webpack_require__(78),
-	    enumBugKeys = __webpack_require__(88);
+	var $keys = __webpack_require__(79),
+	    enumBugKeys = __webpack_require__(89);
 	
 	module.exports = Object.keys || function keys(O) {
 	  return $keys(O, enumBugKeys);
 	};
 
 /***/ },
-/* 78 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var has = __webpack_require__(52),
-	    toIObject = __webpack_require__(79),
-	    arrayIndexOf = __webpack_require__(83)(false),
-	    IE_PROTO = __webpack_require__(87)('IE_PROTO');
+	var has = __webpack_require__(53),
+	    toIObject = __webpack_require__(80),
+	    arrayIndexOf = __webpack_require__(84)(false),
+	    IE_PROTO = __webpack_require__(88)('IE_PROTO');
 	
 	module.exports = function (object, names) {
 	  var O = toIObject(object),
@@ -29330,32 +29495,32 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 79 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	// to indexed object, toObject with fallback for non-array-like ES3 strings
-	var IObject = __webpack_require__(80),
-	    defined = __webpack_require__(82);
-	module.exports = function (it) {
-	  return IObject(defined(it));
-	};
-
-/***/ },
 /* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
+	// to indexed object, toObject with fallback for non-array-like ES3 strings
+	var IObject = __webpack_require__(81),
+	    defined = __webpack_require__(83);
+	module.exports = function (it) {
+	  return IObject(defined(it));
+	};
+
+/***/ },
+/* 81 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
 	// fallback for non-array-like ES3 and non-enumerable old V8 strings
-	var cof = __webpack_require__(81);
+	var cof = __webpack_require__(82);
 	module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
 	  return cof(it) == 'String' ? it.split('') : Object(it);
 	};
 
 /***/ },
-/* 81 */
+/* 82 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -29367,7 +29532,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 82 */
+/* 83 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -29379,16 +29544,16 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 83 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	// false -> Array#indexOf
 	// true  -> Array#includes
-	var toIObject = __webpack_require__(79),
-	    toLength = __webpack_require__(84),
-	    toIndex = __webpack_require__(86);
+	var toIObject = __webpack_require__(80),
+	    toLength = __webpack_require__(85),
+	    toIndex = __webpack_require__(87);
 	module.exports = function (IS_INCLUDES) {
 	  return function ($this, el, fromIndex) {
 	    var O = toIObject($this),
@@ -29409,20 +29574,20 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 84 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	// 7.1.15 ToLength
-	var toInteger = __webpack_require__(85),
+	var toInteger = __webpack_require__(86),
 	    min = Math.min;
 	module.exports = function (it) {
 	  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
 	};
 
 /***/ },
-/* 85 */
+/* 86 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -29435,12 +29600,12 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 86 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var toInteger = __webpack_require__(85),
+	var toInteger = __webpack_require__(86),
 	    max = Math.max,
 	    min = Math.min;
 	module.exports = function (index, length) {
@@ -29449,19 +29614,19 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 87 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var shared = __webpack_require__(70)('keys'),
-	    uid = __webpack_require__(69);
+	var shared = __webpack_require__(71)('keys'),
+	    uid = __webpack_require__(70);
 	module.exports = function (key) {
 	  return shared[key] || (shared[key] = uid(key));
 	};
 
 /***/ },
-/* 88 */
+/* 89 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29470,15 +29635,15 @@ var DDFCsvReader =
 	module.exports = 'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'.split(',');
 
 /***/ },
-/* 89 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	// all enumerable object keys, includes symbols
-	var getKeys = __webpack_require__(77),
-	    gOPS = __webpack_require__(90),
-	    pIE = __webpack_require__(91);
+	var getKeys = __webpack_require__(78),
+	    gOPS = __webpack_require__(91),
+	    pIE = __webpack_require__(92);
 	module.exports = function (it) {
 	  var result = getKeys(it),
 	      getSymbols = gOPS.f;
@@ -29494,7 +29659,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 90 */
+/* 91 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -29502,7 +29667,7 @@ var DDFCsvReader =
 	exports.f = Object.getOwnPropertySymbols;
 
 /***/ },
-/* 91 */
+/* 92 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -29510,41 +29675,41 @@ var DDFCsvReader =
 	exports.f = {}.propertyIsEnumerable;
 
 /***/ },
-/* 92 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	// 7.2.2 IsArray(argument)
-	var cof = __webpack_require__(81);
-	module.exports = Array.isArray || function isArray(arg) {
-	  return cof(arg) == 'Array';
-	};
-
-/***/ },
 /* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
+	// 7.2.2 IsArray(argument)
+	var cof = __webpack_require__(82);
+	module.exports = Array.isArray || function isArray(arg) {
+	  return cof(arg) == 'Array';
+	};
+
+/***/ },
+/* 94 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
 	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-	var anObject = __webpack_require__(61),
-	    dPs = __webpack_require__(94),
-	    enumBugKeys = __webpack_require__(88),
-	    IE_PROTO = __webpack_require__(87)('IE_PROTO'),
+	var anObject = __webpack_require__(62),
+	    dPs = __webpack_require__(95),
+	    enumBugKeys = __webpack_require__(89),
+	    IE_PROTO = __webpack_require__(88)('IE_PROTO'),
 	    Empty = function Empty() {/* empty */},
 	    PROTOTYPE = 'prototype';
 	
 	// Create object with fake `null` prototype: use iframe Object with cleared prototype
 	var _createDict = function createDict() {
 	  // Thrash, waste and sodomy: IE GC bug
-	  var iframe = __webpack_require__(64)('iframe'),
+	  var iframe = __webpack_require__(65)('iframe'),
 	      i = enumBugKeys.length,
 	      lt = '<',
 	      gt = '>',
 	      iframeDocument;
 	  iframe.style.display = 'none';
-	  __webpack_require__(95).appendChild(iframe);
+	  __webpack_require__(96).appendChild(iframe);
 	  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
 	  // createDict = iframe.contentWindow.Object;
 	  // html.removeChild(iframe);
@@ -29571,16 +29736,16 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 94 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var dP = __webpack_require__(60),
-	    anObject = __webpack_require__(61),
-	    getKeys = __webpack_require__(77);
+	var dP = __webpack_require__(61),
+	    anObject = __webpack_require__(62),
+	    getKeys = __webpack_require__(78);
 	
-	module.exports = __webpack_require__(53) ? Object.defineProperties : function defineProperties(O, Properties) {
+	module.exports = __webpack_require__(54) ? Object.defineProperties : function defineProperties(O, Properties) {
 	  anObject(O);
 	  var keys = getKeys(Properties),
 	      length = keys.length,
@@ -29592,15 +29757,15 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 95 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	module.exports = __webpack_require__(51).document && document.documentElement;
+	module.exports = __webpack_require__(52).document && document.documentElement;
 
 /***/ },
-/* 96 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29608,8 +29773,8 @@ var DDFCsvReader =
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
 	// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
-	var toIObject = __webpack_require__(79),
-	    gOPN = __webpack_require__(97).f,
+	var toIObject = __webpack_require__(80),
+	    gOPN = __webpack_require__(98).f,
 	    toString = {}.toString;
 	
 	var windowNames = (typeof window === 'undefined' ? 'undefined' : _typeof(window)) == 'object' && window && Object.getOwnPropertyNames ? Object.getOwnPropertyNames(window) : [];
@@ -29627,34 +29792,34 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 97 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-	var $keys = __webpack_require__(78),
-	    hiddenKeys = __webpack_require__(88).concat('length', 'prototype');
+	var $keys = __webpack_require__(79),
+	    hiddenKeys = __webpack_require__(89).concat('length', 'prototype');
 	
 	exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
 	  return $keys(O, hiddenKeys);
 	};
 
 /***/ },
-/* 98 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var pIE = __webpack_require__(91),
-	    createDesc = __webpack_require__(66),
-	    toIObject = __webpack_require__(79),
-	    toPrimitive = __webpack_require__(65),
-	    has = __webpack_require__(52),
-	    IE8_DOM_DEFINE = __webpack_require__(63),
+	var pIE = __webpack_require__(92),
+	    createDesc = __webpack_require__(67),
+	    toIObject = __webpack_require__(80),
+	    toPrimitive = __webpack_require__(66),
+	    has = __webpack_require__(53),
+	    IE8_DOM_DEFINE = __webpack_require__(64),
 	    gOPD = Object.getOwnPropertyDescriptor;
 	
-	exports.f = __webpack_require__(53) ? gOPD : function getOwnPropertyDescriptor(O, P) {
+	exports.f = __webpack_require__(54) ? gOPD : function getOwnPropertyDescriptor(O, P) {
 	  O = toIObject(O);
 	  P = toPrimitive(P, true);
 	  if (IE8_DOM_DEFINE) try {
@@ -29664,24 +29829,23 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 99 */
+/* 100 */
 /***/ function(module, exports) {
 
 	"use strict";
 
 /***/ },
-/* 100 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	__webpack_require__(50);
-	__webpack_require__(101);
+	__webpack_require__(51);
 	__webpack_require__(102);
 	__webpack_require__(103);
 	__webpack_require__(104);
-	__webpack_require__(106);
-	__webpack_require__(109);
+	__webpack_require__(105);
+	__webpack_require__(107);
 	__webpack_require__(110);
 	__webpack_require__(111);
 	__webpack_require__(112);
@@ -29690,21 +29854,12 @@ var DDFCsvReader =
 	__webpack_require__(115);
 	__webpack_require__(116);
 	__webpack_require__(117);
-	__webpack_require__(119);
-	__webpack_require__(121);
-	__webpack_require__(99);
+	__webpack_require__(118);
+	__webpack_require__(120);
+	__webpack_require__(122);
+	__webpack_require__(100);
 	
-	module.exports = __webpack_require__(56).Object;
-
-/***/ },
-/* 101 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var $export = __webpack_require__(55);
-	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-	$export($export.S, 'Object', { create: __webpack_require__(93) });
+	module.exports = __webpack_require__(57).Object;
 
 /***/ },
 /* 102 */
@@ -29712,9 +29867,9 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	var $export = __webpack_require__(55);
-	// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
-	$export($export.S + $export.F * !__webpack_require__(53), 'Object', { defineProperty: __webpack_require__(60).f });
+	var $export = __webpack_require__(56);
+	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+	$export($export.S, 'Object', { create: __webpack_require__(94) });
 
 /***/ },
 /* 103 */
@@ -29722,9 +29877,9 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	var $export = __webpack_require__(55);
-	// 19.1.2.3 / 15.2.3.7 Object.defineProperties(O, Properties)
-	$export($export.S + $export.F * !__webpack_require__(53), 'Object', { defineProperties: __webpack_require__(94) });
+	var $export = __webpack_require__(56);
+	// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
+	$export($export.S + $export.F * !__webpack_require__(54), 'Object', { defineProperty: __webpack_require__(61).f });
 
 /***/ },
 /* 104 */
@@ -29732,15 +29887,9 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	// 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
-	var toIObject = __webpack_require__(79),
-	    $getOwnPropertyDescriptor = __webpack_require__(98).f;
-	
-	__webpack_require__(105)('getOwnPropertyDescriptor', function () {
-	  return function getOwnPropertyDescriptor(it, key) {
-	    return $getOwnPropertyDescriptor(toIObject(it), key);
-	  };
-	});
+	var $export = __webpack_require__(56);
+	// 19.1.2.3 / 15.2.3.7 Object.defineProperties(O, Properties)
+	$export($export.S + $export.F * !__webpack_require__(54), 'Object', { defineProperties: __webpack_require__(95) });
 
 /***/ },
 /* 105 */
@@ -29748,10 +29897,26 @@ var DDFCsvReader =
 
 	'use strict';
 	
+	// 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+	var toIObject = __webpack_require__(80),
+	    $getOwnPropertyDescriptor = __webpack_require__(99).f;
+	
+	__webpack_require__(106)('getOwnPropertyDescriptor', function () {
+	  return function getOwnPropertyDescriptor(it, key) {
+	    return $getOwnPropertyDescriptor(toIObject(it), key);
+	  };
+	});
+
+/***/ },
+/* 106 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
 	// most Object methods by ES6 should accept primitives
-	var $export = __webpack_require__(55),
-	    core = __webpack_require__(56),
-	    fails = __webpack_require__(54);
+	var $export = __webpack_require__(56),
+	    core = __webpack_require__(57),
+	    fails = __webpack_require__(55);
 	module.exports = function (KEY, exec) {
 	  var fn = (core.Object || {})[KEY] || Object[KEY],
 	      exp = {};
@@ -29762,32 +29927,20 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 106 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	// 19.1.2.9 Object.getPrototypeOf(O)
-	var toObject = __webpack_require__(107),
-	    $getPrototypeOf = __webpack_require__(108);
-	
-	__webpack_require__(105)('getPrototypeOf', function () {
-	  return function getPrototypeOf(it) {
-	    return $getPrototypeOf(toObject(it));
-	  };
-	});
-
-/***/ },
 /* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	// 7.1.13 ToObject(argument)
-	var defined = __webpack_require__(82);
-	module.exports = function (it) {
-	  return Object(defined(it));
-	};
+	// 19.1.2.9 Object.getPrototypeOf(O)
+	var toObject = __webpack_require__(108),
+	    $getPrototypeOf = __webpack_require__(109);
+	
+	__webpack_require__(106)('getPrototypeOf', function () {
+	  return function getPrototypeOf(it) {
+	    return $getPrototypeOf(toObject(it));
+	  };
+	});
 
 /***/ },
 /* 108 */
@@ -29795,10 +29948,22 @@ var DDFCsvReader =
 
 	'use strict';
 	
+	// 7.1.13 ToObject(argument)
+	var defined = __webpack_require__(83);
+	module.exports = function (it) {
+	  return Object(defined(it));
+	};
+
+/***/ },
+/* 109 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
 	// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-	var has = __webpack_require__(52),
-	    toObject = __webpack_require__(107),
-	    IE_PROTO = __webpack_require__(87)('IE_PROTO'),
+	var has = __webpack_require__(53),
+	    toObject = __webpack_require__(108),
+	    IE_PROTO = __webpack_require__(88)('IE_PROTO'),
 	    ObjectProto = Object.prototype;
 	
 	module.exports = Object.getPrototypeOf || function (O) {
@@ -29810,30 +29975,19 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 109 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	// 19.1.2.14 Object.keys(O)
-	var toObject = __webpack_require__(107),
-	    $keys = __webpack_require__(77);
-	
-	__webpack_require__(105)('keys', function () {
-	  return function keys(it) {
-	    return $keys(toObject(it));
-	  };
-	});
-
-/***/ },
 /* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	// 19.1.2.7 Object.getOwnPropertyNames(O)
-	__webpack_require__(105)('getOwnPropertyNames', function () {
-	  return __webpack_require__(96).f;
+	// 19.1.2.14 Object.keys(O)
+	var toObject = __webpack_require__(108),
+	    $keys = __webpack_require__(78);
+	
+	__webpack_require__(106)('keys', function () {
+	  return function keys(it) {
+	    return $keys(toObject(it));
+	  };
 	});
 
 /***/ },
@@ -29842,14 +29996,9 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	// 19.1.2.5 Object.freeze(O)
-	var isObject = __webpack_require__(62),
-	    meta = __webpack_require__(68).onFreeze;
-	
-	__webpack_require__(105)('freeze', function ($freeze) {
-	  return function freeze(it) {
-	    return $freeze && isObject(it) ? $freeze(meta(it)) : it;
-	  };
+	// 19.1.2.7 Object.getOwnPropertyNames(O)
+	__webpack_require__(106)('getOwnPropertyNames', function () {
+	  return __webpack_require__(97).f;
 	});
 
 /***/ },
@@ -29858,13 +30007,13 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	// 19.1.2.17 Object.seal(O)
-	var isObject = __webpack_require__(62),
-	    meta = __webpack_require__(68).onFreeze;
+	// 19.1.2.5 Object.freeze(O)
+	var isObject = __webpack_require__(63),
+	    meta = __webpack_require__(69).onFreeze;
 	
-	__webpack_require__(105)('seal', function ($seal) {
-	  return function seal(it) {
-	    return $seal && isObject(it) ? $seal(meta(it)) : it;
+	__webpack_require__(106)('freeze', function ($freeze) {
+	  return function freeze(it) {
+	    return $freeze && isObject(it) ? $freeze(meta(it)) : it;
 	  };
 	});
 
@@ -29874,13 +30023,13 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	// 19.1.2.15 Object.preventExtensions(O)
-	var isObject = __webpack_require__(62),
-	    meta = __webpack_require__(68).onFreeze;
+	// 19.1.2.17 Object.seal(O)
+	var isObject = __webpack_require__(63),
+	    meta = __webpack_require__(69).onFreeze;
 	
-	__webpack_require__(105)('preventExtensions', function ($preventExtensions) {
-	  return function preventExtensions(it) {
-	    return $preventExtensions && isObject(it) ? $preventExtensions(meta(it)) : it;
+	__webpack_require__(106)('seal', function ($seal) {
+	  return function seal(it) {
+	    return $seal && isObject(it) ? $seal(meta(it)) : it;
 	  };
 	});
 
@@ -29890,12 +30039,13 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	// 19.1.2.12 Object.isFrozen(O)
-	var isObject = __webpack_require__(62);
+	// 19.1.2.15 Object.preventExtensions(O)
+	var isObject = __webpack_require__(63),
+	    meta = __webpack_require__(69).onFreeze;
 	
-	__webpack_require__(105)('isFrozen', function ($isFrozen) {
-	  return function isFrozen(it) {
-	    return isObject(it) ? $isFrozen ? $isFrozen(it) : false : true;
+	__webpack_require__(106)('preventExtensions', function ($preventExtensions) {
+	  return function preventExtensions(it) {
+	    return $preventExtensions && isObject(it) ? $preventExtensions(meta(it)) : it;
 	  };
 	});
 
@@ -29905,12 +30055,12 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	// 19.1.2.13 Object.isSealed(O)
-	var isObject = __webpack_require__(62);
+	// 19.1.2.12 Object.isFrozen(O)
+	var isObject = __webpack_require__(63);
 	
-	__webpack_require__(105)('isSealed', function ($isSealed) {
-	  return function isSealed(it) {
-	    return isObject(it) ? $isSealed ? $isSealed(it) : false : true;
+	__webpack_require__(106)('isFrozen', function ($isFrozen) {
+	  return function isFrozen(it) {
+	    return isObject(it) ? $isFrozen ? $isFrozen(it) : false : true;
 	  };
 	});
 
@@ -29920,12 +30070,12 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	// 19.1.2.11 Object.isExtensible(O)
-	var isObject = __webpack_require__(62);
+	// 19.1.2.13 Object.isSealed(O)
+	var isObject = __webpack_require__(63);
 	
-	__webpack_require__(105)('isExtensible', function ($isExtensible) {
-	  return function isExtensible(it) {
-	    return isObject(it) ? $isExtensible ? $isExtensible(it) : true : false;
+	__webpack_require__(106)('isSealed', function ($isSealed) {
+	  return function isSealed(it) {
+	    return isObject(it) ? $isSealed ? $isSealed(it) : false : true;
 	  };
 	});
 
@@ -29935,27 +30085,42 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	// 19.1.3.1 Object.assign(target, source)
-	var $export = __webpack_require__(55);
+	// 19.1.2.11 Object.isExtensible(O)
+	var isObject = __webpack_require__(63);
 	
-	$export($export.S + $export.F, 'Object', { assign: __webpack_require__(118) });
+	__webpack_require__(106)('isExtensible', function ($isExtensible) {
+	  return function isExtensible(it) {
+	    return isObject(it) ? $isExtensible ? $isExtensible(it) : true : false;
+	  };
+	});
 
 /***/ },
 /* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+	
+	// 19.1.3.1 Object.assign(target, source)
+	var $export = __webpack_require__(56);
+	
+	$export($export.S + $export.F, 'Object', { assign: __webpack_require__(119) });
+
+/***/ },
+/* 119 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 	// 19.1.2.1 Object.assign(target, source, ...)
 	
-	var getKeys = __webpack_require__(77),
-	    gOPS = __webpack_require__(90),
-	    pIE = __webpack_require__(91),
-	    toObject = __webpack_require__(107),
-	    IObject = __webpack_require__(80),
+	var getKeys = __webpack_require__(78),
+	    gOPS = __webpack_require__(91),
+	    pIE = __webpack_require__(92),
+	    toObject = __webpack_require__(108),
+	    IObject = __webpack_require__(81),
 	    $assign = Object.assign;
 	
 	// should work with symbols and should have deterministic property order (V8 bug)
-	module.exports = !$assign || __webpack_require__(54)(function () {
+	module.exports = !$assign || __webpack_require__(55)(function () {
 	  var A = {},
 	      B = {},
 	      S = Symbol(),
@@ -29985,17 +30150,17 @@ var DDFCsvReader =
 	} : $assign;
 
 /***/ },
-/* 119 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	// 19.1.3.10 Object.is(value1, value2)
-	var $export = __webpack_require__(55);
-	$export($export.S, 'Object', { is: __webpack_require__(120) });
+	var $export = __webpack_require__(56);
+	$export($export.S, 'Object', { is: __webpack_require__(121) });
 
 /***/ },
-/* 120 */
+/* 121 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -30006,25 +30171,25 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 121 */
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	// 19.1.3.19 Object.setPrototypeOf(O, proto)
-	var $export = __webpack_require__(55);
-	$export($export.S, 'Object', { setPrototypeOf: __webpack_require__(122).set });
+	var $export = __webpack_require__(56);
+	$export($export.S, 'Object', { setPrototypeOf: __webpack_require__(123).set });
 
 /***/ },
-/* 122 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	// Works with __proto__ only. Old v8 can't work with null proto objects.
 	/* eslint-disable no-proto */
-	var isObject = __webpack_require__(62),
-	    anObject = __webpack_require__(61);
+	var isObject = __webpack_require__(63),
+	    anObject = __webpack_require__(62);
 	var check = function check(O, proto) {
 	  anObject(O);
 	  if (!isObject(proto) && proto !== null) throw TypeError(proto + ": can't set as prototype!");
@@ -30033,7 +30198,7 @@ var DDFCsvReader =
 	  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
 	  function (test, buggy, set) {
 	    try {
-	      set = __webpack_require__(57)(Function.call, __webpack_require__(98).f(Object.prototype, '__proto__').set, 2);
+	      set = __webpack_require__(58)(Function.call, __webpack_require__(99).f(Object.prototype, '__proto__').set, 2);
 	      set(test, []);
 	      buggy = !(test instanceof Array);
 	    } catch (e) {
@@ -30049,7 +30214,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 123 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {'use strict';
@@ -31813,7 +31978,7 @@ var DDFCsvReader =
 	        if (!locales[name] && typeof module !== 'undefined' && module && module.exports) {
 	            try {
 	                oldLocale = globalLocale._abbr;
-	                __webpack_require__(124)("./" + name);
+	                __webpack_require__(125)("./" + name);
 	                // because defineLocale currently also sets the global locale, we
 	                // want to undo that for lazy loaded locales
 	                locale_locales__getSetGlobalLocale(oldLocale);
@@ -34151,212 +34316,212 @@ var DDFCsvReader =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 124 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./af": 125,
-		"./af.js": 125,
-		"./ar": 126,
-		"./ar-ma": 127,
-		"./ar-ma.js": 127,
-		"./ar-sa": 128,
-		"./ar-sa.js": 128,
-		"./ar-tn": 129,
-		"./ar-tn.js": 129,
-		"./ar.js": 126,
-		"./az": 130,
-		"./az.js": 130,
-		"./be": 131,
-		"./be.js": 131,
-		"./bg": 132,
-		"./bg.js": 132,
-		"./bn": 133,
-		"./bn.js": 133,
-		"./bo": 134,
-		"./bo.js": 134,
-		"./br": 135,
-		"./br.js": 135,
-		"./bs": 136,
-		"./bs.js": 136,
-		"./ca": 137,
-		"./ca.js": 137,
-		"./cs": 138,
-		"./cs.js": 138,
-		"./cv": 139,
-		"./cv.js": 139,
-		"./cy": 140,
-		"./cy.js": 140,
-		"./da": 141,
-		"./da.js": 141,
-		"./de": 142,
-		"./de-at": 143,
-		"./de-at.js": 143,
-		"./de.js": 142,
-		"./dv": 144,
-		"./dv.js": 144,
-		"./el": 145,
-		"./el.js": 145,
-		"./en-au": 146,
-		"./en-au.js": 146,
-		"./en-ca": 147,
-		"./en-ca.js": 147,
-		"./en-gb": 148,
-		"./en-gb.js": 148,
-		"./en-ie": 149,
-		"./en-ie.js": 149,
-		"./en-nz": 150,
-		"./en-nz.js": 150,
-		"./eo": 151,
-		"./eo.js": 151,
-		"./es": 152,
-		"./es-do": 153,
-		"./es-do.js": 153,
-		"./es.js": 152,
-		"./et": 154,
-		"./et.js": 154,
-		"./eu": 155,
-		"./eu.js": 155,
-		"./fa": 156,
-		"./fa.js": 156,
-		"./fi": 157,
-		"./fi.js": 157,
-		"./fo": 158,
-		"./fo.js": 158,
-		"./fr": 159,
-		"./fr-ca": 160,
-		"./fr-ca.js": 160,
-		"./fr-ch": 161,
-		"./fr-ch.js": 161,
-		"./fr.js": 159,
-		"./fy": 162,
-		"./fy.js": 162,
-		"./gd": 163,
-		"./gd.js": 163,
-		"./gl": 164,
-		"./gl.js": 164,
-		"./he": 165,
-		"./he.js": 165,
-		"./hi": 166,
-		"./hi.js": 166,
-		"./hr": 167,
-		"./hr.js": 167,
-		"./hu": 168,
-		"./hu.js": 168,
-		"./hy-am": 169,
-		"./hy-am.js": 169,
-		"./id": 170,
-		"./id.js": 170,
-		"./is": 171,
-		"./is.js": 171,
-		"./it": 172,
-		"./it.js": 172,
-		"./ja": 173,
-		"./ja.js": 173,
-		"./jv": 174,
-		"./jv.js": 174,
-		"./ka": 175,
-		"./ka.js": 175,
-		"./kk": 176,
-		"./kk.js": 176,
-		"./km": 177,
-		"./km.js": 177,
-		"./ko": 178,
-		"./ko.js": 178,
-		"./ky": 179,
-		"./ky.js": 179,
-		"./lb": 180,
-		"./lb.js": 180,
-		"./lo": 181,
-		"./lo.js": 181,
-		"./lt": 182,
-		"./lt.js": 182,
-		"./lv": 183,
-		"./lv.js": 183,
-		"./me": 184,
-		"./me.js": 184,
-		"./mk": 185,
-		"./mk.js": 185,
-		"./ml": 186,
-		"./ml.js": 186,
-		"./mr": 187,
-		"./mr.js": 187,
-		"./ms": 188,
-		"./ms-my": 189,
-		"./ms-my.js": 189,
-		"./ms.js": 188,
-		"./my": 190,
-		"./my.js": 190,
-		"./nb": 191,
-		"./nb.js": 191,
-		"./ne": 192,
-		"./ne.js": 192,
-		"./nl": 193,
-		"./nl.js": 193,
-		"./nn": 194,
-		"./nn.js": 194,
-		"./pa-in": 195,
-		"./pa-in.js": 195,
-		"./pl": 196,
-		"./pl.js": 196,
-		"./pt": 197,
-		"./pt-br": 198,
-		"./pt-br.js": 198,
-		"./pt.js": 197,
-		"./ro": 199,
-		"./ro.js": 199,
-		"./ru": 200,
-		"./ru.js": 200,
-		"./se": 201,
-		"./se.js": 201,
-		"./si": 202,
-		"./si.js": 202,
-		"./sk": 203,
-		"./sk.js": 203,
-		"./sl": 204,
-		"./sl.js": 204,
-		"./sq": 205,
-		"./sq.js": 205,
-		"./sr": 206,
-		"./sr-cyrl": 207,
-		"./sr-cyrl.js": 207,
-		"./sr.js": 206,
-		"./ss": 208,
-		"./ss.js": 208,
-		"./sv": 209,
-		"./sv.js": 209,
-		"./sw": 210,
-		"./sw.js": 210,
-		"./ta": 211,
-		"./ta.js": 211,
-		"./te": 212,
-		"./te.js": 212,
-		"./th": 213,
-		"./th.js": 213,
-		"./tl-ph": 214,
-		"./tl-ph.js": 214,
-		"./tlh": 215,
-		"./tlh.js": 215,
-		"./tr": 216,
-		"./tr.js": 216,
-		"./tzl": 217,
-		"./tzl.js": 217,
-		"./tzm": 218,
-		"./tzm-latn": 219,
-		"./tzm-latn.js": 219,
-		"./tzm.js": 218,
-		"./uk": 220,
-		"./uk.js": 220,
-		"./uz": 221,
-		"./uz.js": 221,
-		"./vi": 222,
-		"./vi.js": 222,
-		"./x-pseudo": 223,
-		"./x-pseudo.js": 223,
-		"./zh-cn": 224,
-		"./zh-cn.js": 224,
-		"./zh-tw": 225,
-		"./zh-tw.js": 225
+		"./af": 126,
+		"./af.js": 126,
+		"./ar": 127,
+		"./ar-ma": 128,
+		"./ar-ma.js": 128,
+		"./ar-sa": 129,
+		"./ar-sa.js": 129,
+		"./ar-tn": 130,
+		"./ar-tn.js": 130,
+		"./ar.js": 127,
+		"./az": 131,
+		"./az.js": 131,
+		"./be": 132,
+		"./be.js": 132,
+		"./bg": 133,
+		"./bg.js": 133,
+		"./bn": 134,
+		"./bn.js": 134,
+		"./bo": 135,
+		"./bo.js": 135,
+		"./br": 136,
+		"./br.js": 136,
+		"./bs": 137,
+		"./bs.js": 137,
+		"./ca": 138,
+		"./ca.js": 138,
+		"./cs": 139,
+		"./cs.js": 139,
+		"./cv": 140,
+		"./cv.js": 140,
+		"./cy": 141,
+		"./cy.js": 141,
+		"./da": 142,
+		"./da.js": 142,
+		"./de": 143,
+		"./de-at": 144,
+		"./de-at.js": 144,
+		"./de.js": 143,
+		"./dv": 145,
+		"./dv.js": 145,
+		"./el": 146,
+		"./el.js": 146,
+		"./en-au": 147,
+		"./en-au.js": 147,
+		"./en-ca": 148,
+		"./en-ca.js": 148,
+		"./en-gb": 149,
+		"./en-gb.js": 149,
+		"./en-ie": 150,
+		"./en-ie.js": 150,
+		"./en-nz": 151,
+		"./en-nz.js": 151,
+		"./eo": 152,
+		"./eo.js": 152,
+		"./es": 153,
+		"./es-do": 154,
+		"./es-do.js": 154,
+		"./es.js": 153,
+		"./et": 155,
+		"./et.js": 155,
+		"./eu": 156,
+		"./eu.js": 156,
+		"./fa": 157,
+		"./fa.js": 157,
+		"./fi": 158,
+		"./fi.js": 158,
+		"./fo": 159,
+		"./fo.js": 159,
+		"./fr": 160,
+		"./fr-ca": 161,
+		"./fr-ca.js": 161,
+		"./fr-ch": 162,
+		"./fr-ch.js": 162,
+		"./fr.js": 160,
+		"./fy": 163,
+		"./fy.js": 163,
+		"./gd": 164,
+		"./gd.js": 164,
+		"./gl": 165,
+		"./gl.js": 165,
+		"./he": 166,
+		"./he.js": 166,
+		"./hi": 167,
+		"./hi.js": 167,
+		"./hr": 168,
+		"./hr.js": 168,
+		"./hu": 169,
+		"./hu.js": 169,
+		"./hy-am": 170,
+		"./hy-am.js": 170,
+		"./id": 171,
+		"./id.js": 171,
+		"./is": 172,
+		"./is.js": 172,
+		"./it": 173,
+		"./it.js": 173,
+		"./ja": 174,
+		"./ja.js": 174,
+		"./jv": 175,
+		"./jv.js": 175,
+		"./ka": 176,
+		"./ka.js": 176,
+		"./kk": 177,
+		"./kk.js": 177,
+		"./km": 178,
+		"./km.js": 178,
+		"./ko": 179,
+		"./ko.js": 179,
+		"./ky": 180,
+		"./ky.js": 180,
+		"./lb": 181,
+		"./lb.js": 181,
+		"./lo": 182,
+		"./lo.js": 182,
+		"./lt": 183,
+		"./lt.js": 183,
+		"./lv": 184,
+		"./lv.js": 184,
+		"./me": 185,
+		"./me.js": 185,
+		"./mk": 186,
+		"./mk.js": 186,
+		"./ml": 187,
+		"./ml.js": 187,
+		"./mr": 188,
+		"./mr.js": 188,
+		"./ms": 189,
+		"./ms-my": 190,
+		"./ms-my.js": 190,
+		"./ms.js": 189,
+		"./my": 191,
+		"./my.js": 191,
+		"./nb": 192,
+		"./nb.js": 192,
+		"./ne": 193,
+		"./ne.js": 193,
+		"./nl": 194,
+		"./nl.js": 194,
+		"./nn": 195,
+		"./nn.js": 195,
+		"./pa-in": 196,
+		"./pa-in.js": 196,
+		"./pl": 197,
+		"./pl.js": 197,
+		"./pt": 198,
+		"./pt-br": 199,
+		"./pt-br.js": 199,
+		"./pt.js": 198,
+		"./ro": 200,
+		"./ro.js": 200,
+		"./ru": 201,
+		"./ru.js": 201,
+		"./se": 202,
+		"./se.js": 202,
+		"./si": 203,
+		"./si.js": 203,
+		"./sk": 204,
+		"./sk.js": 204,
+		"./sl": 205,
+		"./sl.js": 205,
+		"./sq": 206,
+		"./sq.js": 206,
+		"./sr": 207,
+		"./sr-cyrl": 208,
+		"./sr-cyrl.js": 208,
+		"./sr.js": 207,
+		"./ss": 209,
+		"./ss.js": 209,
+		"./sv": 210,
+		"./sv.js": 210,
+		"./sw": 211,
+		"./sw.js": 211,
+		"./ta": 212,
+		"./ta.js": 212,
+		"./te": 213,
+		"./te.js": 213,
+		"./th": 214,
+		"./th.js": 214,
+		"./tl-ph": 215,
+		"./tl-ph.js": 215,
+		"./tlh": 216,
+		"./tlh.js": 216,
+		"./tr": 217,
+		"./tr.js": 217,
+		"./tzl": 218,
+		"./tzl.js": 218,
+		"./tzm": 219,
+		"./tzm-latn": 220,
+		"./tzm-latn.js": 220,
+		"./tzm.js": 219,
+		"./uk": 221,
+		"./uk.js": 221,
+		"./uz": 222,
+		"./uz.js": 222,
+		"./vi": 223,
+		"./vi.js": 223,
+		"./x-pseudo": 224,
+		"./x-pseudo.js": 224,
+		"./zh-cn": 225,
+		"./zh-cn.js": 225,
+		"./zh-tw": 226,
+		"./zh-tw.js": 226
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -34369,11 +34534,11 @@ var DDFCsvReader =
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 124;
+	webpackContext.id = 125;
 
 
 /***/ },
-/* 125 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -34385,7 +34550,7 @@ var DDFCsvReader =
 	//! author : Werner Mollentze : https://github.com/wernerm
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -34452,7 +34617,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 126 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -34466,7 +34631,7 @@ var DDFCsvReader =
 	//! Native plural forms: forabi https://github.com/forabi
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -34586,7 +34751,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 127 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -34599,7 +34764,7 @@ var DDFCsvReader =
 	//! author : Abdel Said : https://github.com/abdelsaid
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -34651,7 +34816,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 128 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -34663,7 +34828,7 @@ var DDFCsvReader =
 	//! author : Suhail Alkowaileet : https://github.com/xsoh
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -34761,7 +34926,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 129 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -34772,7 +34937,7 @@ var DDFCsvReader =
 	//! locale  :  Arabic (Tunisia) [ar-tn]
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -34824,7 +34989,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 130 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -34836,7 +35001,7 @@ var DDFCsvReader =
 	//! author : topchiyev : https://github.com/topchiyev
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -34936,7 +35101,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 131 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -34950,7 +35115,7 @@ var DDFCsvReader =
 	//! Author : Menelion Elensúle : https://github.com/Oire
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -35074,7 +35239,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 132 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -35086,7 +35251,7 @@ var DDFCsvReader =
 	//! author : Krasen Borisov : https://github.com/kraz
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -35169,7 +35334,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 133 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -35181,7 +35346,7 @@ var DDFCsvReader =
 	//! author : Kaushik Gandhi : https://github.com/kaushikgandhi
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -35291,7 +35456,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 134 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -35303,7 +35468,7 @@ var DDFCsvReader =
 	//! author : Thupten N. Chakrishar : https://github.com/vajradog
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -35413,7 +35578,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 135 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -35425,7 +35590,7 @@ var DDFCsvReader =
 	//! author : Jean-Baptiste Le Duigou : https://github.com/jbleduigou
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -35526,7 +35691,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 136 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -35539,7 +35704,7 @@ var DDFCsvReader =
 	//! based on (hr) translation by Bojan Marković
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -35674,7 +35839,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 137 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -35686,7 +35851,7 @@ var DDFCsvReader =
 	//! author : Juan G. Hurtado : https://github.com/juanghurtado
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -35757,7 +35922,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 138 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -35769,7 +35934,7 @@ var DDFCsvReader =
 	//! author : petrbela : https://github.com/petrbela
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -35948,7 +36113,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 139 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -35960,7 +36125,7 @@ var DDFCsvReader =
 	//! author : Anatoly Mironov : https://github.com/mirontoli
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -36016,7 +36181,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 140 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -36028,7 +36193,7 @@ var DDFCsvReader =
 	//! author : Robert Allen
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -36100,7 +36265,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 141 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -36112,7 +36277,7 @@ var DDFCsvReader =
 	//! author : Ulrik Nielsen : https://github.com/mrbase
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -36165,7 +36330,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 142 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -36179,7 +36344,7 @@ var DDFCsvReader =
 	//! author : Mikolaj Dadela : https://github.com/mik01aj
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -36248,7 +36413,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 143 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -36263,7 +36428,7 @@ var DDFCsvReader =
 	//! author : Mikolaj Dadela : https://github.com/mik01aj
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -36332,7 +36497,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 144 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -36344,7 +36509,7 @@ var DDFCsvReader =
 	//! author : Jawish Hameed : https://github.com/jawish
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -36416,7 +36581,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 145 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -36428,7 +36593,7 @@ var DDFCsvReader =
 	//! author : Aggelos Karalias : https://github.com/mehiel
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -36520,7 +36685,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 146 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -36531,7 +36696,7 @@ var DDFCsvReader =
 	//! locale : English (Australia) [en-au]
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -36588,7 +36753,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 147 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -36600,7 +36765,7 @@ var DDFCsvReader =
 	//! author : Jonathan Abourbih : https://github.com/jonbca
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -36653,7 +36818,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 148 */
+/* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -36665,7 +36830,7 @@ var DDFCsvReader =
 	//! author : Chris Gedrim : https://github.com/chrisgedrim
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -36722,7 +36887,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 149 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -36734,7 +36899,7 @@ var DDFCsvReader =
 	//! author : Chris Cartlidge : https://github.com/chriscartlidge
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -36791,7 +36956,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 150 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -36802,7 +36967,7 @@ var DDFCsvReader =
 	//! locale : English (New Zealand) [en-nz]
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -36859,7 +37024,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 151 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -36873,7 +37038,7 @@ var DDFCsvReader =
 	//!          Se ne, bonvolu korekti kaj avizi min por ke mi povas lerni!
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -36937,7 +37102,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 152 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -36949,7 +37114,7 @@ var DDFCsvReader =
 	//! author : Julio Napurí : https://github.com/julionc
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -37023,7 +37188,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 153 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -37034,7 +37199,7 @@ var DDFCsvReader =
 	//! locale : Spanish (Dominican Republic) [es-do]
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -37108,7 +37273,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 154 */
+/* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -37121,7 +37286,7 @@ var DDFCsvReader =
 	//! improvements : Illimar Tambek : https://github.com/ragulka
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -37193,7 +37358,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 155 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -37205,7 +37370,7 @@ var DDFCsvReader =
 	//! author : Eneko Illarramendi : https://github.com/eillarra
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -37264,7 +37429,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 156 */
+/* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -37276,7 +37441,7 @@ var DDFCsvReader =
 	//! author : Ebrahim Byagowi : https://github.com/ebraminio
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -37377,7 +37542,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 157 */
+/* 158 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -37389,7 +37554,7 @@ var DDFCsvReader =
 	//! author : Tarmo Aidantausta : https://github.com/bleadof
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -37486,7 +37651,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 158 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -37498,7 +37663,7 @@ var DDFCsvReader =
 	//! author : Ragnar Johannesen : https://github.com/ragnar123
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -37551,7 +37716,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 159 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -37563,7 +37728,7 @@ var DDFCsvReader =
 	//! author : John Fischer : https://github.com/jfroffice
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -37620,7 +37785,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 160 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -37632,7 +37797,7 @@ var DDFCsvReader =
 	//! author : Jonathan Abourbih : https://github.com/jonbca
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -37685,7 +37850,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 161 */
+/* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -37697,7 +37862,7 @@ var DDFCsvReader =
 	//! author : Gaspard Bucher : https://github.com/gaspard
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -37754,7 +37919,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 162 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -37766,7 +37931,7 @@ var DDFCsvReader =
 	//! author : Robin van der Vliet : https://github.com/robin0van0der0v
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -37832,7 +37997,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 163 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -37844,7 +38009,7 @@ var DDFCsvReader =
 	//! author : Jon Ashdown : https://github.com/jonashdown
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -37911,7 +38076,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 164 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -37923,7 +38088,7 @@ var DDFCsvReader =
 	//! author : Juan G. Hurtado : https://github.com/juanghurtado
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -37993,7 +38158,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 165 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -38007,7 +38172,7 @@ var DDFCsvReader =
 	//! author : Tal Ater : https://github.com/TalAter
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -38098,7 +38263,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 166 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -38110,7 +38275,7 @@ var DDFCsvReader =
 	//! author : Mayank Singhal : https://github.com/mayanksinghal
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -38227,7 +38392,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 167 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -38239,7 +38404,7 @@ var DDFCsvReader =
 	//! author : Bojan Marković : https://github.com/bmarkovic
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -38377,7 +38542,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 168 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -38389,7 +38554,7 @@ var DDFCsvReader =
 	//! author : Adam Brunner : https://github.com/adambrunner
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -38491,7 +38656,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 169 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -38503,7 +38668,7 @@ var DDFCsvReader =
 	//! author : Armendarabyan : https://github.com/armendarabyan
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -38592,7 +38757,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 170 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -38605,7 +38770,7 @@ var DDFCsvReader =
 	//! reference: http://id.wikisource.org/wiki/Pedoman_Umum_Ejaan_Bahasa_Indonesia_yang_Disempurnakan
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -38680,7 +38845,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 171 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -38692,7 +38857,7 @@ var DDFCsvReader =
 	//! author : Hinrik Örn Sigurðsson : https://github.com/hinrik
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -38812,7 +38977,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 172 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -38825,7 +38990,7 @@ var DDFCsvReader =
 	//! author: Mattia Larentis: https://github.com/nostalgiaz
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -38887,7 +39052,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 173 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -38899,7 +39064,7 @@ var DDFCsvReader =
 	//! author : LI Long : https://github.com/baryon
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -38968,7 +39133,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 174 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -38981,7 +39146,7 @@ var DDFCsvReader =
 	//! reference: http://jv.wikipedia.org/wiki/Basa_Jawa
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -39056,7 +39221,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 175 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -39068,7 +39233,7 @@ var DDFCsvReader =
 	//! author : Irakli Janiashvili : https://github.com/irakli-janiashvili
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -39149,7 +39314,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 176 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -39161,7 +39326,7 @@ var DDFCsvReader =
 	//! authors : Nurlan Rakhimzhanov : https://github.com/nurlan
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -39241,7 +39406,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 177 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -39253,7 +39418,7 @@ var DDFCsvReader =
 	//! author : Kruy Vanna : https://github.com/kruyvanna
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -39304,7 +39469,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 178 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -39320,7 +39485,7 @@ var DDFCsvReader =
 	//! - Jeeeyul Lee <jeeeyul@gmail.com>
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -39377,7 +39542,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 179 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -39389,7 +39554,7 @@ var DDFCsvReader =
 	//! author : Chyngyz Arystan uulu : https://github.com/chyngyz
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -39469,7 +39634,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 180 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -39481,7 +39646,7 @@ var DDFCsvReader =
 	//! author : mweimerskirch : https://github.com/mweimerskirch, David Raison : https://github.com/kwisatz
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -39611,7 +39776,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 181 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -39623,7 +39788,7 @@ var DDFCsvReader =
 	//! author : Ryan Hart : https://github.com/ryanhart2
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -39686,7 +39851,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 182 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -39698,7 +39863,7 @@ var DDFCsvReader =
 	//! author : Mindaugas Mozūras : https://github.com/mmozuras
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -39808,7 +39973,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 183 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -39821,7 +39986,7 @@ var DDFCsvReader =
 	//! author : Jānis Elmeris : https://github.com/JanisE
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -39910,7 +40075,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 184 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -39922,7 +40087,7 @@ var DDFCsvReader =
 	//! author : Miodrag Nikač <miodrag@restartit.me> : https://github.com/miodragnikac
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -40018,7 +40183,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 185 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -40030,7 +40195,7 @@ var DDFCsvReader =
 	//! author : Borislav Mickov : https://github.com/B0k0
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -40113,7 +40278,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 186 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -40125,7 +40290,7 @@ var DDFCsvReader =
 	//! author : Floyd Pink : https://github.com/floydpink
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -40197,7 +40362,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 187 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -40210,7 +40375,7 @@ var DDFCsvReader =
 	//! author : Vivek Athalye : https://github.com/vnathalye
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -40381,7 +40546,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 188 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -40393,7 +40558,7 @@ var DDFCsvReader =
 	//! author : Weldan Jamili : https://github.com/weldan
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -40468,7 +40633,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -40481,7 +40646,7 @@ var DDFCsvReader =
 	//! author : Weldan Jamili : https://github.com/weldan
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -40556,7 +40721,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -40568,7 +40733,7 @@ var DDFCsvReader =
 	//! author : Squar team, mysquar.com
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -40655,7 +40820,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 191 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -40668,7 +40833,7 @@ var DDFCsvReader =
 	//!           Sigurd Gartmann : https://github.com/sigurdga
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -40723,7 +40888,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 192 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -40735,7 +40900,7 @@ var DDFCsvReader =
 	//! author : suvash : https://github.com/suvash
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -40851,7 +41016,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 193 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -40863,7 +41028,7 @@ var DDFCsvReader =
 	//! author : Joris Röling : https://github.com/jjupiter
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -40929,7 +41094,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -40941,7 +41106,7 @@ var DDFCsvReader =
 	//! author : https://github.com/mechuwind
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -40994,7 +41159,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -41006,7 +41171,7 @@ var DDFCsvReader =
 	//! author : Harpreet Singh : https://github.com/harpreetkhalsagtbit
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -41123,7 +41288,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -41135,7 +41300,7 @@ var DDFCsvReader =
 	//! author : Rafal Hirsz : https://github.com/evoL
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -41233,7 +41398,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -41245,7 +41410,7 @@ var DDFCsvReader =
 	//! author : Jefferson : https://github.com/jalex79
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -41302,7 +41467,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -41314,7 +41479,7 @@ var DDFCsvReader =
 	//! author : Caio Ribeiro Pereira : https://github.com/caio-ribeiro-pereira
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -41367,7 +41532,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 199 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -41380,7 +41545,7 @@ var DDFCsvReader =
 	//! author : Valentin Agachi : https://github.com/avaly
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -41447,7 +41612,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 200 */
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -41461,7 +41626,7 @@ var DDFCsvReader =
 	//! author : Коренберг Марк : https://github.com/socketpair
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -41635,7 +41800,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 201 */
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -41647,7 +41812,7 @@ var DDFCsvReader =
 	//! authors : Bård Rolstad Henriksen : https://github.com/karamell
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -41700,7 +41865,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 202 */
+/* 203 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -41712,7 +41877,7 @@ var DDFCsvReader =
 	//! author : Sampath Sitinamaluwa : https://github.com/sampathsris
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -41777,7 +41942,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 203 */
+/* 204 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -41790,7 +41955,7 @@ var DDFCsvReader =
 	//! based on work of petrbela : https://github.com/petrbela
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -41943,7 +42108,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 204 */
+/* 205 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -41955,7 +42120,7 @@ var DDFCsvReader =
 	//! author : Robert Sedovšek : https://github.com/sedovsek
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -42110,7 +42275,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 205 */
+/* 206 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -42124,7 +42289,7 @@ var DDFCsvReader =
 	//! author : Oerd Cukalla : https://github.com/oerd (fixes)
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -42185,7 +42350,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 206 */
+/* 207 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -42197,7 +42362,7 @@ var DDFCsvReader =
 	//! author : Milan Janačković<milanjanackovic@gmail.com> : https://github.com/milan-j
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -42292,7 +42457,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 207 */
+/* 208 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -42304,7 +42469,7 @@ var DDFCsvReader =
 	//! author : Milan Janačković<milanjanackovic@gmail.com> : https://github.com/milan-j
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -42399,7 +42564,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 208 */
+/* 209 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -42411,7 +42576,7 @@ var DDFCsvReader =
 	//! author : Nicolai Davies<mail@nicolai.io> : https://github.com/nicolaidavies
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -42492,7 +42657,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 209 */
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -42504,7 +42669,7 @@ var DDFCsvReader =
 	//! author : Jens Alm : https://github.com/ulmus
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -42563,7 +42728,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 210 */
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -42575,7 +42740,7 @@ var DDFCsvReader =
 	//! author : Fahad Kassim : https://github.com/fadsel
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -42627,7 +42792,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -42639,7 +42804,7 @@ var DDFCsvReader =
 	//! author : Arjunkumar Krishnamoorthy : https://github.com/tk120404
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -42762,7 +42927,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -42774,7 +42939,7 @@ var DDFCsvReader =
 	//! author : Krishna Chaitanya Thota : https://github.com/kcthota
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -42856,7 +43021,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -42868,7 +43033,7 @@ var DDFCsvReader =
 	//! author : Kridsada Thanabulpong : https://github.com/sirn
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -42928,7 +43093,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -42940,7 +43105,7 @@ var DDFCsvReader =
 	//! author : Dan Hagman
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -42995,7 +43160,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 215 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -43007,7 +43172,7 @@ var DDFCsvReader =
 	//! author : Dominika Kruk : https://github.com/amaranthrose
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -43108,7 +43273,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 216 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -43121,7 +43286,7 @@ var DDFCsvReader =
 	//!           Burak Yiğit Kaya: https://github.com/BYK
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -43204,7 +43369,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 217 */
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -43216,7 +43381,7 @@ var DDFCsvReader =
 	//! author : Robin van der Vliet : https://github.com/robin0van0der0v with the help of Iustì Canun
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -43300,7 +43465,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 218 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -43312,7 +43477,7 @@ var DDFCsvReader =
 	//! author : Abdel Said : https://github.com/abdelsaid
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -43363,7 +43528,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 219 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -43375,7 +43540,7 @@ var DDFCsvReader =
 	//! author : Abdel Said : https://github.com/abdelsaid
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -43426,7 +43591,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 220 */
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -43439,7 +43604,7 @@ var DDFCsvReader =
 	//! Author : Menelion Elensúle : https://github.com/Oire
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -43572,7 +43737,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 221 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -43584,7 +43749,7 @@ var DDFCsvReader =
 	//! author : Sardor Muminov : https://github.com/muminoff
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -43635,7 +43800,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 222 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -43647,7 +43812,7 @@ var DDFCsvReader =
 	//! author : Bang Nguyen : https://github.com/bangnk
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -43720,7 +43885,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 223 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -43732,7 +43897,7 @@ var DDFCsvReader =
 	//! author : Andrew Hood : https://github.com/andrewhood125
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -43790,7 +43955,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 224 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -43803,7 +43968,7 @@ var DDFCsvReader =
 	//! author : Zeno Zeng : https://github.com/zenozeng
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -43921,7 +44086,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 225 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -43934,7 +44099,7 @@ var DDFCsvReader =
 	//! author : Chris Lam : https://github.com/hehachris
 	
 	;(function (global, factory) {
-	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(123)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(123)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(124)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(124)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
 	})(undefined, function (moment) {
 	    'use strict';
 	
@@ -44030,7 +44195,7 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 226 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -44041,7 +44206,6 @@ var DDFCsvReader =
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var lodash_1 = __webpack_require__(3);
-	var shared_1 = __webpack_require__(7);
 	
 	var DataPointSchemaAdapter = function () {
 	    function DataPointSchemaAdapter(contentManager, reader, ddfPath) {
@@ -44061,11 +44225,65 @@ var DDFCsvReader =
 	    }, {
 	        key: "getExpectedSchemaDetails",
 	        value: function getExpectedSchemaDetails(request, dataPackageContent) {
-	            return shared_1.getSchemaDetailsByKey(request, dataPackageContent, 'datapoints');
+	            this.baseData = [];
+	            this.dataPointsFromDataPackage = dataPackageContent.resources.filter(function (record) {
+	                return lodash_1.isArray(record.schema.primaryKey);
+	            });
+	            var _iteratorNormalCompletion = true;
+	            var _didIteratorError = false;
+	            var _iteratorError = undefined;
+	
+	            try {
+	                for (var _iterator = this.dataPointsFromDataPackage[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                    var record = _step.value;
+	
+	                    var measures = this.getMeasures(record);
+	                    var _iteratorNormalCompletion2 = true;
+	                    var _didIteratorError2 = false;
+	                    var _iteratorError2 = undefined;
+	
+	                    try {
+	                        for (var _iterator2 = measures[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                            var measure = _step2.value;
+	
+	                            this.baseData.push({ key: record.schema.primaryKey, value: measure });
+	                        }
+	                    } catch (err) {
+	                        _didIteratorError2 = true;
+	                        _iteratorError2 = err;
+	                    } finally {
+	                        try {
+	                            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                                _iterator2.return();
+	                            }
+	                        } finally {
+	                            if (_didIteratorError2) {
+	                                throw _iteratorError2;
+	                            }
+	                        }
+	                    }
+	                }
+	            } catch (err) {
+	                _didIteratorError = true;
+	                _iteratorError = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion && _iterator.return) {
+	                        _iterator.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError) {
+	                        throw _iteratorError;
+	                    }
+	                }
+	            }
+	
+	            return this.dataPointsFromDataPackage;
 	        }
 	    }, {
 	        key: "getNormalizedRequest",
 	        value: function getNormalizedRequest(requestParam, onRequestNormalized) {
+	            this.request = requestParam;
 	            onRequestNormalized(null, requestParam);
 	        }
 	    }, {
@@ -44080,10 +44298,13 @@ var DDFCsvReader =
 	        value: function getFileActions(expectedFiles) {
 	            var _this = this;
 	
-	            return expectedFiles.map(function (file) {
+	            if (!this.request.select || lodash_1.isEmpty(this.request.select.value)) {
+	                return [];
+	            }
+	            return this.dataPointsFromDataPackage.map(function (record) {
 	                return function (onFileRead) {
-	                    _this.reader.getFileSchema("" + _this.ddfPath + file, function (err, data) {
-	                        return onFileRead(err, data);
+	                    _this.reader.readCSV("" + _this.ddfPath + record.path, function (err, data) {
+	                        onFileRead(err, []);
 	                    });
 	                };
 	            });
@@ -44091,7 +44312,16 @@ var DDFCsvReader =
 	    }, {
 	        key: "getFinalData",
 	        value: function getFinalData(results) {
-	            return results;
+	            return this.baseData;
+	        }
+	    }, {
+	        key: "getMeasures",
+	        value: function getMeasures(record) {
+	            return record.schema.fields.filter(function (field) {
+	                return !lodash_1.includes(record.schema.primaryKey, field.name);
+	            }).map(function (field) {
+	                return field.name;
+	            });
 	        }
 	    }]);
 	
@@ -44101,7 +44331,7 @@ var DDFCsvReader =
 	exports.DataPointSchemaAdapter = DataPointSchemaAdapter;
 
 /***/ },
-/* 227 */
+/* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -44114,8 +44344,8 @@ var DDFCsvReader =
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var lodash_1 = __webpack_require__(3);
-	var traverse = __webpack_require__(42);
-	var timeUtils = __webpack_require__(48);
+	var traverse = __webpack_require__(43);
+	var timeUtils = __webpack_require__(49);
 	var COMPARISONS_OPERATORS = ['$gt', '$gte', '$lt', '$lte'];
 	function getCorrectedTime(request, contentManager) {
 	    var requestToTraverse = traverse(request);
@@ -44257,7 +44487,7 @@ var DDFCsvReader =
 	exports.RequestNormalizer = RequestNormalizer;
 
 /***/ },
-/* 228 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -44268,8 +44498,8 @@ var DDFCsvReader =
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var lodash_1 = __webpack_require__(3);
-	var csvParse = __webpack_require__(229);
-	__webpack_require__(230);
+	var csvParse = __webpack_require__(230);
+	__webpack_require__(231);
 	
 	var FrontendFileReader = function () {
 	    function FrontendFileReader() {
@@ -44343,7 +44573,7 @@ var DDFCsvReader =
 	exports.FrontendFileReader = FrontendFileReader;
 
 /***/ },
-/* 229 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer, process) {'use strict';
@@ -44903,7 +45133,7 @@ var DDFCsvReader =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19).Buffer, __webpack_require__(14)))
 
 /***/ },
-/* 230 */
+/* 231 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -45263,7 +45493,7 @@ var DDFCsvReader =
 	})();
 
 /***/ },
-/* 231 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45271,7 +45501,7 @@ var DDFCsvReader =
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var lodash_1 = __webpack_require__(3);
 	var ddf_1 = __webpack_require__(1);
-	var Promise = __webpack_require__(232);
+	var Promise = __webpack_require__(233);
 	function prepareDDFCsvReaderObject(defaultFileReader) {
 	    return function (externalFileReader, logger) {
 	        return {
@@ -45332,7 +45562,7 @@ var DDFCsvReader =
 	exports.prepareDDFCsvReaderObject = prepareDDFCsvReaderObject;
 
 /***/ },
-/* 232 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45345,12 +45575,12 @@ var DDFCsvReader =
 	    } catch (e) {}
 	    return bluebird;
 	}
-	var bluebird = __webpack_require__(233)();
+	var bluebird = __webpack_require__(234)();
 	bluebird.noConflict = noConflict;
 	module.exports = bluebird;
 
 /***/ },
-/* 233 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -45367,7 +45597,7 @@ var DDFCsvReader =
 	    };
 	    function Proxyable() {}
 	    var UNDEFINED_BINDING = {};
-	    var util = __webpack_require__(234);
+	    var util = __webpack_require__(235);
 	
 	    var getDomain;
 	    if (util.isNode) {
@@ -45383,11 +45613,11 @@ var DDFCsvReader =
 	    }
 	    util.notEnumerableProp(Promise, "_getDomain", getDomain);
 	
-	    var es5 = __webpack_require__(235);
-	    var Async = __webpack_require__(236);
+	    var es5 = __webpack_require__(236);
+	    var Async = __webpack_require__(237);
 	    var async = new Async();
 	    es5.defineProperty(Promise, "_async", { value: async });
-	    var errors = __webpack_require__(239);
+	    var errors = __webpack_require__(240);
 	    var TypeError = Promise.TypeError = errors.TypeError;
 	    Promise.RangeError = errors.RangeError;
 	    var CancellationError = Promise.CancellationError = errors.CancellationError;
@@ -45398,16 +45628,16 @@ var DDFCsvReader =
 	    var INTERNAL = function INTERNAL() {};
 	    var APPLY = {};
 	    var NEXT_FILTER = {};
-	    var tryConvertToPromise = __webpack_require__(240)(Promise, INTERNAL);
-	    var PromiseArray = __webpack_require__(241)(Promise, INTERNAL, tryConvertToPromise, apiRejection, Proxyable);
-	    var Context = __webpack_require__(242)(Promise);
+	    var tryConvertToPromise = __webpack_require__(241)(Promise, INTERNAL);
+	    var PromiseArray = __webpack_require__(242)(Promise, INTERNAL, tryConvertToPromise, apiRejection, Proxyable);
+	    var Context = __webpack_require__(243)(Promise);
 	    /*jshint unused:false*/
 	    var createContext = Context.create;
-	    var debug = __webpack_require__(243)(Promise, Context);
+	    var debug = __webpack_require__(244)(Promise, Context);
 	    var CapturedTrace = debug.CapturedTrace;
-	    var PassThroughHandlerContext = __webpack_require__(244)(Promise, tryConvertToPromise, NEXT_FILTER);
-	    var catchFilter = __webpack_require__(245)(NEXT_FILTER);
-	    var nodebackForPromise = __webpack_require__(246);
+	    var PassThroughHandlerContext = __webpack_require__(245)(Promise, tryConvertToPromise, NEXT_FILTER);
+	    var catchFilter = __webpack_require__(246)(NEXT_FILTER);
+	    var nodebackForPromise = __webpack_require__(247);
 	    var errorObj = util.errorObj;
 	    var tryCatch = util.tryCatch;
 	    function check(self, executor) {
@@ -46042,29 +46272,29 @@ var DDFCsvReader =
 	
 	    util.notEnumerableProp(Promise, "_makeSelfResolutionError", makeSelfResolutionError);
 	
-	    __webpack_require__(247)(Promise, INTERNAL, tryConvertToPromise, apiRejection, debug);
-	    __webpack_require__(248)(Promise, INTERNAL, tryConvertToPromise, debug);
-	    __webpack_require__(249)(Promise, PromiseArray, apiRejection, debug);
-	    __webpack_require__(250)(Promise);
+	    __webpack_require__(248)(Promise, INTERNAL, tryConvertToPromise, apiRejection, debug);
+	    __webpack_require__(249)(Promise, INTERNAL, tryConvertToPromise, debug);
+	    __webpack_require__(250)(Promise, PromiseArray, apiRejection, debug);
 	    __webpack_require__(251)(Promise);
-	    __webpack_require__(252)(Promise, PromiseArray, tryConvertToPromise, INTERNAL, async, getDomain);
+	    __webpack_require__(252)(Promise);
+	    __webpack_require__(253)(Promise, PromiseArray, tryConvertToPromise, INTERNAL, async, getDomain);
 	    Promise.Promise = Promise;
 	    Promise.version = "3.5.0";
-	    __webpack_require__(253)(Promise, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug);
-	    __webpack_require__(254)(Promise);
-	    __webpack_require__(255)(Promise, apiRejection, tryConvertToPromise, createContext, INTERNAL, debug);
-	    __webpack_require__(256)(Promise, INTERNAL, debug);
-	    __webpack_require__(257)(Promise, apiRejection, INTERNAL, tryConvertToPromise, Proxyable, debug);
-	    __webpack_require__(258)(Promise);
-	    __webpack_require__(259)(Promise, INTERNAL);
-	    __webpack_require__(260)(Promise, PromiseArray, tryConvertToPromise, apiRejection);
-	    __webpack_require__(261)(Promise, INTERNAL, tryConvertToPromise, apiRejection);
-	    __webpack_require__(262)(Promise, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug);
-	    __webpack_require__(263)(Promise, PromiseArray, debug);
-	    __webpack_require__(264)(Promise, PromiseArray, apiRejection);
-	    __webpack_require__(265)(Promise, INTERNAL);
+	    __webpack_require__(254)(Promise, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug);
+	    __webpack_require__(255)(Promise);
+	    __webpack_require__(256)(Promise, apiRejection, tryConvertToPromise, createContext, INTERNAL, debug);
+	    __webpack_require__(257)(Promise, INTERNAL, debug);
+	    __webpack_require__(258)(Promise, apiRejection, INTERNAL, tryConvertToPromise, Proxyable, debug);
+	    __webpack_require__(259)(Promise);
+	    __webpack_require__(260)(Promise, INTERNAL);
+	    __webpack_require__(261)(Promise, PromiseArray, tryConvertToPromise, apiRejection);
+	    __webpack_require__(262)(Promise, INTERNAL, tryConvertToPromise, apiRejection);
+	    __webpack_require__(263)(Promise, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug);
+	    __webpack_require__(264)(Promise, PromiseArray, debug);
+	    __webpack_require__(265)(Promise, PromiseArray, apiRejection);
 	    __webpack_require__(266)(Promise, INTERNAL);
-	    __webpack_require__(267)(Promise);
+	    __webpack_require__(267)(Promise, INTERNAL);
+	    __webpack_require__(268)(Promise);
 	
 	    util.toFastProperties(Promise);
 	    util.toFastProperties(Promise.prototype);
@@ -46091,14 +46321,14 @@ var DDFCsvReader =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 234 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {"use strict";
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
-	var es5 = __webpack_require__(235);
+	var es5 = __webpack_require__(236);
 	var canEvaluate = typeof navigator == "undefined";
 	
 	var errorObj = { e: {} };
@@ -46460,7 +46690,7 @@ var DDFCsvReader =
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(14)))
 
 /***/ },
-/* 235 */
+/* 236 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -46546,7 +46776,7 @@ var DDFCsvReader =
 	}
 
 /***/ },
-/* 236 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -46557,9 +46787,9 @@ var DDFCsvReader =
 	} catch (e) {
 	    firstLineError = e;
 	}
-	var schedule = __webpack_require__(237);
-	var Queue = __webpack_require__(238);
-	var util = __webpack_require__(234);
+	var schedule = __webpack_require__(238);
+	var Queue = __webpack_require__(239);
+	var util = __webpack_require__(235);
 	
 	function Async() {
 	    this._customScheduler = false;
@@ -46718,12 +46948,12 @@ var DDFCsvReader =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 237 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process, setImmediate) {"use strict";
 	
-	var util = __webpack_require__(234);
+	var util = __webpack_require__(235);
 	var schedule;
 	var noAsyncScheduler = function noAsyncScheduler() {
 	    throw new Error("No async scheduler available\n\n    See http://goo.gl/MqrFmX\n");
@@ -46784,7 +47014,7 @@ var DDFCsvReader =
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(14), __webpack_require__(28).setImmediate))
 
 /***/ },
-/* 238 */
+/* 239 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -46863,14 +47093,14 @@ var DDFCsvReader =
 	module.exports = Queue;
 
 /***/ },
-/* 239 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var es5 = __webpack_require__(235);
+	var es5 = __webpack_require__(236);
 	var Objectfreeze = es5.freeze;
-	var util = __webpack_require__(234);
+	var util = __webpack_require__(235);
 	var inherits = util.inherits;
 	var notEnumerableProp = util.notEnumerableProp;
 	
@@ -46981,13 +47211,13 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 240 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, INTERNAL) {
-	    var util = __webpack_require__(234);
+	    var util = __webpack_require__(235);
 	    var errorObj = util.errorObj;
 	    var isObject = util.isObject;
 	
@@ -47067,13 +47297,13 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 241 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, INTERNAL, tryConvertToPromise, apiRejection, Proxyable) {
-	    var util = __webpack_require__(234);
+	    var util = __webpack_require__(235);
 	    var isArray = util.isArray;
 	
 	    function toResolutionValue(val) {
@@ -47252,7 +47482,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 242 */
+/* 243 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -47329,7 +47559,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 243 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -47339,8 +47569,8 @@ var DDFCsvReader =
 	module.exports = function (Promise, Context) {
 	    var getDomain = Promise._getDomain;
 	    var async = Promise._async;
-	    var Warning = __webpack_require__(239).Warning;
-	    var util = __webpack_require__(234);
+	    var Warning = __webpack_require__(240).Warning;
+	    var util = __webpack_require__(235);
 	    var canAttachTrace = util.canAttachTrace;
 	    var unhandledRejectionHandled;
 	    var possiblyUnhandledRejection;
@@ -48211,16 +48441,16 @@ var DDFCsvReader =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 244 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, tryConvertToPromise, NEXT_FILTER) {
-	    var util = __webpack_require__(234);
+	    var util = __webpack_require__(235);
 	    var CancellationError = Promise.CancellationError;
 	    var errorObj = util.errorObj;
-	    var catchFilter = __webpack_require__(245)(NEXT_FILTER);
+	    var catchFilter = __webpack_require__(246)(NEXT_FILTER);
 	
 	    function PassThroughHandlerContext(promise, type, handler) {
 	        this.promise = promise;
@@ -48340,14 +48570,14 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 245 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (NEXT_FILTER) {
-	    var util = __webpack_require__(234);
-	    var getKeys = __webpack_require__(235).keys;
+	    var util = __webpack_require__(235);
+	    var getKeys = __webpack_require__(236).keys;
 	    var tryCatch = util.tryCatch;
 	    var errorObj = util.errorObj;
 	
@@ -48387,16 +48617,16 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 246 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var util = __webpack_require__(234);
+	var util = __webpack_require__(235);
 	var maybeWrapAsError = util.maybeWrapAsError;
-	var errors = __webpack_require__(239);
+	var errors = __webpack_require__(240);
 	var OperationalError = errors.OperationalError;
-	var es5 = __webpack_require__(235);
+	var es5 = __webpack_require__(236);
 	
 	function isUntypedError(obj) {
 	    return obj instanceof Error && es5.getPrototypeOf(obj) === Error.prototype;
@@ -48445,13 +48675,13 @@ var DDFCsvReader =
 	module.exports = nodebackForPromise;
 
 /***/ },
-/* 247 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, INTERNAL, tryConvertToPromise, apiRejection, debug) {
-	    var util = __webpack_require__(234);
+	    var util = __webpack_require__(235);
 	    var tryCatch = util.tryCatch;
 	
 	    Promise.method = function (fn) {
@@ -48502,7 +48732,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 248 */
+/* 249 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -48574,13 +48804,13 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 249 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, PromiseArray, apiRejection, debug) {
-	    var util = __webpack_require__(234);
+	    var util = __webpack_require__(235);
 	    var tryCatch = util.tryCatch;
 	    var errorObj = util.errorObj;
 	    var async = Promise._async;
@@ -48707,7 +48937,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 250 */
+/* 251 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -48757,7 +48987,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 251 */
+/* 252 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -48863,13 +49093,13 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 252 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, PromiseArray, tryConvertToPromise, INTERNAL, async, getDomain) {
-	    var util = __webpack_require__(234);
+	    var util = __webpack_require__(235);
 	    var canEvaluate = util.canEvaluate;
 	    var tryCatch = util.tryCatch;
 	    var errorObj = util.errorObj;
@@ -49029,7 +49259,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 253 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49038,7 +49268,7 @@ var DDFCsvReader =
 	
 	module.exports = function (Promise, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug) {
 	    var getDomain = Promise._getDomain;
-	    var util = __webpack_require__(234);
+	    var util = __webpack_require__(235);
 	    var tryCatch = util.tryCatch;
 	    var errorObj = util.errorObj;
 	    var async = Promise._async;
@@ -49186,7 +49416,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 254 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49199,7 +49429,7 @@ var DDFCsvReader =
 	}
 	
 	module.exports = function (Promise) {
-	    var util = __webpack_require__(234);
+	    var util = __webpack_require__(235);
 	    var canEvaluate = util.canEvaluate;
 	    var isIdentifier = util.isIdentifier;
 	
@@ -49316,15 +49546,15 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, apiRejection, tryConvertToPromise, createContext, INTERNAL, debug) {
-	    var util = __webpack_require__(234);
-	    var TypeError = __webpack_require__(239).TypeError;
-	    var inherits = __webpack_require__(234).inherits;
+	    var util = __webpack_require__(235);
+	    var TypeError = __webpack_require__(240).TypeError;
+	    var inherits = __webpack_require__(235).inherits;
 	    var errorObj = util.errorObj;
 	    var tryCatch = util.tryCatch;
 	    var NULL = {};
@@ -49533,13 +49763,13 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, INTERNAL, debug) {
-	    var util = __webpack_require__(234);
+	    var util = __webpack_require__(235);
 	    var TimeoutError = Promise.TimeoutError;
 	
 	    function HandleWrapper(handle) {
@@ -49632,15 +49862,15 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, apiRejection, INTERNAL, tryConvertToPromise, Proxyable, debug) {
-	    var errors = __webpack_require__(239);
+	    var errors = __webpack_require__(240);
 	    var TypeError = errors.TypeError;
-	    var util = __webpack_require__(234);
+	    var util = __webpack_require__(235);
 	    var errorObj = util.errorObj;
 	    var tryCatch = util.tryCatch;
 	    var yieldHandlers = [];
@@ -49835,13 +50065,13 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise) {
-	    var util = __webpack_require__(234);
+	    var util = __webpack_require__(235);
 	    var async = Promise._async;
 	    var tryCatch = util.tryCatch;
 	    var errorObj = util.errorObj;
@@ -49889,7 +50119,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 259 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49898,12 +50128,12 @@ var DDFCsvReader =
 	
 	module.exports = function (Promise, INTERNAL) {
 	    var THIS = {};
-	    var util = __webpack_require__(234);
-	    var nodebackForPromise = __webpack_require__(246);
+	    var util = __webpack_require__(235);
+	    var nodebackForPromise = __webpack_require__(247);
 	    var withAppended = util.withAppended;
 	    var maybeWrapAsError = util.maybeWrapAsError;
 	    var canEvaluate = util.canEvaluate;
-	    var TypeError = __webpack_require__(239).TypeError;
+	    var TypeError = __webpack_require__(240).TypeError;
 	    var defaultSuffix = "Async";
 	    var defaultPromisified = { __isPromisified__: true };
 	    var noCopyProps = ["arity", "length", "name", "arguments", "caller", "callee", "prototype", "__isPromisified__"];
@@ -50156,15 +50386,15 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 260 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, PromiseArray, tryConvertToPromise, apiRejection) {
-	    var util = __webpack_require__(234);
+	    var util = __webpack_require__(235);
 	    var isObject = util.isObject;
-	    var es5 = __webpack_require__(235);
+	    var es5 = __webpack_require__(236);
 	    var Es6Map;
 	    if (typeof Map === "function") Es6Map = Map;
 	
@@ -50278,13 +50508,13 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 261 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, INTERNAL, tryConvertToPromise, apiRejection) {
-	    var util = __webpack_require__(234);
+	    var util = __webpack_require__(235);
 	
 	    var raceLater = function raceLater(promise) {
 	        return promise.then(function (array) {
@@ -50330,14 +50560,14 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 262 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug) {
 	    var getDomain = Promise._getDomain;
-	    var util = __webpack_require__(234);
+	    var util = __webpack_require__(235);
 	    var tryCatch = util.tryCatch;
 	
 	    function ReductionPromiseArray(promises, fn, initialValue, _each) {
@@ -50493,14 +50723,14 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 263 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, PromiseArray, debug) {
 	    var PromiseInspection = Promise.PromiseInspection;
-	    var util = __webpack_require__(234);
+	    var util = __webpack_require__(235);
 	
 	    function SettledPromiseArray(values) {
 	        this.constructor$(values);
@@ -50541,15 +50771,15 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 264 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, PromiseArray, apiRejection) {
-	    var util = __webpack_require__(234);
-	    var RangeError = __webpack_require__(239).RangeError;
-	    var AggregateError = __webpack_require__(239).AggregateError;
+	    var util = __webpack_require__(235);
+	    var RangeError = __webpack_require__(240).RangeError;
+	    var AggregateError = __webpack_require__(240).AggregateError;
 	    var isArray = util.isArray;
 	    var CANCELLATION = {};
 	
@@ -50689,7 +50919,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 265 */
+/* 266 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -50707,7 +50937,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 266 */
+/* 267 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -50740,7 +50970,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 267 */
+/* 268 */
 /***/ function(module, exports) {
 
 	"use strict";

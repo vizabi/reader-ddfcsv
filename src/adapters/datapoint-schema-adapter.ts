@@ -1,8 +1,18 @@
-import { cloneDeep, isArray, isEmpty, includes } from 'lodash';
+import { cloneDeep, isArray, isEmpty, includes, head, flatten } from 'lodash';
+import { parallelLimit } from 'async';
 import { ContentManager } from '../content-manager';
 import { IReader } from '../file-readers/reader';
 import { RequestNormalizer } from '../request-normalizer';
 import { IDdfAdapter } from './adapter';
+
+const Mingo = require('mingo');
+
+export class DataPointDescriptor {
+  public files: string[] = [];
+
+  constructor(public primaryKey: string[], public measure: string) {
+  }
+}
 
 export class DataPointSchemaAdapter implements IDdfAdapter {
   public contentManager: ContentManager;
@@ -11,7 +21,7 @@ export class DataPointSchemaAdapter implements IDdfAdapter {
   public requestNormalizer: RequestNormalizer;
   public request;
   public baseData: any[];
-  public dataPointsFromDataPackage: any[];
+  public dataPointDescriptors: DataPointDescriptor[];
 
   constructor(contentManager, reader, ddfPath) {
     this.contentManager = contentManager;
@@ -27,17 +37,31 @@ export class DataPointSchemaAdapter implements IDdfAdapter {
 
   getExpectedSchemaDetails(request, dataPackageContent) {
     this.baseData = [];
-    this.dataPointsFromDataPackage = dataPackageContent.resources.filter(record => isArray(record.schema.primaryKey));
 
-    for (let record of this.dataPointsFromDataPackage) {
-      const measures = this.getMeasures(record);
+    const dataPointsFromDataPackage = dataPackageContent.resources.filter(record => isArray(record.schema.primaryKey));
+    const dataPointsDescriptorsMap = new Map();
 
-      for (let measure of measures) {
-        this.baseData.push({key: record.schema.primaryKey, value: measure});
+    for (let record of dataPointsFromDataPackage) {
+      const measure = head(this.getMeasures(record));
+      const dpHash = `${record.schema.primaryKey}@${measure}`;
+
+      if (!dataPointsDescriptorsMap.has(dpHash)) {
+        const dataPointDescriptor = new DataPointDescriptor(record.schema.primaryKey, measure);
+
+        dataPointDescriptor.files = [record.path];
+        dataPointsDescriptorsMap.set(dpHash, dataPointDescriptor);
+      } else {
+        dataPointsDescriptorsMap.get(dpHash).files.push(record.path);
       }
     }
 
-    return this.dataPointsFromDataPackage;
+    this.dataPointDescriptors = Array.from(dataPointsDescriptorsMap.values());
+
+    for (let dataPointDescriptor of this.dataPointDescriptors) {
+      this.baseData.push({key: dataPointDescriptor.primaryKey, value: dataPointDescriptor.measure});
+    }
+
+    return [];
   }
 
   getNormalizedRequest(requestParam, onRequestNormalized) {
@@ -55,22 +79,64 @@ export class DataPointSchemaAdapter implements IDdfAdapter {
       return [];
     }
 
-    return this.dataPointsFromDataPackage.map(record => onFileRead => {
-      this.reader.readCSV(`${this.ddfPath}${record.path}`, (err, data) => {
-        // console.log(`${this.ddfPath}${record.path}`, data);
-        // console.log(`${this.ddfPath}${record.path}`, this.getMeasures(record));
+    const fileActions = this.dataPointDescriptors.map(dataPointDescriptor => onDataPointsProcessed => {
+      const FILES_TO_PROCESS = 10;
+      const fileActions = dataPointDescriptor.files.map(file => onFileRead => {
+        this.reader.readCSV(`${this.ddfPath}${file}`, onFileRead);
+      });
 
-        onFileRead(err, []);
+      parallelLimit(fileActions, FILES_TO_PROCESS, (err, results) => {
+        if (err) {
+          onDataPointsProcessed(err);
+          return;
+        }
+
+        const data = flatten(results);
+        const group = {_id: null};
+
+        for (let value of this.request.select.value) {
+          group[value] = {[`$${this.getFunction(value)}`]: `$${dataPointDescriptor.measure}`};
+        }
+
+        const aggregatedResult = Mingo.aggregate(data, [{$group: group}]);
+        const result = aggregatedResult.map(record => this.getResultRowByAggregation(record, dataPointDescriptor));
+
+        onDataPointsProcessed(null, result);
       });
     });
+
+    return fileActions;
   }
 
   getFinalData(results) {
-    return this.baseData;
+    if (isEmpty(results)) {
+      return this.baseData;
+    } else {
+      this.baseData = [];
+
+      return results;
+    }
   }
 
   private getMeasures(record: any): string[] {
     return record.schema.fields.filter(field =>
       !includes(record.schema.primaryKey, field.name)).map(field => field.name);
+  }
+
+  private getFunction(expression: string): string {
+    const expressionRegex = /([a-z]+)\(.+\)/;
+    const match = expressionRegex.exec(expression);
+
+    return match[1];
+  }
+
+  private getResultRowByAggregation(record: any, dataPointDescriptor: DataPointDescriptor): any {
+    const result = {key: dataPointDescriptor.primaryKey, value: dataPointDescriptor.measure};
+
+    for (let value of this.request.select.value) {
+      result[value] = record[value];
+    }
+
+    return result;
   }
 }

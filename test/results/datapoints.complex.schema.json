@@ -1,0 +1,5832 @@
+[
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "20120905_extreme_poverty_percent_people_below_125_a_day",
+      "min(value)": "0",
+      "max(value)": "92.55"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "adults_with_hiv_percent_age_15_49",
+      "min(value)": "0.00951",
+      "max(value)": "9.8"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "age_at_1st_marriage_women",
+      "min(value)": "12.5",
+      "max(value)": "33.66"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "aged_15_24_employment_rate_percent",
+      "min(value)": "11.3",
+      "max(value)": "81.2"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "aged_15_24_unemployment_rate_percent",
+      "min(value)": "10",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "aged_15_64_labour_force_participation_rate_percent",
+      "min(value)": "39.2",
+      "max(value)": "92.4"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "aged_15plus_employment_rate_percent",
+      "min(value)": "26.6",
+      "max(value)": "87.7"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "aged_15plus_labour_force_participation_rate_percent",
+      "min(value)": "37.5",
+      "max(value)": "91.6"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "aged_15plus_unemployment_rate_percent",
+      "min(value)": "1.1",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "aged_25_54_labour_force_participation_rate_percent",
+      "min(value)": "48.7",
+      "max(value)": "97.3"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "aged_25_54_unemployment_rate_percent",
+      "min(value)": "0.7",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "aged_55plus_unemployment_rate_percent",
+      "min(value)": "0.5",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "aged_65plus_labour_force_participation_rate_percent",
+      "min(value)": "0.5",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "agricultural_land_percent_of_land_area",
+      "min(value)": "0",
+      "max(value)": "91.32"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "agricultural_water_withdrawal_percent_of_total",
+      "min(value)": "0.017",
+      "max(value)": "99.4"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "agriculture_percent_of_gdp",
+      "min(value)": "0",
+      "max(value)": "94.85"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "agriculture_workers_percent_of_labour_force",
+      "min(value)": "0",
+      "max(value)": "90.1"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "aid_given_2007_us",
+      "min(value)": "100000000",
+      "max(value)": "9993000000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "aid_given_per_person_2007_us",
+      "min(value)": "0.1915",
+      "max(value)": "99.92"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "aid_given_percent_of_gni",
+      "min(value)": "0",
+      "max(value)": "1.36"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "aid_received_per_person_current_us",
+      "min(value)": "-0.00482",
+      "max(value)": "993"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "aid_received_percent_of_gni",
+      "min(value)": "-0.00054",
+      "max(value)": "99.51"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "aid_received_total_us_inflation_adjusted",
+      "min(value)": "-10170000",
+      "max(value)": "99990000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "alcohol_consumption_per_adult_15plus_litres",
+      "min(value)": "0.02",
+      "max(value)": "9.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "all_causes_deaths_in_children_1_59_months_per_1000_births",
+      "min(value)": "1.027",
+      "max(value)": "99.03"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "all_causes_deaths_in_children_1_59_months_total_deaths",
+      "min(value)": "101",
+      "max(value)": "94060"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "all_causes_deaths_in_newborn_per_1000_births",
+      "min(value)": "0.9171",
+      "max(value)": "9.911"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "all_causes_deaths_in_newborn_total_deaths",
+      "min(value)": "1004000",
+      "max(value)": "9971"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "all_forms_of_tb_deaths_per_100000_estimated",
+      "min(value)": "0",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "all_forms_of_tb_detection_rate_percent",
+      "min(value)": "0",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "all_forms_of_tb_detection_rate_percent_dots_only",
+      "min(value)": "0",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "all_forms_of_tb_existing_cases_per_100000_estimated",
+      "min(value)": "0",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "all_forms_of_tb_new_cases_per_100000_estimated",
+      "min(value)": "0",
+      "max(value)": "994"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "all_forms_of_tb_new_cases_per_100000_reported",
+      "min(value)": "0",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "all_forms_of_tb_number_of_deaths_estimated",
+      "min(value)": "0",
+      "max(value)": "9980"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "all_forms_of_tb_number_of_existing_cases_estimated",
+      "min(value)": "0",
+      "max(value)": "9984"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "all_forms_of_tb_number_of_new_cases_estimated",
+      "min(value)": "0",
+      "max(value)": "9998"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "all_forms_of_tb_number_of_new_cases_reported",
+      "min(value)": "0",
+      "max(value)": "999"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "alternative_gdp_per_capita_ppp_pwt_7_1",
+      "min(value)": "1000",
+      "max(value)": "9998"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "alternative_gdp_per_capita_ppp_pwt_8_0",
+      "min(value)": "1001",
+      "max(value)": "999.8"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "alternative_gdp_per_capita_ppp_wb",
+      "min(value)": "100.9",
+      "max(value)": "9999"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "alternative_gdppercapita_ppp_inflation_adjusted_from_pwt",
+      "min(value)": "1000",
+      "max(value)": "9996"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "alternative_poverty_percent_below_nationally_defined_poverty",
+      "min(value)": "12.2",
+      "max(value)": "9.8"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "annual_hiv_deaths_number_all_ages",
+      "min(value)": "1000",
+      "max(value)": "99000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "armed_forces_personnel_percent_of_labor_force",
+      "min(value)": "0",
+      "max(value)": "9.82"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "armed_forces_personnel_total",
+      "min(value)": "0",
+      "max(value)": "99600"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "arms_exports_us_inflation_adjusted",
+      "min(value)": "0",
+      "max(value)": "998000000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "arms_imports_us_inflation_adjusted",
+      "min(value)": "0",
+      "max(value)": "998000000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "art_coverage_percent_cd4_l_350",
+      "min(value)": "0",
+      "max(value)": "95"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "average_age_of_dollar_billionaires_years",
+      "min(value)": "0",
+      "max(value)": "79"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "bad_teeth_per_child_12_yr",
+      "min(value)": "0.2",
+      "max(value)": "6.3"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "battle_deaths_per_100_000",
+      "min(value)": "0",
+      "max(value)": "91.81"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "biomass_stock_in_forest_tons",
+      "min(value)": "10000000",
+      "max(value)": "9000000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "birth_asphyxia_deaths_in_newborn_per_1000_births",
+      "min(value)": "0",
+      "max(value)": "9.978"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "birth_asphyxia_deaths_in_newborn_total_deaths",
+      "min(value)": "0",
+      "max(value)": "995"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "births_attended_by_skilled_health_staff_percent_of_total",
+      "min(value)": "10.9",
+      "max(value)": "99.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "blood_pressure_sbp_men_mmhg",
+      "min(value)": "118.5",
+      "max(value)": "143.1"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "blood_pressure_sbp_women_mmhg",
+      "min(value)": "110.3",
+      "max(value)": "139.5"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "body_mass_index_bmi_men_kgperm2",
+      "min(value)": "19.01",
+      "max(value)": "33.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "body_mass_index_bmi_women_kgperm2",
+      "min(value)": "18.47",
+      "max(value)": "35.02"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "breast_cancer_deaths_per_100000_women",
+      "min(value)": "0.06",
+      "max(value)": "9.96"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "breast_cancer_new_cases_per_100000_women",
+      "min(value)": "10.3",
+      "max(value)": "92.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "breast_cancer_number_of_female_deaths",
+      "min(value)": "1003",
+      "max(value)": "989"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "breast_cancer_number_of_new_female_cases",
+      "min(value)": "100",
+      "max(value)": "98"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "broadband_subscribers",
+      "min(value)": "0",
+      "max(value)": "9995"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "broadband_subscribers_per_100_people",
+      "min(value)": "0",
+      "max(value)": "9.985"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "burns_deaths_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "9.987"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "car_deaths_per_100000_people",
+      "min(value)": "0.113",
+      "max(value)": "9.997"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "cars_trucks_and_buses_per_1000_persons",
+      "min(value)": "0.2955",
+      "max(value)": "97.32"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "cell_phones_per_100_people",
+      "min(value)": "0",
+      "max(value)": "99.96"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "cell_phones_total",
+      "min(value)": "0",
+      "max(value)": "99920000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "central_bank_discount_rate_annual_percent",
+      "min(value)": "0",
+      "max(value)": "96"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "cervical_cancer_deaths_per_100000_women",
+      "min(value)": "0.15",
+      "max(value)": "9.98"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "cervical_cancer_new_cases_per_100000_women",
+      "min(value)": "10",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "cervical_cancer_number_of_female_deaths",
+      "min(value)": "10",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "cervical_cancer_number_of_new_female_cases",
+      "min(value)": "1032",
+      "max(value)": "9922"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "child_mortality_0_5_year_olds_dying_per_1000_born",
+      "min(value)": "1.9",
+      "max(value)": "99.93"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "child_mortality_0_5_year_olds_more_years_version_7",
+      "min(value)": "10",
+      "max(value)": "99.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "children_and_elderly_per_100_adults",
+      "min(value)": "100.1",
+      "max(value)": "99.94"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "children_out_of_school_primary",
+      "min(value)": "0",
+      "max(value)": "9984"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "children_out_of_school_primary_female",
+      "min(value)": "1",
+      "max(value)": "999"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "children_out_of_school_primary_male",
+      "min(value)": "1",
+      "max(value)": "999800"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "children_per_woman_temporary_update",
+      "min(value)": "0.836",
+      "max(value)": "8.512"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "children_per_woman_total_fertility",
+      "min(value)": "0.84",
+      "max(value)": "9.22"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "children_per_woman_total_fertility_with_projections",
+      "min(value)": "0.836",
+      "max(value)": "9.223"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "cholesterol_fat_in_blood_men_mmolperl",
+      "min(value)": "3.728",
+      "max(value)": "6.243"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "cholesterol_fat_in_blood_women_mmolperl",
+      "min(value)": "3.974",
+      "max(value)": "6.2"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "co2_emissions_tonnes_per_person",
+      "min(value)": "0",
+      "max(value)": "99.83136"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "co2_intensity_of_economic_output_kg_co2_per_2005_ppp_of_gdp",
+      "min(value)": "0.0013",
+      "max(value)": "4.219"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "coal_consumption_per_cap",
+      "min(value)": "0.00024",
+      "max(value)": "3.936"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "coal_consumption_total",
+      "min(value)": "100000",
+      "max(value)": "99960000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "colonandrectum_cancer_deaths_per_100000_men",
+      "min(value)": "0.34",
+      "max(value)": "9.8"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "colonandrectum_cancer_deaths_per_100000_women",
+      "min(value)": "0.5",
+      "max(value)": "9.98"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "colonandrectum_cancer_new_cases_per_100000_men",
+      "min(value)": "1",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "colonandrectum_cancer_new_cases_per_100000_women",
+      "min(value)": "0.9",
+      "max(value)": "9.93"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "colonandrectum_cancer_number_of_female_deaths",
+      "min(value)": "0",
+      "max(value)": "986"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "colonandrectum_cancer_number_of_male_deaths",
+      "min(value)": "10",
+      "max(value)": "987"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "colonandrectum_cancer_number_of_new_female_cases",
+      "min(value)": "1",
+      "max(value)": "98"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "colonandrectum_cancer_number_of_new_male_cases",
+      "min(value)": "10",
+      "max(value)": "97"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "congenital_deaths_in_newborn_per_1000_births",
+      "min(value)": "0",
+      "max(value)": "6.116"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "congenital_deaths_in_newborn_total_deaths",
+      "min(value)": "0",
+      "max(value)": "985"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "contraceptive_use_percent_of_women_ages_15_49",
+      "min(value)": "0.8",
+      "max(value)": "96"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "corruption_perception_index_cpi",
+      "min(value)": "1.1",
+      "max(value)": "9.4"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "crude_birth_rate_births_per_1000_population",
+      "min(value)": "10",
+      "max(value)": "9.992"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "crude_death_rate_deaths_per_1000_population",
+      "min(value)": "1.508",
+      "max(value)": "9.999"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "cumulative_co2_emissions_tonnes",
+      "min(value)": "0",
+      "max(value)": "99986333"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "data_method_maternal_mortality",
+      "min(value)": "1",
+      "max(value)": "8"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "data_quality_children_per_woman",
+      "min(value)": "1",
+      "max(value)": "5"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "data_quality_income_per_person",
+      "min(value)": "0",
+      "max(value)": "5"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "data_quality_life_expectancy",
+      "min(value)": "1",
+      "max(value)": "4"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "data_quality_population",
+      "min(value)": "2",
+      "max(value)": "5"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "dead_kids_per_woman",
+      "min(value)": "0.01641",
+      "max(value)": "5.552"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "debt_servicing_costs_percent_of_exports_and_net_income_from_abroad",
+      "min(value)": "0",
+      "max(value)": "95.07"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "debt_to_foreigners_by_public_and_private_percent_of_gni",
+      "min(value)": "0",
+      "max(value)": "99.74"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "democracy_score_use_as_color",
+      "min(value)": "-1",
+      "max(value)": "9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "desalinated_water_produced_billion_cu_meters",
+      "min(value)": "0.00005",
+      "max(value)": "1.328"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "diarrhoeal_deaths_in_children_1_59_months_per_1000_births",
+      "min(value)": "0",
+      "max(value)": "9.901"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "diarrhoeal_deaths_in_children_1_59_months_total_deaths",
+      "min(value)": "0",
+      "max(value)": "9908"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "diarrhoeal_deaths_in_newborn_per_1000_births",
+      "min(value)": "0",
+      "max(value)": "2.378"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "diarrhoeal_deaths_in_newborn_total_deaths",
+      "min(value)": "0",
+      "max(value)": "940"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "dollar_billionaires_per_million_people",
+      "min(value)": "0",
+      "max(value)": "6.624"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "drought_affected_annual_number",
+      "min(value)": "0",
+      "max(value)": "986200"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "drought_deaths_annual_number",
+      "min(value)": "0",
+      "max(value)": "9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "drownings_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "9.949"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "dtp3_immunized_percent_of_one_year_olds",
+      "min(value)": "0",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "earthquake_affected_annual_number",
+      "min(value)": "0",
+      "max(value)": "9589"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "earthquake_deaths_annual_number",
+      "min(value)": "0",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "economic_growth_over_the_past_10_years",
+      "min(value)": "-0.00248",
+      "max(value)": "9.783"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "economical_infrastructure_aid_given_percent_of_aid",
+      "min(value)": "0.0476",
+      "max(value)": "92.29"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "education_aid_given_percent_of_aid",
+      "min(value)": "0.5299",
+      "max(value)": "95.8"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "electricity_generation_per_person",
+      "min(value)": "10020",
+      "max(value)": "9994"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "electricity_generation_total",
+      "min(value)": "100300000000",
+      "max(value)": "9998000000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "electricity_use_per_person",
+      "min(value)": "10.26",
+      "max(value)": "9998"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "electricity_use_total",
+      "min(value)": "10000000000",
+      "max(value)": "998800000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "energy_from_solid_biofuels_percent",
+      "min(value)": "0",
+      "max(value)": "93.48"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "energy_production_per_person",
+      "min(value)": "0",
+      "max(value)": "0.2097"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "energy_production_total",
+      "min(value)": "0",
+      "max(value)": "9998"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "energy_supply_per_person_toe",
+      "min(value)": "0.1417",
+      "max(value)": "8.334"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "energy_use_per_person",
+      "min(value)": "0.00902",
+      "max(value)": "9.986"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "energy_use_total",
+      "min(value)": "10000",
+      "max(value)": "99940000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "epidemic_affected_annual_number",
+      "min(value)": "0",
+      "max(value)": "992"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "epidemic_deaths_annual_number",
+      "min(value)": "0",
+      "max(value)": "990"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "estimate_or_projection_of_under_five_mortality_rate_from_ihme",
+      "min(value)": "1",
+      "max(value)": "2"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "expenditure_per_student_primary_percent_of_gdp_per_person",
+      "min(value)": "1.066",
+      "max(value)": "9.976"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "expenditure_per_student_secondary_percent_of_gdp_per_person",
+      "min(value)": "10.02",
+      "max(value)": "9.974"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "expenditure_per_student_tertiary_percent_of_gdp_per_person",
+      "min(value)": "0",
+      "max(value)": "99.64"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "exports_percent_of_gdp",
+      "min(value)": "0.183",
+      "max(value)": "99.79"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "exports_unit_value_index_2000100",
+      "min(value)": "0.7137",
+      "max(value)": "99.97"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "external_debt_total_us_not_inflation_adjusted",
+      "min(value)": "0",
+      "max(value)": "99980000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "extreme_poverty_percent_people_below_125_a_day",
+      "min(value)": "0",
+      "max(value)": "94.64"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "extreme_temperature_affected_annual_number",
+      "min(value)": "0",
+      "max(value)": "965"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "extreme_temperature_deaths_annual_number",
+      "min(value)": "0",
+      "max(value)": "965"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "falls_deaths_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "9.775"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "family_workers_percent_of_labour_force",
+      "min(value)": "0",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "female_agriculture_workers_percent_of_female_labour_force",
+      "min(value)": "0",
+      "max(value)": "95.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "female_family_workers_percent_of_female_labour_force",
+      "min(value)": "0",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "female_industry_workers_percent_of_female_labour_force",
+      "min(value)": "0.5",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "female_long_term_unemployment_rate_percent",
+      "min(value)": "0",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "female_population_with_projections",
+      "min(value)": "1000000",
+      "max(value)": "999700"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "female_salaried_workers_percent_of_female_labour_force",
+      "min(value)": "0.8",
+      "max(value)": "99.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "female_self_employed_percent_of_female_labour_force",
+      "min(value)": "0",
+      "max(value)": "96.1"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "female_service_workers_percent_of_female_labour_force",
+      "min(value)": "11",
+      "max(value)": "98.5"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "females_aged_15_24_employment_rate_percent",
+      "min(value)": "10",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "females_aged_15_24_unemployment_rate_percent",
+      "min(value)": "10",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "females_aged_15_64_labour_force_participation_rate_percent",
+      "min(value)": "10.2",
+      "max(value)": "92.2"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "females_aged_15plus_employment_rate_percent",
+      "min(value)": "10.1",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "females_aged_15plus_labour_force_participation_rate_percent",
+      "min(value)": "10.1",
+      "max(value)": "91.1"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "females_aged_15plus_unemployment_rate_percent",
+      "min(value)": "1",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "females_aged_25_54_labour_force_participation_rate_percent",
+      "min(value)": "10.2",
+      "max(value)": "96.4"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "females_aged_25_54_unemployment_rate_percent",
+      "min(value)": "0.6",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "females_aged_55plus_unemployment_rate_percent",
+      "min(value)": "0",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "females_aged_65plus_labour_force_participation_rate_percent",
+      "min(value)": "0.1",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "fixed_line_and_mobile_phone_subscribers_per_100_people",
+      "min(value)": "0.01166",
+      "max(value)": "99.81"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "flood_affected_annual_number",
+      "min(value)": "0",
+      "max(value)": "9981"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "flood_deaths_annual_number",
+      "min(value)": "0",
+      "max(value)": "98"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "food_supply_kilocalories_per_person_and_day",
+      "min(value)": "1418",
+      "max(value)": "3819"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "foreign_direct_investment_net_inflows_percent_of_gdp",
+      "min(value)": "-0.00011",
+      "max(value)": "90.74"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "foreign_direct_investment_net_outflows_percent_of_gdp",
+      "min(value)": "-0.00054",
+      "max(value)": "9.887"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "forest_area_sq_km",
+      "min(value)": "0",
+      "max(value)": "9980"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "forest_coverage_percent",
+      "min(value)": "0.03",
+      "max(value)": "98.89"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "forest_land_total_area_ha",
+      "min(value)": "1000",
+      "max(value)": "9979000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "forest_products_removal_per_ha_dollar",
+      "min(value)": "1",
+      "max(value)": "96"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "forest_products_removal_total_dollar",
+      "min(value)": "102000",
+      "max(value)": "97630000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "gapminder_gini",
+      "min(value)": "16.2",
+      "max(value)": "74.3"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "gdp_per_capita_yearly_growth",
+      "min(value)": "-0.00009",
+      "max(value)": "95.08"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "gdp_total_yearly_growth",
+      "min(value)": "-0.00086",
+      "max(value)": "95.58"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "gdppercapita_growth_over_next_10_years",
+      "min(value)": "-0.00001",
+      "max(value)": "9.96"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "gdppercapita_growth_percent_per_year",
+      "min(value)": "-0.00019",
+      "max(value)": "92.59"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "gdppercapita_us_inflation_adjusted",
+      "min(value)": "100.1",
+      "max(value)": "9980"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "gdpperemployee_us_inflation_adjusted",
+      "min(value)": "10030",
+      "max(value)": "9990"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "gdpperworking_hour_us_inflation_adjusted",
+      "min(value)": "10",
+      "max(value)": "9.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "gnipercapita_atlasmethod_current_us",
+      "min(value)": "100",
+      "max(value)": "9994"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "gnipercapita_constant_2000_us",
+      "min(value)": "1001",
+      "max(value)": "9995"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "gnipercapita_ppp_current_international",
+      "min(value)": "1000",
+      "max(value)": "9990"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "government_and_society_aid_given_percent_of_aid",
+      "min(value)": "0.00897",
+      "max(value)": "9.965"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "government_health_spending_of_total_gov_spending_percent",
+      "min(value)": "0.1",
+      "max(value)": "9.997"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "government_health_spending_per_person_international_dollar",
+      "min(value)": "0.12",
+      "max(value)": "998.2"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "government_health_spending_per_person_us",
+      "min(value)": "0.03",
+      "max(value)": "99.92"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "government_share_of_total_health_spending_percent",
+      "min(value)": "0.39",
+      "max(value)": "99.91"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "hdi_human_development_index",
+      "min(value)": "0.174",
+      "max(value)": "0.943"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "health_aid_given_percent_of_aid",
+      "min(value)": "0.03834",
+      "max(value)": "9.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "hepb3_immunized_percent_of_one_year_olds",
+      "min(value)": "1",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "hib3_immunized_percent_of_one_year_olds",
+      "min(value)": "0",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "high_technology_exports_percent_of_manufactured_exports",
+      "min(value)": "0",
+      "max(value)": "9.994"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "hiv_deaths_in_children_1_59_months_per_1000_births",
+      "min(value)": "0",
+      "max(value)": "8.405"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "hiv_deaths_in_children_1_59_months_total_deaths",
+      "min(value)": "0",
+      "max(value)": "995"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "hourly_compensation_us",
+      "min(value)": "0.21",
+      "max(value)": "9.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "how_far_to_the_north",
+      "min(value)": "-0.513",
+      "max(value)": "9.941"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "hydro_power_generation_per_person",
+      "min(value)": "0.00001",
+      "max(value)": "3.439"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "hydro_power_generation_total",
+      "min(value)": "100000",
+      "max(value)": "999900"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "ifpri_underweight_children",
+      "min(value)": "0.2",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "imports_percent_of_gdp",
+      "min(value)": "0.06735",
+      "max(value)": "99.92"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "imports_unit_value_index_2000100",
+      "min(value)": "10.05",
+      "max(value)": "99.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "improved_sanitation_overall_access_percent",
+      "min(value)": "10",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "improved_sanitation_rural_access_percent",
+      "min(value)": "0",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "improved_sanitation_urban_access_percent",
+      "min(value)": "10",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "improved_water_source_overall_access_percent",
+      "min(value)": "10",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "improved_water_source_rural_access_percent",
+      "min(value)": "1",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "improved_water_source_urban_access_percent",
+      "min(value)": "100",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "income_per_person_gdppercapita_ppp_inflation_adjusted",
+      "min(value)": "1000",
+      "max(value)": "99995"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "income_per_person_long_series",
+      "min(value)": "1000",
+      "max(value)": "9996"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "income_per_person_with_projections",
+      "min(value)": "1000",
+      "max(value)": "9998"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "income_share_of_2nd_poorest_20percent",
+      "min(value)": "10",
+      "max(value)": "9.96"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "income_share_of_2nd_richest_20percent",
+      "min(value)": "11.98",
+      "max(value)": "25.18"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "income_share_of_middle_20percent",
+      "min(value)": "10.12",
+      "max(value)": "9.96"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "income_share_of_poorest_10percent",
+      "min(value)": "-0.11",
+      "max(value)": "6.11"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "income_share_of_poorest_20percent",
+      "min(value)": "0.66",
+      "max(value)": "9.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "income_share_of_richest_10percent",
+      "min(value)": "17.49",
+      "max(value)": "65"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "income_share_of_richest_20percent",
+      "min(value)": "30.15",
+      "max(value)": "78.25"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "industrial_water_withdrawal_percent_of_total",
+      "min(value)": "0.06",
+      "max(value)": "9.8"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "industry_percent_of_gdp",
+      "min(value)": "1.882",
+      "max(value)": "95.71"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "industry_workers_percent_of_labour_force",
+      "min(value)": "10.1",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "inequality_index_gini",
+      "min(value)": "19.4",
+      "max(value)": "74.33"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "infant_mortality_rate_per_1000_births",
+      "min(value)": "1.5",
+      "max(value)": "99.91"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "infectious_tb_detection_rate_percent",
+      "min(value)": "0",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "infectious_tb_detection_rate_percent_dots_only",
+      "min(value)": "0",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "infectious_tb_new_cases_per_100000_estimated",
+      "min(value)": "0",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "infectious_tb_new_cases_per_100000_reported",
+      "min(value)": "0",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "infectious_tb_number_of_new_cases_estimated",
+      "min(value)": "0",
+      "max(value)": "9986"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "infectious_tb_number_of_new_cases_reported",
+      "min(value)": "0",
+      "max(value)": "9957"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "infectious_tb_treatment_dots_completed_percent",
+      "min(value)": "0",
+      "max(value)": "98"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "inflation_annual_percent",
+      "min(value)": "-0.00001",
+      "max(value)": "99.7"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "injury_deaths_in_children_1_59_months_per_1000_births",
+      "min(value)": "0",
+      "max(value)": "9.507"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "injury_deaths_in_children_1_59_months_total_deaths",
+      "min(value)": "0",
+      "max(value)": "993"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "internal_renewable_water_cu_meters_per_person",
+      "min(value)": "10.7",
+      "max(value)": "99920"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "internet_users_per_100_people",
+      "min(value)": "0",
+      "max(value)": "96.62"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "internet_users_total_number",
+      "min(value)": "0",
+      "max(value)": "9999"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "investments_percent_of_gdp",
+      "min(value)": "-0.6913",
+      "max(value)": "93.13"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "life_expectancy_at_birth_data_from_ihme",
+      "min(value)": "15.6",
+      "max(value)": "83.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "life_expectancy_at_birth_with_projections",
+      "min(value)": "1",
+      "max(value)": "95.64"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "life_expectancy_female",
+      "min(value)": "22.7",
+      "max(value)": "99.06"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "life_expectancy_male",
+      "min(value)": "16.46",
+      "max(value)": "92.3"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "life_expectancy_years",
+      "min(value)": "1",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "literacy_rate_adult_female_percent_of_females_ages_15_above",
+      "min(value)": "100",
+      "max(value)": "99.83"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "literacy_rate_adult_male_percent_of_males_ages_15_and_above",
+      "min(value)": "100",
+      "max(value)": "99.89"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "literacy_rate_adult_total_percent_of_people_ages_15_and_above",
+      "min(value)": "10.89",
+      "max(value)": "99.83"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "literacy_rate_youth_female_percent_of_females_ages_15_24",
+      "min(value)": "100",
+      "max(value)": "99.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "literacy_rate_youth_male_percent_of_males_ages_15_24",
+      "min(value)": "100",
+      "max(value)": "99.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "literacy_rate_youth_total_percent_of_people_ages_15_24",
+      "min(value)": "100",
+      "max(value)": "99.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "liver_cancer_deaths_per_100000_men",
+      "min(value)": "0.03",
+      "max(value)": "93.3"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "liver_cancer_deaths_per_100000_women",
+      "min(value)": "0.01",
+      "max(value)": "9.73"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "liver_cancer_new_cases_per_100000_men",
+      "min(value)": "0.5",
+      "max(value)": "98.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "liver_cancer_new_cases_per_100000_women",
+      "min(value)": "0.2",
+      "max(value)": "9.91"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "liver_cancer_number_of_female_deaths",
+      "min(value)": "1",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "liver_cancer_number_of_male_deaths",
+      "min(value)": "10",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "liver_cancer_number_of_new_female_cases",
+      "min(value)": "0",
+      "max(value)": "970"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "liver_cancer_number_of_new_male_cases",
+      "min(value)": "10",
+      "max(value)": "988"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "long_term_unemployment_rate_percent",
+      "min(value)": "0",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "lung_cancer_deaths_per_100000_men",
+      "min(value)": "0.26",
+      "max(value)": "9.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "lung_cancer_deaths_per_100000_women",
+      "min(value)": "0.1",
+      "max(value)": "9.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "lung_cancer_new_cases_per_100000_men",
+      "min(value)": "0.5",
+      "max(value)": "94.6"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "lung_cancer_new_cases_per_100000_women",
+      "min(value)": "0.1",
+      "max(value)": "9.91"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "lung_cancer_number_of_female_deaths",
+      "min(value)": "0",
+      "max(value)": "980"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "lung_cancer_number_of_male_deaths",
+      "min(value)": "1",
+      "max(value)": "963"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "lung_cancer_number_of_new_female_cases",
+      "min(value)": "0",
+      "max(value)": "998"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "lung_cancer_number_of_new_male_cases",
+      "min(value)": "1",
+      "max(value)": "974"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "malaria_cases_per_100000_reported",
+      "min(value)": "0",
+      "max(value)": "9986"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "malaria_deaths_in_children_1_59_months_per_1000_births",
+      "min(value)": "0",
+      "max(value)": "7.043"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "malaria_deaths_in_children_1_59_months_total_deaths",
+      "min(value)": "0",
+      "max(value)": "969"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "malaria_deaths_per_100000_reported",
+      "min(value)": "0",
+      "max(value)": "97.94"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "malaria_number_of_cases_reported",
+      "min(value)": "0",
+      "max(value)": "998100"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "malaria_number_of_deaths_reported",
+      "min(value)": "0",
+      "max(value)": "9958"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "male_agriculture_workers_percent_of_male_labour_force",
+      "min(value)": "0",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "male_family_workers_percent_of_male_labour_force",
+      "min(value)": "0",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "male_industry_workers_percent_of_male_labour_force",
+      "min(value)": "10",
+      "max(value)": "9.8"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "male_long_term_unemployment_rate_percent",
+      "min(value)": "0",
+      "max(value)": "9.8"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "male_population_with_projections",
+      "min(value)": "100000",
+      "max(value)": "9999000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "male_salaried_workers_percent_of_male_labour_force",
+      "min(value)": "11.3",
+      "max(value)": "98.7"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "male_self_employed_percent_of_male_labour_force",
+      "min(value)": "1.3",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "male_service_workers_percent_of_male_labour_force",
+      "min(value)": "10.5",
+      "max(value)": "84.4"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "males_aged_15_24_employment_rate_percent",
+      "min(value)": "13.4",
+      "max(value)": "83.4"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "males_aged_15_24_unemployment_rate_percent",
+      "min(value)": "10",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "males_aged_15_64_labour_force_participation_rate_percent",
+      "min(value)": "51.1",
+      "max(value)": "95"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "males_aged_15plus_employment_rate_percent",
+      "min(value)": "39.9",
+      "max(value)": "90.8"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "males_aged_15plus_labour_force_participation_rate_percent",
+      "min(value)": "48",
+      "max(value)": "94.5"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "males_aged_15plus_unemployment_rate_percent",
+      "min(value)": "1.1",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "males_aged_25_54_labour_force_participation_rate_percent",
+      "min(value)": "63.3",
+      "max(value)": "99.1"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "males_aged_25_54_unemployment_rate_percent",
+      "min(value)": "0.7",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "males_aged_55plus_unemployment_rate_percent",
+      "min(value)": "0.4",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "males_aged_65plus_labour_force_participation_rate_percent",
+      "min(value)": "0.9",
+      "max(value)": "99.6"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "malnutrition_weight_for_age_percent_of_children_under_5",
+      "min(value)": "0",
+      "max(value)": "9.8"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "market_value_of_listed_companies_percent_of_gdp",
+      "min(value)": "0.00414",
+      "max(value)": "99.53"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "maternal_deaths_lifetime_risk_per_1000",
+      "min(value)": "0.02101",
+      "max(value)": "90.91"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "maternal_deaths_total_number",
+      "min(value)": "0",
+      "max(value)": "999"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "maternal_mortality_ratio_per_100000_live_births",
+      "min(value)": "1",
+      "max(value)": "990"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "maternal_mortality_ratio_who",
+      "min(value)": "10",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "math_achievement_4th_grade",
+      "min(value)": "224",
+      "max(value)": "607"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "math_achievement_8th_grade",
+      "min(value)": "276",
+      "max(value)": "609"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "mcv_immunized_percent_of_one_year_olds",
+      "min(value)": "0",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "mean_years_in_school_men_25_to_34_years",
+      "min(value)": "0.4",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "mean_years_in_school_men_25_years_and_older",
+      "min(value)": "0.2",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "mean_years_in_school_women_25_to_34_years",
+      "min(value)": "0.1",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "mean_years_in_school_women_25_years_and_older",
+      "min(value)": "0",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "mean_years_in_school_women_of_reproductive_age_15_to_44",
+      "min(value)": "0.1",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "mean_years_in_school_women_percent_men_25_to_34_years",
+      "min(value)": "10",
+      "max(value)": "99.31"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "measles_deaths_in_children_1_59_months_per_1000_births",
+      "min(value)": "0",
+      "max(value)": "9.733"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "measles_deaths_in_children_1_59_months_total_deaths",
+      "min(value)": "0",
+      "max(value)": "98"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "median_age_years",
+      "min(value)": "14.34",
+      "max(value)": "55.78"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "medical_doctors_per_1000_people",
+      "min(value)": "0.0038",
+      "max(value)": "6.399"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "meningitis_deaths_in_children_1_59_months_per_1000_births",
+      "min(value)": "0",
+      "max(value)": "5.957"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "meningitis_deaths_in_children_1_59_months_total_deaths",
+      "min(value)": "0",
+      "max(value)": "973"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "merchandise_trade_percent_of_gdp",
+      "min(value)": "10.07",
+      "max(value)": "99.96"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "military_expenditure_percent_of_gdp",
+      "min(value)": "0.04642",
+      "max(value)": "9.813"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "motorcycle_deaths_per_100000_people",
+      "min(value)": "0.021",
+      "max(value)": "9.38"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "multisector_cross_cutting_aid_given_percent_of_aid",
+      "min(value)": "0.0035",
+      "max(value)": "9.97"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "municipal_water_withdrawal_cu_meters_per_person",
+      "min(value)": "1.334",
+      "max(value)": "99.8"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "municipal_water_withdrawal_percent_of_total",
+      "min(value)": "0.4",
+      "max(value)": "98.4"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "murder_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "90.93"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "murder_total_deaths",
+      "min(value)": "0",
+      "max(value)": "9989"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "murdered_15_29_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "94.41"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "murdered_30_44_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "95.91"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "murdered_45_59_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "91.44"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "murdered_60plus_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "9.976"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "murdered_children_0_14_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "7.444"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "murdered_men_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "99.13"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "murdered_women_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "9.938"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "natural_gas_production_per_person",
+      "min(value)": "0.00074",
+      "max(value)": "9.966"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "natural_gas_production_total",
+      "min(value)": "100000",
+      "max(value)": "9959000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "natural_gas_proved_reserves_total",
+      "min(value)": "10040000000",
+      "max(value)": "99900000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "natural_gas_proven_reserves_per_person",
+      "min(value)": "0.1967",
+      "max(value)": "997.2"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "ncd_deaths_in_children_1_59_months_per_1000_births",
+      "min(value)": "0.5277",
+      "max(value)": "9.522"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "ncd_deaths_in_children_1_59_months_total_deaths",
+      "min(value)": "10",
+      "max(value)": "975"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "net_barter_terms_of_trade_2000_100",
+      "min(value)": "100",
+      "max(value)": "99.95"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "new_births_total_number_estimated",
+      "min(value)": "10000",
+      "max(value)": "999800"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "newborn_deaths",
+      "min(value)": "0",
+      "max(value)": "9992"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "newborn_mortality_rate_per_1000",
+      "min(value)": "0.7",
+      "max(value)": "99.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "newly_hiv_infected_number_all_ages",
+      "min(value)": "1000",
+      "max(value)": "99000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "newly_hiv_infected_percent_age_15_49",
+      "min(value)": "0.06",
+      "max(value)": "5.87"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "nuclear_power_generation_per_person",
+      "min(value)": "0",
+      "max(value)": "0.766"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "nuclear_power_generation_total",
+      "min(value)": "0",
+      "max(value)": "999400"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "number_of_child_deaths",
+      "min(value)": "1",
+      "max(value)": "99980"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "number_of_people_in_poverty",
+      "min(value)": "0",
+      "max(value)": "99.98"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "oil_consumption_per_cap",
+      "min(value)": "0.01106",
+      "max(value)": "9.986"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "oil_consumption_total",
+      "min(value)": "10000000",
+      "max(value)": "99990000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "oil_production_per_person",
+      "min(value)": "0.00138",
+      "max(value)": "99.04"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "oil_production_total",
+      "min(value)": "0",
+      "max(value)": "9979000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "oil_proved_reserves_total",
+      "min(value)": "1004000000",
+      "max(value)": "99990000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "oil_proven_reserves_per_person",
+      "min(value)": "0.1085",
+      "max(value)": "99.5"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "old_version_of_income_per_person_version_3",
+      "min(value)": "1000",
+      "max(value)": "9999"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "old_version_of_income_per_person_version_8",
+      "min(value)": "1000",
+      "max(value)": "9995"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "other_deaths_in_newborn_per_1000_births",
+      "min(value)": "0",
+      "max(value)": "7.571"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "other_deaths_in_newborn_total_deaths",
+      "min(value)": "0",
+      "max(value)": "996"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "other_infections_deaths_in_children_1_59_months_per_1000_birt",
+      "min(value)": "0.08436",
+      "max(value)": "9.884"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "other_infections_deaths_in_children_1_59_months_total_deaths",
+      "min(value)": "1",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "other_social_services_aid_given_percent_of_aid",
+      "min(value)": "0.08078",
+      "max(value)": "96.34"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "out_of_pocket_share_of_total_health_spending_percent",
+      "min(value)": "0.7011",
+      "max(value)": "99.61"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "pab_immunized_percent_of_newborns",
+      "min(value)": "1",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "patent_applications_total",
+      "min(value)": "1",
+      "max(value)": "9976"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "patents_granted_total",
+      "min(value)": "1",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "patents_in_force_total",
+      "min(value)": "1",
+      "max(value)": "995"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "people_living_with_hiv_number_all_ages",
+      "min(value)": "10",
+      "max(value)": "990000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "personal_computers_per_100_people",
+      "min(value)": "0.01",
+      "max(value)": "94.58"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "personal_computers_total",
+      "min(value)": "10",
+      "max(value)": "996000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "pertussis_deaths_in_children_1_59_months_per_1000_births",
+      "min(value)": "0",
+      "max(value)": "8.573"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "pertussis_deaths_in_children_1_59_months_total_deaths",
+      "min(value)": "0",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "plane_crash_affected_annual_number",
+      "min(value)": "0",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "plane_crash_deaths_annual_number",
+      "min(value)": "0",
+      "max(value)": "98"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "planted_forest_area_ha",
+      "min(value)": "1000",
+      "max(value)": "99000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "pneumonia_deaths_in_children_1_59_months_per_1000_births",
+      "min(value)": "0",
+      "max(value)": "9.912"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "pneumonia_deaths_in_children_1_59_months_total_deaths",
+      "min(value)": "0",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "pneumonia_deaths_in_newborn_per_1000_births",
+      "min(value)": "0",
+      "max(value)": "9.531"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "pneumonia_deaths_in_newborn_total_deaths",
+      "min(value)": "0",
+      "max(value)": "990"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "poisonings_deaths_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "9.947"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_0_4_years_both_sexes_percent",
+      "min(value)": "10.01",
+      "max(value)": "9.997"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_0_4_years_female_percent",
+      "min(value)": "10",
+      "max(value)": "9.994"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_0_4_years_male_percent",
+      "min(value)": "10",
+      "max(value)": "9.997"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_0_4_years_total_number",
+      "min(value)": "10000",
+      "max(value)": "9997000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_10_14_years_both_sexes_percent",
+      "min(value)": "10",
+      "max(value)": "9.998"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_10_14_years_female_percent",
+      "min(value)": "10",
+      "max(value)": "9.995"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_10_14_years_male_percent",
+      "min(value)": "10",
+      "max(value)": "9.996"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_10_14_years_total_number",
+      "min(value)": "1000",
+      "max(value)": "99980000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_15_19_years_both_sexes_percent",
+      "min(value)": "10",
+      "max(value)": "9.998"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_15_19_years_female_percent",
+      "min(value)": "0",
+      "max(value)": "9.996"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_15_19_years_male_percent",
+      "min(value)": "10",
+      "max(value)": "9.999"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_15_19_years_total_number",
+      "min(value)": "1000",
+      "max(value)": "999000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_20_39_years_both_sexes_percent",
+      "min(value)": "17.69",
+      "max(value)": "54.34"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_20_39_years_female_percent",
+      "min(value)": "0",
+      "max(value)": "46.16"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_20_39_years_male_percent",
+      "min(value)": "12.5",
+      "max(value)": "58.7"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_20_39_years_total_number",
+      "min(value)": "10000",
+      "max(value)": "99910000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_40_59_years_both_sexes_percent",
+      "min(value)": "10",
+      "max(value)": "9.877"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_40_59_years_female_percent",
+      "min(value)": "0",
+      "max(value)": "9.919"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_40_59_years_male_percent",
+      "min(value)": "0",
+      "max(value)": "9.975"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_40_59_years_total_number",
+      "min(value)": "10000",
+      "max(value)": "9990000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_5_9_years_both_sexes_percent",
+      "min(value)": "10",
+      "max(value)": "9.997"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_5_9_years_female_percent",
+      "min(value)": "10",
+      "max(value)": "9.991"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_5_9_years_male_percent",
+      "min(value)": "10",
+      "max(value)": "9.995"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_5_9_years_total_number",
+      "min(value)": "10000",
+      "max(value)": "999000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_60plus_years_both_sexes_percent",
+      "min(value)": "0",
+      "max(value)": "9.995"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_60plus_years_female_percent",
+      "min(value)": "0",
+      "max(value)": "9.987"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_60plus_years_male_percent",
+      "min(value)": "0",
+      "max(value)": "9.994"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_aged_60plus_years_total_number",
+      "min(value)": "0",
+      "max(value)": "999000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_density_per_square_km",
+      "min(value)": "0.011",
+      "max(value)": "999.7"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_growth_annual_percent",
+      "min(value)": "-0.00147",
+      "max(value)": "9.877"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_growth_annual_percent_with_projections",
+      "min(value)": "-0.001",
+      "max(value)": "9.625"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_in_urban_agglomerations_m_1_million_percent_of_total",
+      "min(value)": "1.379",
+      "max(value)": "99.98"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_policies_aid_given_percent_of_aid",
+      "min(value)": "0.0002",
+      "max(value)": "9.739"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "population_total",
+      "min(value)": "0",
+      "max(value)": "9999617"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "poverty_percent_people_below_2_a_day",
+      "min(value)": "0",
+      "max(value)": "98.45"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "prematurity_deaths_in_newborn_per_1000_births",
+      "min(value)": "0",
+      "max(value)": "9.897"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "prematurity_deaths_in_newborn_total_deaths",
+      "min(value)": "0",
+      "max(value)": "98"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "present_value_of_debt_percent_of_gni",
+      "min(value)": "10.14",
+      "max(value)": "97.82"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "primary_completion_rate_total_percent_of_relevant_age_group",
+      "min(value)": "1.505",
+      "max(value)": "99.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "primary_forest_area_ha",
+      "min(value)": "1000",
+      "max(value)": "975000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "primary_school_completion_percent_of_boys",
+      "min(value)": "10.1",
+      "max(value)": "99.96"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "primary_school_completion_percent_of_girls",
+      "min(value)": "0.7114",
+      "max(value)": "99.98"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "private_share_of_total_health_spending_percent",
+      "min(value)": "0.09",
+      "max(value)": "99.61"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "privately_owned_forest_land_percent",
+      "min(value)": "0",
+      "max(value)": "97.3"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "privately_owned_other_wooded_land_percent",
+      "min(value)": "0",
+      "max(value)": "96"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "production_sector_aid_given_percent_of_aid",
+      "min(value)": "1.049",
+      "max(value)": "91.41"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "prostate_cancer_deaths_per_100000_men",
+      "min(value)": "0.01",
+      "max(value)": "9.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "prostate_cancer_new_cases_per_100000_men",
+      "min(value)": "0.3",
+      "max(value)": "99.7"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "prostate_cancer_number_of_male_deaths",
+      "min(value)": "1",
+      "max(value)": "9834"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "prostate_cancer_number_of_new_male_cases",
+      "min(value)": "1",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "pump_price_for_gasoline_us_per_liter",
+      "min(value)": "0",
+      "max(value)": "1.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "ratio_of_girls_to_boys_in_primary_and_secondary_education_perc",
+      "min(value)": "0",
+      "max(value)": "99.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "ratio_of_young_literate_females_to_males_percent_ages_15_24",
+      "min(value)": "100",
+      "max(value)": "99.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "renewable_water_cu_meters_per_person",
+      "min(value)": "10.04",
+      "max(value)": "9995"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "residential_electricity_use_per_person",
+      "min(value)": "1.733",
+      "max(value)": "999.6"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "residential_electricity_use_total",
+      "min(value)": "10000000",
+      "max(value)": "9993000000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "residential_energy_use_percent",
+      "min(value)": "0",
+      "max(value)": "98.3"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "roads_paved_percent_of_total_roads",
+      "min(value)": "0.8",
+      "max(value)": "99.2"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "rural_poverty_percent_rural_people_below_national_rural",
+      "min(value)": "11.6",
+      "max(value)": "83.5"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "salaried_workers_percent_of_labour_force",
+      "min(value)": "10.5",
+      "max(value)": "98.8"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "self_employed_percent_of_labour_force",
+      "min(value)": "0.9",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "sepsis_deaths_in_newborn_per_1000_births",
+      "min(value)": "0",
+      "max(value)": "9.859"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "sepsis_deaths_in_newborn_total_deaths",
+      "min(value)": "0",
+      "max(value)": "9713"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "service_workers_percent_of_labour_force",
+      "min(value)": "10.2",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "services_percent_of_gdp",
+      "min(value)": "10.26",
+      "max(value)": "92.57"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "sex_ratio_0_14_years",
+      "min(value)": "100",
+      "max(value)": "99.98"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "sex_ratio_15_24_years",
+      "min(value)": "100",
+      "max(value)": "99.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "sex_ratio_15_49_years",
+      "min(value)": "100",
+      "max(value)": "99.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "sex_ratio_above_50_years",
+      "min(value)": "100",
+      "max(value)": "99.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "sex_ratio_all_age_groups",
+      "min(value)": "100",
+      "max(value)": "99.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "smoking_adults_percent_of_population_over_age_15",
+      "min(value)": "10.7",
+      "max(value)": "9.4"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "smoking_men_percent_of_men_over_age_15",
+      "min(value)": "10.2",
+      "max(value)": "70.1"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "smoking_women_percent_of_women_over_age_15",
+      "min(value)": "0.3",
+      "max(value)": "9.8"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "stillbirths_per_1000_births",
+      "min(value)": "10.1",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "stomach_cancer_deaths_per_100000_men",
+      "min(value)": "0.09",
+      "max(value)": "92.51"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "stomach_cancer_deaths_per_100000_women",
+      "min(value)": "0.32",
+      "max(value)": "9.99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "stomach_cancer_new_cases_per_100000_men",
+      "min(value)": "0.6",
+      "max(value)": "9.8"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "stomach_cancer_new_cases_per_100000_women",
+      "min(value)": "0.6",
+      "max(value)": "9.92"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "stomach_cancer_number_of_female_deaths",
+      "min(value)": "10",
+      "max(value)": "9962"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "stomach_cancer_number_of_male_deaths",
+      "min(value)": "100",
+      "max(value)": "9659"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "stomach_cancer_number_of_new_female_cases",
+      "min(value)": "10",
+      "max(value)": "9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "stomach_cancer_number_of_new_male_cases",
+      "min(value)": "10",
+      "max(value)": "9850"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "storm_affected_annual_number",
+      "min(value)": "0",
+      "max(value)": "9910"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "storm_deaths_annual_number",
+      "min(value)": "0",
+      "max(value)": "999"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "subsistence_incomes_per_person",
+      "min(value)": "0.6182",
+      "max(value)": "99.97"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "sugar_per_person_g_per_day",
+      "min(value)": "0",
+      "max(value)": "98.63"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "suicide_age_0_14_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "3.229"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "suicide_age_15_29_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "9.998"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "suicide_age_30_44_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "9.984"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "suicide_age_45_59_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "94.88"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "suicide_age_60plus_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "93.8"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "suicide_men_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "9.999"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "suicide_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "9.996"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "suicide_total_deaths",
+      "min(value)": "0",
+      "max(value)": "9851"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "suicide_women_per_100000_people",
+      "min(value)": "0.02449",
+      "max(value)": "9.998"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "sulfur_emissions_per_person_kg",
+      "min(value)": "0",
+      "max(value)": "997.6"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "surface_area_sq_km",
+      "min(value)": "10",
+      "max(value)": "99900"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "surviving_kids_per_woman",
+      "min(value)": "0.4884",
+      "max(value)": "7.263"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "tax_revenue_percent_of_gdp",
+      "min(value)": "0.08581",
+      "max(value)": "9.996"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "tb_programme_dots_population_coverage_percent",
+      "min(value)": "0",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "tb_with_hivplus_deaths_per_100000_estimated",
+      "min(value)": "0",
+      "max(value)": "99.5"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "tb_with_hivplus_existing_cases_per_100000_estimated",
+      "min(value)": "0",
+      "max(value)": "99.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "tb_with_hivplus_new_cases_per_100000_estimated",
+      "min(value)": "0",
+      "max(value)": "98.2"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "tb_with_hivplus_number_of_deaths_estimated",
+      "min(value)": "0",
+      "max(value)": "99"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "tb_with_hivplus_number_of_existing_cases_estimated",
+      "min(value)": "0",
+      "max(value)": "995"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "tb_with_hivplus_number_of_new_cases_estimated",
+      "min(value)": "0",
+      "max(value)": "995"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "teen_fertility_rate_births_per_1000_women_ages_15_19",
+      "min(value)": "0.644",
+      "max(value)": "99.97"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "tetanus_deaths_in_newborn_per_1000_births",
+      "min(value)": "0",
+      "max(value)": "5.228"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "tetanus_deaths_in_newborn_total_deaths",
+      "min(value)": "0",
+      "max(value)": "9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "total_gdp_ppp_inflation_adjusted",
+      "min(value)": "10000000",
+      "max(value)": "999900000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "total_gdp_us_inflation_adjusted",
+      "min(value)": "10000000000",
+      "max(value)": "99990000000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "total_gni_ppp_current_international",
+      "min(value)": "1000000000",
+      "max(value)": "9997000000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "total_health_spending_per_person_international_dollar",
+      "min(value)": "10.03",
+      "max(value)": "999.5"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "total_health_spending_per_person_us",
+      "min(value)": "10.1",
+      "max(value)": "999.7"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "total_health_spending_percent_of_gdp",
+      "min(value)": "1.121",
+      "max(value)": "9.994"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "total_number_of_dollar_billionaires",
+      "min(value)": "0",
+      "max(value)": "9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "total_population_with_projections",
+      "min(value)": "0",
+      "max(value)": "99990000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "total_reserves_percent_of_debt_to_foreigners",
+      "min(value)": "-0.1685",
+      "max(value)": "99.91"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "total_sulfur_emission_kilotonnes",
+      "min(value)": "0",
+      "max(value)": "9996"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "total_water_withdrawal_billion_cu_meters",
+      "min(value)": "0.00337",
+      "max(value)": "96.8"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "trade_balance_percent_of_gdp",
+      "min(value)": "-0.00124",
+      "max(value)": "9.963"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "trade_balance_us_not_inflation_adjusted",
+      "min(value)": "-10000000",
+      "max(value)": "998000000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "traffic_deaths_men_per_100000_people",
+      "min(value)": "0.6444",
+      "max(value)": "94.76"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "traffic_deaths_per_100000_people",
+      "min(value)": "0.322",
+      "max(value)": "9.994"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "traffic_deaths_women_per_100000_people",
+      "min(value)": "0.3295",
+      "max(value)": "9.978"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "traffic_mortality_15_29_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "9.999"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "traffic_mortality_30_44_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "9.999"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "traffic_mortality_45_59_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "9.992"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "traffic_mortality_60plus_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "97.81"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "traffic_mortality_children_0_14_per_100000_people",
+      "min(value)": "0",
+      "max(value)": "9.994"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "traffic_total_deaths",
+      "min(value)": "1",
+      "max(value)": "999"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "tsunami_affected_annual_number",
+      "min(value)": "0",
+      "max(value)": "759"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "tsunami_deaths_annual_number",
+      "min(value)": "0",
+      "max(value)": "8345"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "under_five_mortality_from_cme_per_1000_born",
+      "min(value)": "1.8",
+      "max(value)": "99.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "under_five_mortality_from_ihme_per_1000_born",
+      "min(value)": "1.6",
+      "max(value)": "99.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "underweight_children",
+      "min(value)": "0.5",
+      "max(value)": "9.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "urban_population",
+      "min(value)": "10000",
+      "max(value)": "999700"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "urban_population_growth_annual_percent",
+      "min(value)": "-0.00375",
+      "max(value)": "9.954"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "urban_population_percent_of_total",
+      "min(value)": "10.02",
+      "max(value)": "99.98"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "urban_poverty_percent_urban_people_below_national_urban",
+      "min(value)": "10.8",
+      "max(value)": "9.6"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "water_and_sanitation_aid_given_percent_of_aid",
+      "min(value)": "0.00956",
+      "max(value)": "9.955"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "water_withdrawal_cu_meters_per_person",
+      "min(value)": "1004",
+      "max(value)": "992.9"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "wood_removal_cubic_meters",
+      "min(value)": "1000",
+      "max(value)": "9973000"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "working_hours_per_week",
+      "min(value)": "25.92",
+      "max(value)": "56.21"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "year_categorization_1820_2010",
+      "min(value)": "1820",
+      "max(value)": "2010"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "year_categorization_1950",
+      "min(value)": "1950",
+      "max(value)": "2008"
+    }
+  ],
+  [
+    {
+      "key": [
+        "geo",
+        "time"
+      ],
+      "value": "yearly_co2_emissions_1000_tonnes",
+      "min(value)": "0",
+      "max(value)": "9995.33333"
+    }
+  ]
+]

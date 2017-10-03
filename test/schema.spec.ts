@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import { BackendFileReader, Ddf } from '../src/index';
 
 const GLOBALIS_PATH = './test/fixtures/systema_globalis';
+const SANKEY_PATH = './test/fixtures/sankey';
 
 const expect = chai.expect;
 
@@ -59,7 +60,7 @@ describe('when getting schema', () => {
 
   describe('for datapoints', () => {
     it('should response be expected for simple request', done => {
-      const dataPointsSchemaResult = require('./results/datapoins.simple.schema.json');
+      const dataPointsSchemaResult = require('./results/datapoints.simple.schema.json');
       const ddf = new Ddf(GLOBALIS_PATH, backendFileReader);
       const request = {
         select: {
@@ -77,9 +78,8 @@ describe('when getting schema', () => {
       });
     });
 
-    /*
-    it('should response be expected', done => {
-      const dataPointsSchemaResult = require('./results/datapoins.simple.schema.json');
+    it('should response be expected for SG', done => {
+      const dataPointsSchemaResult = require('./results/datapoints.complex.schema.json');
       const ddf = new Ddf(GLOBALIS_PATH, backendFileReader);
       const request = {
         select: {
@@ -96,6 +96,58 @@ describe('when getting schema', () => {
         done();
       });
     });
-    */
+
+    it('should response be expected for Sankey', done => {
+      const dataPointsSchemaResult = [
+        [
+          {
+            key: [
+              'phase_from',
+              'phase_to',
+              'year'
+            ],
+            value: 'amount',
+            'min(value)': '0',
+            'max(value)': '9112'
+          }
+        ]
+      ];
+      const ddf = new Ddf(SANKEY_PATH, backendFileReader);
+      const request = {
+        select: {
+          key: ["key", "value"],
+          value: ["min(value)", "max(value)"]
+        },
+        from: "datapoints.schema"
+      };
+
+      ddf.ddfRequest(request, (err, data) => {
+        expect(!!err).to.be.false;
+        expect(_.isEqual(data, dataPointsSchemaResult)).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('for general query', () => {
+    it('should response be expected', done => {
+      const generalSchemaResult = require('./results/general.schema.json');
+      const ddf = new Ddf(GLOBALIS_PATH, backendFileReader);
+      const request = {
+        select: {
+          key: ["key", "value"],
+          value: []
+        },
+        from: "*.schema"
+      };
+
+      ddf.ddfRequest(request, (err, data) => {
+        expect(!!err).to.be.false;
+        expect(_.isEqual(data, generalSchemaResult)).to.be.true;
+
+        done();
+      });
+    });
   });
 });
