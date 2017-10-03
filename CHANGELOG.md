@@ -1,3 +1,13 @@
+<a name="0.12.0"></a>
+# [0.12.0](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v0.10.0...v0.12.0) (2017-10-03)
+
+
+### Features
+
+* **ddfschema:** implement schema queries ([d4d41df](https://github.com/vizabi/vizabi-ddfcsv-reader/commit/d4d41df)), closes [#48](https://github.com/vizabi/vizabi-ddfcsv-reader/issues/48)
+
+
+
 <a name="0.10.0"></a>
 # [0.10.0](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v0.9.1...v0.10.0) (2017-08-16)
 
