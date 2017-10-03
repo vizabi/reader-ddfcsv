@@ -1,5 +1,4 @@
-import { cloneDeep } from 'lodash';
-import { getSchemaDetailsByKey } from './shared';
+import { cloneDeep, isArray, isEmpty, includes } from 'lodash';
 import { ContentManager } from '../content-manager';
 import { IReader } from '../file-readers/reader';
 import { RequestNormalizer } from '../request-normalizer';
@@ -10,6 +9,9 @@ export class DataPointSchemaAdapter implements IDdfAdapter {
   public reader: IReader;
   public ddfPath: string;
   public requestNormalizer: RequestNormalizer;
+  public request;
+  public baseData: any[];
+  public dataPointsFromDataPackage: any[];
 
   constructor(contentManager, reader, ddfPath) {
     this.contentManager = contentManager;
@@ -24,10 +26,23 @@ export class DataPointSchemaAdapter implements IDdfAdapter {
   }
 
   getExpectedSchemaDetails(request, dataPackageContent) {
-    return getSchemaDetailsByKey(request, dataPackageContent, 'datapoints');
+    this.baseData = [];
+    this.dataPointsFromDataPackage = dataPackageContent.resources.filter(record => isArray(record.schema.primaryKey));
+
+    for (let record of this.dataPointsFromDataPackage) {
+      const measures = this.getMeasures(record);
+
+      for (let measure of measures) {
+        this.baseData.push({key: record.schema.primaryKey, value: measure});
+      }
+    }
+
+    return this.dataPointsFromDataPackage;
   }
 
   getNormalizedRequest(requestParam, onRequestNormalized) {
+    this.request = requestParam;
+
     onRequestNormalized(null, requestParam);
   }
 
@@ -36,13 +51,26 @@ export class DataPointSchemaAdapter implements IDdfAdapter {
   }
 
   getFileActions(expectedFiles) {
-    return expectedFiles.map(file => onFileRead => {
-      this.reader.getFileSchema(`${this.ddfPath}${file}`,
-        (err, data) => onFileRead(err, data));
+    if (!this.request.select || isEmpty(this.request.select.value)) {
+      return [];
+    }
+
+    return this.dataPointsFromDataPackage.map(record => onFileRead => {
+      this.reader.readCSV(`${this.ddfPath}${record.path}`, (err, data) => {
+        // console.log(`${this.ddfPath}${record.path}`, data);
+        // console.log(`${this.ddfPath}${record.path}`, this.getMeasures(record));
+
+        onFileRead(err, []);
+      });
     });
   }
 
   getFinalData(results) {
-    return results;
+    return this.baseData;
+  }
+
+  private getMeasures(record: any): string[] {
+    return record.schema.fields.filter(field =>
+      !includes(record.schema.primaryKey, field.name)).map(field => field.name);
   }
 }
