@@ -50,10 +50,10 @@ var DDFCsvReader =
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var ddf_1 = __webpack_require__(1);
 	exports.Ddf = ddf_1.Ddf;
-	var frontend_file_reader_1 = __webpack_require__(229);
-	var frontend_file_reader_2 = __webpack_require__(229);
+	var frontend_file_reader_1 = __webpack_require__(230);
+	var frontend_file_reader_2 = __webpack_require__(230);
 	exports.FrontendFileReader = frontend_file_reader_2.FrontendFileReader;
-	var ddfcsv_reader_1 = __webpack_require__(232);
+	var ddfcsv_reader_1 = __webpack_require__(233);
 	exports.getDDFCsvReaderObject = ddfcsv_reader_1.prepareDDFCsvReaderObject(new frontend_file_reader_1.FrontendFileReader());
 
 /***/ },
@@ -77,7 +77,8 @@ var DDFCsvReader =
 	var joins_adapter_1 = __webpack_require__(45);
 	var datapoint_adapter_1 = __webpack_require__(46);
 	var datapoint_schema_adapter_1 = __webpack_require__(227);
-	var request_normalizer_1 = __webpack_require__(228);
+	var general_schema_adapter_1 = __webpack_require__(228);
+	var request_normalizer_1 = __webpack_require__(229);
 	var async_1 = __webpack_require__(48);
 	var lodash_1 = __webpack_require__(3);
 	var traverse = __webpack_require__(43);
@@ -89,7 +90,8 @@ var DDFCsvReader =
 	    'entities.schema': entity_schema_adapter_1.EntitySchemaAdapter,
 	    joins: joins_adapter_1.JoinsAdapter,
 	    datapoints: datapoint_adapter_1.DataPointAdapter,
-	    'datapoints.schema': datapoint_schema_adapter_1.DataPointSchemaAdapter
+	    'datapoints.schema': datapoint_schema_adapter_1.DataPointSchemaAdapter,
+	    '*.schema': general_schema_adapter_1.GeneralSchemaAdapter
 	};
 	var isEntitySet = function isEntitySet(concept) {
 	    return contentManager.conceptTypeHash[concept] === 'entity_set';
@@ -44202,10 +44204,24 @@ var DDFCsvReader =
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var lodash_1 = __webpack_require__(3);
+	var async_1 = __webpack_require__(48);
+	var Mingo = __webpack_require__(8);
+	
+	var DataPointDescriptor = function DataPointDescriptor(primaryKey, measure) {
+	    _classCallCheck(this, DataPointDescriptor);
+	
+	    this.primaryKey = primaryKey;
+	    this.measure = measure;
+	    this.files = [];
+	};
+	
+	exports.DataPointDescriptor = DataPointDescriptor;
 	
 	var DataPointSchemaAdapter = function () {
 	    function DataPointSchemaAdapter(contentManager, reader, ddfPath) {
@@ -44226,41 +44242,26 @@ var DDFCsvReader =
 	        key: "getExpectedSchemaDetails",
 	        value: function getExpectedSchemaDetails(request, dataPackageContent) {
 	            this.baseData = [];
-	            this.dataPointsFromDataPackage = dataPackageContent.resources.filter(function (record) {
+	            var dataPointsFromDataPackage = dataPackageContent.resources.filter(function (record) {
 	                return lodash_1.isArray(record.schema.primaryKey);
 	            });
+	            var dataPointsDescriptorsMap = new Map();
 	            var _iteratorNormalCompletion = true;
 	            var _didIteratorError = false;
 	            var _iteratorError = undefined;
 	
 	            try {
-	                for (var _iterator = this.dataPointsFromDataPackage[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                for (var _iterator = dataPointsFromDataPackage[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 	                    var record = _step.value;
 	
-	                    var measures = this.getMeasures(record);
-	                    var _iteratorNormalCompletion2 = true;
-	                    var _didIteratorError2 = false;
-	                    var _iteratorError2 = undefined;
-	
-	                    try {
-	                        for (var _iterator2 = measures[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	                            var measure = _step2.value;
-	
-	                            this.baseData.push({ key: record.schema.primaryKey, value: measure });
-	                        }
-	                    } catch (err) {
-	                        _didIteratorError2 = true;
-	                        _iteratorError2 = err;
-	                    } finally {
-	                        try {
-	                            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-	                                _iterator2.return();
-	                            }
-	                        } finally {
-	                            if (_didIteratorError2) {
-	                                throw _iteratorError2;
-	                            }
-	                        }
+	                    var measure = lodash_1.head(this.getMeasures(record));
+	                    var dpHash = record.schema.primaryKey + "@" + measure;
+	                    if (!dataPointsDescriptorsMap.has(dpHash)) {
+	                        var dataPointDescriptor = new DataPointDescriptor(record.schema.primaryKey, measure);
+	                        dataPointDescriptor.files = [record.path];
+	                        dataPointsDescriptorsMap.set(dpHash, dataPointDescriptor);
+	                    } else {
+	                        dataPointsDescriptorsMap.get(dpHash).files.push(record.path);
 	                    }
 	                }
 	            } catch (err) {
@@ -44278,7 +44279,33 @@ var DDFCsvReader =
 	                }
 	            }
 	
-	            return this.dataPointsFromDataPackage;
+	            this.dataPointDescriptors = Array.from(dataPointsDescriptorsMap.values());
+	            var _iteratorNormalCompletion2 = true;
+	            var _didIteratorError2 = false;
+	            var _iteratorError2 = undefined;
+	
+	            try {
+	                for (var _iterator2 = this.dataPointDescriptors[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                    var _dataPointDescriptor = _step2.value;
+	
+	                    this.baseData.push({ key: _dataPointDescriptor.primaryKey, value: _dataPointDescriptor.measure });
+	                }
+	            } catch (err) {
+	                _didIteratorError2 = true;
+	                _iteratorError2 = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                        _iterator2.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError2) {
+	                        throw _iteratorError2;
+	                    }
+	                }
+	            }
+	
+	            return [];
 	        }
 	    }, {
 	        key: "getNormalizedRequest",
@@ -44301,18 +44328,65 @@ var DDFCsvReader =
 	            if (!this.request.select || lodash_1.isEmpty(this.request.select.value)) {
 	                return [];
 	            }
-	            return this.dataPointsFromDataPackage.map(function (record) {
-	                return function (onFileRead) {
-	                    _this.reader.readCSV("" + _this.ddfPath + record.path, function (err, data) {
-	                        onFileRead(err, []);
+	            var fileActions = this.dataPointDescriptors.map(function (dataPointDescriptor) {
+	                return function (onDataPointsProcessed) {
+	                    var FILES_TO_PROCESS = 10;
+	                    var fileActions = dataPointDescriptor.files.map(function (file) {
+	                        return function (onFileRead) {
+	                            _this.reader.readCSV("" + _this.ddfPath + file, onFileRead);
+	                        };
+	                    });
+	                    async_1.parallelLimit(fileActions, FILES_TO_PROCESS, function (err, results) {
+	                        if (err) {
+	                            onDataPointsProcessed(err);
+	                            return;
+	                        }
+	                        var data = lodash_1.flatten(results);
+	                        var group = { _id: null };
+	                        var _iteratorNormalCompletion3 = true;
+	                        var _didIteratorError3 = false;
+	                        var _iteratorError3 = undefined;
+	
+	                        try {
+	                            for (var _iterator3 = _this.request.select.value[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	                                var value = _step3.value;
+	
+	                                group[value] = _defineProperty({}, "$" + _this.getFunction(value), "$" + dataPointDescriptor.measure);
+	                            }
+	                        } catch (err) {
+	                            _didIteratorError3 = true;
+	                            _iteratorError3 = err;
+	                        } finally {
+	                            try {
+	                                if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	                                    _iterator3.return();
+	                                }
+	                            } finally {
+	                                if (_didIteratorError3) {
+	                                    throw _iteratorError3;
+	                                }
+	                            }
+	                        }
+	
+	                        var aggregatedResult = Mingo.aggregate(data, [{ $group: group }]);
+	                        var result = aggregatedResult.map(function (record) {
+	                            return _this.getResultRowByAggregation(record, dataPointDescriptor);
+	                        });
+	                        onDataPointsProcessed(null, result);
 	                    });
 	                };
 	            });
+	            return fileActions;
 	        }
 	    }, {
 	        key: "getFinalData",
 	        value: function getFinalData(results) {
-	            return this.baseData;
+	            if (lodash_1.isEmpty(results)) {
+	                return this.baseData;
+	            } else {
+	                this.baseData = [];
+	                return results;
+	            }
 	        }
 	    }, {
 	        key: "getMeasures",
@@ -44323,6 +44397,44 @@ var DDFCsvReader =
 	                return field.name;
 	            });
 	        }
+	    }, {
+	        key: "getFunction",
+	        value: function getFunction(expression) {
+	            var expressionRegex = /([a-z]+)\(.+\)/;
+	            var match = expressionRegex.exec(expression);
+	            return match[1];
+	        }
+	    }, {
+	        key: "getResultRowByAggregation",
+	        value: function getResultRowByAggregation(record, dataPointDescriptor) {
+	            var result = { key: dataPointDescriptor.primaryKey, value: dataPointDescriptor.measure };
+	            var _iteratorNormalCompletion4 = true;
+	            var _didIteratorError4 = false;
+	            var _iteratorError4 = undefined;
+	
+	            try {
+	                for (var _iterator4 = this.request.select.value[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+	                    var value = _step4.value;
+	
+	                    result[value] = record[value];
+	                }
+	            } catch (err) {
+	                _didIteratorError4 = true;
+	                _iteratorError4 = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion4 && _iterator4.return) {
+	                        _iterator4.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError4) {
+	                        throw _iteratorError4;
+	                    }
+	                }
+	            }
+	
+	            return result;
+	        }
 	    }]);
 	
 	    return DataPointSchemaAdapter;
@@ -44332,6 +44444,114 @@ var DDFCsvReader =
 
 /***/ },
 /* 228 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var async_1 = __webpack_require__(48);
+	var lodash_1 = __webpack_require__(3);
+	var concept_schema_adapter_1 = __webpack_require__(41);
+	var entity_schema_adapter_1 = __webpack_require__(44);
+	var datapoint_schema_adapter_1 = __webpack_require__(227);
+	
+	var GeneralSchemaAdapter = function () {
+	    function GeneralSchemaAdapter(contentManager, reader, ddfPath) {
+	        _classCallCheck(this, GeneralSchemaAdapter);
+	
+	        this.contentManager = contentManager;
+	        this.reader = lodash_1.cloneDeep(reader);
+	        this.ddfPath = ddfPath;
+	        this.adapters = [new concept_schema_adapter_1.ConceptSchemaAdapter(contentManager, reader, ddfPath), new entity_schema_adapter_1.EntitySchemaAdapter(contentManager, reader, ddfPath), new datapoint_schema_adapter_1.DataPointSchemaAdapter(contentManager, reader, ddfPath)];
+	    }
+	
+	    _createClass(GeneralSchemaAdapter, [{
+	        key: "addRequestNormalizer",
+	        value: function addRequestNormalizer(requestNormalizer) {
+	            this.requestNormalizer = requestNormalizer;
+	            return this;
+	        }
+	    }, {
+	        key: "getExpectedSchemaDetails",
+	        value: function getExpectedSchemaDetails(request, dataPackageContent) {
+	            return [];
+	        }
+	    }, {
+	        key: "getNormalizedRequest",
+	        value: function getNormalizedRequest(requestParam, onRequestNormalized) {
+	            var _this = this;
+	
+	            this.request = requestParam;
+	            var actions = this.adapters.map(function (adapter) {
+	                return function (onAdapterProcessed) {
+	                    adapter.getNormalizedRequest(requestParam, function () {
+	                        adapter.getExpectedSchemaDetails(requestParam, _this.contentManager.dataPackage);
+	                        onAdapterProcessed();
+	                    });
+	                };
+	            });
+	            async_1.parallel(actions, function () {
+	                onRequestNormalized(null, requestParam);
+	            });
+	        }
+	    }, {
+	        key: "getRecordTransformer",
+	        value: function getRecordTransformer() {
+	            return function (record) {
+	                return record;
+	            };
+	        }
+	    }, {
+	        key: "getFileActions",
+	        value: function getFileActions() {
+	            return lodash_1.flatten(this.adapters.map(function (adapter) {
+	                return adapter.getFileActions([]);
+	            }));
+	        }
+	    }, {
+	        key: "getFinalData",
+	        value: function getFinalData() {
+	            var allResults = [];
+	            var _iteratorNormalCompletion = true;
+	            var _didIteratorError = false;
+	            var _iteratorError = undefined;
+	
+	            try {
+	                for (var _iterator = this.adapters[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                    var adapter = _step.value;
+	
+	                    allResults.push(adapter.getFinalData(null, this.request));
+	                }
+	            } catch (err) {
+	                _didIteratorError = true;
+	                _iteratorError = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion && _iterator.return) {
+	                        _iterator.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError) {
+	                        throw _iteratorError;
+	                    }
+	                }
+	            }
+	
+	            return lodash_1.flatten(allResults);
+	        }
+	    }]);
+	
+	    return GeneralSchemaAdapter;
+	}();
+	
+	exports.GeneralSchemaAdapter = GeneralSchemaAdapter;
+
+/***/ },
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -44487,7 +44707,7 @@ var DDFCsvReader =
 	exports.RequestNormalizer = RequestNormalizer;
 
 /***/ },
-/* 229 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -44498,8 +44718,8 @@ var DDFCsvReader =
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var lodash_1 = __webpack_require__(3);
-	var csvParse = __webpack_require__(230);
-	__webpack_require__(231);
+	var csvParse = __webpack_require__(231);
+	__webpack_require__(232);
 	
 	var FrontendFileReader = function () {
 	    function FrontendFileReader() {
@@ -44573,7 +44793,7 @@ var DDFCsvReader =
 	exports.FrontendFileReader = FrontendFileReader;
 
 /***/ },
-/* 230 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer, process) {'use strict';
@@ -45133,7 +45353,7 @@ var DDFCsvReader =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19).Buffer, __webpack_require__(14)))
 
 /***/ },
-/* 231 */
+/* 232 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -45493,7 +45713,7 @@ var DDFCsvReader =
 	})();
 
 /***/ },
-/* 232 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45501,7 +45721,7 @@ var DDFCsvReader =
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var lodash_1 = __webpack_require__(3);
 	var ddf_1 = __webpack_require__(1);
-	var Promise = __webpack_require__(233);
+	var Promise = __webpack_require__(234);
 	function prepareDDFCsvReaderObject(defaultFileReader) {
 	    return function (externalFileReader, logger) {
 	        return {
@@ -45562,7 +45782,7 @@ var DDFCsvReader =
 	exports.prepareDDFCsvReaderObject = prepareDDFCsvReaderObject;
 
 /***/ },
-/* 233 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45575,12 +45795,12 @@ var DDFCsvReader =
 	    } catch (e) {}
 	    return bluebird;
 	}
-	var bluebird = __webpack_require__(234)();
+	var bluebird = __webpack_require__(235)();
 	bluebird.noConflict = noConflict;
 	module.exports = bluebird;
 
 /***/ },
-/* 234 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -45597,7 +45817,7 @@ var DDFCsvReader =
 	    };
 	    function Proxyable() {}
 	    var UNDEFINED_BINDING = {};
-	    var util = __webpack_require__(235);
+	    var util = __webpack_require__(236);
 	
 	    var getDomain;
 	    if (util.isNode) {
@@ -45613,11 +45833,11 @@ var DDFCsvReader =
 	    }
 	    util.notEnumerableProp(Promise, "_getDomain", getDomain);
 	
-	    var es5 = __webpack_require__(236);
-	    var Async = __webpack_require__(237);
+	    var es5 = __webpack_require__(237);
+	    var Async = __webpack_require__(238);
 	    var async = new Async();
 	    es5.defineProperty(Promise, "_async", { value: async });
-	    var errors = __webpack_require__(240);
+	    var errors = __webpack_require__(241);
 	    var TypeError = Promise.TypeError = errors.TypeError;
 	    Promise.RangeError = errors.RangeError;
 	    var CancellationError = Promise.CancellationError = errors.CancellationError;
@@ -45628,16 +45848,16 @@ var DDFCsvReader =
 	    var INTERNAL = function INTERNAL() {};
 	    var APPLY = {};
 	    var NEXT_FILTER = {};
-	    var tryConvertToPromise = __webpack_require__(241)(Promise, INTERNAL);
-	    var PromiseArray = __webpack_require__(242)(Promise, INTERNAL, tryConvertToPromise, apiRejection, Proxyable);
-	    var Context = __webpack_require__(243)(Promise);
+	    var tryConvertToPromise = __webpack_require__(242)(Promise, INTERNAL);
+	    var PromiseArray = __webpack_require__(243)(Promise, INTERNAL, tryConvertToPromise, apiRejection, Proxyable);
+	    var Context = __webpack_require__(244)(Promise);
 	    /*jshint unused:false*/
 	    var createContext = Context.create;
-	    var debug = __webpack_require__(244)(Promise, Context);
+	    var debug = __webpack_require__(245)(Promise, Context);
 	    var CapturedTrace = debug.CapturedTrace;
-	    var PassThroughHandlerContext = __webpack_require__(245)(Promise, tryConvertToPromise, NEXT_FILTER);
-	    var catchFilter = __webpack_require__(246)(NEXT_FILTER);
-	    var nodebackForPromise = __webpack_require__(247);
+	    var PassThroughHandlerContext = __webpack_require__(246)(Promise, tryConvertToPromise, NEXT_FILTER);
+	    var catchFilter = __webpack_require__(247)(NEXT_FILTER);
+	    var nodebackForPromise = __webpack_require__(248);
 	    var errorObj = util.errorObj;
 	    var tryCatch = util.tryCatch;
 	    function check(self, executor) {
@@ -46272,29 +46492,29 @@ var DDFCsvReader =
 	
 	    util.notEnumerableProp(Promise, "_makeSelfResolutionError", makeSelfResolutionError);
 	
-	    __webpack_require__(248)(Promise, INTERNAL, tryConvertToPromise, apiRejection, debug);
-	    __webpack_require__(249)(Promise, INTERNAL, tryConvertToPromise, debug);
-	    __webpack_require__(250)(Promise, PromiseArray, apiRejection, debug);
-	    __webpack_require__(251)(Promise);
+	    __webpack_require__(249)(Promise, INTERNAL, tryConvertToPromise, apiRejection, debug);
+	    __webpack_require__(250)(Promise, INTERNAL, tryConvertToPromise, debug);
+	    __webpack_require__(251)(Promise, PromiseArray, apiRejection, debug);
 	    __webpack_require__(252)(Promise);
-	    __webpack_require__(253)(Promise, PromiseArray, tryConvertToPromise, INTERNAL, async, getDomain);
+	    __webpack_require__(253)(Promise);
+	    __webpack_require__(254)(Promise, PromiseArray, tryConvertToPromise, INTERNAL, async, getDomain);
 	    Promise.Promise = Promise;
 	    Promise.version = "3.5.0";
-	    __webpack_require__(254)(Promise, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug);
-	    __webpack_require__(255)(Promise);
-	    __webpack_require__(256)(Promise, apiRejection, tryConvertToPromise, createContext, INTERNAL, debug);
-	    __webpack_require__(257)(Promise, INTERNAL, debug);
-	    __webpack_require__(258)(Promise, apiRejection, INTERNAL, tryConvertToPromise, Proxyable, debug);
-	    __webpack_require__(259)(Promise);
-	    __webpack_require__(260)(Promise, INTERNAL);
-	    __webpack_require__(261)(Promise, PromiseArray, tryConvertToPromise, apiRejection);
-	    __webpack_require__(262)(Promise, INTERNAL, tryConvertToPromise, apiRejection);
-	    __webpack_require__(263)(Promise, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug);
-	    __webpack_require__(264)(Promise, PromiseArray, debug);
-	    __webpack_require__(265)(Promise, PromiseArray, apiRejection);
-	    __webpack_require__(266)(Promise, INTERNAL);
+	    __webpack_require__(255)(Promise, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug);
+	    __webpack_require__(256)(Promise);
+	    __webpack_require__(257)(Promise, apiRejection, tryConvertToPromise, createContext, INTERNAL, debug);
+	    __webpack_require__(258)(Promise, INTERNAL, debug);
+	    __webpack_require__(259)(Promise, apiRejection, INTERNAL, tryConvertToPromise, Proxyable, debug);
+	    __webpack_require__(260)(Promise);
+	    __webpack_require__(261)(Promise, INTERNAL);
+	    __webpack_require__(262)(Promise, PromiseArray, tryConvertToPromise, apiRejection);
+	    __webpack_require__(263)(Promise, INTERNAL, tryConvertToPromise, apiRejection);
+	    __webpack_require__(264)(Promise, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug);
+	    __webpack_require__(265)(Promise, PromiseArray, debug);
+	    __webpack_require__(266)(Promise, PromiseArray, apiRejection);
 	    __webpack_require__(267)(Promise, INTERNAL);
-	    __webpack_require__(268)(Promise);
+	    __webpack_require__(268)(Promise, INTERNAL);
+	    __webpack_require__(269)(Promise);
 	
 	    util.toFastProperties(Promise);
 	    util.toFastProperties(Promise.prototype);
@@ -46321,14 +46541,14 @@ var DDFCsvReader =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 235 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {"use strict";
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
-	var es5 = __webpack_require__(236);
+	var es5 = __webpack_require__(237);
 	var canEvaluate = typeof navigator == "undefined";
 	
 	var errorObj = { e: {} };
@@ -46690,7 +46910,7 @@ var DDFCsvReader =
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(14)))
 
 /***/ },
-/* 236 */
+/* 237 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -46776,7 +46996,7 @@ var DDFCsvReader =
 	}
 
 /***/ },
-/* 237 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -46787,9 +47007,9 @@ var DDFCsvReader =
 	} catch (e) {
 	    firstLineError = e;
 	}
-	var schedule = __webpack_require__(238);
-	var Queue = __webpack_require__(239);
-	var util = __webpack_require__(235);
+	var schedule = __webpack_require__(239);
+	var Queue = __webpack_require__(240);
+	var util = __webpack_require__(236);
 	
 	function Async() {
 	    this._customScheduler = false;
@@ -46948,12 +47168,12 @@ var DDFCsvReader =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 238 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process, setImmediate) {"use strict";
 	
-	var util = __webpack_require__(235);
+	var util = __webpack_require__(236);
 	var schedule;
 	var noAsyncScheduler = function noAsyncScheduler() {
 	    throw new Error("No async scheduler available\n\n    See http://goo.gl/MqrFmX\n");
@@ -47014,7 +47234,7 @@ var DDFCsvReader =
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(14), __webpack_require__(28).setImmediate))
 
 /***/ },
-/* 239 */
+/* 240 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -47093,14 +47313,14 @@ var DDFCsvReader =
 	module.exports = Queue;
 
 /***/ },
-/* 240 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var es5 = __webpack_require__(236);
+	var es5 = __webpack_require__(237);
 	var Objectfreeze = es5.freeze;
-	var util = __webpack_require__(235);
+	var util = __webpack_require__(236);
 	var inherits = util.inherits;
 	var notEnumerableProp = util.notEnumerableProp;
 	
@@ -47211,13 +47431,13 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 241 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, INTERNAL) {
-	    var util = __webpack_require__(235);
+	    var util = __webpack_require__(236);
 	    var errorObj = util.errorObj;
 	    var isObject = util.isObject;
 	
@@ -47297,13 +47517,13 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 242 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, INTERNAL, tryConvertToPromise, apiRejection, Proxyable) {
-	    var util = __webpack_require__(235);
+	    var util = __webpack_require__(236);
 	    var isArray = util.isArray;
 	
 	    function toResolutionValue(val) {
@@ -47482,7 +47702,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 243 */
+/* 244 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -47559,7 +47779,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 244 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -47569,8 +47789,8 @@ var DDFCsvReader =
 	module.exports = function (Promise, Context) {
 	    var getDomain = Promise._getDomain;
 	    var async = Promise._async;
-	    var Warning = __webpack_require__(240).Warning;
-	    var util = __webpack_require__(235);
+	    var Warning = __webpack_require__(241).Warning;
+	    var util = __webpack_require__(236);
 	    var canAttachTrace = util.canAttachTrace;
 	    var unhandledRejectionHandled;
 	    var possiblyUnhandledRejection;
@@ -48441,16 +48661,16 @@ var DDFCsvReader =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 245 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, tryConvertToPromise, NEXT_FILTER) {
-	    var util = __webpack_require__(235);
+	    var util = __webpack_require__(236);
 	    var CancellationError = Promise.CancellationError;
 	    var errorObj = util.errorObj;
-	    var catchFilter = __webpack_require__(246)(NEXT_FILTER);
+	    var catchFilter = __webpack_require__(247)(NEXT_FILTER);
 	
 	    function PassThroughHandlerContext(promise, type, handler) {
 	        this.promise = promise;
@@ -48570,14 +48790,14 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 246 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (NEXT_FILTER) {
-	    var util = __webpack_require__(235);
-	    var getKeys = __webpack_require__(236).keys;
+	    var util = __webpack_require__(236);
+	    var getKeys = __webpack_require__(237).keys;
 	    var tryCatch = util.tryCatch;
 	    var errorObj = util.errorObj;
 	
@@ -48617,16 +48837,16 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 247 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var util = __webpack_require__(235);
+	var util = __webpack_require__(236);
 	var maybeWrapAsError = util.maybeWrapAsError;
-	var errors = __webpack_require__(240);
+	var errors = __webpack_require__(241);
 	var OperationalError = errors.OperationalError;
-	var es5 = __webpack_require__(236);
+	var es5 = __webpack_require__(237);
 	
 	function isUntypedError(obj) {
 	    return obj instanceof Error && es5.getPrototypeOf(obj) === Error.prototype;
@@ -48675,13 +48895,13 @@ var DDFCsvReader =
 	module.exports = nodebackForPromise;
 
 /***/ },
-/* 248 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, INTERNAL, tryConvertToPromise, apiRejection, debug) {
-	    var util = __webpack_require__(235);
+	    var util = __webpack_require__(236);
 	    var tryCatch = util.tryCatch;
 	
 	    Promise.method = function (fn) {
@@ -48732,7 +48952,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 249 */
+/* 250 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -48804,13 +49024,13 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 250 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, PromiseArray, apiRejection, debug) {
-	    var util = __webpack_require__(235);
+	    var util = __webpack_require__(236);
 	    var tryCatch = util.tryCatch;
 	    var errorObj = util.errorObj;
 	    var async = Promise._async;
@@ -48937,7 +49157,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 251 */
+/* 252 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -48987,7 +49207,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 252 */
+/* 253 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -49093,13 +49313,13 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 253 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, PromiseArray, tryConvertToPromise, INTERNAL, async, getDomain) {
-	    var util = __webpack_require__(235);
+	    var util = __webpack_require__(236);
 	    var canEvaluate = util.canEvaluate;
 	    var tryCatch = util.tryCatch;
 	    var errorObj = util.errorObj;
@@ -49259,7 +49479,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 254 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49268,7 +49488,7 @@ var DDFCsvReader =
 	
 	module.exports = function (Promise, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug) {
 	    var getDomain = Promise._getDomain;
-	    var util = __webpack_require__(235);
+	    var util = __webpack_require__(236);
 	    var tryCatch = util.tryCatch;
 	    var errorObj = util.errorObj;
 	    var async = Promise._async;
@@ -49416,7 +49636,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49429,7 +49649,7 @@ var DDFCsvReader =
 	}
 	
 	module.exports = function (Promise) {
-	    var util = __webpack_require__(235);
+	    var util = __webpack_require__(236);
 	    var canEvaluate = util.canEvaluate;
 	    var isIdentifier = util.isIdentifier;
 	
@@ -49546,15 +49766,15 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, apiRejection, tryConvertToPromise, createContext, INTERNAL, debug) {
-	    var util = __webpack_require__(235);
-	    var TypeError = __webpack_require__(240).TypeError;
-	    var inherits = __webpack_require__(235).inherits;
+	    var util = __webpack_require__(236);
+	    var TypeError = __webpack_require__(241).TypeError;
+	    var inherits = __webpack_require__(236).inherits;
 	    var errorObj = util.errorObj;
 	    var tryCatch = util.tryCatch;
 	    var NULL = {};
@@ -49763,13 +49983,13 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, INTERNAL, debug) {
-	    var util = __webpack_require__(235);
+	    var util = __webpack_require__(236);
 	    var TimeoutError = Promise.TimeoutError;
 	
 	    function HandleWrapper(handle) {
@@ -49862,15 +50082,15 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, apiRejection, INTERNAL, tryConvertToPromise, Proxyable, debug) {
-	    var errors = __webpack_require__(240);
+	    var errors = __webpack_require__(241);
 	    var TypeError = errors.TypeError;
-	    var util = __webpack_require__(235);
+	    var util = __webpack_require__(236);
 	    var errorObj = util.errorObj;
 	    var tryCatch = util.tryCatch;
 	    var yieldHandlers = [];
@@ -50065,13 +50285,13 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 259 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise) {
-	    var util = __webpack_require__(235);
+	    var util = __webpack_require__(236);
 	    var async = Promise._async;
 	    var tryCatch = util.tryCatch;
 	    var errorObj = util.errorObj;
@@ -50119,7 +50339,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 260 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -50128,12 +50348,12 @@ var DDFCsvReader =
 	
 	module.exports = function (Promise, INTERNAL) {
 	    var THIS = {};
-	    var util = __webpack_require__(235);
-	    var nodebackForPromise = __webpack_require__(247);
+	    var util = __webpack_require__(236);
+	    var nodebackForPromise = __webpack_require__(248);
 	    var withAppended = util.withAppended;
 	    var maybeWrapAsError = util.maybeWrapAsError;
 	    var canEvaluate = util.canEvaluate;
-	    var TypeError = __webpack_require__(240).TypeError;
+	    var TypeError = __webpack_require__(241).TypeError;
 	    var defaultSuffix = "Async";
 	    var defaultPromisified = { __isPromisified__: true };
 	    var noCopyProps = ["arity", "length", "name", "arguments", "caller", "callee", "prototype", "__isPromisified__"];
@@ -50386,15 +50606,15 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 261 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, PromiseArray, tryConvertToPromise, apiRejection) {
-	    var util = __webpack_require__(235);
+	    var util = __webpack_require__(236);
 	    var isObject = util.isObject;
-	    var es5 = __webpack_require__(236);
+	    var es5 = __webpack_require__(237);
 	    var Es6Map;
 	    if (typeof Map === "function") Es6Map = Map;
 	
@@ -50508,13 +50728,13 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 262 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, INTERNAL, tryConvertToPromise, apiRejection) {
-	    var util = __webpack_require__(235);
+	    var util = __webpack_require__(236);
 	
 	    var raceLater = function raceLater(promise) {
 	        return promise.then(function (array) {
@@ -50560,14 +50780,14 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 263 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug) {
 	    var getDomain = Promise._getDomain;
-	    var util = __webpack_require__(235);
+	    var util = __webpack_require__(236);
 	    var tryCatch = util.tryCatch;
 	
 	    function ReductionPromiseArray(promises, fn, initialValue, _each) {
@@ -50723,14 +50943,14 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 264 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, PromiseArray, debug) {
 	    var PromiseInspection = Promise.PromiseInspection;
-	    var util = __webpack_require__(235);
+	    var util = __webpack_require__(236);
 	
 	    function SettledPromiseArray(values) {
 	        this.constructor$(values);
@@ -50771,15 +50991,15 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 265 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, PromiseArray, apiRejection) {
-	    var util = __webpack_require__(235);
-	    var RangeError = __webpack_require__(240).RangeError;
-	    var AggregateError = __webpack_require__(240).AggregateError;
+	    var util = __webpack_require__(236);
+	    var RangeError = __webpack_require__(241).RangeError;
+	    var AggregateError = __webpack_require__(241).AggregateError;
 	    var isArray = util.isArray;
 	    var CANCELLATION = {};
 	
@@ -50919,7 +51139,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 266 */
+/* 267 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -50937,7 +51157,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 267 */
+/* 268 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -50970,7 +51190,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 268 */
+/* 269 */
 /***/ function(module, exports) {
 
 	"use strict";
