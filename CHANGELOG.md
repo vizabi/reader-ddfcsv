@@ -1,3 +1,13 @@
+<a name="0.13.0"></a>
+# [0.13.0](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v0.12.0...v0.13.0) (2017-10-04)
+
+
+### Features
+
+* **schema query:** implement custom aggregation functions on ddf schema queries ([a3cad9e](https://github.com/vizabi/vizabi-ddfcsv-reader/commit/a3cad9e)), closes [#50](https://github.com/vizabi/vizabi-ddfcsv-reader/issues/50)
+
+
+
 <a name="0.12.0"></a>
 # [0.12.0](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v0.10.0...v0.12.0) (2017-10-03)
 
