@@ -6,6 +6,7 @@ import { EntitySchemaAdapter } from './adapters/entity-schema-adapter';
 import { JoinsAdapter } from './adapters/joins-adapter';
 import { DataPointAdapter } from './adapters/datapoint-adapter';
 import { DataPointSchemaAdapter } from './adapters/datapoint-schema-adapter';
+import { GeneralSchemaAdapter } from './adapters/general-schema-adapter';
 import { RequestNormalizer } from './request-normalizer';
 import { IReader } from './file-readers/reader';
 import { IDdfAdapter } from './adapters/adapter';
@@ -32,7 +33,8 @@ const ADAPTERS = {
   'entities.schema': EntitySchemaAdapter,
   joins: JoinsAdapter,
   datapoints: DataPointAdapter,
-  'datapoints.schema': DataPointSchemaAdapter
+  'datapoints.schema': DataPointSchemaAdapter,
+  '*.schema': GeneralSchemaAdapter
 };
 
 const isEntitySet = concept => contentManager.conceptTypeHash[concept] === 'entity_set';
