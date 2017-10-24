@@ -7,6 +7,9 @@ export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
   return function (externalFileReader?: IReader, logger?: any) {
     return {
       init(readerInfo) {
+        this._basepath = readerInfo.path;
+        this._lastModified = readerInfo._lastModified;
+
         const fileReader = externalFileReader || defaultFileReader;
 
         this.ddf = new Ddf(readerInfo.path, fileReader);

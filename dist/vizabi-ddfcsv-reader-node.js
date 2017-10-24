@@ -39194,6 +39194,8 @@ module.exports =
 	    return function (externalFileReader, logger) {
 	        return {
 	            init: function init(readerInfo) {
+	                this._basepath = readerInfo.path;
+	                this._lastModified = readerInfo._lastModified;
 	                var fileReader = externalFileReader || defaultFileReader;
 	                this.ddf = new ddf_1.Ddf(readerInfo.path, fileReader);
 	            },
