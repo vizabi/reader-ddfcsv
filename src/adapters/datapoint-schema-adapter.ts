@@ -8,9 +8,7 @@ import { IDdfAdapter } from './adapter';
 const Mingo = require('mingo');
 
 export class DataPointDescriptor {
-  public files: string[] = [];
-
-  constructor(public primaryKey: string[], public measure: string) {
+  constructor(public primaryKey: string[], public measure: string, public files: string[] = []) {
   }
 }
 
@@ -38,24 +36,19 @@ export class DataPointSchemaAdapter implements IDdfAdapter {
   getExpectedSchemaDetails(request, dataPackageContent) {
     this.baseData = [];
 
-    const dataPointsFromDataPackage = dataPackageContent.resources.filter(record => isArray(record.schema.primaryKey));
-    const dataPointsDescriptorsMap = new Map();
+    const resourceToPath = dataPackageContent.resources
+      .filter(record => isArray(record.schema.primaryKey))
+      .reduce((hash, record) => {
+        hash[record.name] = record.path;
 
-    for (let record of dataPointsFromDataPackage) {
-      const measure = head(this.getMeasures(record));
-      const dpHash = `${record.schema.primaryKey}@${measure}`;
+        return hash;
+      }, {});
 
-      if (!dataPointsDescriptorsMap.has(dpHash)) {
-        const dataPointDescriptor = new DataPointDescriptor(record.schema.primaryKey, measure);
+    this.dataPointDescriptors = dataPackageContent.ddfSchema.datapoints.map(schemaRecord => {
+      const files = schemaRecord.resources.map(resource => resourceToPath[resource]);
 
-        dataPointDescriptor.files = [record.path];
-        dataPointsDescriptorsMap.set(dpHash, dataPointDescriptor);
-      } else {
-        dataPointsDescriptorsMap.get(dpHash).files.push(record.path);
-      }
-    }
-
-    this.dataPointDescriptors = Array.from(dataPointsDescriptorsMap.values());
+      return new DataPointDescriptor(schemaRecord.primaryKey, schemaRecord.value, files);
+    });
 
     for (let dataPointDescriptor of this.dataPointDescriptors) {
       this.baseData.push({key: dataPointDescriptor.primaryKey, value: dataPointDescriptor.measure});
@@ -116,11 +109,6 @@ export class DataPointSchemaAdapter implements IDdfAdapter {
 
       return results;
     }
-  }
-
-  private getMeasures(record: any): string[] {
-    return record.schema.fields.filter(field =>
-      !includes(record.schema.primaryKey, field.name)).map(field => field.name);
   }
 
   private getFunction(expression: string): string {

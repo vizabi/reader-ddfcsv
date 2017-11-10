@@ -4,6 +4,7 @@ import { BackendFileReader, Ddf } from '../src/index';
 
 const GLOBALIS_PATH = './test/fixtures/systema_globalis';
 const SANKEY_PATH = './test/fixtures/sankey';
+const PCBC_CENSUS_PATH = './test/fixtures/pcbs';
 
 const expect = chai.expect;
 
@@ -98,20 +99,7 @@ describe('when getting schema', () => {
     });
 
     it('should response be expected for Sankey', done => {
-      const dataPointsSchemaResult = [
-        [
-          {
-            key: [
-              'phase_from',
-              'phase_to',
-              'year'
-            ],
-            value: 'amount',
-            'min(value)': '0',
-            'max(value)': '9112'
-          }
-        ]
-      ];
+      const dataPointsSchemaResult = require('./results/sankey-min-max.json');
       const ddf = new Ddf(SANKEY_PATH, backendFileReader);
       const request = {
         select: {
@@ -128,6 +116,28 @@ describe('when getting schema', () => {
         done();
       });
     });
+
+    /*
+    it('should ...', done => {
+      const ddf = new Ddf(PCBC_CENSUS_PATH, backendFileReader);
+      const request = {
+        select: {
+          key: [
+            'key',
+            'value'
+          ],
+          'value': []
+        },
+        from: 'datapoints.schema'
+      };
+
+      ddf.ddfRequest(request, (err, data) => {
+        console.log(JSON.stringify(data, null, 2));
+
+        done();
+      });
+    });
+    */
   });
 
   describe('for general query', () => {
