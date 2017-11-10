@@ -251,7 +251,17 @@ export class DataPointAdapter implements IDdfAdapter {
         const timeField = this.getTimeFieldByFirstRecord(firstRecord);
         const measureFields = this.getMeasureFieldsByFirstRecord(firstRecord);
 
-        onFileRead(null, {data, entityFields, timeField, measureFields});
+        // /////////////////////
+        let originalEntitySet;
+
+        for (let key of request.select.key) {
+          if (key !== timeField && !includes(entityFields, key)) {
+            originalEntitySet = key;
+            break;
+          }
+        }
+
+        onFileRead(null, {data, entityFields, originalEntitySet, timeField, measureFields});
       });
     };
     const translationsFileActions = () => files.map(file => onFileRead => {
@@ -316,7 +326,13 @@ export class DataPointAdapter implements IDdfAdapter {
             if (!entityDescriptor.entity) {
               dataHash[holderKey][entityDescriptor.domain] = record[entityDescriptor.domain];
             }
+
+            if (result.originalEntitySet) {
+              // todo: add check in accordance with entity value
+              //dataHash[holderKey][result.originalEntitySet] = record[entityDescriptor.domain];
+            }
           });
+
           request.select.value.forEach(measure => {
             dataHash[holderKey][measure] = null;
           });

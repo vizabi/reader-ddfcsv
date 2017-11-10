@@ -1,0 +1,74 @@
+[
+  [
+    {
+      "key": [
+        "phase",
+        "phase",
+        "year"
+      ],
+      "value": "amount",
+      "min(value)": "0",
+      "max(value)": "9112"
+    }
+  ],
+  [
+    {
+      "key": [
+        "phase",
+        "phase_from",
+        "year"
+      ],
+      "value": "amount",
+      "min(value)": "0",
+      "max(value)": "9112"
+    }
+  ],
+  [
+    {
+      "key": [
+        "phase",
+        "phase_to",
+        "year"
+      ],
+      "value": "amount",
+      "min(value)": "0",
+      "max(value)": "9112"
+    }
+  ],
+  [
+    {
+      "key": [
+        "phase_from",
+        "phase_from",
+        "year"
+      ],
+      "value": "amount",
+      "min(value)": "0",
+      "max(value)": "9112"
+    }
+  ],
+  [
+    {
+      "key": [
+        "phase_from",
+        "phase_to",
+        "year"
+      ],
+      "value": "amount",
+      "min(value)": "0",
+      "max(value)": "9112"
+    }
+  ],
+  [
+    {
+      "key": [
+        "phase_to",
+        "phase_to",
+        "year"
+      ],
+      "value": "amount",
+      "min(value)": "0",
+      "max(value)": "9112"
+    }
+  ]
+]

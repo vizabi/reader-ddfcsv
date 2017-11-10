@@ -5,6 +5,7 @@ import { BackendFileReader, Ddf } from '../src/index';
 const GLOBALIS_PATH = './test/fixtures/systema_globalis';
 const GLOBALIS_TINY_PATH = './test/fixtures/systema_globalis_tiny';
 const POP_WPP_PATH = './test/fixtures/population_wpp';
+const PCBC_CENSUS_PATH = './test/fixtures/pcbs';
 
 const expect = chai.expect;
 
@@ -408,4 +409,38 @@ describe('when data points checking', () => {
       done();
     });
   });
+
+  /*
+  it('test', done => {
+    const ddf = new Ddf(PCBC_CENSUS_PATH, backendFileReader);
+    const request = {
+      language: 'en',
+      from: 'datapoints',
+      animatable: 'year',
+      select: {
+        key: [
+          'governorate',
+          'year'
+        ],
+        value: [
+          'economic_establishments',
+          'unemployment_male_total',
+          'illiteracy_both_sexes_55_59'
+        ]
+      },
+      where: {},
+      join: {},
+      order_by: [
+        'year'
+      ]
+    };
+
+    ddf.ddfRequest(request, (err, data) => {
+
+      console.log(data);
+
+      done();
+    });
+  });
+  */
 });
