@@ -6,6 +6,7 @@ import { BackendFileReader, Ddf } from '../src/index';
 
 const backendFileReader = new BackendFileReader();
 const GLOBALIS_PATH = './test/fixtures/systema_globalis';
+const GLOBALIS_PATH2 = './test/fixtures/systema_globalis_2';
 const GLOBALIS_TINY_PATH = './test/fixtures/systema_globalis_tiny';
 const PRESENTATION_SET = './test/fixtures/presentation_set';
 
@@ -300,6 +301,48 @@ describe('when entities checking', () => {
       expect((<any[]>results.unStateEntities).length).to.equal(EXPECTED_UNSTATE_QUANTITY);
       expect((<any[]>results.unStateLessEntities).length).to.equal(EXPECTED_UNSTATE_LESS_QUANTITY);
       expect((<any[]>results.allEntities).length).to.equal(EXPECTED_UNSTATE_QUANTITY + EXPECTED_NON_UNSTATE_QUANTITY + EXPECTED_UNSTATE_LESS_QUANTITY);
+
+      done();
+    });
+  });
+
+  it('should filters work properly (an another case)', done => {
+    const getRequest = where => ({
+      language: 'en',
+      from: 'entities',
+      animatable: 'time',
+      select: {
+        key: [
+          'country'
+        ],
+        value: [
+          'name',
+          'world_4region'
+        ]
+      },
+      where,
+      join: {},
+      order_by: [
+        'rank'
+      ]
+    });
+
+    const getAction = request => onDdfRequestCompleted => {
+      const ddf = new Ddf(GLOBALIS_PATH2, backendFileReader);
+
+      ddf.ddfRequest(request, (err, data) => {
+        onDdfRequestCompleted(err, data);
+      });
+    };
+    const actions = {
+      unStateTrue: getAction(getRequest({$and: [{'un_state': true}]})),
+      unStateFalse: getAction(getRequest({$and: [{'un_state': false}]})),
+      all: getAction(getRequest({}))
+    };
+
+    parallel(actions, (err, results: any) => {
+      expect(!!err).to.be.false;
+      expect(results.unStateTrue.length + results.unStateFalse.length).to.equal(results.all.length);
 
       done();
     });
