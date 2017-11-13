@@ -5,7 +5,7 @@ import { BackendFileReader, Ddf } from '../src/index';
 const GLOBALIS_PATH = './test/fixtures/systema_globalis';
 const GLOBALIS_TINY_PATH = './test/fixtures/systema_globalis_tiny';
 const POP_WPP_PATH = './test/fixtures/population_wpp';
-const PCBC_CENSUS_PATH = './test/fixtures/pcbs';
+const SG_DP_MIX_ENTITY = './test/fixtures/sg_dp_mix_entity';
 
 const expect = chai.expect;
 
@@ -410,37 +410,39 @@ describe('when data points checking', () => {
     });
   });
 
-  /*
-  it('test', done => {
-    const ddf = new Ddf(PCBC_CENSUS_PATH, backendFileReader);
+  it('query on dataset that contains mixed kinds of entities in the same file should be processed correctly', done => {
+    const ddf = new Ddf(SG_DP_MIX_ENTITY, backendFileReader);
     const request = {
       language: 'en',
       from: 'datapoints',
       animatable: 'year',
       select: {
         key: [
-          'governorate',
-          'year'
+          'global',
+          'time'
         ],
         value: [
-          'economic_establishments',
-          'unemployment_male_total',
-          'illiteracy_both_sexes_55_59'
+          'population_total'
         ]
       },
       where: {},
       join: {},
       order_by: [
-        'year'
+        'time'
       ]
+    };
+    const expectedData = {
+      global: 'world',
+      time: '2000',
+      population_total: 777
     };
 
     ddf.ddfRequest(request, (err, data) => {
-
-      console.log(data);
+      expect(!!err).to.be.false;
+      expect(data.length).to.equal(1);
+      expect(_.isEqual(_.head(data), expectedData)).to.be.true;
 
       done();
     });
   });
-  */
 });

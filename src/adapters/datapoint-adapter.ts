@@ -1,16 +1,23 @@
 import { EntityUtils } from '../entity-utils';
+import { parallel } from 'async';
 import {
   cloneDeep,
   head,
+  compact,
   isEmpty,
   isInteger,
+  isObject,
   intersection,
   includes,
   keys,
   reduce,
-  values
+  values,
+  uniq,
+  flatten,
+  flattenDeep
 } from 'lodash';
 import * as timeUtils from 'ddf-time-utils';
+import { EntityAdapter } from './entity-adapter';
 import { ContentManager } from '../content-manager';
 import { IReader } from '../file-readers/reader';
 import { RequestNormalizer } from '../request-normalizer';
@@ -62,6 +69,8 @@ export class DataPointAdapter implements IDdfAdapter {
   public entitySetsHash: any;
   public request: any;
 
+  private isEntitySetBasedRequest;
+  private expectedEntityValuesHash;
   private recordsDescriptor: any = {};
 
   constructor(contentManager, reader, ddfPath) {
@@ -99,7 +108,19 @@ export class DataPointAdapter implements IDdfAdapter {
       request.where = transformedCondition;
       this.request = request;
 
-      onRequestNormalized(err, request);
+      const allEntitySets = keys(this.contentManager.domainHash);
+      const requestEntitySets: string[] = this.request.select.key.filter(entitySet => includes(allEntitySets, entitySet));
+      const domains = uniq(requestEntitySets.map(entitySet => this.contentManager.domainHash[entitySet]));
+
+      this.isEntitySetBasedRequest = !isEmpty(requestEntitySets);
+
+      if (!this.isEntitySetBasedRequest) {
+        return onRequestNormalized(err, request);
+      }
+
+      this.getEntityValuesAccordingToRequest(domains, requestEntitySets, (entitiesErr) => {
+        onRequestNormalized(err || entitiesErr, request);
+      });
     });
   }
 
@@ -251,7 +272,6 @@ export class DataPointAdapter implements IDdfAdapter {
         const timeField = this.getTimeFieldByFirstRecord(firstRecord);
         const measureFields = this.getMeasureFieldsByFirstRecord(firstRecord);
 
-        // /////////////////////
         let originalEntitySet;
 
         for (let key of request.select.key) {
@@ -327,9 +347,12 @@ export class DataPointAdapter implements IDdfAdapter {
               dataHash[holderKey][entityDescriptor.domain] = record[entityDescriptor.domain];
             }
 
-            if (result.originalEntitySet) {
-              // todo: add check in accordance with entity value
-              //dataHash[holderKey][result.originalEntitySet] = record[entityDescriptor.domain];
+            if (this.isEntitySetBasedRequest && result.originalEntitySet) {
+              if (this.expectedEntityValuesHash && this.expectedEntityValuesHash[record[entityDescriptor.domain]]) {
+                dataHash[holderKey][result.originalEntitySet] = record[entityDescriptor.domain];
+              } else {
+                dataHash[holderKey][result.originalEntitySet] = {_access: 'denied'};
+              }
             }
           });
 
@@ -344,6 +367,8 @@ export class DataPointAdapter implements IDdfAdapter {
       });
     });
 
+    let isCompactNeeded = false;
+
     const query = new Mingo.Query(request.where);
     const data = values(dataHash);
     const timeKeys = keys(timeValuesHash);
@@ -352,6 +377,12 @@ export class DataPointAdapter implements IDdfAdapter {
       const projectionKeys = keys(projection);
 
       for (const projectionKey of projectionKeys) {
+        if (isObject(record[projectionKey]) && record[projectionKey]._access === 'denied') {
+          isCompactNeeded = true;
+
+          return null;
+        }
+
         resultRecord[projectionKey] = record[projectionKey];
       }
 
@@ -365,6 +396,48 @@ export class DataPointAdapter implements IDdfAdapter {
       return resultRecord;
     });
 
-    return filteredData;
+    return isCompactNeeded ? compact(filteredData) : filteredData;
+  }
+
+  private getEntityValuesAccordingToRequest(domains: string[], requestEntitySets: string[], onEntityValuesRead: Function) {
+    const entitySetCondition = {$or: requestEntitySets.map(entitySet => ({[`is--${entitySet}`]: 'TRUE'}))};
+    const entitiesRequest = {
+      from: 'entities',
+      select: {
+        key: domains,
+        value: []
+      },
+      where: entitySetCondition
+    };
+
+    const ddfTypeAdapter: IDdfAdapter = new EntityAdapter(this.contentManager, this.reader, this.ddfPath);
+    const expectedSchemaDetails = ddfTypeAdapter.getExpectedSchemaDetails(entitiesRequest, this.contentManager.dataPackage);
+    const expectedFiles = uniq(flattenDeep(expectedSchemaDetails.map(ddfSchemaRecord => ddfSchemaRecord.resources)))
+      .map((resource: string) => this.contentManager.nameHash[resource]);
+    const fileActions = ddfTypeAdapter.getFileActions(expectedFiles, entitiesRequest);
+
+    parallel(fileActions, (entitiesErr, entitiesResult) => {
+      if (entitiesErr) {
+        onEntityValuesRead(entitiesErr);
+      }
+
+      const projection = domains.reduce((result, domain) => {
+        result[domain] = 1;
+
+        return result;
+      }, {});
+      const allEntities = flatten(entitiesResult);
+      const query = new Mingo.Query(entitiesRequest.where, projection);
+
+      this.expectedEntityValuesHash = query.find(allEntities).all().reduce((result, entityRecord) => {
+        for (const key of keys(entityRecord)) {
+          result[entityRecord[key]] = 1;
+        }
+
+        return result;
+      }, {});
+
+      onEntityValuesRead();
+    });
   }
 }

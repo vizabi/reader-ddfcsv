@@ -26936,7 +26936,36 @@ var DDFCsvReader =
 	                    var entityFields = _this8.getEntityFieldsByFirstRecord(firstRecord);
 	                    var timeField = _this8.getTimeFieldByFirstRecord(firstRecord);
 	                    var measureFields = _this8.getMeasureFieldsByFirstRecord(firstRecord);
-	                    onFileRead(null, { data: data, entityFields: entityFields, timeField: timeField, measureFields: measureFields });
+	                    var originalEntitySet = void 0;
+	                    var _iteratorNormalCompletion5 = true;
+	                    var _didIteratorError5 = false;
+	                    var _iteratorError5 = undefined;
+	
+	                    try {
+	                        for (var _iterator5 = request.select.key[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+	                            var key = _step5.value;
+	
+	                            if (key !== timeField && !lodash_1.includes(entityFields, key)) {
+	                                originalEntitySet = key;
+	                                break;
+	                            }
+	                        }
+	                    } catch (err) {
+	                        _didIteratorError5 = true;
+	                        _iteratorError5 = err;
+	                    } finally {
+	                        try {
+	                            if (!_iteratorNormalCompletion5 && _iterator5.return) {
+	                                _iterator5.return();
+	                            }
+	                        } finally {
+	                            if (_didIteratorError5) {
+	                                throw _iteratorError5;
+	                            }
+	                        }
+	                    }
+	
+	                    onFileRead(null, { data: data, entityFields: entityFields, originalEntitySet: originalEntitySet, timeField: timeField, measureFields: measureFields });
 	                });
 	            };
 	            var translationsFileActions = function translationsFileActions() {
@@ -26973,27 +27002,27 @@ var DDFCsvReader =
 	        key: "getEntitiesHolderKey",
 	        value: function getEntitiesHolderKey(record, entityDescriptors) {
 	            var result = '';
-	            var _iteratorNormalCompletion5 = true;
-	            var _didIteratorError5 = false;
-	            var _iteratorError5 = undefined;
+	            var _iteratorNormalCompletion6 = true;
+	            var _didIteratorError6 = false;
+	            var _iteratorError6 = undefined;
 	
 	            try {
-	                for (var _iterator5 = entityDescriptors[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-	                    var entityDescriptor = _step5.value;
+	                for (var _iterator6 = entityDescriptors[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+	                    var entityDescriptor = _step6.value;
 	
 	                    result += record[entityDescriptor.entity || entityDescriptor.domain] + ',';
 	                }
 	            } catch (err) {
-	                _didIteratorError5 = true;
-	                _iteratorError5 = err;
+	                _didIteratorError6 = true;
+	                _iteratorError6 = err;
 	            } finally {
 	                try {
-	                    if (!_iteratorNormalCompletion5 && _iterator5.return) {
-	                        _iterator5.return();
+	                    if (!_iteratorNormalCompletion6 && _iterator6.return) {
+	                        _iterator6.return();
 	                    }
 	                } finally {
-	                    if (_didIteratorError5) {
-	                        throw _iteratorError5;
+	                    if (_didIteratorError6) {
+	                        throw _iteratorError6;
 	                    }
 	                }
 	            }
@@ -27029,32 +27058,33 @@ var DDFCsvReader =
 	                            if (!entityDescriptor.entity) {
 	                                dataHash[holderKey][entityDescriptor.domain] = record[entityDescriptor.domain];
 	                            }
+	                            if (result.originalEntitySet) {}
 	                        });
 	                        request.select.value.forEach(function (measure) {
 	                            dataHash[holderKey][measure] = null;
 	                        });
 	                    }
-	                    var _iteratorNormalCompletion6 = true;
-	                    var _didIteratorError6 = false;
-	                    var _iteratorError6 = undefined;
+	                    var _iteratorNormalCompletion7 = true;
+	                    var _didIteratorError7 = false;
+	                    var _iteratorError7 = undefined;
 	
 	                    try {
-	                        for (var _iterator6 = result.measureFields[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-	                            var measureField = _step6.value;
+	                        for (var _iterator7 = result.measureFields[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+	                            var measureField = _step7.value;
 	
 	                            dataHash[holderKey][measureField] = record[measureField];
 	                        }
 	                    } catch (err) {
-	                        _didIteratorError6 = true;
-	                        _iteratorError6 = err;
+	                        _didIteratorError7 = true;
+	                        _iteratorError7 = err;
 	                    } finally {
 	                        try {
-	                            if (!_iteratorNormalCompletion6 && _iterator6.return) {
-	                                _iterator6.return();
+	                            if (!_iteratorNormalCompletion7 && _iterator7.return) {
+	                                _iterator7.return();
 	                            }
 	                        } finally {
-	                            if (_didIteratorError6) {
-	                                throw _iteratorError6;
+	                            if (_didIteratorError7) {
+	                                throw _iteratorError7;
 	                            }
 	                        }
 	                    }
@@ -27066,43 +27096,15 @@ var DDFCsvReader =
 	            var filteredData = query.find(data).all().map(function (record) {
 	                var resultRecord = {};
 	                var projectionKeys = lodash_1.keys(projection);
-	                var _iteratorNormalCompletion7 = true;
-	                var _didIteratorError7 = false;
-	                var _iteratorError7 = undefined;
-	
-	                try {
-	                    for (var _iterator7 = projectionKeys[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-	                        var projectionKey = _step7.value;
-	
-	                        resultRecord[projectionKey] = record[projectionKey];
-	                    }
-	                } catch (err) {
-	                    _didIteratorError7 = true;
-	                    _iteratorError7 = err;
-	                } finally {
-	                    try {
-	                        if (!_iteratorNormalCompletion7 && _iterator7.return) {
-	                            _iterator7.return();
-	                        }
-	                    } finally {
-	                        if (_didIteratorError7) {
-	                            throw _iteratorError7;
-	                        }
-	                    }
-	                }
-	
 	                var _iteratorNormalCompletion8 = true;
 	                var _didIteratorError8 = false;
 	                var _iteratorError8 = undefined;
 	
 	                try {
-	                    for (var _iterator8 = timeKeys[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
-	                        var timeKey = _step8.value;
+	                    for (var _iterator8 = projectionKeys[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+	                        var projectionKey = _step8.value;
 	
-	                        if (lodash_1.isInteger(record[timeKey])) {
-	                            resultRecord[timeKey] = "" + timeValuesHash[timeKey][record[timeKey]];
-	                            break;
-	                        }
+	                        resultRecord[projectionKey] = record[projectionKey];
 	                    }
 	                } catch (err) {
 	                    _didIteratorError8 = true;
@@ -27115,6 +27117,34 @@ var DDFCsvReader =
 	                    } finally {
 	                        if (_didIteratorError8) {
 	                            throw _iteratorError8;
+	                        }
+	                    }
+	                }
+	
+	                var _iteratorNormalCompletion9 = true;
+	                var _didIteratorError9 = false;
+	                var _iteratorError9 = undefined;
+	
+	                try {
+	                    for (var _iterator9 = timeKeys[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+	                        var timeKey = _step9.value;
+	
+	                        if (lodash_1.isInteger(record[timeKey])) {
+	                            resultRecord[timeKey] = "" + timeValuesHash[timeKey][record[timeKey]];
+	                            break;
+	                        }
+	                    }
+	                } catch (err) {
+	                    _didIteratorError9 = true;
+	                    _iteratorError9 = err;
+	                } finally {
+	                    try {
+	                        if (!_iteratorNormalCompletion9 && _iterator9.return) {
+	                            _iterator9.return();
+	                        }
+	                    } finally {
+	                        if (_didIteratorError9) {
+	                            throw _iteratorError9;
 	                        }
 	                    }
 	                }
@@ -44214,11 +44244,13 @@ var DDFCsvReader =
 	var Mingo = __webpack_require__(8);
 	
 	var DataPointDescriptor = function DataPointDescriptor(primaryKey, measure) {
+	    var files = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+	
 	    _classCallCheck(this, DataPointDescriptor);
 	
 	    this.primaryKey = primaryKey;
 	    this.measure = measure;
-	    this.files = [];
+	    this.files = files;
 	};
 	
 	exports.DataPointDescriptor = DataPointDescriptor;
@@ -44242,27 +44274,27 @@ var DDFCsvReader =
 	        key: "getExpectedSchemaDetails",
 	        value: function getExpectedSchemaDetails(request, dataPackageContent) {
 	            this.baseData = [];
-	            var dataPointsFromDataPackage = dataPackageContent.resources.filter(function (record) {
+	            var resourceToPath = dataPackageContent.resources.filter(function (record) {
 	                return lodash_1.isArray(record.schema.primaryKey);
+	            }).reduce(function (hash, record) {
+	                hash[record.name] = record.path;
+	                return hash;
+	            }, {});
+	            this.dataPointDescriptors = dataPackageContent.ddfSchema.datapoints.map(function (schemaRecord) {
+	                var files = schemaRecord.resources.map(function (resource) {
+	                    return resourceToPath[resource];
+	                });
+	                return new DataPointDescriptor(schemaRecord.primaryKey, schemaRecord.value, files);
 	            });
-	            var dataPointsDescriptorsMap = new Map();
 	            var _iteratorNormalCompletion = true;
 	            var _didIteratorError = false;
 	            var _iteratorError = undefined;
 	
 	            try {
-	                for (var _iterator = dataPointsFromDataPackage[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                    var record = _step.value;
+	                for (var _iterator = this.dataPointDescriptors[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                    var dataPointDescriptor = _step.value;
 	
-	                    var measure = lodash_1.head(this.getMeasures(record));
-	                    var dpHash = record.schema.primaryKey + "@" + measure;
-	                    if (!dataPointsDescriptorsMap.has(dpHash)) {
-	                        var dataPointDescriptor = new DataPointDescriptor(record.schema.primaryKey, measure);
-	                        dataPointDescriptor.files = [record.path];
-	                        dataPointsDescriptorsMap.set(dpHash, dataPointDescriptor);
-	                    } else {
-	                        dataPointsDescriptorsMap.get(dpHash).files.push(record.path);
-	                    }
+	                    this.baseData.push({ key: dataPointDescriptor.primaryKey, value: dataPointDescriptor.measure });
 	                }
 	            } catch (err) {
 	                _didIteratorError = true;
@@ -44275,32 +44307,6 @@ var DDFCsvReader =
 	                } finally {
 	                    if (_didIteratorError) {
 	                        throw _iteratorError;
-	                    }
-	                }
-	            }
-	
-	            this.dataPointDescriptors = Array.from(dataPointsDescriptorsMap.values());
-	            var _iteratorNormalCompletion2 = true;
-	            var _didIteratorError2 = false;
-	            var _iteratorError2 = undefined;
-	
-	            try {
-	                for (var _iterator2 = this.dataPointDescriptors[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	                    var _dataPointDescriptor = _step2.value;
-	
-	                    this.baseData.push({ key: _dataPointDescriptor.primaryKey, value: _dataPointDescriptor.measure });
-	                }
-	            } catch (err) {
-	                _didIteratorError2 = true;
-	                _iteratorError2 = err;
-	            } finally {
-	                try {
-	                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
-	                        _iterator2.return();
-	                    }
-	                } finally {
-	                    if (_didIteratorError2) {
-	                        throw _iteratorError2;
 	                    }
 	                }
 	            }
@@ -44343,27 +44349,27 @@ var DDFCsvReader =
 	                        }
 	                        var data = lodash_1.flatten(results);
 	                        var group = { _id: null };
-	                        var _iteratorNormalCompletion3 = true;
-	                        var _didIteratorError3 = false;
-	                        var _iteratorError3 = undefined;
+	                        var _iteratorNormalCompletion2 = true;
+	                        var _didIteratorError2 = false;
+	                        var _iteratorError2 = undefined;
 	
 	                        try {
-	                            for (var _iterator3 = _this.request.select.value[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-	                                var value = _step3.value;
+	                            for (var _iterator2 = _this.request.select.value[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                                var value = _step2.value;
 	
 	                                group[value] = _defineProperty({}, "$" + _this.getFunction(value), "$" + dataPointDescriptor.measure);
 	                            }
 	                        } catch (err) {
-	                            _didIteratorError3 = true;
-	                            _iteratorError3 = err;
+	                            _didIteratorError2 = true;
+	                            _iteratorError2 = err;
 	                        } finally {
 	                            try {
-	                                if (!_iteratorNormalCompletion3 && _iterator3.return) {
-	                                    _iterator3.return();
+	                                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                                    _iterator2.return();
 	                                }
 	                            } finally {
-	                                if (_didIteratorError3) {
-	                                    throw _iteratorError3;
+	                                if (_didIteratorError2) {
+	                                    throw _iteratorError2;
 	                                }
 	                            }
 	                        }
@@ -44389,15 +44395,6 @@ var DDFCsvReader =
 	            }
 	        }
 	    }, {
-	        key: "getMeasures",
-	        value: function getMeasures(record) {
-	            return record.schema.fields.filter(function (field) {
-	                return !lodash_1.includes(record.schema.primaryKey, field.name);
-	            }).map(function (field) {
-	                return field.name;
-	            });
-	        }
-	    }, {
 	        key: "getFunction",
 	        value: function getFunction(expression) {
 	            var expressionRegex = /([a-z]+)\(.+\)/;
@@ -44408,27 +44405,27 @@ var DDFCsvReader =
 	        key: "getResultRowByAggregation",
 	        value: function getResultRowByAggregation(record, dataPointDescriptor) {
 	            var result = { key: dataPointDescriptor.primaryKey, value: dataPointDescriptor.measure };
-	            var _iteratorNormalCompletion4 = true;
-	            var _didIteratorError4 = false;
-	            var _iteratorError4 = undefined;
+	            var _iteratorNormalCompletion3 = true;
+	            var _didIteratorError3 = false;
+	            var _iteratorError3 = undefined;
 	
 	            try {
-	                for (var _iterator4 = this.request.select.value[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-	                    var value = _step4.value;
+	                for (var _iterator3 = this.request.select.value[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	                    var value = _step3.value;
 	
 	                    result[value] = record[value];
 	                }
 	            } catch (err) {
-	                _didIteratorError4 = true;
-	                _iteratorError4 = err;
+	                _didIteratorError3 = true;
+	                _iteratorError3 = err;
 	            } finally {
 	                try {
-	                    if (!_iteratorNormalCompletion4 && _iterator4.return) {
-	                        _iterator4.return();
+	                    if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	                        _iterator3.return();
 	                    }
 	                } finally {
-	                    if (_didIteratorError4) {
-	                        throw _iteratorError4;
+	                    if (_didIteratorError3) {
+	                        throw _iteratorError3;
 	                    }
 	                }
 	            }
