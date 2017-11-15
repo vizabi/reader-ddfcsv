@@ -6,7 +6,6 @@ import { BackendFileReader, Ddf } from '../src/index';
 
 const backendFileReader = new BackendFileReader();
 const GLOBALIS_PATH = './test/fixtures/systema_globalis';
-const GLOBALIS_PATH2 = './test/fixtures/systema_globalis_2';
 const GLOBALIS_TINY_PATH = './test/fixtures/systema_globalis_tiny';
 const PRESENTATION_SET = './test/fixtures/presentation_set';
 
@@ -28,7 +27,7 @@ describe('when entities checking', () => {
     };
 
     ddf.ddfRequest(request, (err, data) => {
-      const EXPECTED_RECORDS_COUNT = 275;
+      const EXPECTED_RECORDS_COUNT = 273;
 
       expect(!!err).to.be.false;
       expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
@@ -65,7 +64,7 @@ describe('when entities checking', () => {
     };
 
     ddf.ddfRequest(request, (err, data) => {
-      const EXPECTED_RECORDS_COUNT = 275;
+      const EXPECTED_RECORDS_COUNT = 273;
 
       expect(!!err).to.be.false;
       expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
@@ -328,7 +327,7 @@ describe('when entities checking', () => {
     });
 
     const getAction = request => onDdfRequestCompleted => {
-      const ddf = new Ddf(GLOBALIS_PATH2, backendFileReader);
+      const ddf = new Ddf(GLOBALIS_PATH, backendFileReader);
 
       ddf.ddfRequest(request, (err, data) => {
         onDdfRequestCompleted(err, data);

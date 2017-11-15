@@ -105,13 +105,31 @@
     "key": [
       "country"
     ],
-    "value": "code"
+    "value": "iso3166_1_alpha2"
   },
   {
     "key": [
       "country"
     ],
-    "value": "number"
+    "value": "iso3166_1_alpha3"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "iso3166_1_numeric"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "iso3166_2"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "unicode_region_subtag"
   },
   {
     "key": [
@@ -154,6 +172,12 @@
       "country"
     ],
     "value": "is--country"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "un_state"
   },
   {
     "key": [
@@ -225,6 +249,12 @@
     "key": [
       "geo"
     ],
+    "value": "unicode_region_subtag"
+  },
+  {
+    "key": [
+      "geo"
+    ],
     "value": "latitude"
   },
   {
@@ -232,6 +262,12 @@
       "geo"
     ],
     "value": "longitude"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "topojson"
   },
   {
     "key": [

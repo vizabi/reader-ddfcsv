@@ -4,7 +4,6 @@ import { BackendFileReader, Ddf } from '../src/index';
 
 const GLOBALIS_PATH = './test/fixtures/systema_globalis';
 const SANKEY_PATH = './test/fixtures/sankey';
-const PCBC_CENSUS_PATH = './test/fixtures/pcbs';
 
 const expect = chai.expect;
 
@@ -116,28 +115,6 @@ describe('when getting schema', () => {
         done();
       });
     });
-
-    /*
-    it('should ...', done => {
-      const ddf = new Ddf(PCBC_CENSUS_PATH, backendFileReader);
-      const request = {
-        select: {
-          key: [
-            'key',
-            'value'
-          ],
-          'value': []
-        },
-        from: 'datapoints.schema'
-      };
-
-      ddf.ddfRequest(request, (err, data) => {
-        console.log(JSON.stringify(data, null, 2));
-
-        done();
-      });
-    });
-    */
   });
 
   describe('for general query', () => {

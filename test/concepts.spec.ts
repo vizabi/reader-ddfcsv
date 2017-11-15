@@ -14,7 +14,7 @@ describe('when concepts checking', () => {
       select: {
         key: ['concept'],
         value: [
-          'concept_type', 'name', 'unit', 'color'
+          'concept_type', 'name', 'color'
         ]
       },
       from: 'concepts',
@@ -27,7 +27,7 @@ describe('when concepts checking', () => {
 
     ddf.ddfRequest(request, (err, data) => {
       const EXPECTED_RECORDS_COUNT = 8;
-      const EXPECTED_FIELDS_COUNT = 5;
+      const EXPECTED_FIELDS_COUNT = 4;
 
       expect(!!err).to.be.false;
       expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
@@ -52,7 +52,7 @@ describe('when concepts checking', () => {
       select: {
         key: ['concept'],
         value: [
-          'concept_type', 'name', 'unit', 'color', 'description'
+          'concept_type', 'name', 'color', 'description'
         ]
       },
       from: 'concepts',
@@ -65,7 +65,7 @@ describe('when concepts checking', () => {
 
     ddf.ddfRequest(request, (err, data) => {
       const EXPECTED_RECORDS_COUNT = 8;
-      const EXPECTED_FIELDS_COUNT = 6;
+      const EXPECTED_FIELDS_COUNT = 5;
 
       expect(!!err).to.be.false;
       expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
