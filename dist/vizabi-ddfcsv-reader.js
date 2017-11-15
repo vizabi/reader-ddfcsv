@@ -26610,8 +26610,10 @@ var DDFCsvReader =
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var entity_utils_1 = __webpack_require__(47);
+	var async_1 = __webpack_require__(48);
 	var lodash_1 = __webpack_require__(3);
 	var timeUtils = __webpack_require__(49);
+	var entity_adapter_1 = __webpack_require__(42);
 	var shared_1 = __webpack_require__(7);
 	var Mingo = __webpack_require__(8);
 	var timeValuesHash = {};
@@ -26690,7 +26692,20 @@ var DDFCsvReader =
 	            entityUtils.transformConditionByDomain(function (err, transformedCondition) {
 	                request.where = transformedCondition;
 	                _this2.request = request;
-	                onRequestNormalized(err, request);
+	                var allEntitySets = lodash_1.keys(_this2.contentManager.domainHash);
+	                var requestEntitySets = _this2.request.select.key.filter(function (entitySet) {
+	                    return lodash_1.includes(allEntitySets, entitySet);
+	                });
+	                var domains = lodash_1.uniq(requestEntitySets.map(function (entitySet) {
+	                    return _this2.contentManager.domainHash[entitySet];
+	                }));
+	                _this2.isEntitySetBasedRequest = !lodash_1.isEmpty(requestEntitySets);
+	                if (!_this2.isEntitySetBasedRequest) {
+	                    return onRequestNormalized(err, request);
+	                }
+	                _this2.getEntityValuesAccordingToRequest(domains, requestEntitySets, function (entitiesErr) {
+	                    onRequestNormalized(err || entitiesErr, request);
+	                });
 	            });
 	        }
 	    }, {
@@ -27058,7 +27073,13 @@ var DDFCsvReader =
 	                            if (!entityDescriptor.entity) {
 	                                dataHash[holderKey][entityDescriptor.domain] = record[entityDescriptor.domain];
 	                            }
-	                            if (result.originalEntitySet) {}
+	                            if (_this10.isEntitySetBasedRequest && result.originalEntitySet) {
+	                                if (_this10.expectedEntityValuesHash && _this10.expectedEntityValuesHash[record[entityDescriptor.domain]]) {
+	                                    dataHash[holderKey][result.originalEntitySet] = record[entityDescriptor.domain];
+	                                } else {
+	                                    dataHash[holderKey][result.originalEntitySet] = { _access: 'denied' };
+	                                }
+	                            }
 	                        });
 	                        request.select.value.forEach(function (measure) {
 	                            dataHash[holderKey][measure] = null;
@@ -27090,6 +27111,7 @@ var DDFCsvReader =
 	                    }
 	                });
 	            });
+	            var isCompactNeeded = false;
 	            var query = new Mingo.Query(request.where);
 	            var data = lodash_1.values(dataHash);
 	            var timeKeys = lodash_1.keys(timeValuesHash);
@@ -27104,6 +27126,10 @@ var DDFCsvReader =
 	                    for (var _iterator8 = projectionKeys[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
 	                        var projectionKey = _step8.value;
 	
+	                        if (lodash_1.isObject(record[projectionKey]) && record[projectionKey]._access === 'denied') {
+	                            isCompactNeeded = true;
+	                            return null;
+	                        }
 	                        resultRecord[projectionKey] = record[projectionKey];
 	                    }
 	                } catch (err) {
@@ -27151,7 +27177,72 @@ var DDFCsvReader =
 	
 	                return resultRecord;
 	            });
-	            return filteredData;
+	            return isCompactNeeded ? lodash_1.compact(filteredData) : filteredData;
+	        }
+	    }, {
+	        key: "getEntityValuesAccordingToRequest",
+	        value: function getEntityValuesAccordingToRequest(domains, requestEntitySets, onEntityValuesRead) {
+	            var _this11 = this;
+	
+	            var entitySetCondition = { $or: requestEntitySets.map(function (entitySet) {
+	                    return _defineProperty({}, "is--" + entitySet, 'TRUE');
+	                }) };
+	            var entitiesRequest = {
+	                from: 'entities',
+	                select: {
+	                    key: domains,
+	                    value: []
+	                },
+	                where: entitySetCondition
+	            };
+	            var ddfTypeAdapter = new entity_adapter_1.EntityAdapter(this.contentManager, this.reader, this.ddfPath);
+	            var expectedSchemaDetails = ddfTypeAdapter.getExpectedSchemaDetails(entitiesRequest, this.contentManager.dataPackage);
+	            var expectedFiles = lodash_1.uniq(lodash_1.flattenDeep(expectedSchemaDetails.map(function (ddfSchemaRecord) {
+	                return ddfSchemaRecord.resources;
+	            }))).map(function (resource) {
+	                return _this11.contentManager.nameHash[resource];
+	            });
+	            var fileActions = ddfTypeAdapter.getFileActions(expectedFiles, entitiesRequest);
+	            async_1.parallel(fileActions, function (entitiesErr, entitiesResult) {
+	                if (entitiesErr) {
+	                    onEntityValuesRead(entitiesErr);
+	                }
+	                var projection = domains.reduce(function (result, domain) {
+	                    result[domain] = 1;
+	                    return result;
+	                }, {});
+	                var allEntities = lodash_1.flatten(entitiesResult);
+	                var query = new Mingo.Query(entitiesRequest.where, projection);
+	                _this11.expectedEntityValuesHash = query.find(allEntities).all().reduce(function (result, entityRecord) {
+	                    var _iteratorNormalCompletion10 = true;
+	                    var _didIteratorError10 = false;
+	                    var _iteratorError10 = undefined;
+	
+	                    try {
+	                        for (var _iterator10 = lodash_1.keys(entityRecord)[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
+	                            var key = _step10.value;
+	
+	                            result[entityRecord[key]] = 1;
+	                        }
+	                    } catch (err) {
+	                        _didIteratorError10 = true;
+	                        _iteratorError10 = err;
+	                    } finally {
+	                        try {
+	                            if (!_iteratorNormalCompletion10 && _iterator10.return) {
+	                                _iterator10.return();
+	                            }
+	                        } finally {
+	                            if (_didIteratorError10) {
+	                                throw _iteratorError10;
+	                            }
+	                        }
+	                    }
+	
+	                    return result;
+	                }, {});
+	                onEntityValuesRead();
+	            });
 	        }
 	    }]);
 	
