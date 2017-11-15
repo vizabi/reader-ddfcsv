@@ -9,7 +9,7 @@
     "key": [
       "concept"
     ],
-    "value": "name"
+    "value": "color"
   },
   {
     "key": [
@@ -21,25 +21,13 @@
     "key": [
       "concept"
     ],
+    "value": "description"
+  },
+  {
+    "key": [
+      "concept"
+    ],
     "value": "domain"
-  },
-  {
-    "key": [
-      "concept"
-    ],
-    "value": "indicator_url"
-  },
-  {
-    "key": [
-      "concept"
-    ],
-    "value": "color"
-  },
-  {
-    "key": [
-      "concept"
-    ],
-    "value": "scales"
   },
   {
     "key": [
@@ -51,7 +39,7 @@
     "key": [
       "concept"
     ],
-    "value": "unit"
+    "value": "indicator_url"
   },
   {
     "key": [
@@ -63,7 +51,25 @@
     "key": [
       "concept"
     ],
-    "value": "description"
+    "value": "name"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "name_catalog"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "name_short"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "scales"
   },
   {
     "key": [

@@ -13,7 +13,7 @@ describe(`when reader's read method checking`, () => {
       select: {
         key: ['concept'],
         value: [
-          'concept_type', 'name', 'unit', 'color'
+          'concept_type', 'name', 'color'
         ]
       },
       from: 'concepts',
@@ -30,7 +30,7 @@ describe(`when reader's read method checking`, () => {
 
     return pro.then(data => {
       const EXPECTED_RECORDS_COUNT = 8;
-      const EXPECTED_FIELDS_COUNT = 5;
+      const EXPECTED_FIELDS_COUNT = 4;
 
       expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
 
