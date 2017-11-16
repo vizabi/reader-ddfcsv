@@ -3,17 +3,18 @@ import {
   cloneDeep,
   flatten,
   keys,
+  head,
   reduce,
   includes,
   isEmpty,
   startsWith,
   uniq
 } from 'lodash';
-import {ContentManager} from '../content-manager';
-import {IReader} from '../file-readers/reader';
-import {RequestNormalizer} from '../request-normalizer';
+import { ContentManager } from '../content-manager';
+import { IReader } from '../file-readers/reader';
+import { RequestNormalizer } from '../request-normalizer';
 import * as traverse from 'traverse';
-import {IDdfAdapter} from './adapter';
+import { IDdfAdapter } from './adapter';
 import { getSchemaDetailsByKey } from './shared';
 
 const Mingo = require('mingo');
@@ -75,7 +76,49 @@ export class EntityAdapter implements IDdfAdapter {
   }
 
   getExpectedSchemaDetails(request, dataPackageContent) {
-    return getSchemaDetailsByKey(request, dataPackageContent, 'entities');
+    const allRelatedSchemaDetails = getSchemaDetailsByKey(request, dataPackageContent, 'entities');
+
+    let filteredSchemaDetails;
+
+    if (request.where) {
+      let values = [];
+
+      const getDataPackageValueByRequest = partOfCondition => {
+        const isTrue = value => value === 'TRUE' || value === 'true';
+        const conditionKeys = keys(partOfCondition);
+
+        if (conditionKeys.length === 1) {
+          const firstClauseKey = head(conditionKeys);
+
+          if ((startsWith(firstClauseKey, 'is--') || includes('firstClauseKey', '.is--')) &&
+            isTrue(partOfCondition[firstClauseKey])) {
+            return firstClauseKey;
+          }
+        }
+
+        return null;
+      };
+      const setValue = value => {
+        if (value) {
+          values.push(value);
+        }
+      };
+
+      if (request.where.$or) {
+        for (const partOfCondition of request.where.$or) {
+          setValue(getDataPackageValueByRequest(partOfCondition))
+        }
+      } else if (keys(request.where).length === 1) {
+        setValue(getDataPackageValueByRequest(request.where));
+      }
+
+      if (!isEmpty(values)) {
+        filteredSchemaDetails = allRelatedSchemaDetails.filter(dataPackageRecord =>
+          includes(values, dataPackageRecord.value));
+      }
+    }
+
+    return !isEmpty(filteredSchemaDetails) ? filteredSchemaDetails : allRelatedSchemaDetails;
   }
 
   getDomainDescriptorsByRequestKeys(requestKey) {
@@ -135,10 +178,10 @@ export class EntityAdapter implements IDdfAdapter {
     return (record: any, filePath: string) => {
       const recordKeys = keys(record);
       const isTranslationExists = key =>
-      this.recordsDescriptor[filePath] &&
-      this.recordsDescriptor[filePath].translationHash &&
-      this.recordsDescriptor[filePath].translationHash[record[this.recordsDescriptor[filePath].mainKey]] &&
-      this.recordsDescriptor[filePath].translationHash[record[this.recordsDescriptor[filePath].mainKey]][key];
+        this.recordsDescriptor[filePath] &&
+        this.recordsDescriptor[filePath].translationHash &&
+        this.recordsDescriptor[filePath].translationHash[record[this.recordsDescriptor[filePath].mainKey]] &&
+        this.recordsDescriptor[filePath].translationHash[record[this.recordsDescriptor[filePath].mainKey]][key];
 
       this.constructRecordDescriptor(record, filePath);
 
