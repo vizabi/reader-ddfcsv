@@ -25612,7 +25612,63 @@ var DDFCsvReader =
 	    }, {
 	        key: "getExpectedSchemaDetails",
 	        value: function getExpectedSchemaDetails(request, dataPackageContent) {
-	            return shared_1.getSchemaDetailsByKey(request, dataPackageContent, 'entities');
+	            var allRelatedSchemaDetails = shared_1.getSchemaDetailsByKey(request, dataPackageContent, 'entities');
+	            var filteredSchemaDetails = void 0;
+	            if (request.where) {
+	                var values = [];
+	                var getDataPackageValueByRequest = function getDataPackageValueByRequest(partOfCondition) {
+	                    var isTrue = function isTrue(value) {
+	                        return value === 'TRUE' || value === 'true';
+	                    };
+	                    var conditionKeys = lodash_1.keys(partOfCondition);
+	                    if (conditionKeys.length === 1) {
+	                        var firstClauseKey = lodash_1.head(conditionKeys);
+	                        if ((lodash_1.startsWith(firstClauseKey, 'is--') || lodash_1.includes('firstClauseKey', '.is--')) && isTrue(partOfCondition[firstClauseKey])) {
+	                            return firstClauseKey;
+	                        }
+	                    }
+	                    return null;
+	                };
+	                var setValue = function setValue(value) {
+	                    if (value) {
+	                        values.push(value);
+	                    }
+	                };
+	                if (request.where.$or) {
+	                    var _iteratorNormalCompletion = true;
+	                    var _didIteratorError = false;
+	                    var _iteratorError = undefined;
+	
+	                    try {
+	                        for (var _iterator = request.where.$or[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                            var partOfCondition = _step.value;
+	
+	                            setValue(getDataPackageValueByRequest(partOfCondition));
+	                        }
+	                    } catch (err) {
+	                        _didIteratorError = true;
+	                        _iteratorError = err;
+	                    } finally {
+	                        try {
+	                            if (!_iteratorNormalCompletion && _iterator.return) {
+	                                _iterator.return();
+	                            }
+	                        } finally {
+	                            if (_didIteratorError) {
+	                                throw _iteratorError;
+	                            }
+	                        }
+	                    }
+	                } else if (lodash_1.keys(request.where).length === 1) {
+	                    setValue(getDataPackageValueByRequest(request.where));
+	                }
+	                if (!lodash_1.isEmpty(values)) {
+	                    filteredSchemaDetails = allRelatedSchemaDetails.filter(function (dataPackageRecord) {
+	                        return lodash_1.includes(values, dataPackageRecord.value);
+	                    });
+	                }
+	            }
+	            return !lodash_1.isEmpty(filteredSchemaDetails) ? filteredSchemaDetails : allRelatedSchemaDetails;
 	        }
 	    }, {
 	        key: "getDomainDescriptorsByRequestKeys",
@@ -25655,13 +25711,13 @@ var DDFCsvReader =
 	            if (!this.recordsDescriptor[filePath]) {
 	                var recordKeys = lodash_1.keys(record);
 	                var mainKey = null;
-	                var _iteratorNormalCompletion = true;
-	                var _didIteratorError = false;
-	                var _iteratorError = undefined;
+	                var _iteratorNormalCompletion2 = true;
+	                var _didIteratorError2 = false;
+	                var _iteratorError2 = undefined;
 	
 	                try {
-	                    for (var _iterator = recordKeys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                        var key = _step.value;
+	                    for (var _iterator2 = recordKeys[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                        var key = _step2.value;
 	
 	                        if (lodash_1.includes(this.contentManager.domainConcepts, key)) {
 	                            mainKey = key;
@@ -25673,16 +25729,16 @@ var DDFCsvReader =
 	                        }
 	                    }
 	                } catch (err) {
-	                    _didIteratorError = true;
-	                    _iteratorError = err;
+	                    _didIteratorError2 = true;
+	                    _iteratorError2 = err;
 	                } finally {
 	                    try {
-	                        if (!_iteratorNormalCompletion && _iterator.return) {
-	                            _iterator.return();
+	                        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                            _iterator2.return();
 	                        }
 	                    } finally {
-	                        if (_didIteratorError) {
-	                            throw _iteratorError;
+	                        if (_didIteratorError2) {
+	                            throw _iteratorError2;
 	                        }
 	                    }
 	                }
@@ -25704,13 +25760,13 @@ var DDFCsvReader =
 	                    return _this2.recordsDescriptor[filePath] && _this2.recordsDescriptor[filePath].translationHash && _this2.recordsDescriptor[filePath].translationHash[record[_this2.recordsDescriptor[filePath].mainKey]] && _this2.recordsDescriptor[filePath].translationHash[record[_this2.recordsDescriptor[filePath].mainKey]][key];
 	                };
 	                _this2.constructRecordDescriptor(record, filePath);
-	                var _iteratorNormalCompletion2 = true;
-	                var _didIteratorError2 = false;
-	                var _iteratorError2 = undefined;
+	                var _iteratorNormalCompletion3 = true;
+	                var _didIteratorError3 = false;
+	                var _iteratorError3 = undefined;
 	
 	                try {
-	                    for (var _iterator2 = recordKeys[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	                        var key = _step2.value;
+	                    for (var _iterator3 = recordKeys[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	                        var key = _step3.value;
 	
 	                        if (lodash_1.includes(_this2.contentManager.measureConcepts, key) && record[key]) {
 	                            record[key] = Number(record[key]);
@@ -25723,28 +25779,28 @@ var DDFCsvReader =
 	                        }
 	                    }
 	                } catch (err) {
-	                    _didIteratorError2 = true;
-	                    _iteratorError2 = err;
+	                    _didIteratorError3 = true;
+	                    _iteratorError3 = err;
 	                } finally {
 	                    try {
-	                        if (!_iteratorNormalCompletion2 && _iterator2.return) {
-	                            _iterator2.return();
+	                        if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	                            _iterator3.return();
 	                        }
 	                    } finally {
-	                        if (_didIteratorError2) {
-	                            throw _iteratorError2;
+	                        if (_didIteratorError3) {
+	                            throw _iteratorError3;
 	                        }
 	                    }
 	                }
 	
 	                if (!lodash_1.isEmpty(_this2.domainDescriptors)) {
-	                    var _iteratorNormalCompletion3 = true;
-	                    var _didIteratorError3 = false;
-	                    var _iteratorError3 = undefined;
+	                    var _iteratorNormalCompletion4 = true;
+	                    var _didIteratorError4 = false;
+	                    var _iteratorError4 = undefined;
 	
 	                    try {
-	                        for (var _iterator3 = _this2.domainDescriptors[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-	                            var domainDescriptor = _step3.value;
+	                        for (var _iterator4 = _this2.domainDescriptors[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+	                            var domainDescriptor = _step4.value;
 	
 	                            if (isTruth(record["is--" + domainDescriptor.key]) && lodash_1.isEmpty(record[domainDescriptor.domain])) {
 	                                record[domainDescriptor.domain] = record[domainDescriptor.key];
@@ -25755,16 +25811,16 @@ var DDFCsvReader =
 	                            }
 	                        }
 	                    } catch (err) {
-	                        _didIteratorError3 = true;
-	                        _iteratorError3 = err;
+	                        _didIteratorError4 = true;
+	                        _iteratorError4 = err;
 	                    } finally {
 	                        try {
-	                            if (!_iteratorNormalCompletion3 && _iterator3.return) {
-	                                _iterator3.return();
+	                            if (!_iteratorNormalCompletion4 && _iterator4.return) {
+	                                _iterator4.return();
 	                            }
 	                        } finally {
-	                            if (_didIteratorError3) {
-	                                throw _iteratorError3;
+	                            if (_didIteratorError4) {
+	                                throw _iteratorError4;
 	                            }
 	                        }
 	                    }
