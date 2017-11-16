@@ -27209,20 +27209,15 @@ var DDFCsvReader =
 	                }
 	                var projection = domains.reduce(function (result, domain) {
 	                    result[domain] = 1;
-	                    return result;
-	                }, {});
-	                var allEntities = lodash_1.flatten(entitiesResult);
-	                var query = new Mingo.Query(entitiesRequest.where, projection);
-	                _this11.expectedEntityValuesHash = query.find(allEntities).all().reduce(function (result, entityRecord) {
 	                    var _iteratorNormalCompletion10 = true;
 	                    var _didIteratorError10 = false;
 	                    var _iteratorError10 = undefined;
 	
 	                    try {
-	                        for (var _iterator10 = lodash_1.keys(entityRecord)[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
-	                            var key = _step10.value;
+	                        for (var _iterator10 = requestEntitySets[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
+	                            var entitySet = _step10.value;
 	
-	                            result[entityRecord[key]] = 1;
+	                            result[entitySet] = 1;
 	                        }
 	                    } catch (err) {
 	                        _didIteratorError10 = true;
@@ -27235,6 +27230,36 @@ var DDFCsvReader =
 	                        } finally {
 	                            if (_didIteratorError10) {
 	                                throw _iteratorError10;
+	                            }
+	                        }
+	                    }
+	
+	                    return result;
+	                }, {});
+	                var allEntities = lodash_1.flatten(entitiesResult);
+	                var query = new Mingo.Query(entitiesRequest.where, projection);
+	                _this11.expectedEntityValuesHash = query.find(allEntities).all().reduce(function (result, entityRecord) {
+	                    var _iteratorNormalCompletion11 = true;
+	                    var _didIteratorError11 = false;
+	                    var _iteratorError11 = undefined;
+	
+	                    try {
+	                        for (var _iterator11 = lodash_1.keys(entityRecord)[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
+	                            var key = _step11.value;
+	
+	                            result[entityRecord[key]] = 1;
+	                        }
+	                    } catch (err) {
+	                        _didIteratorError11 = true;
+	                        _iteratorError11 = err;
+	                    } finally {
+	                        try {
+	                            if (!_iteratorNormalCompletion11 && _iterator11.return) {
+	                                _iterator11.return();
+	                            }
+	                        } finally {
+	                            if (_didIteratorError11) {
+	                                throw _iteratorError11;
 	                            }
 	                        }
 	                    }
