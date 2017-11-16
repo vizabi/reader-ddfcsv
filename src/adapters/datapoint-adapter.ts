@@ -424,6 +424,10 @@ export class DataPointAdapter implements IDdfAdapter {
       const projection = domains.reduce((result, domain) => {
         result[domain] = 1;
 
+        for (const entitySet of requestEntitySets) {
+          result[entitySet] = 1;
+        }
+
         return result;
       }, {});
       const allEntities = flatten(entitiesResult);
