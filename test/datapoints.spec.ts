@@ -445,4 +445,42 @@ describe('when data points checking', () => {
       done();
     });
   });
+
+  it('query on dataset when datapoint record contains domain but request contains entity set should be processed correctly', done => {
+    const ddf = new Ddf(GLOBALIS_PATH, backendFileReader);
+    const request = {
+      select: {
+        key: ['country', 'time'],
+        value: ['population_total', 'life_expectancy_years']
+      },
+      from: 'datapoints',
+      where: {
+        $and: [
+          {time: '$time'}
+        ]
+      },
+      join: {
+        $time: {
+          key: 'time',
+          where: {
+            time: {
+              $gte: '1993',
+              $lte: '2015'
+            }
+          }
+        }
+      },
+      order_by: ['time'],
+      language: 'en',
+    };
+
+    const EXPECTED_RECORDS_COUNT = 5691;
+
+    ddf.ddfRequest(request, (err, data) => {
+      expect(!!err).to.be.false;
+      expect(data.length).to.equal(EXPECTED_RECORDS_COUNT);
+
+      done();
+    });
+  });
 });
