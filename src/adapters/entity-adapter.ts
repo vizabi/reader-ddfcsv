@@ -108,8 +108,10 @@ export class EntityAdapter implements IDdfAdapter {
         for (const partOfCondition of request.where.$or) {
           setValue(getDataPackageValueByRequest(partOfCondition))
         }
-      } else if (keys(request.where).length === 1) {
-        setValue(getDataPackageValueByRequest(request.where));
+      } else {
+        const conditionKeys = keys(request.where);
+
+        setValue(getDataPackageValueByRequest(conditionKeys.map(key => ({[key]: request.where[key]}))));
       }
 
       if (!isEmpty(values)) {
