@@ -1,5 +1,5 @@
 import * as chai from 'chai';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isEqual } from 'lodash';
 import { parallel } from 'async';
 import { isNumber } from 'lodash';
 import { BackendFileReader, Ddf } from '../src/index';
@@ -8,6 +8,7 @@ const backendFileReader = new BackendFileReader();
 const GLOBALIS_PATH = './test/fixtures/systema_globalis';
 const GLOBALIS_TINY_PATH = './test/fixtures/systema_globalis_tiny';
 const PRESENTATION_SET = './test/fixtures/presentation_set';
+const COMPLEX_ENTITIES = './test/fixtures/complex-entities';
 
 const expect = chai.expect;
 
@@ -342,6 +343,41 @@ describe('when entities checking', () => {
     parallel(actions, (err, results: any) => {
       expect(!!err).to.be.false;
       expect(results.unStateTrue.length + results.unStateFalse.length).to.equal(results.all.length);
+
+      done();
+    });
+  });
+
+  it('should query on DS with different kind of entities in the same file work properly', done => {
+    const ddf = new Ddf(COMPLEX_ENTITIES, backendFileReader);
+    const expectedData = [
+      {region: 'africa', name: 'Africa'},
+      {region: 'europe', name: 'Europe'},
+      {region: 'americas', name: 'Americas'},
+      {region: 'asia', name: 'Asia'}
+    ];
+    const request = {
+      language: 'en',
+      from: 'entities',
+      animatable: 'year',
+      select: {
+        key: [
+          'region'
+        ],
+        value: [
+          'name'
+        ]
+      },
+      where: {},
+      join: {},
+      order_by: [
+        'rank'
+      ]
+    };
+
+    ddf.ddfRequest(request, (err, data) => {
+      expect(!!err).to.be.false;
+      expect(isEqual(data, expectedData)).to.be.true;
 
       done();
     });
