@@ -131,6 +131,19 @@ export class EntityAdapter implements IDdfAdapter {
     ));
   }
 
+  addIsClauseByKey(request) {
+    const isParentDomainPresent = entitySet => {
+      const domain = this.contentManager.domainHash[entitySet];
+
+      return includes(request.select.key, domain);
+    };
+    const extraIsClauses = request.select.key
+      .filter(concept => this.contentManager.conceptTypeHash[concept] === 'entity_set' && !isParentDomainPresent(concept))
+      .map(concept => ({$or: [{[`is--${concept}`]: 'TRUE'}, {[`is--${concept}`]: 'true'}]}));
+
+    request.where = Object.assign(request.where, ...extraIsClauses);
+  }
+
   getNormalizedRequest(request, onRequestNormalized) {
     const allEntitySets = this.contentManager.concepts.filter(concept => concept.concept_type === 'entity_set');
     const relatedEntitySetsNames = flatten(
@@ -146,6 +159,7 @@ export class EntityAdapter implements IDdfAdapter {
       .filter(value => value !== '_default');
     request.where = getNormalizedBoolean(getCroppedKeys(request.where));
 
+    this.addIsClauseByKey(request);
     this.domainDescriptors = this.getDomainDescriptorsByRequestKeys(request.select.key);
     this.request = request;
 
