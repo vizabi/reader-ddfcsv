@@ -11,6 +11,19 @@
       "node",
       "mocha",
       "chai"
+    ],
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "alwaysStrict": true,
+    "sourceMap": true,
+    "noEmitHelpers": true,
+    "importHelpers": false,
+    "strictNullChecks": false,
+    "baseUrl": ".",
+    "lib": [
+      "es2017"
     ]
   },
   "include": [
@@ -18,6 +31,7 @@
     "src/index-web.ts"
   ],
   "exclude": [
+    "dist",
     "node_modules",
     "**/*.spec.ts"
   ]
