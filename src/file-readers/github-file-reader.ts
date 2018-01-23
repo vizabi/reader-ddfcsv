@@ -1,8 +1,9 @@
-import * as https from 'https';
-import * as csvParse from 'csv-parse';
-import { compact, head, split } from 'lodash';
+/* tslint:disable */
+
+// import * as https from 'https';
 import { IReader } from './reader';
 
+/*
 function readViaHttp(filePath: string, onFileRead: Function) {
   let content: string = '';
 
@@ -17,6 +18,7 @@ function readViaHttp(filePath: string, onFileRead: Function) {
     onFileRead(error);
   });
 }
+*/
 
 export class GithubFileReader implements IReader {
   public recordTransformer: Function;
@@ -25,65 +27,6 @@ export class GithubFileReader implements IReader {
     this.recordTransformer = recordTransformer;
   }
 
-  readCSV(filePath, onFileRead) {
-    readViaHttp(filePath, (contentError, content) => {
-      if (contentError) {
-        onFileRead(contentError);
-        return;
-      }
-
-      csvParse(content, {columns: true}, (err, contentSource) => {
-        if (err) {
-          onFileRead(err);
-          return;
-        }
-
-        let content = null;
-
-        if (this.recordTransformer) {
-          content = compact(contentSource.map(record => this.recordTransformer(record, filePath)));
-        }
-
-        if (!this.recordTransformer) {
-          content = contentSource;
-        }
-
-        onFileRead(err, content);
-      });
-    });
-  }
-
-  readJSON(filePath, onFileRead) {
-    readViaHttp(filePath, (contentError, content) => {
-      if (contentError) {
-        onFileRead(contentError);
-        return;
-      }
-
-      try {
-        onFileRead(null, JSON.parse(content));
-      } catch (jsonErr) {
-        onFileRead(jsonErr);
-      }
-    });
-  }
-
   readText(filePath, onFileRead) {
-  }
-
-  getFileSchema(filePath, onFileRead) {
-    readViaHttp(filePath, (contentError, content) => {
-      if (contentError) {
-        onFileRead(contentError);
-        return;
-      }
-
-      const arrayContent = split(content.toString(), '\n');
-      const firstRecord = head(arrayContent);
-      const header = split(firstRecord, ',');
-      const recordCount = arrayContent.length - 1;
-
-      onFileRead(null, {filePath, header, recordCount});
-    });
   }
 }

@@ -1,40 +1,42 @@
-import { cloneDeep, trimEnd, trimStart, endsWith } from 'lodash';
-import { Ddf } from './ddf';
-import { IReader } from './file-readers/reader';
 import * as Promise from 'bluebird';
+import { ddfCsvReader } from './ddf-csv';
+import { IReader } from './file-readers/reader';
 
 export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
-  return function (externalFileReader?: IReader, logger?: any) {
+  return function(externalFileReader?: IReader, logger?: any) {
     return {
       init(readerInfo) {
         this._basepath = readerInfo.path;
         this._lastModified = readerInfo._lastModified;
-
-        const fileReader = externalFileReader || defaultFileReader;
-
-        this.ddf = new Ddf(readerInfo.path, fileReader);
+        this.fileReader = externalFileReader || defaultFileReader;
+        this.logger = logger;
+        this.reader = ddfCsvReader(`${this._basepath}/datapackage.json`, this.fileReader, this.logger);
       },
 
-      getAsset(asset, options: any = {}) {
-        const trimmedDdfPath = trimEnd(this.ddf.ddfPath, '/');
-        const trimmedAsset = trimStart(asset, '/');
-        const isJsonAsset = endsWith(trimmedAsset, '.json');
+      getAsset(asset) {
+        const isJsonAsset = asset.slice(-'.json'.length) === '.json';
 
         return new Promise((resolve, reject) => {
-          this.ddf.getAsset(`${trimmedDdfPath}/${trimmedAsset}`, isJsonAsset, (err, data) => {
+          this.fileReader.readText(`${this._basepath}/${asset}`, (err, data) => {
             if (err) {
               reject(err);
               return;
             }
 
-            resolve(data);
+            if (isJsonAsset) {
+              try {
+                resolve(JSON.parse(data));
+              } catch (jsonErr) {
+                reject(err);
+              }
+            } else {
+              resolve(data);
+            }
           });
         });
       },
 
       read(queryPar, parsers) {
-        const query = cloneDeep(queryPar);
-
         function prettifyData(data) {
           return data.map(record => {
             const keys = Object.keys(record);
@@ -49,20 +51,17 @@ export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
           });
         }
 
-        return new Promise((resolve, reject) => {
-          this.ddf.ddfRequest(query, function (err, data) {
-            if (err) {
-              reject(err);
-              return;
+        return new Promise(resolve => {
+          this.reader.query(queryPar).then(result => {
+
+            result = parsers ? prettifyData(result) : result;
+
+            if (this.logger && this.logger.log) {
+              logger.log(JSON.stringify(queryPar), result.length);
+              logger.log(result);
             }
 
-            data = parsers ? prettifyData(data) : data;
-
-            if (logger && logger.log) {
-              logger.log(JSON.stringify(queryPar), data.length, data);
-            }
-
-            resolve(data);
+            resolve(result);
           });
         });
       }
