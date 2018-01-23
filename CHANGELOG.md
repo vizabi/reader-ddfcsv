@@ -1,3 +1,13 @@
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v0.14.5...v2.0.0) (2018-01-23)
+
+
+### Features
+
+* **redesing:** version 2.0 ([0c29ae0](https://github.com/vizabi/vizabi-ddfcsv-reader/commit/0c29ae0)), closes [#65](https://github.com/vizabi/vizabi-ddfcsv-reader/issues/65)
+
+
+
 <a name="0.14.5"></a>
 ## [0.14.5](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v0.14.4...v0.14.5) (2017-11-16)
 
