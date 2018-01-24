@@ -512,7 +512,7 @@ var DDFCsvReader =
 	                        return record;
 	                    });
 	                }
-	                return new Promise(function (resolve) {
+	                return new Promise(function (resolve, reject) {
 	                    _this2.reader.query(queryPar).then(function (result) {
 	                        result = parsers ? prettifyData(result) : result;
 	                        if (_this2.logger && _this2.logger.log) {
@@ -520,6 +520,8 @@ var DDFCsvReader =
 	                            logger.log(result);
 	                        }
 	                        resolve(result);
+	                    }).catch(function (err) {
+	                        reject(err);
 	                    });
 	                });
 	            }

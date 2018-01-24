@@ -13,7 +13,8 @@
     "object-literal-sort-keys": false,
     "forin": false,
     "only-arrow-functions": false,
-    "member-access": false
+    "member-access": false,
+    "space-before-function-paren": false
   },
   "rulesDirectory": []
 }

@@ -32,7 +32,7 @@ describe('Concepts supporting', () => {
       done();
     });
   });
-  it('an exception should be raced for request with an error', done => {
+  it('an exception should be raised for request with an error', done => {
     const reader = getDDFCsvReaderObject();
 
     reader.init({path: GLOBALIS_PATH});
@@ -62,7 +62,7 @@ describe('Concepts supporting', () => {
     });
   });
 
-  it('an exception should be raced for empty request', done => {
+  it('an exception should be raised for empty request', done => {
     const reader = getDDFCsvReaderObject();
 
     reader.init({path: GLOBALIS_PATH});
