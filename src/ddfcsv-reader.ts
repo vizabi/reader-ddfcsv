@@ -3,7 +3,7 @@ import { ddfCsvReader } from './ddf-csv';
 import { IReader } from './file-readers/reader';
 
 export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
-  return function(externalFileReader?: IReader, logger?: any) {
+  return function (externalFileReader?: IReader, logger?: any) {
     return {
       init(readerInfo) {
         this._basepath = readerInfo.path;
@@ -51,7 +51,7 @@ export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
           });
         }
 
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
           this.reader.query(queryPar).then(result => {
 
             result = parsers ? prettifyData(result) : result;
@@ -62,6 +62,8 @@ export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
             }
 
             resolve(result);
+          }).catch(err => {
+            reject(err);
           });
         });
       }
