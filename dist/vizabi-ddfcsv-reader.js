@@ -6999,9 +6999,9 @@ var DDFCsvReader =
 	        });
 	    }
 	    function getLanguages() {
-	        return [datapackage.translations.map(function (lang) {
+	        return datapackage.translations.map(function (lang) {
 	            return lang.id;
-	        })];
+	        });
 	    }
 	    function loadFile(filePath) {
 	        return new Promise(function (resolve, reject) {
