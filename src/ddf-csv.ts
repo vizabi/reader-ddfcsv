@@ -667,9 +667,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
   }
 
   function getLanguages(): string[] {
-    return [
-      datapackage.translations.map(lang => lang.id)
-    ];
+    return datapackage.translations.map(lang => lang.id);
   }
 
   function loadFile(filePath) {
