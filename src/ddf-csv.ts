@@ -3,6 +3,8 @@ import { IReader } from './file-readers/reader';
 const Promise = require('bluebird');
 const Papa = require('papaparse');
 
+const isValidNumeric = val => typeof val !== 'number' && !val ? false : true;
+
 export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
 
   const internalConcepts = [
@@ -18,12 +20,12 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
     ['$nor', (row, predicates) => !predicates.some(p => applyFilterRow(row, p))],
 
     /* equality operators */
-    ['$eq', (rowValue, filterValue) => rowValue === filterValue],
-    ['$ne', (rowValue, filterValue) => rowValue !== filterValue],
-    ['$gt', (rowValue, filterValue) => rowValue > filterValue],
-    ['$gte', (rowValue, filterValue) => rowValue >= filterValue],
-    ['$lt', (rowValue, filterValue) => rowValue < filterValue],
-    ['$lte', (rowValue, filterValue) => rowValue <= filterValue],
+    ['$eq', (rowValue, filterValue) => rowValue == filterValue],
+    ['$ne', (rowValue, filterValue) => rowValue != filterValue],
+    ['$gt', (rowValue, filterValue) => isValidNumeric(rowValue) && rowValue > filterValue],
+    ['$gte', (rowValue, filterValue) => isValidNumeric(rowValue) && rowValue >= filterValue],
+    ['$lt', (rowValue, filterValue) => isValidNumeric(rowValue) && rowValue < filterValue],
+    ['$lte', (rowValue, filterValue) => isValidNumeric(rowValue) && rowValue <= filterValue],
     ['$in', (rowValue, filterValue) => filterValue.has(rowValue)],
     ['$nin', (rowValue, filterValue) => !filterValue.has(rowValue)],
   ]);

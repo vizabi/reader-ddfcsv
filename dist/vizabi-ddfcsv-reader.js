@@ -6422,6 +6422,9 @@ var DDFCsvReader =
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var Promise = __webpack_require__(4);
 	var Papa = __webpack_require__(44);
+	var isValidNumeric = function isValidNumeric(val) {
+	    return typeof val !== 'number' && !val ? false : true;
+	};
 	function ddfCsvReader(path, fileReader, logger) {
 	    var internalConcepts = [{ concept: 'concept', concept_type: 'string', domain: null }, { concept: 'concept_type', concept_type: 'string', domain: null }];
 	    var operators = new Map([['$and', function (row, predicates) {
@@ -6439,17 +6442,17 @@ var DDFCsvReader =
 	            return applyFilterRow(row, p);
 	        });
 	    }], ['$eq', function (rowValue, filterValue) {
-	        return rowValue === filterValue;
+	        return rowValue == filterValue;
 	    }], ['$ne', function (rowValue, filterValue) {
-	        return rowValue !== filterValue;
+	        return rowValue != filterValue;
 	    }], ['$gt', function (rowValue, filterValue) {
-	        return rowValue > filterValue;
+	        return isValidNumeric(rowValue) && rowValue > filterValue;
 	    }], ['$gte', function (rowValue, filterValue) {
-	        return rowValue >= filterValue;
+	        return isValidNumeric(rowValue) && rowValue >= filterValue;
 	    }], ['$lt', function (rowValue, filterValue) {
-	        return rowValue < filterValue;
+	        return isValidNumeric(rowValue) && rowValue < filterValue;
 	    }], ['$lte', function (rowValue, filterValue) {
-	        return rowValue <= filterValue;
+	        return isValidNumeric(rowValue) && rowValue <= filterValue;
 	    }], ['$in', function (rowValue, filterValue) {
 	        return filterValue.has(rowValue);
 	    }], ['$nin', function (rowValue, filterValue) {
