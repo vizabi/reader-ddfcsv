@@ -6966,6 +6966,7 @@ var DDFCsvReader =
 	    function throwError(error) {
 	        var currentLogger = logger || console;
 	        currentLogger.error(error);
+	        throw new Error(error);
 	    }
 	    function createKeyString(key) {
 	        var row = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
