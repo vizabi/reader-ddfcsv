@@ -14,7 +14,9 @@
     "forin": false,
     "only-arrow-functions": false,
     "member-access": false,
-    "space-before-function-paren": false
+    "space-before-function-paren": false,
+    "triple-equals": false,
+    "ordered-imports": false
   },
   "rulesDirectory": []
 }

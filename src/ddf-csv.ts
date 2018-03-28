@@ -1,7 +1,16 @@
 import { IReader } from './file-readers/reader';
+import {
+  CSV_PARSING_ERROR,
+  DDF_ERROR,
+  DdfCsvError,
+  FILE_READING_ERROR,
+  JSON_PARSING_ERROR
+} from './ddfcsv-error';
 
 const Promise = require('bluebird');
 const Papa = require('papaparse');
+
+const isValidNumeric = val => typeof val !== 'number' && !val ? false : true;
 
 export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
 
@@ -18,12 +27,12 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
     ['$nor', (row, predicates) => !predicates.some(p => applyFilterRow(row, p))],
 
     /* equality operators */
-    ['$eq', (rowValue, filterValue) => rowValue === filterValue],
-    ['$ne', (rowValue, filterValue) => rowValue !== filterValue],
-    ['$gt', (rowValue, filterValue) => rowValue > filterValue],
-    ['$gte', (rowValue, filterValue) => rowValue >= filterValue],
-    ['$lt', (rowValue, filterValue) => rowValue < filterValue],
-    ['$lte', (rowValue, filterValue) => rowValue <= filterValue],
+    ['$eq', (rowValue, filterValue) => rowValue == filterValue],
+    ['$ne', (rowValue, filterValue) => rowValue != filterValue],
+    ['$gt', (rowValue, filterValue) => isValidNumeric(rowValue) && rowValue > filterValue],
+    ['$gte', (rowValue, filterValue) => isValidNumeric(rowValue) && rowValue >= filterValue],
+    ['$lt', (rowValue, filterValue) => isValidNumeric(rowValue) && rowValue < filterValue],
+    ['$lte', (rowValue, filterValue) => isValidNumeric(rowValue) && rowValue <= filterValue],
     ['$in', (rowValue, filterValue) => filterValue.has(rowValue)],
     ['$nin', (rowValue, filterValue) => !filterValue.has(rowValue)],
   ]);
@@ -63,13 +72,13 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
     return new Promise((resolve, reject) => {
       fileReader.readText(pathParam, (err, data) => {
         if (err) {
-          return reject(err);
+          return reject(new DdfCsvError(FILE_READING_ERROR, err, pathParam));
         }
 
         try {
           datapackage = JSON.parse(data);
         } catch (parseErr) {
-          return reject(parseErr);
+          return reject(new DdfCsvError(JSON_PARSING_ERROR, parseErr, pathParam));
         }
 
         buildResourcesLookup(datapackage);
@@ -320,7 +329,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
         .map(getSchemaFromCollection)
         .reduce((a, b) => a.concat(b));
     } else {
-      throwError(`No valid collection (${collection}) for schema query`);
+      throwError(new DdfCsvError(DDF_ERROR, `No valid collection (${collection}) for schema query`));
     }
   }
 
@@ -609,7 +618,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
             const errStr =
               `JOIN Error: two resources have different data for "${concept}": ${sourceRowStr},${resultRowStr}`;
 
-            throwError(errStr);
+            throwError(new DdfCsvError(DDF_ERROR, errStr));
           } else {
             resultRow[concept] = sourceRow[concept];
           }
@@ -618,10 +627,12 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
     }
   }
 
-  function throwError(error) {
+  function throwError(error: DdfCsvError) {
     const currentLogger = logger || console;
 
-    currentLogger.error(error);
+    currentLogger.error(error.message);
+
+    throw error;
   }
 
   function createKeyString(key, row = false) {
@@ -674,7 +685,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
     return new Promise((resolve, reject) => {
       fileReader.readText(filePath, (err, data) => {
         if (err) {
-          return reject(err);
+          return reject(new DdfCsvError(FILE_READING_ERROR, err, filePath));
         }
 
         Papa.parse(data, {
@@ -694,7 +705,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
             return ['boolean', 'measure'].includes(concept.concept_type);
           },
           complete: result => resolve(result),
-          error: error => reject(error)
+          error: error => reject(new DdfCsvError(CSV_PARSING_ERROR, error, filePath))
         });
       });
     });

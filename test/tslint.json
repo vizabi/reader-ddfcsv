@@ -14,7 +14,8 @@
     "forin": false,
     "only-arrow-functions": false,
     "member-access": false,
-    "no-unused-expression": false
+    "no-unused-expression": false,
+    "ordered-imports": false
   },
   "rulesDirectory": []
 }

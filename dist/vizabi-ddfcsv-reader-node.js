@@ -5660,6 +5660,9 @@ module.exports =
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var Promise = __webpack_require__(5);
 	var Papa = __webpack_require__(42);
+	var isValidNumeric = function isValidNumeric(val) {
+	    return typeof val !== 'number' && !val ? false : true;
+	};
 	function ddfCsvReader(path, fileReader, logger) {
 	    var internalConcepts = [{ concept: 'concept', concept_type: 'string', domain: null }, { concept: 'concept_type', concept_type: 'string', domain: null }];
 	    var operators = new Map([['$and', function (row, predicates) {
@@ -5677,17 +5680,17 @@ module.exports =
 	            return applyFilterRow(row, p);
 	        });
 	    }], ['$eq', function (rowValue, filterValue) {
-	        return rowValue === filterValue;
+	        return rowValue == filterValue;
 	    }], ['$ne', function (rowValue, filterValue) {
-	        return rowValue !== filterValue;
+	        return rowValue != filterValue;
 	    }], ['$gt', function (rowValue, filterValue) {
-	        return rowValue > filterValue;
+	        return isValidNumeric(rowValue) && rowValue > filterValue;
 	    }], ['$gte', function (rowValue, filterValue) {
-	        return rowValue >= filterValue;
+	        return isValidNumeric(rowValue) && rowValue >= filterValue;
 	    }], ['$lt', function (rowValue, filterValue) {
-	        return rowValue < filterValue;
+	        return isValidNumeric(rowValue) && rowValue < filterValue;
 	    }], ['$lte', function (rowValue, filterValue) {
-	        return rowValue <= filterValue;
+	        return isValidNumeric(rowValue) && rowValue <= filterValue;
 	    }], ['$in', function (rowValue, filterValue) {
 	        return filterValue.has(rowValue);
 	    }], ['$nin', function (rowValue, filterValue) {
@@ -6201,6 +6204,7 @@ module.exports =
 	    function throwError(error) {
 	        var currentLogger = logger || console;
 	        currentLogger.error(error);
+	        throw new Error(error);
 	    }
 	    function createKeyString(key) {
 	        var row = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;

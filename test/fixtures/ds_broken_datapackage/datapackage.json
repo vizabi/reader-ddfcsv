@@ -1,0 +1,56 @@
+(
+    "name": "ddf--gapminder--systema_globalis",
+    "title": "ddf--gapminder--systema_globalis",
+    "author": "Gapminder",
+    "description": "",
+    "license": "",
+    "version": "1.2.3",
+    "language": {
+        "id": "en",
+        "name": "English"
+    },
+    "last_updated": "2017-09-06 14:03:17",
+    "translations": [
+        {
+            "id": "ar-SA",
+            "name": "العربية"
+        },
+        {
+            "id": "es-ES"
+        },
+        {
+            "id": "fr-FR"
+        },
+        {
+            "id": "ru-RU"
+        },
+        {
+            "id": "sv-SE"
+        },
+        {
+            "id": "zh-CN"
+        }
+    ],
+    "id": "sg-dataset",
+    "resources": [
+        {
+            "path": "ddf--concepts.csv",
+            "name": "ddf--concepts",
+            "schema": {
+                "fields": [
+                    {
+                        "name": "concept"
+                    },
+                    {
+                        "name": "color"
+                    },
+                    {
+                        "name": "concept_type"
+                    },
+                    {
+                        "name": "description"
+                    },
+                    {
+                        "name": "domain"
+                    },
+                    {
