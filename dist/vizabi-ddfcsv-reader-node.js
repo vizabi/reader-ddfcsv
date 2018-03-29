@@ -54,7 +54,9 @@ module.exports =
 	var github_file_reader_1 = __webpack_require__(3);
 	var github_file_reader_2 = __webpack_require__(3);
 	exports.GithubFileReader = github_file_reader_2.GithubFileReader;
-	var ddfcsv_reader_1 = __webpack_require__(4);
+	var ddfcsv_error_1 = __webpack_require__(4);
+	exports.DdfCsvError = ddfcsv_error_1.DdfCsvError;
+	var ddfcsv_reader_1 = __webpack_require__(5);
 	exports.getDDFCsvReaderObject = ddfcsv_reader_1.prepareDDFCsvReaderObject(new backend_file_reader_1.BackendFileReader());
 	exports.getGithubDDFCsvReaderObject = ddfcsv_reader_1.prepareDDFCsvReaderObject(new github_file_reader_1.GithubFileReader());
 	//# sourceMappingURL=index.js.map
@@ -142,13 +144,54 @@ module.exports =
 
 /***/ },
 /* 4 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.FILE_READING_ERROR = 'File reading error';
+	exports.JSON_PARSING_ERROR = 'JSON parsing error';
+	exports.CSV_PARSING_ERROR = 'CSV parsing error';
+	exports.DDF_ERROR = 'DDF error';
+	
+	var DdfCsvError = function (_Error) {
+	    _inherits(DdfCsvError, _Error);
+	
+	    function DdfCsvError(message, details, file) {
+	        _classCallCheck(this, DdfCsvError);
+	
+	        var _this = _possibleConstructorReturn(this, (DdfCsvError.__proto__ || Object.getPrototypeOf(DdfCsvError)).call(this));
+	
+	        _this.details = details;
+	        _this.file = file;
+	        _this.name = 'DdfCsvError';
+	        _this.message = message;
+	        _this.details = details;
+	        _this.file = file;
+	        return _this;
+	    }
+	
+	    return DdfCsvError;
+	}(Error);
+	
+	exports.DdfCsvError = DdfCsvError;
+	//# sourceMappingURL=ddfcsv-error.js.map
+
+/***/ },
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
-	var Promise = __webpack_require__(5);
-	var ddf_csv_1 = __webpack_require__(41);
+	var Promise = __webpack_require__(6);
+	var ddf_csv_1 = __webpack_require__(42);
 	function prepareDDFCsvReaderObject(defaultFileReader) {
 	    return function (externalFileReader, logger) {
 	        return {
@@ -215,7 +258,7 @@ module.exports =
 	//# sourceMappingURL=ddfcsv-reader.js.map
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -228,12 +271,12 @@ module.exports =
 	    } catch (e) {}
 	    return bluebird;
 	}
-	var bluebird = __webpack_require__(6)();
+	var bluebird = __webpack_require__(7)();
 	bluebird.noConflict = noConflict;
 	module.exports = bluebird;
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -250,7 +293,7 @@ module.exports =
 	    };
 	    function Proxyable() {}
 	    var UNDEFINED_BINDING = {};
-	    var util = __webpack_require__(7);
+	    var util = __webpack_require__(8);
 	
 	    var getDomain;
 	    if (util.isNode) {
@@ -266,11 +309,11 @@ module.exports =
 	    }
 	    util.notEnumerableProp(Promise, "_getDomain", getDomain);
 	
-	    var es5 = __webpack_require__(8);
-	    var Async = __webpack_require__(9);
+	    var es5 = __webpack_require__(9);
+	    var Async = __webpack_require__(10);
 	    var async = new Async();
 	    es5.defineProperty(Promise, "_async", { value: async });
-	    var errors = __webpack_require__(12);
+	    var errors = __webpack_require__(13);
 	    var TypeError = Promise.TypeError = errors.TypeError;
 	    Promise.RangeError = errors.RangeError;
 	    var CancellationError = Promise.CancellationError = errors.CancellationError;
@@ -281,16 +324,16 @@ module.exports =
 	    var INTERNAL = function INTERNAL() {};
 	    var APPLY = {};
 	    var NEXT_FILTER = {};
-	    var tryConvertToPromise = __webpack_require__(13)(Promise, INTERNAL);
-	    var PromiseArray = __webpack_require__(14)(Promise, INTERNAL, tryConvertToPromise, apiRejection, Proxyable);
-	    var Context = __webpack_require__(15)(Promise);
+	    var tryConvertToPromise = __webpack_require__(14)(Promise, INTERNAL);
+	    var PromiseArray = __webpack_require__(15)(Promise, INTERNAL, tryConvertToPromise, apiRejection, Proxyable);
+	    var Context = __webpack_require__(16)(Promise);
 	    /*jshint unused:false*/
 	    var createContext = Context.create;
-	    var debug = __webpack_require__(16)(Promise, Context);
+	    var debug = __webpack_require__(17)(Promise, Context);
 	    var CapturedTrace = debug.CapturedTrace;
-	    var PassThroughHandlerContext = __webpack_require__(17)(Promise, tryConvertToPromise, NEXT_FILTER);
-	    var catchFilter = __webpack_require__(18)(NEXT_FILTER);
-	    var nodebackForPromise = __webpack_require__(19);
+	    var PassThroughHandlerContext = __webpack_require__(18)(Promise, tryConvertToPromise, NEXT_FILTER);
+	    var catchFilter = __webpack_require__(19)(NEXT_FILTER);
+	    var nodebackForPromise = __webpack_require__(20);
 	    var errorObj = util.errorObj;
 	    var tryCatch = util.tryCatch;
 	    function check(self, executor) {
@@ -925,29 +968,29 @@ module.exports =
 	
 	    util.notEnumerableProp(Promise, "_makeSelfResolutionError", makeSelfResolutionError);
 	
-	    __webpack_require__(20)(Promise, INTERNAL, tryConvertToPromise, apiRejection, debug);
-	    __webpack_require__(21)(Promise, INTERNAL, tryConvertToPromise, debug);
-	    __webpack_require__(22)(Promise, PromiseArray, apiRejection, debug);
-	    __webpack_require__(23)(Promise);
+	    __webpack_require__(21)(Promise, INTERNAL, tryConvertToPromise, apiRejection, debug);
+	    __webpack_require__(22)(Promise, INTERNAL, tryConvertToPromise, debug);
+	    __webpack_require__(23)(Promise, PromiseArray, apiRejection, debug);
 	    __webpack_require__(24)(Promise);
-	    __webpack_require__(25)(Promise, PromiseArray, tryConvertToPromise, INTERNAL, async, getDomain);
+	    __webpack_require__(25)(Promise);
+	    __webpack_require__(26)(Promise, PromiseArray, tryConvertToPromise, INTERNAL, async, getDomain);
 	    Promise.Promise = Promise;
 	    Promise.version = "3.5.0";
-	    __webpack_require__(26)(Promise, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug);
-	    __webpack_require__(27)(Promise);
-	    __webpack_require__(28)(Promise, apiRejection, tryConvertToPromise, createContext, INTERNAL, debug);
-	    __webpack_require__(29)(Promise, INTERNAL, debug);
-	    __webpack_require__(30)(Promise, apiRejection, INTERNAL, tryConvertToPromise, Proxyable, debug);
-	    __webpack_require__(31)(Promise);
-	    __webpack_require__(32)(Promise, INTERNAL);
-	    __webpack_require__(33)(Promise, PromiseArray, tryConvertToPromise, apiRejection);
-	    __webpack_require__(34)(Promise, INTERNAL, tryConvertToPromise, apiRejection);
-	    __webpack_require__(35)(Promise, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug);
-	    __webpack_require__(36)(Promise, PromiseArray, debug);
-	    __webpack_require__(37)(Promise, PromiseArray, apiRejection);
-	    __webpack_require__(38)(Promise, INTERNAL);
+	    __webpack_require__(27)(Promise, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug);
+	    __webpack_require__(28)(Promise);
+	    __webpack_require__(29)(Promise, apiRejection, tryConvertToPromise, createContext, INTERNAL, debug);
+	    __webpack_require__(30)(Promise, INTERNAL, debug);
+	    __webpack_require__(31)(Promise, apiRejection, INTERNAL, tryConvertToPromise, Proxyable, debug);
+	    __webpack_require__(32)(Promise);
+	    __webpack_require__(33)(Promise, INTERNAL);
+	    __webpack_require__(34)(Promise, PromiseArray, tryConvertToPromise, apiRejection);
+	    __webpack_require__(35)(Promise, INTERNAL, tryConvertToPromise, apiRejection);
+	    __webpack_require__(36)(Promise, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug);
+	    __webpack_require__(37)(Promise, PromiseArray, debug);
+	    __webpack_require__(38)(Promise, PromiseArray, apiRejection);
 	    __webpack_require__(39)(Promise, INTERNAL);
-	    __webpack_require__(40)(Promise);
+	    __webpack_require__(40)(Promise, INTERNAL);
+	    __webpack_require__(41)(Promise);
 	
 	    util.toFastProperties(Promise);
 	    util.toFastProperties(Promise.prototype);
@@ -973,14 +1016,14 @@ module.exports =
 	};
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
-	var es5 = __webpack_require__(8);
+	var es5 = __webpack_require__(9);
 	var canEvaluate = typeof navigator == "undefined";
 	
 	var errorObj = { e: {} };
@@ -1341,7 +1384,7 @@ module.exports =
 	module.exports = ret;
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1427,7 +1470,7 @@ module.exports =
 	}
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1438,9 +1481,9 @@ module.exports =
 	} catch (e) {
 	    firstLineError = e;
 	}
-	var schedule = __webpack_require__(10);
-	var Queue = __webpack_require__(11);
-	var util = __webpack_require__(7);
+	var schedule = __webpack_require__(11);
+	var Queue = __webpack_require__(12);
+	var util = __webpack_require__(8);
 	
 	function Async() {
 	    this._customScheduler = false;
@@ -1598,12 +1641,12 @@ module.exports =
 	module.exports.firstLineError = firstLineError;
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var util = __webpack_require__(7);
+	var util = __webpack_require__(8);
 	var schedule;
 	var noAsyncScheduler = function noAsyncScheduler() {
 	    throw new Error("No async scheduler available\n\n    See http://goo.gl/MqrFmX\n");
@@ -1663,7 +1706,7 @@ module.exports =
 	module.exports = schedule;
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1742,14 +1785,14 @@ module.exports =
 	module.exports = Queue;
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var es5 = __webpack_require__(8);
+	var es5 = __webpack_require__(9);
 	var Objectfreeze = es5.freeze;
-	var util = __webpack_require__(7);
+	var util = __webpack_require__(8);
 	var inherits = util.inherits;
 	var notEnumerableProp = util.notEnumerableProp;
 	
@@ -1860,13 +1903,13 @@ module.exports =
 	};
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, INTERNAL) {
-	    var util = __webpack_require__(7);
+	    var util = __webpack_require__(8);
 	    var errorObj = util.errorObj;
 	    var isObject = util.isObject;
 	
@@ -1946,13 +1989,13 @@ module.exports =
 	};
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, INTERNAL, tryConvertToPromise, apiRejection, Proxyable) {
-	    var util = __webpack_require__(7);
+	    var util = __webpack_require__(8);
 	    var isArray = util.isArray;
 	
 	    function toResolutionValue(val) {
@@ -2131,7 +2174,7 @@ module.exports =
 	};
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2208,7 +2251,7 @@ module.exports =
 	};
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2218,8 +2261,8 @@ module.exports =
 	module.exports = function (Promise, Context) {
 	    var getDomain = Promise._getDomain;
 	    var async = Promise._async;
-	    var Warning = __webpack_require__(12).Warning;
-	    var util = __webpack_require__(7);
+	    var Warning = __webpack_require__(13).Warning;
+	    var util = __webpack_require__(8);
 	    var canAttachTrace = util.canAttachTrace;
 	    var unhandledRejectionHandled;
 	    var possiblyUnhandledRejection;
@@ -3089,16 +3132,16 @@ module.exports =
 	};
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, tryConvertToPromise, NEXT_FILTER) {
-	    var util = __webpack_require__(7);
+	    var util = __webpack_require__(8);
 	    var CancellationError = Promise.CancellationError;
 	    var errorObj = util.errorObj;
-	    var catchFilter = __webpack_require__(18)(NEXT_FILTER);
+	    var catchFilter = __webpack_require__(19)(NEXT_FILTER);
 	
 	    function PassThroughHandlerContext(promise, type, handler) {
 	        this.promise = promise;
@@ -3218,14 +3261,14 @@ module.exports =
 	};
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (NEXT_FILTER) {
-	    var util = __webpack_require__(7);
-	    var getKeys = __webpack_require__(8).keys;
+	    var util = __webpack_require__(8);
+	    var getKeys = __webpack_require__(9).keys;
 	    var tryCatch = util.tryCatch;
 	    var errorObj = util.errorObj;
 	
@@ -3265,16 +3308,16 @@ module.exports =
 	};
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var util = __webpack_require__(7);
+	var util = __webpack_require__(8);
 	var maybeWrapAsError = util.maybeWrapAsError;
-	var errors = __webpack_require__(12);
+	var errors = __webpack_require__(13);
 	var OperationalError = errors.OperationalError;
-	var es5 = __webpack_require__(8);
+	var es5 = __webpack_require__(9);
 	
 	function isUntypedError(obj) {
 	    return obj instanceof Error && es5.getPrototypeOf(obj) === Error.prototype;
@@ -3323,13 +3366,13 @@ module.exports =
 	module.exports = nodebackForPromise;
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, INTERNAL, tryConvertToPromise, apiRejection, debug) {
-	    var util = __webpack_require__(7);
+	    var util = __webpack_require__(8);
 	    var tryCatch = util.tryCatch;
 	
 	    Promise.method = function (fn) {
@@ -3380,7 +3423,7 @@ module.exports =
 	};
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3452,13 +3495,13 @@ module.exports =
 	};
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, PromiseArray, apiRejection, debug) {
-	    var util = __webpack_require__(7);
+	    var util = __webpack_require__(8);
 	    var tryCatch = util.tryCatch;
 	    var errorObj = util.errorObj;
 	    var async = Promise._async;
@@ -3585,7 +3628,7 @@ module.exports =
 	};
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3635,7 +3678,7 @@ module.exports =
 	};
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3741,13 +3784,13 @@ module.exports =
 	};
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, PromiseArray, tryConvertToPromise, INTERNAL, async, getDomain) {
-	    var util = __webpack_require__(7);
+	    var util = __webpack_require__(8);
 	    var canEvaluate = util.canEvaluate;
 	    var tryCatch = util.tryCatch;
 	    var errorObj = util.errorObj;
@@ -3907,7 +3950,7 @@ module.exports =
 	};
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3916,7 +3959,7 @@ module.exports =
 	
 	module.exports = function (Promise, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug) {
 	    var getDomain = Promise._getDomain;
-	    var util = __webpack_require__(7);
+	    var util = __webpack_require__(8);
 	    var tryCatch = util.tryCatch;
 	    var errorObj = util.errorObj;
 	    var async = Promise._async;
@@ -4064,7 +4107,7 @@ module.exports =
 	};
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4077,7 +4120,7 @@ module.exports =
 	}
 	
 	module.exports = function (Promise) {
-	    var util = __webpack_require__(7);
+	    var util = __webpack_require__(8);
 	    var canEvaluate = util.canEvaluate;
 	    var isIdentifier = util.isIdentifier;
 	
@@ -4194,15 +4237,15 @@ module.exports =
 	};
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, apiRejection, tryConvertToPromise, createContext, INTERNAL, debug) {
-	    var util = __webpack_require__(7);
-	    var TypeError = __webpack_require__(12).TypeError;
-	    var inherits = __webpack_require__(7).inherits;
+	    var util = __webpack_require__(8);
+	    var TypeError = __webpack_require__(13).TypeError;
+	    var inherits = __webpack_require__(8).inherits;
 	    var errorObj = util.errorObj;
 	    var tryCatch = util.tryCatch;
 	    var NULL = {};
@@ -4411,13 +4454,13 @@ module.exports =
 	};
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, INTERNAL, debug) {
-	    var util = __webpack_require__(7);
+	    var util = __webpack_require__(8);
 	    var TimeoutError = Promise.TimeoutError;
 	
 	    function HandleWrapper(handle) {
@@ -4510,15 +4553,15 @@ module.exports =
 	};
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, apiRejection, INTERNAL, tryConvertToPromise, Proxyable, debug) {
-	    var errors = __webpack_require__(12);
+	    var errors = __webpack_require__(13);
 	    var TypeError = errors.TypeError;
-	    var util = __webpack_require__(7);
+	    var util = __webpack_require__(8);
 	    var errorObj = util.errorObj;
 	    var tryCatch = util.tryCatch;
 	    var yieldHandlers = [];
@@ -4713,13 +4756,13 @@ module.exports =
 	};
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise) {
-	    var util = __webpack_require__(7);
+	    var util = __webpack_require__(8);
 	    var async = Promise._async;
 	    var tryCatch = util.tryCatch;
 	    var errorObj = util.errorObj;
@@ -4767,7 +4810,7 @@ module.exports =
 	};
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4776,12 +4819,12 @@ module.exports =
 	
 	module.exports = function (Promise, INTERNAL) {
 	    var THIS = {};
-	    var util = __webpack_require__(7);
-	    var nodebackForPromise = __webpack_require__(19);
+	    var util = __webpack_require__(8);
+	    var nodebackForPromise = __webpack_require__(20);
 	    var withAppended = util.withAppended;
 	    var maybeWrapAsError = util.maybeWrapAsError;
 	    var canEvaluate = util.canEvaluate;
-	    var TypeError = __webpack_require__(12).TypeError;
+	    var TypeError = __webpack_require__(13).TypeError;
 	    var defaultSuffix = "Async";
 	    var defaultPromisified = { __isPromisified__: true };
 	    var noCopyProps = ["arity", "length", "name", "arguments", "caller", "callee", "prototype", "__isPromisified__"];
@@ -5034,15 +5077,15 @@ module.exports =
 	};
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, PromiseArray, tryConvertToPromise, apiRejection) {
-	    var util = __webpack_require__(7);
+	    var util = __webpack_require__(8);
 	    var isObject = util.isObject;
-	    var es5 = __webpack_require__(8);
+	    var es5 = __webpack_require__(9);
 	    var Es6Map;
 	    if (typeof Map === "function") Es6Map = Map;
 	
@@ -5156,13 +5199,13 @@ module.exports =
 	};
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, INTERNAL, tryConvertToPromise, apiRejection) {
-	    var util = __webpack_require__(7);
+	    var util = __webpack_require__(8);
 	
 	    var raceLater = function raceLater(promise) {
 	        return promise.then(function (array) {
@@ -5208,14 +5251,14 @@ module.exports =
 	};
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug) {
 	    var getDomain = Promise._getDomain;
-	    var util = __webpack_require__(7);
+	    var util = __webpack_require__(8);
 	    var tryCatch = util.tryCatch;
 	
 	    function ReductionPromiseArray(promises, fn, initialValue, _each) {
@@ -5371,14 +5414,14 @@ module.exports =
 	};
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, PromiseArray, debug) {
 	    var PromiseInspection = Promise.PromiseInspection;
-	    var util = __webpack_require__(7);
+	    var util = __webpack_require__(8);
 	
 	    function SettledPromiseArray(values) {
 	        this.constructor$(values);
@@ -5419,15 +5462,15 @@ module.exports =
 	};
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = function (Promise, PromiseArray, apiRejection) {
-	    var util = __webpack_require__(7);
-	    var RangeError = __webpack_require__(12).RangeError;
-	    var AggregateError = __webpack_require__(12).AggregateError;
+	    var util = __webpack_require__(8);
+	    var RangeError = __webpack_require__(13).RangeError;
+	    var AggregateError = __webpack_require__(13).AggregateError;
 	    var isArray = util.isArray;
 	    var CANCELLATION = {};
 	
@@ -5567,7 +5610,7 @@ module.exports =
 	};
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -5585,7 +5628,7 @@ module.exports =
 	};
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -5618,7 +5661,7 @@ module.exports =
 	};
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -5644,7 +5687,7 @@ module.exports =
 	};
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5658,8 +5701,9 @@ module.exports =
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
-	var Promise = __webpack_require__(5);
-	var Papa = __webpack_require__(42);
+	var ddfcsv_error_1 = __webpack_require__(4);
+	var Promise = __webpack_require__(6);
+	var Papa = __webpack_require__(43);
 	var isValidNumeric = function isValidNumeric(val) {
 	    return typeof val !== 'number' && !val ? false : true;
 	};
@@ -5722,12 +5766,12 @@ module.exports =
 	        return new Promise(function (resolve, reject) {
 	            fileReader.readText(pathParam, function (err, data) {
 	                if (err) {
-	                    return reject(err);
+	                    return reject(new ddfcsv_error_1.DdfCsvError(ddfcsv_error_1.FILE_READING_ERROR, err, pathParam));
 	                }
 	                try {
 	                    datapackage = JSON.parse(data);
 	                } catch (parseErr) {
-	                    return reject(parseErr);
+	                    return reject(new ddfcsv_error_1.DdfCsvError(ddfcsv_error_1.JSON_PARSING_ERROR, parseErr, pathParam));
 	                }
 	                buildResourcesLookup(datapackage);
 	                buildKeyValueLookup(datapackage);
@@ -5948,7 +5992,7 @@ module.exports =
 	                return a.concat(b);
 	            });
 	        } else {
-	            throwError("No valid collection (" + collection + ") for schema query");
+	            throwError(new ddfcsv_error_1.DdfCsvError(ddfcsv_error_1.DDF_ERROR, "No valid collection (" + collection + ") for schema query"));
 	        }
 	    }
 	    function fillMissingValues(row, projection) {
@@ -6193,7 +6237,7 @@ module.exports =
 	                        var sourceRowStr = JSON.stringify(sourceRow);
 	                        var resultRowStr = JSON.stringify(resultRow);
 	                        var errStr = "JOIN Error: two resources have different data for \"" + _concept + "\": " + sourceRowStr + "," + resultRowStr;
-	                        throwError(errStr);
+	                        throwError(new ddfcsv_error_1.DdfCsvError(ddfcsv_error_1.DDF_ERROR, errStr));
 	                    } else {
 	                        resultRow[_concept] = sourceRow[_concept];
 	                    }
@@ -6203,8 +6247,8 @@ module.exports =
 	    }
 	    function throwError(error) {
 	        var currentLogger = logger || console;
-	        currentLogger.error(error);
-	        throw new Error(error);
+	        currentLogger.error(error.message);
+	        throw error;
 	    }
 	    function createKeyString(key) {
 	        var row = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
@@ -6251,7 +6295,7 @@ module.exports =
 	        return new Promise(function (resolve, reject) {
 	            fileReader.readText(filePath, function (err, data) {
 	                if (err) {
-	                    return reject(err);
+	                    return reject(new ddfcsv_error_1.DdfCsvError(ddfcsv_error_1.FILE_READING_ERROR, err, filePath));
 	                }
 	                Papa.parse(data, {
 	                    header: true,
@@ -6267,7 +6311,7 @@ module.exports =
 	                        return resolve(result);
 	                    },
 	                    error: function error(_error) {
-	                        return reject(_error);
+	                        return reject(new ddfcsv_error_1.DdfCsvError(ddfcsv_error_1.CSV_PARSING_ERROR, _error, filePath));
 	                    }
 	                });
 	            });
@@ -6313,7 +6357,7 @@ module.exports =
 	//# sourceMappingURL=ddf-csv.js.map
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
