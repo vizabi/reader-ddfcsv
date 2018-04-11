@@ -4,6 +4,7 @@ import { getDDFCsvReaderObject } from '../src/index';
 const expect = chai.expect;
 
 const GLOBALIS_PATH = './test/fixtures/systema_globalis';
+const EMPTY_TRANSLATIONS_PATH = './test/fixtures/empty-translations';
 
 describe('Concepts supporting', () => {
   it('translation supporting', done => {
@@ -73,6 +74,26 @@ describe('Concepts supporting', () => {
       done();
     }).catch(err => {
       expect(!!err).to.be.true;
+
+      done();
+    });
+  });
+
+  it('any exception should NOT be raised in case of empty translations section in datapackage.json', done => {
+    const reader = getDDFCsvReaderObject();
+
+    reader.init({path: EMPTY_TRANSLATIONS_PATH});
+
+    reader.read({
+      from: 'concepts',
+      language: 'en',
+      select: {
+        key: ['concept'],
+        value: ['concept_type', 'name']
+      },
+      where: {}
+    }).then(data => {
+      expect(data.length).to.equal(595);
 
       done();
     });

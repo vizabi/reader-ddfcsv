@@ -678,6 +678,10 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
   }
 
   function getLanguages(): string[] {
+    if (!datapackage.translations) {
+      return [];
+    }
+
     return datapackage.translations.map(lang => lang.id);
   }
 
