@@ -10,6 +10,7 @@ export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
         this._lastModified = readerInfo._lastModified;
         this.fileReader = externalFileReader || defaultFileReader;
         this.logger = logger;
+        this.resultTransformer = readerInfo.resultTransformer;
         this.reader = ddfCsvReader(`${this._basepath}/datapackage.json`, this.fileReader, this.logger);
       },
 
@@ -36,6 +37,9 @@ export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
         });
       },
 
+      // create own custom parser from WS!!!
+      // no,,, create ability to use custom transformer for data
+      // try empty query!!! -> headers
       read(queryPar, parsers) {
         function prettifyData(data) {
           return data.map(record => {
@@ -53,8 +57,11 @@ export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
 
         return new Promise((resolve, reject) => {
           this.reader.query(queryPar).then(result => {
-
             result = parsers ? prettifyData(result) : result;
+
+            if (this.resultTransformer) {
+              result = this.resultTransformer(result);
+            }
 
             if (this.logger && this.logger.log) {
               logger.log(JSON.stringify(queryPar), result.length);

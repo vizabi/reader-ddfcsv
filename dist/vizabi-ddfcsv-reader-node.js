@@ -200,6 +200,7 @@ module.exports =
 	                this._lastModified = readerInfo._lastModified;
 	                this.fileReader = externalFileReader || defaultFileReader;
 	                this.logger = logger;
+	                this.resultTransformer = readerInfo.resultTransformer;
 	                this.reader = ddf_csv_1.ddfCsvReader(this._basepath + "/datapackage.json", this.fileReader, this.logger);
 	            },
 	            getAsset: function getAsset(asset) {
@@ -241,6 +242,9 @@ module.exports =
 	                return new Promise(function (resolve, reject) {
 	                    _this2.reader.query(queryPar).then(function (result) {
 	                        result = parsers ? prettifyData(result) : result;
+	                        if (_this2.resultTransformer) {
+	                            result = _this2.resultTransformer(result);
+	                        }
 	                        if (_this2.logger && _this2.logger.log) {
 	                            logger.log(JSON.stringify(queryPar), result.length);
 	                            logger.log(result);
@@ -6287,6 +6291,9 @@ module.exports =
 	        });
 	    }
 	    function getLanguages() {
+	        if (!datapackage.translations) {
+	            return [];
+	        }
 	        return datapackage.translations.map(function (lang) {
 	            return lang.id;
 	        });
