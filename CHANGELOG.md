@@ -1,3 +1,13 @@
+<a name="2.1.2"></a>
+## [2.1.2](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v2.1.1...v2.1.2) (2018-04-25)
+
+
+### Features
+
+* **general:** provide an appropriate result format for WS ([1050a07](https://github.com/vizabi/vizabi-ddfcsv-reader/commit/1050a07)), closes [#75](https://github.com/vizabi/vizabi-ddfcsv-reader/issues/75)
+
+
+
 <a name="2.1.1"></a>
 ## [2.1.1](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v2.1.0...v2.1.1) (2018-04-12)
 
