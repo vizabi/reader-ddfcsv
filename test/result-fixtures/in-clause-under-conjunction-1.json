@@ -1,0 +1,702 @@
+[
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "50",
+    "gender": "female",
+    "population": 44754913
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "0",
+    "gender": "female",
+    "population": 65899883
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "2",
+    "gender": "female",
+    "population": 65586811
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "3",
+    "gender": "female",
+    "population": 65502177
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "4",
+    "gender": "female",
+    "population": 65032987
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "5",
+    "gender": "female",
+    "population": 64508265
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "6",
+    "gender": "female",
+    "population": 63938237
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "7",
+    "gender": "female",
+    "population": 63333090
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "8",
+    "gender": "female",
+    "population": 62701456
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "9",
+    "gender": "female",
+    "population": 62051909
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "10",
+    "gender": "female",
+    "population": 61402851
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "11",
+    "gender": "female",
+    "population": 60767729
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "12",
+    "gender": "female",
+    "population": 60151883
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "13",
+    "gender": "female",
+    "population": 59563242
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "14",
+    "gender": "female",
+    "population": 59019489
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "15",
+    "gender": "female",
+    "population": 58493536
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "16",
+    "gender": "female",
+    "population": 57979099
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "17",
+    "gender": "female",
+    "population": 57507123
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "18",
+    "gender": "female",
+    "population": 57085015
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "19",
+    "gender": "female",
+    "population": 56675387
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "20",
+    "gender": "female",
+    "population": 56516604
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "21",
+    "gender": "female",
+    "population": 56716639
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "22",
+    "gender": "female",
+    "population": 57153654
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "23",
+    "gender": "female",
+    "population": 57550602
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "24",
+    "gender": "female",
+    "population": 57906043
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "25",
+    "gender": "female",
+    "population": 58323229
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "26",
+    "gender": "female",
+    "population": 58807148
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "27",
+    "gender": "female",
+    "population": 59275530
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "28",
+    "gender": "female",
+    "population": 59694648
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "29",
+    "gender": "female",
+    "population": 60135286
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "30",
+    "gender": "female",
+    "population": 60063988
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "31",
+    "gender": "female",
+    "population": 59231979
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "32",
+    "gender": "female",
+    "population": 57894107
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "33",
+    "gender": "female",
+    "population": 56582553
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "34",
+    "gender": "female",
+    "population": 55225300
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "35",
+    "gender": "female",
+    "population": 53898548
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "36",
+    "gender": "female",
+    "population": 52704950
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "37",
+    "gender": "female",
+    "population": 51623884
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "38",
+    "gender": "female",
+    "population": 50488515
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "39",
+    "gender": "female",
+    "population": 49280156
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "40",
+    "gender": "female",
+    "population": 48412392
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "41",
+    "gender": "female",
+    "population": 48058045
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "42",
+    "gender": "female",
+    "population": 48029631
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "43",
+    "gender": "female",
+    "population": 47962448
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "44",
+    "gender": "female",
+    "population": 47924089
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "45",
+    "gender": "female",
+    "population": 47748755
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "46",
+    "gender": "female",
+    "population": 47315344
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "47",
+    "gender": "female",
+    "population": 46697145
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "48",
+    "gender": "female",
+    "population": 46097817
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "49",
+    "gender": "female",
+    "population": 45487651
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "1",
+    "gender": "female",
+    "population": 65796890
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "51",
+    "gender": "female",
+    "population": 43867800
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "52",
+    "gender": "female",
+    "population": 42862884
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "53",
+    "gender": "female",
+    "population": 41827260
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "54",
+    "gender": "female",
+    "population": 40766139
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "55",
+    "gender": "female",
+    "population": 39627029
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "56",
+    "gender": "female",
+    "population": 38399871
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "57",
+    "gender": "female",
+    "population": 37122761
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "58",
+    "gender": "female",
+    "population": 35808748
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "59",
+    "gender": "female",
+    "population": 34413403
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "60",
+    "gender": "female",
+    "population": 33214271
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "61",
+    "gender": "female",
+    "population": 32337534
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "62",
+    "gender": "female",
+    "population": 31640967
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "63",
+    "gender": "female",
+    "population": 30891783
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "64",
+    "gender": "female",
+    "population": 30179270
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "65",
+    "gender": "female",
+    "population": 29169770
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "66",
+    "gender": "female",
+    "population": 27687364
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "67",
+    "gender": "female",
+    "population": 25908692
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "68",
+    "gender": "female",
+    "population": 24193713
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "69",
+    "gender": "female",
+    "population": 22479408
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "70",
+    "gender": "female",
+    "population": 20871656
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "71",
+    "gender": "female",
+    "population": 19462402
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "72",
+    "gender": "female",
+    "population": 18202791
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "73",
+    "gender": "female",
+    "population": 16929655
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "74",
+    "gender": "female",
+    "population": 15648747
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "75",
+    "gender": "female",
+    "population": 14545025
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "76",
+    "gender": "female",
+    "population": 13685746
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "77",
+    "gender": "female",
+    "population": 12988682
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "78",
+    "gender": "female",
+    "population": 12316221
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "79",
+    "gender": "female",
+    "population": 11709810
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "80",
+    "gender": "female",
+    "population": 11006671
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "81",
+    "gender": "female",
+    "population": 10116271
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "82",
+    "gender": "female",
+    "population": 9118366
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "83",
+    "gender": "female",
+    "population": 8184431
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "84",
+    "gender": "female",
+    "population": 7281589
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "85",
+    "gender": "female",
+    "population": 6439773
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "86",
+    "gender": "female",
+    "population": 5691748
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "87",
+    "gender": "female",
+    "population": 5017563
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "88",
+    "gender": "female",
+    "population": 4365354
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "89",
+    "gender": "female",
+    "population": 3746037
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "90",
+    "gender": "female",
+    "population": 3174865
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "91",
+    "gender": "female",
+    "population": 2654220
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "92",
+    "gender": "female",
+    "population": 2183298
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "93",
+    "gender": "female",
+    "population": 1746000
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "94",
+    "gender": "female",
+    "population": 1361973
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "95",
+    "gender": "female",
+    "population": 1038773
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "96",
+    "gender": "female",
+    "population": 785995
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "97",
+    "gender": "female",
+    "population": 590541
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "98",
+    "gender": "female",
+    "population": 330714
+  },
+  {
+    "geo": "world",
+    "year": "2018",
+    "age": "99",
+    "gender": "female",
+    "population": 226157
+  }
+]
