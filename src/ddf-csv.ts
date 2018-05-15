@@ -1,4 +1,7 @@
+import includes = require('lodash/includes');
+import isEmpty = require('lodash/isEmpty');
 import { IReader } from './file-readers/reader';
+import { getAppropriatePlugin } from './query-optimization-plugins';
 import {
   CSV_PARSING_ERROR,
   DDF_ERROR,
@@ -47,6 +50,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
   const conceptsLookup = new Map<string, any>();
 
   let datapackage;
+  let optimalFilesSet = [];
 
   function getDatapackagePath(pathParam) {
     if (!pathParam.endsWith('datapackage.json')) {
@@ -77,6 +81,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
 
         try {
           datapackage = JSON.parse(data);
+          optimalFilesSet = [];
         } catch (parseErr) {
           return reject(new DdfCsvError(JSON_PARSING_ERROR, parseErr, pathParam));
         }
@@ -177,7 +182,23 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
     if (isSchemaQuery(queryParam)) {
       return datapackagePromise.then(() => querySchema(queryParam));
     } else {
-      return conceptsPromise.then(() => queryData(queryParam));
+      return conceptsPromise.then(() => {
+        const appropriatePlugin = getAppropriatePlugin(fileReader, basePath, queryParam, datapackage);
+
+        return new Promise((resolve: Function) => {
+          if (!appropriatePlugin) {
+            return resolve();
+          }
+
+          appropriatePlugin.getOptimalFilesSet().then(files => {
+            optimalFilesSet = files;
+            resolve();
+          }).catch(() => {
+            optimalFilesSet = [];
+            resolve();
+          });
+        });
+      }).then(() => queryData(queryParam));
     }
   }
 
@@ -513,11 +534,16 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
         .reduce((resultSet, resources) => new Set([...resultSet, ...resources]), new Set());
     }
     // one key, one value
-    return new Set(
-      keyValueLookup
-        .get(createKeyString(key))
-        .get(value)
-    );
+    let oneKeyOneValueResourcesArray = keyValueLookup
+      .get(createKeyString(key))
+      .get(value);
+
+    if (oneKeyOneValueResourcesArray) {
+      oneKeyOneValueResourcesArray = oneKeyOneValueResourcesArray
+        .filter(v => isEmpty(optimalFilesSet) || includes(optimalFilesSet, v.path));
+    }
+
+    return new Set(oneKeyOneValueResourcesArray);
   }
 
   function processResourceResponse(response, select, filterFields) {
