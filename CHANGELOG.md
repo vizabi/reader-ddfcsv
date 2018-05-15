@@ -1,3 +1,13 @@
+<a name="2.2.0"></a>
+# [2.2.0](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v2.1.2...v2.2.0) (2018-05-15)
+
+
+### Features
+
+* **query optimization:** optimize slow query based on $in clause ([476c4ea](https://github.com/vizabi/vizabi-ddfcsv-reader/commit/476c4ea)), closes [#77](https://github.com/vizabi/vizabi-ddfcsv-reader/issues/77)
+
+
+
 <a name="2.1.2"></a>
 ## [2.1.2](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v2.1.1...v2.1.2) (2018-04-25)
 
