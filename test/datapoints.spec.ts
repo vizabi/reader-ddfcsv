@@ -22,6 +22,7 @@ describe('Datapoints supporting', () => {
         ]
       },
       from: 'datapoints',
+      language: 'ar-SA',
       where: {
         $and: [
           {geo: '$geo'},

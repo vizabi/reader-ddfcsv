@@ -55,23 +55,19 @@ export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
           });
         }
 
-        return new Promise((resolve, reject) => {
-          this.reader.query(queryPar).then(result => {
-            result = parsers ? prettifyData(result) : result;
+        return this.reader.query(queryPar).then(result => {
+          result = parsers ? prettifyData(result) : result;
 
-            if (this.resultTransformer) {
-              result = this.resultTransformer(result);
-            }
+          if (this.resultTransformer) {
+            result = this.resultTransformer(result);
+          }
 
-            if (this.logger && this.logger.log) {
-              logger.log(JSON.stringify(queryPar), result.length);
-              logger.log(result);
-            }
+          if (this.logger && this.logger.log) {
+            logger.log(JSON.stringify(queryPar), result.length);
+            logger.log(result);
+          }
 
-            resolve(result);
-          }).catch(err => {
-            reject(err);
-          });
+          return result;
         });
       }
     };
