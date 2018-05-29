@@ -24,3 +24,10 @@ deploy:
     branch: develop
     node: 6
     condition: "-e /tmp/deployment.flag"
+
+branches:
+  only:
+  - master
+  - develop
+  - development
+  - stage
