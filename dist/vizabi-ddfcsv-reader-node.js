@@ -239,20 +239,16 @@ module.exports =
 	                        return record;
 	                    });
 	                }
-	                return new Promise(function (resolve, reject) {
-	                    _this2.reader.query(queryPar).then(function (result) {
-	                        result = parsers ? prettifyData(result) : result;
-	                        if (_this2.resultTransformer) {
-	                            result = _this2.resultTransformer(result);
-	                        }
-	                        if (_this2.logger && _this2.logger.log) {
-	                            logger.log(JSON.stringify(queryPar), result.length);
-	                            logger.log(result);
-	                        }
-	                        resolve(result);
-	                    }).catch(function (err) {
-	                        reject(err);
-	                    });
+	                return this.reader.query(queryPar).then(function (result) {
+	                    result = parsers ? prettifyData(result) : result;
+	                    if (_this2.resultTransformer) {
+	                        result = _this2.resultTransformer(result);
+	                    }
+	                    if (_this2.logger && _this2.logger.log) {
+	                        logger.log(JSON.stringify(queryPar), result.length);
+	                        logger.log(result);
+	                    }
+	                    return result;
 	                });
 	            }
 	        };
@@ -6302,13 +6298,15 @@ module.exports =
 	        if (languageValid) {
 	            if (!languageLoaded) {
 	                var translationPath = basePath + "lang/" + language + "/" + resource.path;
-	                resource.translations[language] = loadFile(translationPath);
+	                resource.translations[language] = loadFile(translationPath).catch(function (err) {
+	                    return Promise.resolve({});
+	                });
 	            }
 	            filePromises.push(resource.translations[language]);
 	        }
 	        return Promise.all(filePromises).then(function (fileResponses) {
 	            var filesData = fileResponses.map(function (resp) {
-	                return resp.data;
+	                return resp.data || [];
 	            });
 	            var primaryKey = resource.schema.primaryKey;
 	            var data = joinData.apply(undefined, [primaryKey, 'translation'].concat(_toConsumableArray(filesData)));
@@ -8255,6 +8253,10 @@ module.exports =
 	var includes = __webpack_require__(43);
 	var compact = __webpack_require__(141);
 	var Papa = __webpack_require__(142);
+	var WHERE_KEYWORD = 'where';
+	var JOIN_KEYWORD = 'join';
+	var KEY_IN = '$in';
+	var KEY_AND = '$and';
 	var getFirstConditionClause = function getFirstConditionClause(clause) {
 	    return head(values(clause));
 	};
@@ -8279,8 +8281,8 @@ module.exports =
 	    _createClass(InClauseUnderConjunctionPlugin, [{
 	        key: "isMatched",
 	        value: function isMatched() {
-	            this.flow.joinObject = get(this.query, 'join');
-	            var mainAndClause = get(this.query, 'where');
+	            this.flow.joinObject = get(this.query, JOIN_KEYWORD);
+	            var mainAndClause = get(this.query, WHERE_KEYWORD);
 	            var isMainAndClauseCorrect = isOneKeyBased(mainAndClause);
 	            var joinKeys = keys(this.flow.joinObject);
 	            var areJoinKeysSameAsKeyInWhereClause = true;
@@ -8294,7 +8296,7 @@ module.exports =
 	
 	                    var joinPart = this.flow.joinObject[key];
 	                    var firstKey = getFirstKey(joinPart.where);
-	                    if (joinPart.key !== firstKey && firstKey !== '$and') {
+	                    if (joinPart.key !== firstKey && firstKey !== KEY_AND) {
 	                        areJoinKeysSameAsKeyInWhereClause = false;
 	                        break;
 	                    }
@@ -8358,7 +8360,7 @@ module.exports =
 	                for (var _iterator2 = joinKeys[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
 	                    var joinKey = _step2.value;
 	
-	                    var where = get(this.flow.joinObject[joinKey], 'where');
+	                    var where = get(this.flow.joinObject[joinKey], WHERE_KEYWORD);
 	                    if (this.singleAndField(where)) {
 	                        var _flow$processableClau;
 	
@@ -8797,7 +8799,7 @@ module.exports =
 	
 	                    if (!startsWith(key, '$') && isOneKeyBased(clause[key])) {
 	                        var conditionKey = head(keys(clause[key]));
-	                        if (conditionKey === '$in') {
+	                        if (conditionKey === KEY_IN) {
 	                            result.push(clause);
 	                        }
 	                    }
@@ -8822,7 +8824,7 @@ module.exports =
 	    }, {
 	        key: "singleAndField",
 	        value: function singleAndField(clause) {
-	            return isOneKeyBased(clause) && !!get(clause, '$and');
+	            return isOneKeyBased(clause) && !!get(clause, KEY_AND);
 	        }
 	    }]);
 	

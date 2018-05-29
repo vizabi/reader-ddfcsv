@@ -687,14 +687,17 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
       if (!languageLoaded) {
         const translationPath = `${basePath}lang/${language}/${resource.path}`;
 
-        resource.translations[language] = loadFile(translationPath);
+        // error loading translation file is expected when specific file is not translated
+        // more correct would be to only resolve file-not-found errors but current solution is sufficient
+        resource.translations[language] = loadFile(translationPath).catch(err => Promise.resolve({}));
       }
 
       filePromises.push(resource.translations[language]);
     }
 
     return Promise.all(filePromises).then(fileResponses => {
-      const filesData = fileResponses.map(resp => resp.data);
+      // resp.data does not exist if translation file not found
+      const filesData = fileResponses.map(resp => resp.data || []);
       const primaryKey = resource.schema.primaryKey;
       const data = joinData(primaryKey, 'translation', ...filesData);
 
