@@ -43,3 +43,8 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# Exclude git submodules
+test/fixtures/*
+!test/fixtures/ds_broken_datapackage
+!test/fixtures/empty-translations

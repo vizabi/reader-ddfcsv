@@ -6,7 +6,7 @@ const expect = chai.expect;
 const GLOBALIS_PATH = './test/fixtures/systema_globalis';
 const EMPTY_TRANSLATIONS_PATH = './test/fixtures/empty-translations';
 
-describe('Concepts supporting', () => {
+describe('Entities supporting', () => {
   describe('# happy flow', () => {
     it('translation supporting', done => {
       const reader = getDDFCsvReaderObject();
@@ -16,22 +16,24 @@ describe('Concepts supporting', () => {
       reader.read({
         language: 'ar-SA',
         select: {
-          key: ['concept'],
+          key: ['country'],
           value: [
-            'concept_type', 'name', 'description'
+            'name'
           ]
         },
-        from: 'concepts',
+        from: 'entities',
         where: {
           $and: [
-            {concept_type: {$eq: 'entity_set'}}
+            {country: {$in: ['usa', 'dza', 'abkh', 'afg']}}
           ]
         },
-        order_by: ['concept']
+        order_by: ['country']
       }).then(data => {
-        expect(data.length).to.equal(8);
+        expect(data.length).to.equal(4);
 
         done();
+      }).catch((error) => {
+        done(error);
       });
     });
   });
@@ -49,7 +51,7 @@ describe('Concepts supporting', () => {
             'concept_type', 'name', 'description'
           ]
         },
-        from: 'concepts',
+        from: 'entities',
         where: {
           $and: [
             {concept_type: {$eq: 'entity_set'}}
@@ -89,7 +91,7 @@ describe('Concepts supporting', () => {
       reader.init({path: EMPTY_TRANSLATIONS_PATH});
 
       reader.read({
-        from: 'concepts',
+        from: 'entities',
         language: 'en',
         select: {
           key: ['concept'],

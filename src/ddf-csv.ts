@@ -1,14 +1,10 @@
 import includes = require('lodash/includes');
 import isEmpty = require('lodash/isEmpty');
+import endsWith = require('lodash/endsWith');
 import { IReader } from './file-readers/reader';
 import { getAppropriatePlugin } from './query-optimization-plugins';
-import {
-  CSV_PARSING_ERROR,
-  DDF_ERROR,
-  DdfCsvError,
-  FILE_READING_ERROR,
-  JSON_PARSING_ERROR
-} from './ddfcsv-error';
+import { CSV_PARSING_ERROR, DDF_ERROR, DdfCsvError, FILE_READING_ERROR, JSON_PARSING_ERROR } from './ddfcsv-error';
+import { validateQuery } from './query-validator';
 
 const Promise = require('bluebird');
 const Papa = require('papaparse');
@@ -18,26 +14,26 @@ const isValidNumeric = val => typeof val !== 'number' && !val ? false : true;
 export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
 
   const internalConcepts = [
-    {concept: 'concept', concept_type: 'string', domain: null},
-    {concept: 'concept_type', concept_type: 'string', domain: null}
+    { concept: 'concept', concept_type: 'string', domain: null },
+    { concept: 'concept_type', concept_type: 'string', domain: null }
   ];
 
   const operators = new Map([
     /* logical operators */
-    ['$and', (row, predicates) => predicates.every(p => applyFilterRow(row, p))],
-    ['$or', (row, predicates) => predicates.some(p => applyFilterRow(row, p))],
-    ['$not', (row, predicate) => !applyFilterRow(row, predicate)],
-    ['$nor', (row, predicates) => !predicates.some(p => applyFilterRow(row, p))],
+    [ '$and', (row, predicates) => predicates.every(p => applyFilterRow(row, p)) ],
+    [ '$or', (row, predicates) => predicates.some(p => applyFilterRow(row, p)) ],
+    [ '$not', (row, predicate) => !applyFilterRow(row, predicate) ],
+    [ '$nor', (row, predicates) => !predicates.some(p => applyFilterRow(row, p)) ],
 
     /* equality operators */
-    ['$eq', (rowValue, filterValue) => rowValue == filterValue],
-    ['$ne', (rowValue, filterValue) => rowValue != filterValue],
-    ['$gt', (rowValue, filterValue) => isValidNumeric(rowValue) && rowValue > filterValue],
-    ['$gte', (rowValue, filterValue) => isValidNumeric(rowValue) && rowValue >= filterValue],
-    ['$lt', (rowValue, filterValue) => isValidNumeric(rowValue) && rowValue < filterValue],
-    ['$lte', (rowValue, filterValue) => isValidNumeric(rowValue) && rowValue <= filterValue],
-    ['$in', (rowValue, filterValue) => filterValue.has(rowValue)],
-    ['$nin', (rowValue, filterValue) => !filterValue.has(rowValue)],
+    [ '$eq', (rowValue, filterValue) => rowValue == filterValue ],
+    [ '$ne', (rowValue, filterValue) => rowValue != filterValue ],
+    [ '$gt', (rowValue, filterValue) => isValidNumeric(rowValue) && rowValue > filterValue ],
+    [ '$gte', (rowValue, filterValue) => isValidNumeric(rowValue) && rowValue >= filterValue ],
+    [ '$lt', (rowValue, filterValue) => isValidNumeric(rowValue) && rowValue < filterValue ],
+    [ '$lte', (rowValue, filterValue) => isValidNumeric(rowValue) && rowValue <= filterValue ],
+    [ '$in', (rowValue, filterValue) => filterValue.has(rowValue) ],
+    [ '$nin', (rowValue, filterValue) => !filterValue.has(rowValue) ],
   ]);
 
   const datapackagePath = getDatapackagePath(path);
@@ -83,7 +79,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
           datapackage = JSON.parse(data);
           optimalFilesSet = [];
         } catch (parseErr) {
-          return reject(new DdfCsvError(JSON_PARSING_ERROR, parseErr, pathParam));
+          return reject(new DdfCsvError(JSON_PARSING_ERROR, parseErr.message, pathParam));
         }
 
         buildResourcesLookup(datapackage);
@@ -100,7 +96,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
 
     // query concepts
     const conceptQuery = {
-      select: {key: ['concept'], value: ['concept_type', 'domain']},
+      select: { key: [ 'concept' ], value: [ 'concept_type', 'domain' ] },
       from: 'concepts'
     };
     // not using query() to circumvent the conceptPromise resolving
@@ -137,17 +133,17 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
    */
   function reparseConcepts() {
     const parsingFunctions = new Map<string, Function>([
-      ['boolean', (str) => str === 'true' || str === 'TRUE'],
-      ['measure', (str) => parseFloat(str)]
+      [ 'boolean', (str) => str === 'true' || str === 'TRUE' ],
+      [ 'measure', (str) => parseFloat(str) ]
     ]);
 
-    const resources = getResources(['concept']);
+    const resources = getResources([ 'concept' ]);
 
-    const resourceUpdates = [...resources].map(resource => {
+    const resourceUpdates = [ ...resources ].map(resource => {
       return resource.data.then(response => {
 
         // first find out which resource concepts need parsing
-        const resourceConcepts = Object.keys(response.data[0]);
+        const resourceConcepts = Object.keys(response.data[ 0 ]);
         const parsingConcepts = new Map<string, Function>();
 
         resourceConcepts.forEach(concept => {
@@ -161,8 +157,8 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
 
         // then parse only those concepts
         return response.data.forEach(row => {
-          for (const [concept, parseFn] of parsingConcepts) {
-            row[concept] = parseFn(row[concept]);
+          for (const [ concept, parseFn ] of parsingConcepts) {
+            row[ concept ] = parseFn(row[ concept ]);
           }
         });
 
@@ -180,56 +176,61 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
 
   function query(queryParam) {
     if (isSchemaQuery(queryParam)) {
-      return datapackagePromise.then(() => querySchema(queryParam));
+      return datapackagePromise
+        .then(() => validateQuery(queryParam, {basePath, conceptsLookup}))
+        .then(() => querySchema(queryParam));
     } else {
-      return conceptsPromise.then(() => {
-        const appropriatePlugin = getAppropriatePlugin(fileReader, basePath, queryParam, datapackage);
+      return conceptsPromise
+        .then(() => validateQuery(queryParam, {basePath, conceptsLookup}))
+        .then(() => {
+          const appropriatePlugin = getAppropriatePlugin(fileReader, basePath, queryParam, datapackage);
 
-        return new Promise((resolve: Function) => {
-          if (!appropriatePlugin) {
-            return resolve();
-          }
+          return new Promise((resolve: Function) => {
+            if (!appropriatePlugin) {
+              return resolve();
+            }
 
-          appropriatePlugin.getOptimalFilesSet().then(files => {
-            optimalFilesSet = files;
-            resolve();
-          }).catch(() => {
-            optimalFilesSet = [];
-            resolve();
+            appropriatePlugin.getOptimalFilesSet().then(files => {
+              optimalFilesSet = files;
+              resolve();
+            }).catch(() => {
+              optimalFilesSet = [];
+              resolve();
+            });
           });
-        });
-      }).then(() => queryData(queryParam));
+        })
+        .then(() => queryData(queryParam));
     }
   }
 
   function isSchemaQuery(queryParam) {
     const fromClause = queryParam.from || '';
 
-    return fromClause.split('.')[1] === 'schema';
+    return endsWith(fromClause, '.schema');
   }
 
   function queryData(queryParam) {
     const {
-      select: {key = [], value = []},
+      select: { key = [], value = [] },
       from = '',
       where = {},
       join = {},
       order_by = [],
       language
     } = queryParam;
-    const select = {key, value};
+    const select = { key, value };
 
     const projection = new Set(select.key.concat(select.value));
     const filterFields = getFilterFields(where).filter(field => !projection.has(field));
     // load all relevant resources
-    const resourcesPromise = loadResources(select.key, [...select.value, ...filterFields], language);
+    const resourcesPromise = loadResources(select.key, [ ...select.value, ...filterFields ], language);
     // list of entities selected from a join clause, later insterted in where clause
     const joinsPromise = getJoinFilters(join);
     // filter which ensures result only includes queried entity sets
     const entitySetFilterPromise = getEntitySetFilter(select.key);
 
-    return Promise.all([resourcesPromise, entitySetFilterPromise, joinsPromise])
-      .then(([resourceResponses, entitySetFilter, joinFilters]) => {
+    return Promise.all([ resourcesPromise, entitySetFilterPromise, joinsPromise ])
+      .then(([ resourceResponses, entitySetFilter, joinFilters ]) => {
         // create filter from where, join filters and entity set filters
         const whereResolved = processWhere(where, joinFilters);
         const filter = mergeFilters(entitySetFilter, whereResolved);
@@ -258,12 +259,12 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
     // process ["geo"] or [{"geo": "asc"}] to [{ concept: "geo", direction: 1 }];
     const orderNormalized = orderBy.map(orderPart => {
       if (typeof orderPart === 'string') {
-        return {concept: orderPart, direction: 1};
+        return { concept: orderPart, direction: 1 };
       } else {
-        const concept = Object.keys(orderPart)[0];
-        const direction = (orderPart[concept] === 'asc' ? 1 : -1);
+        const concept = Object.keys(orderPart)[ 0 ];
+        const direction = (orderPart[ concept ] === 'asc' ? 1 : -1);
 
-        return {concept, direction};
+        return { concept, direction };
       }
     });
 
@@ -272,11 +273,11 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
 
     data.sort((a, b) => {
       for (let i = 0; i < n; i++) {
-        const order = orderNormalized[i];
+        const order = orderNormalized[ i ];
 
-        if (a[order.concept] < b[order.concept]) {
+        if (a[ order.concept ] < b[ order.concept ]) {
           return -1 * order.direction;
-        } else if (a[order.concept] > b[order.concept]) {
+        } else if (a[ order.concept ] > b[ order.concept ]) {
           return 1 * order.direction;
         }
       }
@@ -297,29 +298,29 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
     const result = {};
 
     for (const field in where) {
-      const fieldValue = where[field];
+      const fieldValue = where[ field ];
 
-      if (['$and', '$or', '$nor'].includes(field)) {
-        result[field] = fieldValue.map(subFilter => processWhere(subFilter, joinFilters));
+      if ([ '$and', '$or', '$nor' ].includes(field)) {
+        result[ field ] = fieldValue.map(subFilter => processWhere(subFilter, joinFilters));
       } else if (field === '$in' || field === '$nin') {
         // prepare "$in" fields for optimized lookup
-        result[field] = new Set(fieldValue);
-      } else if (typeof joinFilters[fieldValue] !== 'undefined') {
+        result[ field ] = new Set(fieldValue);
+      } else if (typeof joinFilters[ fieldValue ] !== 'undefined') {
         // found a join!
         // not assigning to result[field] because joinFilter can contain $and/$or statements in case of
         // time concept (join-where is directly copied, not executed)
         // otherwise could end up with where: { year: { $and: [{ ... }]}}, which is invalid
         // (no boolean ops inside field objects)
         // in case of entity join, joinFilters contains correct field
-        Object.assign(result, joinFilters[fieldValue]);
+        Object.assign(result, joinFilters[ fieldValue ]);
       } else if (typeof fieldValue === 'object') {
         // catches $not and fields with equality operator-objects
         // { <field>: { "$lt": 1500 }}
-        result[field] = processWhere(fieldValue, joinFilters);
+        result[ field ] = processWhere(fieldValue, joinFilters);
       } else {
         // catches rest, being all equality operators except for $in and $nin
         // { "$lt": 1500 }
-        result[field] = fieldValue;
+        result[ field ] = fieldValue;
       }
     }
 
@@ -331,19 +332,19 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
       a.$and.push(b);
 
       return a;
-    }, {$and: []});
+    }, { $and: [] });
   }
 
   function querySchema(queryPar) {
     const getSchemaFromCollection = collectionPar => {
-      return datapackage.ddfSchema[collectionPar].map(
-        ({primaryKey, value}) => ({key: primaryKey, value})
+      return datapackage.ddfSchema[ collectionPar ].map(
+        ({ primaryKey, value }) => ({ key: primaryKey, value })
       );
     };
 
-    const collection = queryPar.from.split('.')[0];
+    const collection = queryPar.from.split('.')[ 0 ];
 
-    if (datapackage.ddfSchema[collection]) {
+    if (datapackage.ddfSchema[ collection ]) {
       return getSchemaFromCollection(collection);
     } else if (collection === '*') {
       return Object.keys(datapackage.ddfSchema)
@@ -356,8 +357,8 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
 
   function fillMissingValues(row, projection) {
     for (const field of projection) {
-      if (typeof row[field] === 'undefined') {
-        row[field] = null;
+      if (typeof row[ field ] === 'undefined') {
+        row[ field ] = null;
       }
     }
 
@@ -370,21 +371,21 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
       const operator = operators.get(filterKey);
 
       if (operator) {
-        return operator(row, filter[filterKey]);
+        return operator(row, filter[ filterKey ]);
         // assuming values are primitives not Number/Boolean/String objects
-      } else if (typeof filter[filterKey] !== 'object') {
+      } else if (typeof filter[ filterKey ] !== 'object') {
         // { <field>: <value> } is shorthand for { <field>: { $eq: <value> }}
-        return operators.get('$eq')(row[filterKey], filter[filterKey]);
+        return operators.get('$eq')(row[ filterKey ], filter[ filterKey ]);
       } else {
         // filter[filterKey] is an object and will thus contain
         // an equality operator (no deep objects (like in Mongo) supported)
-        return applyFilterRow(row[filterKey], filter[filterKey]);
+        return applyFilterRow(row[ filterKey ], filter[ filterKey ]);
       }
     });
   }
 
   function getJoinFilters(join) {
-    return Promise.all(Object.keys(join).map(joinID => getJoinFilter(joinID, join[joinID])))
+    return Promise.all(Object.keys(join).map(joinID => getJoinFilter(joinID, join[ joinID ])))
       .then(results => results.reduce(mergeObjects, {}));
   }
 
@@ -399,14 +400,14 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
     if (conceptsLookup.get(join.key).concept_type === 'time') {
       // time, no query needed as time values are not explicit in the dataSource
       // assumption: there are no time-properties. E.g. data like <year>,population
-      return Promise.resolve({[joinID]: join.where});
+      return Promise.resolve({ [ joinID ]: join.where });
     } else {
       // entity concept
-      return query({select: {key: [join.key]}, where: join.where})
+      return query({ select: { key: [ join.key ] }, where: join.where, from: conceptsLookup.has(join.key) ? 'concepts' : 'entities' })
         .then(result => ({
-          [joinID]: {
-            [join.key]: {
-              $in: new Set(result.map(row => row[join.key]))
+          [ joinID ]: {
+            [ join.key ]: {
+              $in: new Set(result.map(row => row[ join.key ]))
             }
           }
         }));
@@ -418,8 +419,8 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
 
     for (const field in filter) {
       // no support for deeper object structures (mongo style)
-      if (['$and', '$or', '$not', '$nor'].includes(field)) {
-        filter[field].map(getFilterFields).forEach(subFields => fields.push(...subFields));
+      if ([ '$and', '$or', '$not', '$nor' ].includes(field)) {
+        filter[ field ].map(getFilterFields).forEach(subFields => fields.push(...subFields));
       } else {
         fields.push(field);
       }
@@ -456,7 +457,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
    */
   function getEntityConceptRenameMap(queryKey, resourceKey) {
     const resourceKeySet = new Set(resourceKey);
-    const entityConceptTypes = ['entity_set', 'entity_domain'];
+    const entityConceptTypes = [ 'entity_set', 'entity_domain' ];
     const queryEntityConcepts = filterConceptsByType(entityConceptTypes, queryKey);
 
     if (queryEntityConcepts.length === 0) {
@@ -483,7 +484,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
           }
         })
         .reduce((map, aliasConcept) => map.set(aliasConcept.concept, concept.concept), new Map())
-      ).reduce((mapA, mapB) => new Map([...mapA, ...mapB]), new Map());
+      ).reduce((mapA, mapB) => new Map([ ...mapA, ...mapB ]), new Map());
   }
 
   /**
@@ -492,15 +493,15 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
    * @return {Array}                Array of filter objects for each entity concept
    */
   function getEntitySetFilter(conceptStrings) {
-    const promises = filterConceptsByType(['entity_set'], conceptStrings)
-      .map(concept => query({select: {key: [concept.domain], value: ['is--' + concept.concept]}})
+    const promises = filterConceptsByType([ 'entity_set' ], conceptStrings)
+      .map(concept => query({ select: { key: [ concept.domain ], value: [ 'is--' + concept.concept ] }, from: 'entities' })
         .then(result => ({
-          [concept.concept]:
+          [ concept.concept ]:
             {
               $in: new Set(
                 result
-                  .filter(row => row['is--' + concept.concept])
-                  .map(row => row[concept.domain])
+                  .filter(row => row[ 'is--' + concept.concept ])
+                  .map(row => row[ concept.domain ])
               )
             }
         }))
@@ -521,7 +522,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
     // value not given, load all resources for key
     if (!value || value.length === 0) {
       return new Set(
-        [...keyValueLookup
+        [ ...keyValueLookup
           .get(createKeyString(key))
           .values()
         ].reduce((a, b) => a.concat(b))
@@ -531,7 +532,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
     if (Array.isArray(value)) {
       return value
         .map(singleValue => getResources(key, singleValue))
-        .reduce((resultSet, resources) => new Set([...resultSet, ...resources]), new Set());
+        .reduce((resultSet, resources) => new Set([ ...resultSet, ...resources ]), new Set());
     }
     // one key, one value
     let oneKeyOneValueResourcesArray = keyValueLookup
@@ -549,7 +550,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
   function processResourceResponse(response, select, filterFields) {
     const resourcePK = response.resource.schema.primaryKey;
     // all fields used for select or filters
-    const resourceProjection = new Set([...resourcePK, ...select.value, ...filterFields]);
+    const resourceProjection = new Set([ ...resourcePK, ...select.value, ...filterFields ]);
     // rename map to rename relevant entity headers to requested entity concepts
     const renameMap = getEntityConceptRenameMap(select.key, resourcePK);
 
@@ -569,7 +570,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
 
     const resources = getResources(key, value);
 
-    return Promise.all([...resources].map(
+    return Promise.all([ ...resources ].map(
       resource => loadResource(resource, language)
     ));
   }
@@ -579,7 +580,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
 
     for (const concept in row) {
       if (projectionSet.has(concept)) {
-        result[concept] = row[concept];
+        result[ concept ] = row[ concept ];
       }
     }
 
@@ -590,7 +591,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
     const result = {};
 
     for (const concept in row) {
-      result[renameMap.get(concept) || concept] = row[concept];
+      result[ renameMap.get(concept) || concept ] = row[ concept ];
     }
 
     return result;
@@ -598,13 +599,13 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
 
   function joinData(key, joinMode, ...data) {
     if (data.length === 1) {
-      return data[0];
+      return data[ 0 ];
     }
 
     const canonicalKey = key.slice(0).sort();
     const dataMap = data.reduce((result, dataPar) => {
       dataPar.forEach(row => {
-        const keyString = canonicalKey.map(concept => row[concept]).join(',');
+        const keyString = canonicalKey.map(concept => row[ concept ]).join(',');
 
         if (result.has(keyString)) {
           const resultRow = result.get(keyString);
@@ -617,7 +618,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
 
       return result;
     }, new Map());
-    return [...dataMap.values()];
+    return [ ...dataMap.values() ];
   }
 
   function joinRow(resultRow, sourceRow, mode) {
@@ -630,15 +631,15 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
         // Translation joining ignores empty values
         // and allows different values for strings (= translations)
         for (const concept in sourceRow) {
-          if (sourceRow[concept] !== '') {
-            resultRow[concept] = sourceRow[concept];
+          if (sourceRow[ concept ] !== '') {
+            resultRow[ concept ] = sourceRow[ concept ];
           }
         }
         break;
       case 'overwriteWithError':
         /* Alternative for "overwrite" with JOIN error detection */
         for (const concept in sourceRow) {
-          if (resultRow[concept] !== undefined && resultRow[concept] !== sourceRow[concept]) {
+          if (resultRow[ concept ] !== undefined && resultRow[ concept ] !== sourceRow[ concept ]) {
             const sourceRowStr = JSON.stringify(sourceRow);
             const resultRowStr = JSON.stringify(resultRow);
             const errStr =
@@ -646,7 +647,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
 
             throwError(new DdfCsvError(DDF_ERROR, errStr));
           } else {
-            resultRow[concept] = sourceRow[concept];
+            resultRow[ concept ] = sourceRow[ concept ];
           }
         }
         break;
@@ -667,7 +668,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
     if (!row) {
       return canonicalKey.join(',');
     } else {
-      return canonicalKey.map(concept => row[concept]).join(',');
+      return canonicalKey.map(concept => row[ concept ]).join(',');
     }
   }
 
@@ -681,7 +682,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
     filePromises.push(resource.data);
 
     const languageValid = typeof language !== 'undefined' && getLanguages().includes(language);
-    const languageLoaded = typeof resource.translations[language] !== 'undefined';
+    const languageLoaded = typeof resource.translations[ language ] !== 'undefined';
 
     if (languageValid) {
       if (!languageLoaded) {
@@ -689,10 +690,10 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
 
         // error loading translation file is expected when specific file is not translated
         // more correct would be to only resolve file-not-found errors but current solution is sufficient
-        resource.translations[language] = loadFile(translationPath).catch(err => Promise.resolve({}));
+        resource.translations[ language ] = loadFile(translationPath).catch(err => Promise.resolve({}));
       }
 
-      filePromises.push(resource.translations[language]);
+      filePromises.push(resource.translations[ language ]);
     }
 
     return Promise.all(filePromises).then(fileResponses => {
@@ -701,7 +702,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
       const primaryKey = resource.schema.primaryKey;
       const data = joinData(primaryKey, 'translation', ...filesData);
 
-      return {data, resource};
+      return { data, resource };
     });
 
   }
@@ -735,7 +736,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
             // parsing to number/boolean based on concept type
             const concept: any = conceptsLookup.get(headerName) || {};
 
-            return ['boolean', 'measure'].includes(concept.concept_type);
+            return [ 'boolean', 'measure' ].includes(concept.concept_type);
           },
           complete: result => resolve(result),
           error: error => reject(new DdfCsvError(CSV_PARSING_ERROR, error, filePath))
@@ -751,7 +752,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
 
     datapackagePar.resources.forEach(resource => {
       if (!Array.isArray(resource.schema.primaryKey)) {
-        resource.schema.primaryKey = [resource.schema.primaryKey];
+        resource.schema.primaryKey = [ resource.schema.primaryKey ];
       }
 
       resource.translations = {};
@@ -767,7 +768,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
     }
 
     for (const collection in datapackagePar.ddfSchema) {
-      datapackagePar.ddfSchema[collection].map(kvPair => {
+      datapackagePar.ddfSchema[ collection ].map(kvPair => {
         const key = createKeyString(kvPair.primaryKey);
         const resources = kvPair.resources.map(
           resourceName => resourcesLookup.get(resourceName)
@@ -776,7 +777,7 @@ export function ddfCsvReader(path: string, fileReader: IReader, logger?) {
         if (keyValueLookup.has(key)) {
           keyValueLookup.get(key).set(kvPair.value, resources);
         } else {
-          keyValueLookup.set(key, new Map([[kvPair.value, resources]]));
+          keyValueLookup.set(key, new Map([ [ kvPair.value, resources ] ]));
         }
       });
     }

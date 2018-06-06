@@ -1,0 +1,16 @@
+[submodule "systema_globalis"]
+	path = test/fixtures/systema_globalis
+	url = git@github.com:open-numbers/ddf--gapminder--systema_globalis.git
+	branch = master
+[submodule "ddf--gapminder--population.big"]
+	path = test/fixtures/ddf--gapminder--population.big
+	url = git@github.com:buchslava/readers-test-ds-gm-population-big.git
+	branch = master
+[submodule "population_wpp"]
+	path = test/fixtures/population_wpp
+	url = git@github.com:buchslava/readers-test-ds-gm-population.git
+	branch = master
+[submodule "static-assets"]
+	path = test/fixtures/static-assets
+	url = git@github.com:buchslava/readers-test-ds-static-assets.git
+	branch = master

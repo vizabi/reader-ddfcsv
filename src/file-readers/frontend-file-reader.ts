@@ -18,7 +18,7 @@ export class FrontendFileReader implements IReader {
         onFileRead(null, text);
       })
       .catch(err => {
-        onFileRead(err || `${filePath} read error`);
+        onFileRead(`${filePath} read error: ${err}`);
       });
   }
 }

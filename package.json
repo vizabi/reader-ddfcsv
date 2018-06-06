@@ -4,6 +4,7 @@
   "description": "Vizabi DDFcsv reader",
   "main": "dist/vizabi-ddfcsv-reader-node.js",
   "scripts": {
+    "preinstall": "git submodule update --remote -f",
     "test": "mocha --compilers ts:ts-node/register --timeout 200000 --max-old-space-size=6144 test/**/*.spec.ts",
     "test-travis": "tsc && istanbul cover mocha _mocha -- -R spec --compilers ts:ts-node/register --recursive --timeout 200000 test/**/*.spec.ts && codecov",
     "changelog": "conventional-changelog -i CHANGELOG.md -s -p angular",

@@ -37,37 +37,35 @@ export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
         });
       },
 
-      // create own custom parser from WS!!!
-      // no,,, create ability to use custom transformer for data
-      // try empty query!!! -> headers
       read(queryPar, parsers) {
-        function prettifyData(data) {
-          return data.map(record => {
-            const keys = Object.keys(record);
+        return this.reader.query(queryPar)
+          .then(result => {
+            result = parsers ? this._prettifyData(result, parsers) : result;
 
-            keys.forEach(key => {
-              if (parsers[key]) {
-                record[key] = parsers[key](record[key]);
-              }
-            });
+            if (this.resultTransformer) {
+              result = this.resultTransformer(result);
+            }
 
-            return record;
+            if (this.logger && this.logger.log) {
+              logger.log(JSON.stringify(queryPar), result.length);
+              logger.log(result);
+            }
+
+            return result;
           });
-        }
+      },
 
-        return this.reader.query(queryPar).then(result => {
-          result = parsers ? prettifyData(result) : result;
+      _prettifyData(data, parsers) {
+        return data.map(record => {
+          const keys = Object.keys(record);
 
-          if (this.resultTransformer) {
-            result = this.resultTransformer(result);
-          }
+          keys.forEach(key => {
+            if (parsers[ key ]) {
+              record[ key ] = parsers[ key ](record[ key ]);
+            }
+          });
 
-          if (this.logger && this.logger.log) {
-            logger.log(JSON.stringify(queryPar), result.length);
-            logger.log(result);
-          }
-
-          return result;
+          return record;
         });
       }
     };

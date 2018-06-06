@@ -32,7 +32,7 @@ describe('Errors processing', () => {
       expect(error.details).to.equal('file is not found');
       expect(error.file).to.equal('./test/fixtures/systema_globalis/ddf--concepts.csv');
       expect(error.name).to.equal('DdfCsvError');
-      expect(error.message).to.equal('File reading error');
+      expect(error.message).to.equal('File reading error [filepath: ./test/fixtures/systema_globalis/ddf--concepts.csv]. file is not found.');
 
       done();
     });
@@ -55,8 +55,7 @@ describe('Errors processing', () => {
     }).catch((error: DdfCsvError) => {
       expect(error.file).to.equal('foo path/datapackage.json');
       expect(error.name).to.equal('DdfCsvError');
-      expect(error.message).to.equal('File reading error');
-      expect(error.details.message).to.equal(`ENOENT: no such file or directory, open 'foo path/datapackage.json'`);
+      expect(error.message).to.equal('File reading error [filepath: foo path/datapackage.json]. No such file: foo path/datapackage.json.');
 
       done();
     });
@@ -79,8 +78,8 @@ describe('Errors processing', () => {
     }).catch((error: DdfCsvError) => {
       expect(error.file).to.equal('./test/fixtures/ds_broken_datapackage/datapackage.json');
       expect(error.name).to.equal('DdfCsvError');
-      expect(error.message).to.equal('JSON parsing error');
-      expect(error.details.message).to.equal('Unexpected token ( in JSON at position 0');
+      expect(error.message).to.equal('JSON parsing error [filepath: ./test/fixtures/ds_broken_datapackage/datapackage.json]. Unexpected token ( in JSON at position 0.');
+      expect(error.details).to.equal('Unexpected token ( in JSON at position 0');
 
       done();
     });

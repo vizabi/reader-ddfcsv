@@ -9,6 +9,10 @@ export class BackendFileReader implements IReader {
   }
 
   readText(filePath, onFileRead) {
+    if (!fs.existsSync(filePath)) {
+      return onFileRead('No such file: ' + filePath);
+    }
+
     fs.readFile(filePath, 'utf-8', (err, content) => {
       if (err) {
         onFileRead(err);

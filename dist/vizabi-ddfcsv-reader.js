@@ -488,7 +488,7 @@ var DDFCsvReader =
 	        _this.details = details;
 	        _this.file = file;
 	        _this.name = 'DdfCsvError';
-	        _this.message = message;
+	        _this.message = message + " " + details + " " + file;
 	        _this.details = details;
 	        _this.file = file;
 	        return _this;

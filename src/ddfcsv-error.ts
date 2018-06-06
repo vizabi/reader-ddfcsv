@@ -7,7 +7,7 @@ export class DdfCsvError extends Error {
   constructor(message: string, public details, public file?: string) {
     super();
     this.name = 'DdfCsvError';
-    this.message = message;
+    this.message = `${message} [filepath: ${file}]. ${details}.`;
     this.details = details;
     this.file = file;
   }

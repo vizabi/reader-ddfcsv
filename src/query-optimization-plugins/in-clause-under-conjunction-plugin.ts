@@ -15,6 +15,7 @@ const Papa = require('papaparse');
 
 const WHERE_KEYWORD = 'where';
 const JOIN_KEYWORD = 'join';
+const KEY_KEYWORD = 'key';
 const KEY_IN = '$in';
 const KEY_AND = '$and';
 
@@ -37,10 +38,10 @@ export class InClauseUnderConjunctionPlugin implements IQueryOptimizationPlugin 
     let areJoinKeysSameAsKeyInWhereClause = true;
 
     for (const key of joinKeys) {
-      const joinPart = this.flow.joinObject[key];
-      const firstKey = getFirstKey(joinPart.where);
+      const joinPart = get(this.flow.joinObject, key, {});
+      const firstKey = getFirstKey(joinPart[WHERE_KEYWORD]);
 
-      if (joinPart.key !== firstKey && firstKey !== KEY_AND) {
+      if (joinPart[KEY_KEYWORD] !== firstKey && firstKey !== KEY_AND) {
         areJoinKeysSameAsKeyInWhereClause = false;
         break;
       }
@@ -66,7 +67,7 @@ export class InClauseUnderConjunctionPlugin implements IQueryOptimizationPlugin 
   }
 
   private fillResourceToFileHash(): InClauseUnderConjunctionPlugin {
-    this.flow.resourceToFile = this.datapackage.resources.reduce((hash, resource) => {
+    this.flow.resourceToFile = get(this.datapackage, 'resources', []).reduce((hash, resource) => {
       hash.set(resource.name, resource.path);
 
       return hash;
@@ -84,7 +85,7 @@ export class InClauseUnderConjunctionPlugin implements IQueryOptimizationPlugin 
       const where = get(this.flow.joinObject[joinKey], WHERE_KEYWORD);
 
       if (this.singleAndField(where)) {
-        this.flow.processableClauses.push(...flattenDeep(where.$and.map(el => this.getProcessableClauses(el))));
+        this.flow.processableClauses.push(...flattenDeep(where[KEY_AND].map(el => this.getProcessableClauses(el))));
       } else {
         this.flow.processableClauses.push(...this.getProcessableClauses(where));
       }
