@@ -10,12 +10,17 @@ import endsWith = require('lodash/endsWith');
 import get = require('lodash/get');
 import isString = require('lodash/isString');
 
-const AVAILABLE_QUERY_OPERATORS = new Set(['$eq', '$gt', '$gte', '$lt', '$lte', '$ne', '$in', '$nin', '$or', '$and', '$not', '$nor', '$size', '$all', '$elemMatch']);
-const AVAILABLE_FROM_CLAUSE_VALUES = new Set(['concepts', 'entities', 'datapoints', 'schema.concepts', 'schema.entities', 'schema.datapoints']);
+const AVAILABLE_QUERY_OPERATORS = new Set([
+  '$eq', '$gt', '$gte', '$lt', '$lte', '$ne', '$in', '$nin',
+  '$or', '$and', '$not', '$nor', '$size', '$all', '$elemMatch'
+]);
+const AVAILABLE_FROM_CLAUSE_VALUES = new Set([
+  'concepts', 'entities', 'datapoints', 'schema.concepts', 'schema.entities', 'schema.datapoints'
+]);
 const SORT_DIRECTIONS = new Set([ 'asc', 'desc' ]);
 const MAX_AMOUNT_OF_MEASURES_IN_SELECT = 5;
 
-export function validateQuery(query, options = {}): void {
+export function validateQuery (query, options = {}): void {
   const validationResult = [
     ...validateFrom(query, options),
     ...validateSelect(query, options),
@@ -32,7 +37,7 @@ export function validateQuery(query, options = {}): void {
   }
 }
 
-function validateFrom(query: any, options): string[] {
+function validateFrom (query: any, options): string[] {
   const errorMessages = [];
   const clause = get(query, 'from', null);
 
@@ -45,14 +50,14 @@ function validateFrom(query: any, options): string[] {
   }
 
   if (!AVAILABLE_FROM_CLAUSE_VALUES.has(clause)) {
-    const listAvaliableValues = [...AVAILABLE_FROM_CLAUSE_VALUES];
+    const listAvaliableValues = [ ...AVAILABLE_FROM_CLAUSE_VALUES ];
     errorMessages.push(`'from' clause must be one of the list: ${listAvaliableValues.join(', ')}`);
   }
 
   return errorMessages;
 }
 
-function validateSelect(query, options): string[] {
+function validateSelect (query, options): string[] {
   const errorMessages = [];
   const selectClause = get(query, 'select', null);
   const fromClause = get(query, 'from', null);
@@ -67,10 +72,14 @@ function validateSelect(query, options): string[] {
   switch (true) {
     case (endsWith(fromClause, '.schema')):
       if (!isArray(key) || size(key) < 2) {
-        errorMessages.push(`'select.key' clause for '${fromClause}' queries must have at least 2 items: 'key', 'value'`);
+        errorMessages.push(
+          `'select.key' clause for '${fromClause}' queries must have at least 2 items: 'key', 'value'`
+        );
       }
       if (!isArray(value)) {
-        errorMessages.push(`'select.value' clause for '${fromClause}' queries should be array of strings or empty`);
+        errorMessages.push(
+          `'select.value' clause for '${fromClause}' queries should be array of strings or empty`
+        );
       }
       break;
     case (isNil(fromClause)):
@@ -84,7 +93,7 @@ function validateSelect(query, options): string[] {
         errorMessages.push(`'select.key' clause for '${fromClause}' queries must have at least 2 items`);
       }
 
-      const unavailableKeys = filter(key, (keyItem: string) => {
+      const unavailableKeys: string[] = filter(key, (keyItem: string) => {
         const concept = options.conceptsLookup.get(keyItem);
         if (isNil(concept) || !isEntityDomainOrSet(concept.concept_type)) {
           return true;
@@ -95,12 +104,11 @@ function validateSelect(query, options): string[] {
         errorMessages.push(`'select.key' clause for '${fromClause}' queries contains unavailable item(s): ${unavailableKeys.join(', ')} [repo: ${options.basePath}]`);
       }
 
-
       if (size(value) < 1) {
         errorMessages.push(`'select.value' clause for '${fromClause}' queries must have at least 1 item`);
       }
 
-      const unavailableValues = filter(value, (valueItem: string) => {
+      const unavailableValues: string[] = filter(value, (valueItem: string) => {
         const concept = options.conceptsLookup.get(valueItem);
         if (isNil(concept) || !isMeasure(concept.concept_type)) {
           return true;
@@ -126,7 +134,7 @@ function validateSelect(query, options): string[] {
   return errorMessages;
 }
 
-function validateWhere(query, options): string[] {
+function validateWhere (query, options): string[] {
   const errorMessages = [];
   const clausesUnderValidating = [];
   const operatorsUnderValidating = Object.keys(query);
@@ -139,24 +147,27 @@ function validateWhere(query, options): string[] {
 
   return errorMessages;
 }
-function validateLanguage(query, options): string[] {
-  return [];
-}
-function validateJoin(query, options): string[] {
-  return [];
-}
-function validateOrderBy(query, options): string[] {
+
+function validateLanguage (query, options): string[] {
   return [];
 }
 
-function isInvalidQueryOperator(operator: string): boolean {
+function validateJoin (query, options): string[] {
+  return [];
+}
+
+function validateOrderBy (query, options): string[] {
+  return [];
+}
+
+function isInvalidQueryOperator (operator: string): boolean {
   return startsWith(operator, '$') && !AVAILABLE_QUERY_OPERATORS.has(operator);
 }
 
-function isEntityDomainOrSet(conceptType: string): boolean {
-  return includes(['entity_domain', 'entity_set', 'time'], conceptType);
+function isEntityDomainOrSet (conceptType: string): boolean {
+  return includes([ 'entity_domain', 'entity_set', 'time' ], conceptType);
 }
 
-function isMeasure(conceptType: string): boolean {
-  return includes(['measure', 'string'], conceptType);
+function isMeasure (conceptType: string): boolean {
+  return includes([ 'measure', 'string' ], conceptType);
 }
