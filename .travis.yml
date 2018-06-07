@@ -7,13 +7,17 @@ addons:
     packages:
     - python-pip
 
+git:
+  submodules: false
+
 before_install:
-- sudo pip install s3cmd
+  - sudo pip install s3cmd
+  - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+  - git submodule update --init --remote --recursive
 
 script:
   - npm run-script test-travis
   - npm run deploy
-
 
 deploy:
   provider: npm
