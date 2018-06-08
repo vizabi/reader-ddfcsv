@@ -1,7 +1,7 @@
 language: node_js
 sudo: true
 node_js:
-  - "6"
+  - "8.11.2"
 addons:
   apt:
     packages:
