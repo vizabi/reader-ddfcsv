@@ -485,8 +485,6 @@ var DDFCsvReader =
 	
 	        var _this = _possibleConstructorReturn(this, (DdfCsvError.__proto__ || Object.getPrototypeOf(DdfCsvError)).call(this));
 	
-	        _this.details = details;
-	        _this.file = file;
 	        _this.name = 'DdfCsvError';
 	        _this.message = message + " [filepath: " + file + "]. " + details + ".";
 	        _this.details = details;

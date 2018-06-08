@@ -4,7 +4,8 @@
   "description": "Vizabi DDFcsv reader",
   "main": "dist/vizabi-ddfcsv-reader-node.js",
   "scripts": {
-    "preinstall": "git submodule update --remote -f && rm -rf coverage && rm -rf .nyc_output && rm -rf coverage.lcov && npm run tsc",
+    "preinstall": "git submodule update --remote -f && rm -rf coverage && rm -rf .nyc_output && rm -rf coverage.lcov",
+    "postinstall": "npm run tsc",
     "test": "npm run e2e",
     "test-travis": "npm run e2e && nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "pree2e": "npm i",
