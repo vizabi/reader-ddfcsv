@@ -5,11 +5,11 @@ export const DDF_ERROR = 'DDF error';
 
 /* tslint: disable-next-line */
 export class DdfCsvError extends Error {
-  name: string;
-  message: string;
   public details: any;
   public file: string | null;
-  stack: string;
+  public stack: string;
+  public name: string;
+  public message: string;
 
   constructor(message: string, details, file?: string) {
     super();
