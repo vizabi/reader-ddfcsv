@@ -2,8 +2,19 @@ import * as chai from 'chai';
 import { getDDFCsvReaderObject } from '../src/index';
 
 const expect = chai.expect;
+import {
+  BIG_PATH,
+  expectedError1,
+  expectedError2,
+  expectedError3,
+  expectedError4,
+  expectedError5,
+  GLOBALIS_PATH,
+  notExpectedError,
+  POP_WPP_PATH,
+  STATIC_ASSETS
+} from './common';
 
-const GLOBALIS_PATH = './test/fixtures/systema_globalis';
 const EMPTY_TRANSLATIONS_PATH = './test/fixtures/empty-translations';
 
 describe('Concepts supporting', () => {
@@ -72,12 +83,14 @@ describe('Concepts supporting', () => {
 
       reader.init({path: GLOBALIS_PATH});
 
-      reader.read({}).then(data => {
-        expect(data.length).to.not.equal(8);
-
-        done();
-      }).catch(err => {
-        expect(!!err).to.be.true;
+      reader.read({}).then(() => {
+        done(notExpectedError);
+      }).catch(error => {
+        expect(error.toString()).to.contain(expectedError1);
+        expect(error.toString()).to.contain(expectedError2);
+        expect(error.toString()).to.contain(expectedError3);
+        expect(error.toString()).to.contain(expectedError4);
+        expect(error.toString()).to.not.contain(expectedError5);
 
         done();
       });
@@ -100,7 +113,7 @@ describe('Concepts supporting', () => {
         expect(data.length).to.equal(595);
 
         done();
-      });
+      }).catch(error => done(error));
     });
   });
 });

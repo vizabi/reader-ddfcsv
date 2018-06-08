@@ -1,25 +1,23 @@
 import * as chai from 'chai';
 import { getDDFCsvReaderObject } from '../src/index';
+import {
+  BIG_PATH,
+  expectedError1,
+  expectedError2,
+  expectedError3,
+  expectedError4,
+  expectedError5,
+  expectedError6,
+  expectedError7,
+  expectedError8,
+  expectedError9,
+  GLOBALIS_PATH,
+  notExpectedError,
+  POP_WPP_PATH,
+  STATIC_ASSETS
+} from './common';
 
 const expect = chai.expect;
-
-const GLOBALIS_PATH = './test/fixtures/systema_globalis';
-const BIG_PATH = './test/fixtures/ddf--gapminder--population.big';
-const POP_WPP_PATH = './test/fixtures/population_wpp';
-const STATIC_ASSETS = './test/fixtures/static-assets';
-
-const expectedError1 = `'from' clause couldn't be empty`;
-const expectedError2 = `'from' clause must be string only`;
-const expectedError3 = `'from' clause must be one of the list: `;
-
-const expectedError4 = `'select' clause couldn't be empty`;
-const expectedError5 = `'select' clause must have next structure: { key: [...], value: [...] }`;
-const expectedError6 = `'select.key' clause for 'datapoints' queries must have at least 2 items`;
-const expectedError7 = `'select.key' clause for 'datapoints' queries contains unavailable item(s): failed_concept [repo: ${GLOBALIS_PATH}/]`;
-const expectedError8 = `'select.value' clause for 'datapoints' queries must have at least 1 item`;
-const expectedError9 = `'select.value' clause for 'datapoints' queries contains unavailable item(s): failed_measure [repo: ${GLOBALIS_PATH}/]`;
-
-const notExpectedError = 'this should never be called';
 
 describe('Datapoints supporting', () => {
   describe('# happy flow', () => {
@@ -356,7 +354,7 @@ describe('Datapoints supporting', () => {
   });
 
   describe('# sad flow, when query is empty', () => {
-    it('return many errors for each required section', function(done: Function): void {
+    it('return many errors only for \'from\' section', function(done: Function): void {
       const reader = getDDFCsvReaderObject();
       reader.init({ path: GLOBALIS_PATH });
 

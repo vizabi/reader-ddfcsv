@@ -51,7 +51,6 @@
     "@types/bluebird": "3.5.2",
     "@types/chai": "4.0.10",
     "@types/core-js": "0.9.43",
-    "@types/es6-shim": "0.31.35",
     "@types/lodash": "4.14.91",
     "@types/mocha": "5.2.1",
     "@types/node": "8.5.2",

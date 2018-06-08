@@ -3,7 +3,7 @@ import head = require('lodash/head');
 import {IQueryOptimizationPlugin} from './query-optimization-plugin';
 import {IReader} from '../file-readers/reader';
 
-export function getAppropriatePlugin(
+export function getAppropriatePlugin (
   fileReader: IReader,
   basePath: string,
   queryParam,

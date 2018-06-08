@@ -1,10 +1,9 @@
 import includes = require('lodash/includes');
 import isEmpty = require('lodash/isEmpty');
-import endsWith = require('lodash/endsWith');
 import { IReader } from './file-readers/reader';
 import { getAppropriatePlugin } from './query-optimization-plugins';
 import { CSV_PARSING_ERROR, DDF_ERROR, DdfCsvError, FILE_READING_ERROR, JSON_PARSING_ERROR } from './ddfcsv-error';
-import { validateQuery } from './query-validator';
+import { isSchemaQuery, validateQueryStructure, validateQueryDefinitions } from './query-validator';
 
 const Promise = require('bluebird');
 const Papa = require('papaparse');
@@ -175,13 +174,16 @@ export function ddfCsvReader (path: string, fileReader: IReader, logger?) {
   }
 
   function query (queryParam) {
+
     if (isSchemaQuery(queryParam)) {
-      return datapackagePromise
-        .then(() => validateQuery(queryParam, { basePath, conceptsLookup }))
+      return validateQueryStructure(queryParam)
+        .then(() => datapackagePromise)
+        .then(() => validateQueryDefinitions(queryParam, { basePath, conceptsLookup }))
         .then(() => querySchema(queryParam));
     } else {
-      return conceptsPromise
-        .then(() => validateQuery(queryParam, { basePath, conceptsLookup }))
+      return validateQueryStructure(queryParam)
+        .then(() => conceptsPromise)
+        .then(() => validateQueryDefinitions(queryParam, { basePath, conceptsLookup }))
         .then(() => {
           const appropriatePlugin = getAppropriatePlugin(fileReader, basePath, queryParam, datapackage);
 
@@ -201,12 +203,6 @@ export function ddfCsvReader (path: string, fileReader: IReader, logger?) {
         })
         .then(() => queryData(queryParam));
     }
-  }
-
-  function isSchemaQuery (queryParam) {
-    const fromClause = queryParam.from || '';
-
-    return endsWith(fromClause, '.schema');
   }
 
   function queryData (queryParam) {
