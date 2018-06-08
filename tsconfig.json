@@ -7,11 +7,7 @@
     "outDir": "./lib",
     "preserveConstEnums": true,
     "removeComments": true,
-    "types": [
-      "node",
-      "mocha",
-      "chai"
-    ],
+    "typeRoots": ["node_modules/@types"],
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
