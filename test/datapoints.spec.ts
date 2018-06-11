@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 import { getDDFCsvReaderObject } from '../src/index';
 import {
-  BIG_PATH,
+  BIG_PATH, checkExpectations,
   expectedError1,
   expectedError2,
   expectedError3,
@@ -62,14 +62,16 @@ describe('Datapoints supporting', () => {
           }
         },
         order_by: [ 'time', 'geo' ]
-      }).then(data => {
-        const countryAntData = data.filter(record => record.geo === 'ant');
+      })
+        .then(data => {
+          const countryAntData = data.filter(record => record.geo === 'ant');
 
-        expect(data.length).to.equal(1155);
-        expect(countryAntData).to.be.an('array').that.is.empty;
+          expect(data.length).to.equal(1155);
+          expect(countryAntData).to.be.an('array').that.is.empty;
 
-        done();
-      });
+          done();
+        })
+        .catch(done);
     });
 
     it('big 1', done => {
@@ -166,13 +168,15 @@ describe('Datapoints supporting', () => {
         order_by: [
           'year'
         ]
-      }).then(result => {
-        const expectedResult = require('./result-fixtures/in-clause-under-conjunction-1.json');
+      })
+        .then(result => {
+          const expectedResult = require('./result-fixtures/in-clause-under-conjunction-1.json');
 
-        expect(result).to.deep.equal(expectedResult);
+          expect(result).to.deep.equal(expectedResult);
 
-        done();
-      });
+          done();
+        })
+        .catch(done);
     });
 
     it('big 2', done => {
@@ -219,20 +223,22 @@ describe('Datapoints supporting', () => {
           'gender',
           'age'
         ]
-      }).then(result => {
-        const expectedResult = require('./result-fixtures/in-clause-under-conjunction-2.json');
+      })
+        .then(result => {
+          const expectedResult = require('./result-fixtures/in-clause-under-conjunction-2.json');
 
-        expect(result).to.deep.equal(expectedResult);
+          expect(result).to.deep.equal(expectedResult);
 
-        done();
-      });
+          done();
+        })
+        .catch(done);
     });
 
-    it('assets', () => {
+    it('assets', (done: Function) => {
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: STATIC_ASSETS });
-      return reader.read({
+      reader.read({
         language: 'en',
         from: 'datapoints',
         animatable: 'time',
@@ -248,20 +254,22 @@ describe('Datapoints supporting', () => {
           $time: { key: 'time', where: { time: '2015' } }
         },
         order_by: [ 'geo', 'time' ]
-      }).then(result => {
-        const expectedResult = require('./result-fixtures/datapoints-assets.json');
+      })
+        .then(result => {
+          const expectedResult = require('./result-fixtures/datapoints-assets.json');
 
-        expect(result).to.deep.equal(expectedResult);
-
-      });
+          expect(result).to.deep.equal(expectedResult);
+          done();
+        })
+        .catch(done);
     });
 
-    it('condition under translations supporting: ar-SA', () => {
+    it('condition under translations supporting: ar-SA', (done: Function) => {
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: GLOBALIS_PATH });
 
-      return reader.read({
+      reader.read({
           language: 'ar-SA',
           from: 'datapoints',
           animatable: 'time',
@@ -295,21 +303,24 @@ describe('Datapoints supporting', () => {
             'time'
           ]
         }
-      ).then(data => {
-        const countryAntData = data.filter(record => record.geo === 'ant');
+      )
+        .then(data => {
+          const countryAntData = data.filter(record => record.geo === 'ant');
 
-        expect(data.length).to.equal(42705);
-        expect(countryAntData).to.be.an('array').that.is.empty;
+          expect(data.length).to.equal(42705);
+          expect(countryAntData).to.be.an('array').that.is.empty;
 
-      });
+          done();
+        })
+        .catch(done);
     });
 
-    it('condition under translations supporting: ru-RU', () => {
+    it('condition under translations supporting: ru-RU', (done: Function) => {
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: GLOBALIS_PATH });
 
-      return reader.read({
+      reader.read({
           language: 'ru-RU',
           from: 'datapoints',
           animatable: 'time',
@@ -343,13 +354,16 @@ describe('Datapoints supporting', () => {
             'time'
           ]
         }
-      ).then(data => {
-        const countryAntData = data.filter(record => record.geo === 'ant');
+      )
+        .then(data => {
+          const countryAntData = data.filter(record => record.geo === 'ant');
 
-        expect(data.length).to.equal(42705);
-        expect(countryAntData).to.be.an('array').that.is.empty;
+          expect(data.length).to.equal(42705);
+          expect(countryAntData).to.be.an('array').that.is.empty;
 
-      });
+          return done();
+        })
+        .catch(done);
     });
   });
 
@@ -358,17 +372,18 @@ describe('Datapoints supporting', () => {
       const reader = getDDFCsvReaderObject();
       reader.init({ path: GLOBALIS_PATH });
 
-      reader.read({}).then(() => {
-        return done(notExpectedError);
-      }).catch((error) => {
-        // console.log(error.stack);
-        expect(error.toString()).to.contain(expectedError1);
-        expect(error.toString()).to.contain(expectedError2);
-        expect(error.toString()).to.contain(expectedError3);
-        expect(error.toString()).to.contain(expectedError4);
-        expect(error.toString()).to.not.contain(expectedError5);
-        return done();
-      });
+      reader.read({})
+        .then(() => {
+          return done(notExpectedError);
+        })
+        .catch(checkExpectations((error) => {
+          // console.log(error.stack);
+          expect(error.toString()).to.contain(expectedError1);
+          expect(error.toString()).to.contain(expectedError2);
+          expect(error.toString()).to.contain(expectedError3);
+          expect(error.toString()).to.contain(expectedError4);
+          expect(error.toString()).to.not.contain(expectedError5);
+        }, done));
     });
   });
 
@@ -379,12 +394,11 @@ describe('Datapoints supporting', () => {
 
       reader.read({ from: 'datapoints' })
         .then(() => done(notExpectedError))
-        .catch((error) => {
+        .catch(checkExpectations((error) => {
           // console.log(error.stack);
           expect(error.toString()).to.contain(expectedError4);
           expect(error.toString()).to.contain(expectedError5);
-          return done();
-        });
+        }, done));
     });
 
     it('is empty', function(done: Function): void {
@@ -393,12 +407,11 @@ describe('Datapoints supporting', () => {
 
       reader.read({ from: 'datapoints', select: {} })
         .then(() => done(notExpectedError))
-        .catch((error) => {
+        .catch(checkExpectations((error) => {
           // console.log(error.stack);
           expect(error.toString()).to.not.contain(expectedError4);
           expect(error.toString()).to.contain(expectedError5);
-          return done();
-        });
+        }, done));
     });
 
     it('is not object', function(done: Function): void {
@@ -407,12 +420,11 @@ describe('Datapoints supporting', () => {
 
       reader.read({ from: 'datapoints', select: 'fail' })
         .then(() => done(notExpectedError))
-        .catch((error) => {
+        .catch(checkExpectations((error) => {
           // console.log(error.stack);
           expect(error.toString()).to.not.contain(expectedError4);
           expect(error.toString()).to.contain(expectedError5);
-          return done();
-        });
+        }, done));
     });
 
     it('\'key\' property is not array', function(done: Function): void {
@@ -421,12 +433,11 @@ describe('Datapoints supporting', () => {
 
       reader.read({ from: 'datapoints', select: { key: 'fail', value: [ 'population_total' ] } })
         .then(() => done(notExpectedError))
-        .catch((error) => {
+        .catch(checkExpectations((error) => {
           // console.log(error.stack);
           expect(error.toString()).to.not.contain(expectedError4);
           expect(error.toString()).to.contain(expectedError5);
-          return done();
-        });
+        }, done));
     });
 
     it('\'key\' property has 0 item', function(done: Function): void {
@@ -435,13 +446,12 @@ describe('Datapoints supporting', () => {
 
       reader.read({ from: 'datapoints', select: { key: [], value: [ 'population_total' ] } })
         .then(() => done(notExpectedError))
-        .catch((error) => {
+        .catch(checkExpectations((error) => {
           // console.log(error.stack);
           expect(error.toString()).to.not.contain(expectedError4);
           expect(error.toString()).to.not.contain(expectedError5);
           expect(error.toString()).to.contain(expectedError6);
-          return done();
-        });
+        }, done));
     });
 
     it('\'key\' property has 1 item', function(done: Function): void {
@@ -450,13 +460,12 @@ describe('Datapoints supporting', () => {
 
       reader.read({ from: 'datapoints', select: { key: [ 'geo' ], value: [ 'population_total' ] } })
         .then(() => done(notExpectedError))
-        .catch((error) => {
+        .catch(checkExpectations((error) => {
           // console.log(error.stack);
           expect(error.toString()).to.not.contain(expectedError4);
           expect(error.toString()).to.not.contain(expectedError5);
           expect(error.toString()).to.contain(expectedError6);
-          return done();
-        });
+        }, done));
     });
 
     it('\'key\' property has item that is absent in dataset', function(done: Function): void {
@@ -465,14 +474,13 @@ describe('Datapoints supporting', () => {
 
       reader.read({ from: 'datapoints', select: { key: [ 'failed_concept', 'time' ], value: [ 'population_total' ] } })
         .then(() => done(notExpectedError))
-        .catch((error) => {
+        .catch(checkExpectations((error) => {
           // console.log(error.stack);
           expect(error.toString()).to.not.contain(expectedError4);
           expect(error.toString()).to.not.contain(expectedError5);
           expect(error.toString()).to.not.contain(expectedError6);
           expect(error.toString()).to.contain(expectedError7);
-          return done();
-        });
+        }, done));
     });
 
     it('\'value\' property is absent', function(done: Function): void {
@@ -481,13 +489,12 @@ describe('Datapoints supporting', () => {
 
       reader.read({ from: 'datapoints', select: { key: [ 'geo', 'time' ] } })
         .then(() => done(notExpectedError))
-        .catch((error) => {
+        .catch(checkExpectations((error) => {
           // console.log(error.stack);
           expect(error.toString()).to.not.contain(expectedError4);
           expect(error.toString()).to.contain(expectedError5);
           expect(error.toString()).to.contain(expectedError8);
-          return done();
-        });
+        }, done));
     });
 
     it('\'value\' property is not array', function(done: Function): void {
@@ -496,13 +503,12 @@ describe('Datapoints supporting', () => {
 
       reader.read({ from: 'datapoints', select: { key: [ 'geo', 'time' ], value: 'fail' } })
         .then(() => done(notExpectedError))
-        .catch((error) => {
+        .catch(checkExpectations((error) => {
           // console.log(error.stack);
           expect(error.toString()).to.not.contain(expectedError4);
           expect(error.toString()).to.contain(expectedError5);
           expect(error.toString()).to.not.contain(expectedError8);
-          return done();
-        });
+        }, done));
     });
 
     it('\'value\' property is empty', function(done: Function): void {
@@ -511,13 +517,12 @@ describe('Datapoints supporting', () => {
 
       reader.read({ from: 'datapoints', select: { key: [ 'geo', 'time' ], value: [] } })
         .then(() => done(notExpectedError))
-        .catch((error) => {
+        .catch(checkExpectations((error) => {
           // console.log(error.stack);
           expect(error.toString()).to.not.contain(expectedError4);
           expect(error.toString()).to.not.contain(expectedError5);
           expect(error.toString()).to.contain(expectedError8);
-          return done();
-        });
+        }, done));
     });
 
     it('\'value\' property has item that is absent in dataset', function(done: Function): void {
@@ -526,12 +531,11 @@ describe('Datapoints supporting', () => {
 
       reader.read({ from: 'datapoints', select: { key: [ 'geo', 'time' ], value: [ 'failed_measure' ] } })
         .then(() => done(notExpectedError))
-        .catch((error) => {
+        .catch(checkExpectations((error) => {
           // console.log(error.stack);
           expect(error.toString()).to.not.contain(expectedError4);
           expect(error.toString()).to.contain(expectedError9);
-          return done();
-        });
+        }, done));
     });
   });
 
@@ -542,15 +546,14 @@ describe('Datapoints supporting', () => {
 
       reader.read({ select: { key: [ 'geo', 'time' ], value: [ 'population_total' ] } })
         .then(() => done(notExpectedError))
-        .catch((error) => {
+        .catch(checkExpectations((error) => {
           // console.log(error.stack);
           expect(error.toString()).to.contain(expectedError1);
           expect(error.toString()).to.contain(expectedError2);
           expect(error.toString()).to.contain(expectedError3);
           expect(error.toString()).to.not.contain(expectedError4);
           expect(error.toString()).to.not.contain(expectedError5);
-          return done();
-        });
+        }, done));
     });
 
     it('is object', function(done: Function): void {
@@ -559,15 +562,14 @@ describe('Datapoints supporting', () => {
 
       reader.read({ from: {}, select: { key: [ 'geo', 'time' ], value: [ 'population_total' ] } })
         .then(() => done(notExpectedError))
-        .catch((error) => {
+        .catch(checkExpectations((error) => {
           // console.log(error.stack);
           expect(error.toString()).to.not.contain(expectedError1);
           expect(error.toString()).to.contain(expectedError2);
           expect(error.toString()).to.contain(expectedError3);
           expect(error.toString()).to.not.contain(expectedError4);
           expect(error.toString()).to.not.contain(expectedError5);
-          return done();
-        });
+        }, done));
     });
 
     it('doesn\'t have available value', function(done: Function): void {
@@ -576,15 +578,14 @@ describe('Datapoints supporting', () => {
 
       reader.read({ from: 'fail', select: { key: [ 'geo', 'time' ], value: [ 'population_total' ] } })
         .then(() => done(notExpectedError))
-        .catch((error) => {
+        .catch(checkExpectations((error) => {
           // console.log(error.stack);
           expect(error.toString()).to.not.contain(expectedError1);
           expect(error.toString()).to.not.contain(expectedError2);
           expect(error.toString()).to.contain(expectedError3);
           expect(error.toString()).to.not.contain(expectedError4);
           expect(error.toString()).to.not.contain(expectedError5);
-          return done();
-        });
+        }, done));
     });
   });
 });

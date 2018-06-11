@@ -15,3 +15,14 @@ export const expectedError8 = `'select.value' clause for 'datapoints' queries mu
 export const expectedError9 = `'select.value' clause for 'datapoints' queries contains unavailable item(s): failed_measure [repo: ${GLOBALIS_PATH}/]`;
 
 export const notExpectedError = 'this should never be called';
+
+export const checkExpectations = (fn: Function, done: Function) => {
+  return (errorUnderExpectation) => {
+    try {
+      fn(errorUnderExpectation);
+    } catch (expectationError) {
+      return done(expectationError);
+    }
+    return done();
+  };
+};

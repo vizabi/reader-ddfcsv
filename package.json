@@ -4,16 +4,16 @@
   "description": "Vizabi DDFcsv reader",
   "main": "dist/vizabi-ddfcsv-reader-node.js",
   "scripts": {
-    "preinstall": "git submodule update --remote -f && rm -rf coverage && rm -rf .nyc_output && rm -rf coverage.lcov",
-    "postinstall": "npm run tsc",
-    "test": "npm run e2e",
-    "test-travis": "npm run e2e && nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "pree2e": "npm i",
-    "e2e": "nyc mocha",
-    "changelog": "conventional-changelog -i CHANGELOG.md -s -p angular",
-    "github-release": "conventional-github-releaser -p angular",
     "tslint": "./node_modules/.bin/tslint -c ./tslint.json 'src/**/*.ts' && ./node_modules/.bin/tslint -c ./test/tslint.json 'test/**/*.ts'",
     "tsc": "./node_modules/.bin/tsc --project tsconfig.json && npm run tslint",
+    "preinstall": "git submodule update --remote -f && rm -rf coverage && rm -rf .nyc_output && rm -rf coverage.lcov",
+    "postinstall": "npm run tsc",
+    "pree2e": "npm i",
+    "e2e": "nyc mocha",
+    "test": "npm run e2e",
+    "test-travis": "npm run e2e && nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "changelog": "conventional-changelog -i CHANGELOG.md -s -p angular",
+    "github-release": "conventional-github-releaser -p angular",
     "build": "npm run tsc && webpack && WEB_ENV=1 webpack",
     "version": "npm run changelog && git add CHANGELOG.md",
     "postversion": "git push origin master && git push --tags && npm run github-release",
@@ -44,8 +44,8 @@
   "dependencies": {
     "bluebird": "3.5.0",
     "fetch-polyfill": "0.8.2",
-    "papaparse": "4.3.6",
-    "lodash": "4.17.4"
+    "lodash": "4.17.4",
+    "papaparse": "4.3.6"
   },
   "devDependencies": {
     "@types/bluebird": "3.5.2",

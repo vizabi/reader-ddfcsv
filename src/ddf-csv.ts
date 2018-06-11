@@ -3,7 +3,7 @@ import isEmpty = require('lodash/isEmpty');
 import { IReader } from './file-readers/reader';
 import { getAppropriatePlugin } from './query-optimization-plugins';
 import { CSV_PARSING_ERROR, DDF_ERROR, DdfCsvError, FILE_READING_ERROR, JSON_PARSING_ERROR } from './ddfcsv-error';
-import { isSchemaQuery, validateQueryStructure, validateQueryDefinitions } from './query-validator';
+import { isSchemaQuery, validateQueryStructure, validateQueryDefinitions } from './ddf-query-validator';
 
 const Promise = require('bluebird');
 const Papa = require('papaparse');

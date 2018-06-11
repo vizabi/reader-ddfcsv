@@ -6470,7 +6470,7 @@ var DDFCsvReader =
 	var isEmpty = __webpack_require__(87);
 	var query_optimization_plugins_1 = __webpack_require__(100);
 	var ddfcsv_error_1 = __webpack_require__(3);
-	var query_validator_1 = __webpack_require__(145);
+	var ddf_query_validator_1 = __webpack_require__(145);
 	var Promise = __webpack_require__(5);
 	var Papa = __webpack_require__(144);
 	var isValidNumeric = function isValidNumeric(val) {
@@ -6629,19 +6629,19 @@ var DDFCsvReader =
 	        });
 	    }
 	    function query(queryParam) {
-	        if (query_validator_1.isSchemaQuery(queryParam)) {
-	            return query_validator_1.validateQueryStructure(queryParam).then(function () {
+	        if (ddf_query_validator_1.isSchemaQuery(queryParam)) {
+	            return ddf_query_validator_1.validateQueryStructure(queryParam).then(function () {
 	                return datapackagePromise;
 	            }).then(function () {
-	                return query_validator_1.validateQueryDefinitions(queryParam, { basePath: basePath, conceptsLookup: conceptsLookup });
+	                return ddf_query_validator_1.validateQueryDefinitions(queryParam, { basePath: basePath, conceptsLookup: conceptsLookup });
 	            }).then(function () {
 	                return querySchema(queryParam);
 	            });
 	        } else {
-	            return query_validator_1.validateQueryStructure(queryParam).then(function () {
+	            return ddf_query_validator_1.validateQueryStructure(queryParam).then(function () {
 	                return conceptsPromise;
 	            }).then(function () {
-	                return query_validator_1.validateQueryDefinitions(queryParam, { basePath: basePath, conceptsLookup: conceptsLookup });
+	                return ddf_query_validator_1.validateQueryDefinitions(queryParam, { basePath: basePath, conceptsLookup: conceptsLookup });
 	            }).then(function () {
 	                var appropriatePlugin = query_optimization_plugins_1.getAppropriatePlugin(fileReader, basePath, queryParam, datapackage);
 	                return new Promise(function (resolve) {
@@ -12447,51 +12447,37 @@ var DDFCsvReader =
 
 	"use strict";
 	
+	function __export(m) {
+	    for (var p in m) {
+	        if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+	    }
+	}
+	Object.defineProperty(exports, "__esModule", { value: true });
+	__export(__webpack_require__(146));
+	__export(__webpack_require__(147));
+	__export(__webpack_require__(194));
+	//# sourceMappingURL=index.js.map
+
+/***/ },
+/* 146 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
-	var isEmpty = __webpack_require__(87);
-	var isNil = __webpack_require__(146);
-	var isObject = __webpack_require__(58);
-	var isArray = __webpack_require__(61);
-	var size = __webpack_require__(147);
-	var includes = __webpack_require__(45);
-	var filter = __webpack_require__(153);
-	var startsWith = __webpack_require__(141);
 	var get = __webpack_require__(104);
-	var compact = __webpack_require__(143);
-	var isString = __webpack_require__(60);
-	exports.AVAILABLE_QUERY_OPERATORS = new Set(['$eq', '$gt', '$gte', '$lt', '$lte', '$ne', '$in', '$nin', '$or', '$and', '$not', '$nor', '$size', '$all', '$elemMatch']);
+	var includes = __webpack_require__(45);
+	var startsWith = __webpack_require__(141);
 	exports.SCHEMAS = new Set(['concepts.schema', 'entities.schema', 'datapoints.schema']);
 	exports.DATAPOINTS = 'datapoints';
 	exports.ENTITIES = 'entities';
 	exports.CONCEPTS = 'concepts';
+	exports.AVAILABLE_QUERY_OPERATORS = new Set(['$eq', '$gt', '$gte', '$lt', '$lte', '$ne', '$in', '$nin', '$or', '$and', '$not', '$nor', '$size', '$all', '$elemMatch']);
 	exports.AVAILABLE_FROM_CLAUSE_VALUES = new Set([exports.CONCEPTS, exports.ENTITIES, exports.DATAPOINTS].concat(_toConsumableArray(exports.SCHEMAS)));
-	var SORT_DIRECTIONS = new Set(['asc', 'desc']);
-	var MAX_AMOUNT_OF_MEASURES_IN_SELECT = 5;
-	function validateQueryStructure(query) {
-	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-	
-	    return new Promise(function (resolve, reject) {
-	        var validationResult = [].concat(_toConsumableArray(validateFromStructure(query, options)), _toConsumableArray(validateSelectStructure(query, options)), _toConsumableArray(validateLanguageStructure(query, options)), _toConsumableArray(validateJoinStructure(query, options)), _toConsumableArray(validateOrderByStructure(query, options)));
-	        var isQueryValid = isEmpty(validationResult);
-	        if (!isQueryValid) {
-	            return reject("Too many errors: \n* " + validationResult.join('\n* '));
-	        }
-	        return resolve();
-	    });
-	}
-	exports.validateQueryStructure = validateQueryStructure;
-	function validateQueryDefinitions(query) {
-	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-	
-	    var validationResult = [].concat(_toConsumableArray(validateSelectDefinitions(query, options)));
-	    var isQueryValid = isEmpty(validationResult);
-	    if (!isQueryValid) {
-	        throw new Error("Too many errors: \n* " + validationResult.join('\n* '));
-	    }
-	}
-	exports.validateQueryDefinitions = validateQueryDefinitions;
+	exports.SORT_DIRECTIONS = new Set(['asc', 'desc']);
+	exports.MAX_AMOUNT_OF_MEASURES_IN_SELECT = 5;
 	function isSchemaQuery(query) {
 	    var fromClause = get(query, 'from');
 	    return exports.SCHEMAS.has(fromClause);
@@ -12512,46 +12498,48 @@ var DDFCsvReader =
 	    return fromClause === exports.CONCEPTS;
 	}
 	exports.isConceptsQuery = isConceptsQuery;
-	function validateFromStructure(query, options) {
-	    var errorMessages = [];
-	    var clause = get(query, 'from', null);
-	    if (isNil(clause)) {
-	        errorMessages.push("'from' clause couldn't be empty");
-	    }
-	    if (!isString(clause)) {
-	        errorMessages.push("'from' clause must be string only");
-	    }
-	    if (!exports.AVAILABLE_FROM_CLAUSE_VALUES.has(clause)) {
-	        var listAvaliableValues = [].concat(_toConsumableArray(exports.AVAILABLE_FROM_CLAUSE_VALUES));
-	        errorMessages.push("'from' clause must be one of the list: " + listAvaliableValues.join(', '));
-	    }
-	    return errorMessages;
+	function isInvalidQueryOperator(operator) {
+	    return startsWith(operator, '$') && !exports.AVAILABLE_QUERY_OPERATORS.has(operator);
 	}
-	function validateSelectStructure(query, options) {
-	    var errorMessages = [];
-	    var selectClause = get(query, 'select', null);
-	    var fromClause = get(query, 'from', null);
-	    var key = get(selectClause, 'key');
-	    var value = get(selectClause, 'value');
-	    switch (true) {
-	        case isSchemaQuery(query):
-	            errorMessages.push(checkIfSelectIsEmpty(selectClause), checkIfSelectHasInvalidStructure(selectClause, key, value), checkIfSchemasSelectKeyHasInvalidStructure(fromClause, key), checkIfSchemasSelectValueHasInvalidStructure(fromClause, value));
-	            break;
-	        case isEntitiesQuery(query):
-	            errorMessages.push(checkIfSelectIsEmpty(selectClause), checkIfSelectKeyHasInvalidStructure(fromClause, key));
-	            break;
-	        case isConceptsQuery(query):
-	            errorMessages.push(checkIfSelectIsEmpty(selectClause), checkIfSelectKeyHasInvalidStructure(fromClause, key));
-	            break;
-	        case isDatapointsQuery(query):
-	            errorMessages.push(checkIfSelectIsEmpty(selectClause), checkIfSelectHasInvalidStructure(selectClause, key, value), checkIfDatapointsSelectKeyHasInvalidStructure(fromClause, key), checkIfDatapointsSelectValueHasInvalidStructure(fromClause, value));
-	            break;
-	        default:
-	            errorMessages.push(checkIfSelectIsEmpty(selectClause));
-	            break;
-	    }
-	    return compact(errorMessages);
+	exports.isInvalidQueryOperator = isInvalidQueryOperator;
+	function isEntityDomainOrSet(conceptType) {
+	    return includes(['entity_domain', 'entity_set', 'time'], conceptType);
 	}
+	exports.isEntityDomainOrSet = isEntityDomainOrSet;
+	function isMeasure(conceptType) {
+	    return includes(['measure', 'string'], conceptType);
+	}
+	exports.isMeasure = isMeasure;
+	//# sourceMappingURL=helper.service.js.map
+
+/***/ },
+/* 147 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var isEmpty = __webpack_require__(87);
+	var isNil = __webpack_require__(148);
+	var filter = __webpack_require__(149);
+	var get = __webpack_require__(104);
+	var compact = __webpack_require__(143);
+	var helper_service_1 = __webpack_require__(146);
+	function validateQueryDefinitions(query) {
+	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	
+	    return new Promise(function (resolve, reject) {
+	        var validationResult = [].concat(_toConsumableArray(validateSelectDefinitions(query, options)));
+	        var isQueryValid = isEmpty(validationResult);
+	        if (!isQueryValid) {
+	            return reject("Too many query definition errors: \n* " + validationResult.join('\n* '));
+	        }
+	        return resolve();
+	    });
+	}
+	exports.validateQueryDefinitions = validateQueryDefinitions;
 	function validateSelectDefinitions(query, options) {
 	    var errorMessages = [];
 	    var selectClause = get(query, 'select', null);
@@ -12559,73 +12547,22 @@ var DDFCsvReader =
 	    var key = get(selectClause, 'key');
 	    var value = get(selectClause, 'value');
 	    switch (true) {
-	        case isSchemaQuery(query):
+	        case helper_service_1.isSchemaQuery(query):
 	            errorMessages.push.apply(errorMessages, []);
 	            break;
-	        case isEntitiesQuery(query):
+	        case helper_service_1.isEntitiesQuery(query):
 	            errorMessages.push.apply(errorMessages, []);
 	            break;
-	        case isConceptsQuery(query):
+	        case helper_service_1.isConceptsQuery(query):
 	            errorMessages.push.apply(errorMessages, []);
 	            break;
-	        case isDatapointsQuery(query):
+	        case helper_service_1.isDatapointsQuery(query):
 	            errorMessages.push(checkIfSelectKeyHasInvalidDefinitions(fromClause, key, options), checkIfSelectValueHasInvalidDefinitions(fromClause, value, options));
 	            break;
 	        default:
 	            break;
 	    }
 	    return compact(errorMessages);
-	}
-	function validateWhereStructure(query, options) {
-	    var errorMessages = [];
-	    var clausesUnderValidating = [];
-	    var operatorsUnderValidating = Object.keys(query);
-	    var _iteratorNormalCompletion = true;
-	    var _didIteratorError = false;
-	    var _iteratorError = undefined;
-	
-	    try {
-	        for (var _iterator = operatorsUnderValidating[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	            var key = _step.value;
-	
-	            if (isInvalidQueryOperator(key.toString())) {
-	                errorMessages.push('Invalid DDFQL-query. Validation by Operators, not acceptable: ' + key);
-	            }
-	        }
-	    } catch (err) {
-	        _didIteratorError = true;
-	        _iteratorError = err;
-	    } finally {
-	        try {
-	            if (!_iteratorNormalCompletion && _iterator.return) {
-	                _iterator.return();
-	            }
-	        } finally {
-	            if (_didIteratorError) {
-	                throw _iteratorError;
-	            }
-	        }
-	    }
-	
-	    return errorMessages;
-	}
-	function validateLanguageStructure(query, options) {
-	    return [];
-	}
-	function validateJoinStructure(query, options) {
-	    return [];
-	}
-	function validateOrderByStructure(query, options) {
-	    return [];
-	}
-	function isInvalidQueryOperator(operator) {
-	    return startsWith(operator, '$') && !exports.AVAILABLE_QUERY_OPERATORS.has(operator);
-	}
-	function isEntityDomainOrSet(conceptType) {
-	    return includes(['entity_domain', 'entity_set', 'time'], conceptType);
-	}
-	function isMeasure(conceptType) {
-	    return includes(['measure', 'string'], conceptType);
 	}
 	function checkIfSelectKeyHasInvalidDefinitions(fromClause, key, options) {
 	    var unavailableKeys = getUnavailableSelectKeys(key, options);
@@ -12642,7 +12579,7 @@ var DDFCsvReader =
 	function getUnavailableSelectKeys(key, options) {
 	    return filter(key, function (keyItem) {
 	        var concept = options.conceptsLookup.get(keyItem);
-	        if (isNil(concept) || !isEntityDomainOrSet(concept.concept_type)) {
+	        if (isNil(concept) || !helper_service_1.isEntityDomainOrSet(concept.concept_type)) {
 	            return true;
 	        }
 	        return false;
@@ -12651,51 +12588,16 @@ var DDFCsvReader =
 	function getUnavailableSelectValues(value, options) {
 	    return filter(value, function (valueItem) {
 	        var concept = options.conceptsLookup.get(valueItem);
-	        if (isNil(concept) || !isMeasure(concept.concept_type)) {
+	        if (isNil(concept) || !helper_service_1.isMeasure(concept.concept_type)) {
 	            return true;
 	        }
 	        return false;
 	    });
 	}
-	function checkIfSelectIsEmpty(selectClause) {
-	    if (isNil(selectClause)) {
-	        return "'select' clause couldn't be empty";
-	    }
-	}
-	function checkIfSelectHasInvalidStructure(selectClause, key, value) {
-	    if (!isObject(selectClause) || !isArray(key) || !isArray(value)) {
-	        return "'select' clause must have next structure: { key: [...], value: [...] }";
-	    }
-	}
-	function checkIfDatapointsSelectKeyHasInvalidStructure(fromClause, key) {
-	    if (size(key) < 2) {
-	        return "'select.key' clause for '" + fromClause + "' queries must have at least 2 items";
-	    }
-	}
-	function checkIfDatapointsSelectValueHasInvalidStructure(fromClause, value) {
-	    if (size(value) < 1) {
-	        return "'select.value' clause for '" + fromClause + "' queries must have at least 1 item";
-	    }
-	}
-	function checkIfSchemasSelectKeyHasInvalidStructure(fromClause, key) {
-	    if (size(key) < 2) {
-	        return "'select.key' clause for '" + fromClause + "' queries must have at least 2 items: 'key', 'value'";
-	    }
-	}
-	function checkIfSchemasSelectValueHasInvalidStructure(fromClause, value) {
-	    if (!isArray(value) && !isNil(value)) {
-	        return "'select.value' clause for '" + fromClause + "' queries should be array of strings or empty";
-	    }
-	}
-	function checkIfSelectKeyHasInvalidStructure(fromClause, key) {
-	    if (!isArray(key) || size(key) !== 1) {
-	        return "'select.key' clause for '" + fromClause + "' queries must have only 1 item";
-	    }
-	}
-	//# sourceMappingURL=index.js.map
+	//# sourceMappingURL=definition.service.js.map
 
 /***/ },
-/* 146 */
+/* 148 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -12727,214 +12629,14 @@ var DDFCsvReader =
 	module.exports = isNil;
 
 /***/ },
-/* 147 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var baseKeys = __webpack_require__(83),
-	    getTag = __webpack_require__(88),
-	    isArrayLike = __webpack_require__(50),
-	    isString = __webpack_require__(60),
-	    stringSize = __webpack_require__(148);
-	
-	/** `Object#toString` result references. */
-	var mapTag = '[object Map]',
-	    setTag = '[object Set]';
-	
-	/**
-	 * Gets the size of `collection` by returning its length for array-like
-	 * values or the number of own enumerable string keyed properties for objects.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Collection
-	 * @param {Array|Object|string} collection The collection to inspect.
-	 * @returns {number} Returns the collection size.
-	 * @example
-	 *
-	 * _.size([1, 2, 3]);
-	 * // => 3
-	 *
-	 * _.size({ 'a': 1, 'b': 2 });
-	 * // => 2
-	 *
-	 * _.size('pebbles');
-	 * // => 7
-	 */
-	function size(collection) {
-	  if (collection == null) {
-	    return 0;
-	  }
-	  if (isArrayLike(collection)) {
-	    return isString(collection) ? stringSize(collection) : collection.length;
-	  }
-	  var tag = getTag(collection);
-	  if (tag == mapTag || tag == setTag) {
-	    return collection.size;
-	  }
-	  return baseKeys(collection).length;
-	}
-	
-	module.exports = size;
-
-/***/ },
-/* 148 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var asciiSize = __webpack_require__(149),
-	    hasUnicode = __webpack_require__(151),
-	    unicodeSize = __webpack_require__(152);
-	
-	/**
-	 * Gets the number of symbols in `string`.
-	 *
-	 * @private
-	 * @param {string} string The string to inspect.
-	 * @returns {number} Returns the string size.
-	 */
-	function stringSize(string) {
-	    return hasUnicode(string) ? unicodeSize(string) : asciiSize(string);
-	}
-	
-	module.exports = stringSize;
-
-/***/ },
 /* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseProperty = __webpack_require__(150);
-	
-	/**
-	 * Gets the size of an ASCII `string`.
-	 *
-	 * @private
-	 * @param {string} string The string inspect.
-	 * @returns {number} Returns the string size.
-	 */
-	var asciiSize = baseProperty('length');
-	
-	module.exports = asciiSize;
-
-/***/ },
-/* 150 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	/**
-	 * The base implementation of `_.property` without support for deep paths.
-	 *
-	 * @private
-	 * @param {string} key The key of the property to get.
-	 * @returns {Function} Returns the new accessor function.
-	 */
-	function baseProperty(key) {
-	  return function (object) {
-	    return object == null ? undefined : object[key];
-	  };
-	}
-	
-	module.exports = baseProperty;
-
-/***/ },
-/* 151 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	/** Used to compose unicode character classes. */
-	var rsAstralRange = '\\ud800-\\udfff',
-	    rsComboMarksRange = '\\u0300-\\u036f',
-	    reComboHalfMarksRange = '\\ufe20-\\ufe2f',
-	    rsComboSymbolsRange = '\\u20d0-\\u20ff',
-	    rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange,
-	    rsVarRange = '\\ufe0e\\ufe0f';
-	
-	/** Used to compose unicode capture groups. */
-	var rsZWJ = '\\u200d';
-	
-	/** Used to detect strings with [zero-width joiners or code points from the astral planes](http://eev.ee/blog/2015/09/12/dark-corners-of-unicode/). */
-	var reHasUnicode = RegExp('[' + rsZWJ + rsAstralRange + rsComboRange + rsVarRange + ']');
-	
-	/**
-	 * Checks if `string` contains Unicode symbols.
-	 *
-	 * @private
-	 * @param {string} string The string to inspect.
-	 * @returns {boolean} Returns `true` if a symbol is found, else `false`.
-	 */
-	function hasUnicode(string) {
-	  return reHasUnicode.test(string);
-	}
-	
-	module.exports = hasUnicode;
-
-/***/ },
-/* 152 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	/** Used to compose unicode character classes. */
-	var rsAstralRange = '\\ud800-\\udfff',
-	    rsComboMarksRange = '\\u0300-\\u036f',
-	    reComboHalfMarksRange = '\\ufe20-\\ufe2f',
-	    rsComboSymbolsRange = '\\u20d0-\\u20ff',
-	    rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange,
-	    rsVarRange = '\\ufe0e\\ufe0f';
-	
-	/** Used to compose unicode capture groups. */
-	var rsAstral = '[' + rsAstralRange + ']',
-	    rsCombo = '[' + rsComboRange + ']',
-	    rsFitz = '\\ud83c[\\udffb-\\udfff]',
-	    rsModifier = '(?:' + rsCombo + '|' + rsFitz + ')',
-	    rsNonAstral = '[^' + rsAstralRange + ']',
-	    rsRegional = '(?:\\ud83c[\\udde6-\\uddff]){2}',
-	    rsSurrPair = '[\\ud800-\\udbff][\\udc00-\\udfff]',
-	    rsZWJ = '\\u200d';
-	
-	/** Used to compose unicode regexes. */
-	var reOptMod = rsModifier + '?',
-	    rsOptVar = '[' + rsVarRange + ']?',
-	    rsOptJoin = '(?:' + rsZWJ + '(?:' + [rsNonAstral, rsRegional, rsSurrPair].join('|') + ')' + rsOptVar + reOptMod + ')*',
-	    rsSeq = rsOptVar + reOptMod + rsOptJoin,
-	    rsSymbol = '(?:' + [rsNonAstral + rsCombo + '?', rsCombo, rsRegional, rsSurrPair, rsAstral].join('|') + ')';
-	
-	/** Used to match [string symbols](https://mathiasbynens.be/notes/javascript-unicode). */
-	var reUnicode = RegExp(rsFitz + '(?=' + rsFitz + ')|' + rsSymbol + rsSeq, 'g');
-	
-	/**
-	 * Gets the size of a Unicode `string`.
-	 *
-	 * @private
-	 * @param {string} string The string inspect.
-	 * @returns {number} Returns the string size.
-	 */
-	function unicodeSize(string) {
-	    var result = reUnicode.lastIndex = 0;
-	    while (reUnicode.test(string)) {
-	        ++result;
-	    }
-	    return result;
-	}
-	
-	module.exports = unicodeSize;
-
-/***/ },
-/* 153 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var arrayFilter = __webpack_require__(154),
-	    baseFilter = __webpack_require__(155),
-	    baseIteratee = __webpack_require__(161),
+	var arrayFilter = __webpack_require__(150),
+	    baseFilter = __webpack_require__(151),
+	    baseIteratee = __webpack_require__(157),
 	    isArray = __webpack_require__(61);
 	
 	/**
@@ -12982,7 +12684,7 @@ var DDFCsvReader =
 	module.exports = filter;
 
 /***/ },
-/* 154 */
+/* 150 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -13014,12 +12716,12 @@ var DDFCsvReader =
 	module.exports = arrayFilter;
 
 /***/ },
-/* 155 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseEach = __webpack_require__(156);
+	var baseEach = __webpack_require__(152);
 	
 	/**
 	 * The base implementation of `_.filter` without support for iteratee shorthands.
@@ -13042,13 +12744,13 @@ var DDFCsvReader =
 	module.exports = baseFilter;
 
 /***/ },
-/* 156 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseForOwn = __webpack_require__(157),
-	    createBaseEach = __webpack_require__(160);
+	var baseForOwn = __webpack_require__(153),
+	    createBaseEach = __webpack_require__(156);
 	
 	/**
 	 * The base implementation of `_.forEach` without support for iteratee shorthands.
@@ -13063,12 +12765,12 @@ var DDFCsvReader =
 	module.exports = baseEach;
 
 /***/ },
-/* 157 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseFor = __webpack_require__(158),
+	var baseFor = __webpack_require__(154),
 	    keys = __webpack_require__(70);
 	
 	/**
@@ -13086,12 +12788,12 @@ var DDFCsvReader =
 	module.exports = baseForOwn;
 
 /***/ },
-/* 158 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var createBaseFor = __webpack_require__(159);
+	var createBaseFor = __webpack_require__(155);
 	
 	/**
 	 * The base implementation of `baseForOwn` which iterates over `object`
@@ -13109,7 +12811,7 @@ var DDFCsvReader =
 	module.exports = baseFor;
 
 /***/ },
-/* 159 */
+/* 155 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -13141,7 +12843,7 @@ var DDFCsvReader =
 	module.exports = createBaseFor;
 
 /***/ },
-/* 160 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13180,18 +12882,18 @@ var DDFCsvReader =
 	module.exports = createBaseEach;
 
 /***/ },
-/* 161 */
+/* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
-	var baseMatches = __webpack_require__(162),
-	    baseMatchesProperty = __webpack_require__(190),
-	    identity = __webpack_require__(194),
+	var baseMatches = __webpack_require__(158),
+	    baseMatchesProperty = __webpack_require__(186),
+	    identity = __webpack_require__(190),
 	    isArray = __webpack_require__(61),
-	    property = __webpack_require__(195);
+	    property = __webpack_require__(191);
 	
 	/**
 	 * The base implementation of `_.iteratee`.
@@ -13218,14 +12920,14 @@ var DDFCsvReader =
 	module.exports = baseIteratee;
 
 /***/ },
-/* 162 */
+/* 158 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseIsMatch = __webpack_require__(163),
-	    getMatchData = __webpack_require__(187),
-	    matchesStrictComparable = __webpack_require__(189);
+	var baseIsMatch = __webpack_require__(159),
+	    getMatchData = __webpack_require__(183),
+	    matchesStrictComparable = __webpack_require__(185);
 	
 	/**
 	 * The base implementation of `_.matches` which doesn't clone `source`.
@@ -13247,13 +12949,13 @@ var DDFCsvReader =
 	module.exports = baseMatches;
 
 /***/ },
-/* 163 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Stack = __webpack_require__(164),
-	    baseIsEqual = __webpack_require__(170);
+	var Stack = __webpack_require__(160),
+	    baseIsEqual = __webpack_require__(166);
 	
 	/** Used to compose bitmasks for value comparisons. */
 	var COMPARE_PARTIAL_FLAG = 1,
@@ -13310,17 +13012,17 @@ var DDFCsvReader =
 	module.exports = baseIsMatch;
 
 /***/ },
-/* 164 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var ListCache = __webpack_require__(120),
-	    stackClear = __webpack_require__(165),
-	    stackDelete = __webpack_require__(166),
-	    stackGet = __webpack_require__(167),
-	    stackHas = __webpack_require__(168),
-	    stackSet = __webpack_require__(169);
+	    stackClear = __webpack_require__(161),
+	    stackDelete = __webpack_require__(162),
+	    stackGet = __webpack_require__(163),
+	    stackHas = __webpack_require__(164),
+	    stackSet = __webpack_require__(165);
 	
 	/**
 	 * Creates a stack cache object to store key-value pairs.
@@ -13344,7 +13046,7 @@ var DDFCsvReader =
 	module.exports = Stack;
 
 /***/ },
-/* 165 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13366,7 +13068,7 @@ var DDFCsvReader =
 	module.exports = stackClear;
 
 /***/ },
-/* 166 */
+/* 162 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -13391,7 +13093,7 @@ var DDFCsvReader =
 	module.exports = stackDelete;
 
 /***/ },
-/* 167 */
+/* 163 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -13412,7 +13114,7 @@ var DDFCsvReader =
 	module.exports = stackGet;
 
 /***/ },
-/* 168 */
+/* 164 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -13433,7 +13135,7 @@ var DDFCsvReader =
 	module.exports = stackHas;
 
 /***/ },
-/* 169 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13474,12 +13176,12 @@ var DDFCsvReader =
 	module.exports = stackSet;
 
 /***/ },
-/* 170 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseIsEqualDeep = __webpack_require__(171),
+	var baseIsEqualDeep = __webpack_require__(167),
 	    isObjectLike = __webpack_require__(62);
 	
 	/**
@@ -13509,15 +13211,15 @@ var DDFCsvReader =
 	module.exports = baseIsEqual;
 
 /***/ },
-/* 171 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Stack = __webpack_require__(164),
-	    equalArrays = __webpack_require__(172),
-	    equalByTag = __webpack_require__(178),
-	    equalObjects = __webpack_require__(182),
+	var Stack = __webpack_require__(160),
+	    equalArrays = __webpack_require__(168),
+	    equalByTag = __webpack_require__(174),
+	    equalObjects = __webpack_require__(178),
 	    getTag = __webpack_require__(88),
 	    isArray = __webpack_require__(61),
 	    isBuffer = __webpack_require__(75),
@@ -13597,14 +13299,14 @@ var DDFCsvReader =
 	module.exports = baseIsEqualDeep;
 
 /***/ },
-/* 172 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var SetCache = __webpack_require__(173),
-	    arraySome = __webpack_require__(176),
-	    cacheHas = __webpack_require__(177);
+	var SetCache = __webpack_require__(169),
+	    arraySome = __webpack_require__(172),
+	    cacheHas = __webpack_require__(173);
 	
 	/** Used to compose bitmasks for value comparisons. */
 	var COMPARE_PARTIAL_FLAG = 1,
@@ -13681,14 +13383,14 @@ var DDFCsvReader =
 	module.exports = equalArrays;
 
 /***/ },
-/* 173 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var MapCache = __webpack_require__(111),
-	    setCacheAdd = __webpack_require__(174),
-	    setCacheHas = __webpack_require__(175);
+	    setCacheAdd = __webpack_require__(170),
+	    setCacheHas = __webpack_require__(171);
 	
 	/**
 	 *
@@ -13715,7 +13417,7 @@ var DDFCsvReader =
 	module.exports = SetCache;
 
 /***/ },
-/* 174 */
+/* 170 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -13741,7 +13443,7 @@ var DDFCsvReader =
 	module.exports = setCacheAdd;
 
 /***/ },
-/* 175 */
+/* 171 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -13762,7 +13464,7 @@ var DDFCsvReader =
 	module.exports = setCacheHas;
 
 /***/ },
-/* 176 */
+/* 172 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -13792,7 +13494,7 @@ var DDFCsvReader =
 	module.exports = arraySome;
 
 /***/ },
-/* 177 */
+/* 173 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -13812,17 +13514,17 @@ var DDFCsvReader =
 	module.exports = cacheHas;
 
 /***/ },
-/* 178 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var _Symbol = __webpack_require__(53),
-	    Uint8Array = __webpack_require__(179),
+	    Uint8Array = __webpack_require__(175),
 	    eq = __webpack_require__(124),
-	    equalArrays = __webpack_require__(172),
-	    mapToArray = __webpack_require__(180),
-	    setToArray = __webpack_require__(181);
+	    equalArrays = __webpack_require__(168),
+	    mapToArray = __webpack_require__(176),
+	    setToArray = __webpack_require__(177);
 	
 	/** Used to compose bitmasks for value comparisons. */
 	var COMPARE_PARTIAL_FLAG = 1,
@@ -13929,7 +13631,7 @@ var DDFCsvReader =
 	module.exports = equalByTag;
 
 /***/ },
-/* 179 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13942,7 +13644,7 @@ var DDFCsvReader =
 	module.exports = Uint8Array;
 
 /***/ },
-/* 180 */
+/* 176 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -13967,7 +13669,7 @@ var DDFCsvReader =
 	module.exports = mapToArray;
 
 /***/ },
-/* 181 */
+/* 177 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -13992,12 +13694,12 @@ var DDFCsvReader =
 	module.exports = setToArray;
 
 /***/ },
-/* 182 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var getAllKeys = __webpack_require__(183);
+	var getAllKeys = __webpack_require__(179);
 	
 	/** Used to compose bitmasks for value comparisons. */
 	var COMPARE_PARTIAL_FLAG = 1;
@@ -14080,13 +13782,13 @@ var DDFCsvReader =
 	module.exports = equalObjects;
 
 /***/ },
-/* 183 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseGetAllKeys = __webpack_require__(184),
-	    getSymbols = __webpack_require__(185),
+	var baseGetAllKeys = __webpack_require__(180),
+	    getSymbols = __webpack_require__(181),
 	    keys = __webpack_require__(70);
 	
 	/**
@@ -14103,7 +13805,7 @@ var DDFCsvReader =
 	module.exports = getAllKeys;
 
 /***/ },
-/* 184 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14130,13 +13832,13 @@ var DDFCsvReader =
 	module.exports = baseGetAllKeys;
 
 /***/ },
-/* 185 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var arrayFilter = __webpack_require__(154),
-	    stubArray = __webpack_require__(186);
+	var arrayFilter = __webpack_require__(150),
+	    stubArray = __webpack_require__(182);
 	
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -14167,7 +13869,7 @@ var DDFCsvReader =
 	module.exports = getSymbols;
 
 /***/ },
-/* 186 */
+/* 182 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -14197,12 +13899,12 @@ var DDFCsvReader =
 	module.exports = stubArray;
 
 /***/ },
-/* 187 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var isStrictComparable = __webpack_require__(188),
+	var isStrictComparable = __webpack_require__(184),
 	    keys = __webpack_require__(70);
 	
 	/**
@@ -14228,7 +13930,7 @@ var DDFCsvReader =
 	module.exports = getMatchData;
 
 /***/ },
-/* 188 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14250,7 +13952,7 @@ var DDFCsvReader =
 	module.exports = isStrictComparable;
 
 /***/ },
-/* 189 */
+/* 185 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -14276,17 +13978,17 @@ var DDFCsvReader =
 	module.exports = matchesStrictComparable;
 
 /***/ },
-/* 190 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseIsEqual = __webpack_require__(170),
+	var baseIsEqual = __webpack_require__(166),
 	    get = __webpack_require__(104),
-	    hasIn = __webpack_require__(191),
+	    hasIn = __webpack_require__(187),
 	    isKey = __webpack_require__(107),
-	    isStrictComparable = __webpack_require__(188),
-	    matchesStrictComparable = __webpack_require__(189),
+	    isStrictComparable = __webpack_require__(184),
+	    matchesStrictComparable = __webpack_require__(185),
 	    toKey = __webpack_require__(136);
 	
 	/** Used to compose bitmasks for value comparisons. */
@@ -14314,13 +14016,13 @@ var DDFCsvReader =
 	module.exports = baseMatchesProperty;
 
 /***/ },
-/* 191 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseHasIn = __webpack_require__(192),
-	    hasPath = __webpack_require__(193);
+	var baseHasIn = __webpack_require__(188),
+	    hasPath = __webpack_require__(189);
 	
 	/**
 	 * Checks if `path` is a direct or inherited property of `object`.
@@ -14355,7 +14057,7 @@ var DDFCsvReader =
 	module.exports = hasIn;
 
 /***/ },
-/* 192 */
+/* 188 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -14375,7 +14077,7 @@ var DDFCsvReader =
 	module.exports = baseHasIn;
 
 /***/ },
-/* 193 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14420,7 +14122,7 @@ var DDFCsvReader =
 	module.exports = hasPath;
 
 /***/ },
-/* 194 */
+/* 190 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -14448,13 +14150,13 @@ var DDFCsvReader =
 	module.exports = identity;
 
 /***/ },
-/* 195 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseProperty = __webpack_require__(150),
-	    basePropertyDeep = __webpack_require__(196),
+	var baseProperty = __webpack_require__(192),
+	    basePropertyDeep = __webpack_require__(193),
 	    isKey = __webpack_require__(107),
 	    toKey = __webpack_require__(136);
 	
@@ -14487,7 +14189,28 @@ var DDFCsvReader =
 	module.exports = property;
 
 /***/ },
-/* 196 */
+/* 192 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	/**
+	 * The base implementation of `_.property` without support for deep paths.
+	 *
+	 * @private
+	 * @param {string} key The key of the property to get.
+	 * @returns {Function} Returns the new accessor function.
+	 */
+	function baseProperty(key) {
+	  return function (object) {
+	    return object == null ? undefined : object[key];
+	  };
+	}
+	
+	module.exports = baseProperty;
+
+/***/ },
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14508,6 +14231,335 @@ var DDFCsvReader =
 	}
 	
 	module.exports = basePropertyDeep;
+
+/***/ },
+/* 194 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var isEmpty = __webpack_require__(87);
+	var isNil = __webpack_require__(148);
+	var isObject = __webpack_require__(58);
+	var isArray = __webpack_require__(61);
+	var size = __webpack_require__(195);
+	var get = __webpack_require__(104);
+	var compact = __webpack_require__(143);
+	var isString = __webpack_require__(60);
+	var helper_service_1 = __webpack_require__(146);
+	function validateQueryStructure(query) {
+	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	
+	    return new Promise(function (resolve, reject) {
+	        var validationResult = [].concat(_toConsumableArray(validateFromStructure(query, options)), _toConsumableArray(validateSelectStructure(query, options)), _toConsumableArray(validateLanguageStructure(query, options)), _toConsumableArray(validateJoinStructure(query, options)), _toConsumableArray(validateOrderByStructure(query, options)));
+	        var isQueryValid = isEmpty(validationResult);
+	        if (!isQueryValid) {
+	            return reject("Too many query structure errors: \n* " + validationResult.join('\n* '));
+	        }
+	        return resolve();
+	    });
+	}
+	exports.validateQueryStructure = validateQueryStructure;
+	function validateFromStructure(query, options) {
+	    var errorMessages = [];
+	    var clause = get(query, 'from', null);
+	    if (isNil(clause)) {
+	        errorMessages.push("'from' clause couldn't be empty");
+	    }
+	    if (!isString(clause)) {
+	        errorMessages.push("'from' clause must be string only");
+	    }
+	    if (!helper_service_1.AVAILABLE_FROM_CLAUSE_VALUES.has(clause)) {
+	        var listAvaliableValues = [].concat(_toConsumableArray(helper_service_1.AVAILABLE_FROM_CLAUSE_VALUES));
+	        errorMessages.push("'from' clause must be one of the list: " + listAvaliableValues.join(', '));
+	    }
+	    return errorMessages;
+	}
+	function validateSelectStructure(query, options) {
+	    var errorMessages = [];
+	    var selectClause = get(query, 'select', null);
+	    var fromClause = get(query, 'from', null);
+	    var key = get(selectClause, 'key');
+	    var value = get(selectClause, 'value');
+	    switch (true) {
+	        case helper_service_1.isSchemaQuery(query):
+	            errorMessages.push(checkIfSelectIsEmpty(selectClause), checkIfSchemasSelectKeyHasInvalidStructure(fromClause, key), checkIfSchemasSelectValueHasInvalidStructure(fromClause, value));
+	            break;
+	        case helper_service_1.isEntitiesQuery(query):
+	            errorMessages.push(checkIfSelectIsEmpty(selectClause), checkIfSelectKeyHasInvalidStructure(fromClause, key));
+	            break;
+	        case helper_service_1.isConceptsQuery(query):
+	            errorMessages.push(checkIfSelectIsEmpty(selectClause), checkIfSelectKeyHasInvalidStructure(fromClause, key));
+	            break;
+	        case helper_service_1.isDatapointsQuery(query):
+	            errorMessages.push(checkIfSelectIsEmpty(selectClause), checkIfSelectHasInvalidStructure(selectClause, key, value), checkIfDatapointsSelectKeyHasInvalidStructure(fromClause, key), checkIfDatapointsSelectValueHasInvalidStructure(fromClause, value));
+	            break;
+	        default:
+	            errorMessages.push(checkIfSelectIsEmpty(selectClause));
+	            break;
+	    }
+	    return compact(errorMessages);
+	}
+	function validateWhereStructure(query, options) {
+	    var errorMessages = [];
+	    var clausesUnderValidating = [];
+	    var operatorsUnderValidating = Object.keys(query);
+	    var _iteratorNormalCompletion = true;
+	    var _didIteratorError = false;
+	    var _iteratorError = undefined;
+	
+	    try {
+	        for (var _iterator = operatorsUnderValidating[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	            var key = _step.value;
+	
+	            if (helper_service_1.isInvalidQueryOperator(key.toString())) {
+	                errorMessages.push('Invalid DDFQL-query. Validation by Operators, not acceptable: ' + key);
+	            }
+	        }
+	    } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
+	    } finally {
+	        try {
+	            if (!_iteratorNormalCompletion && _iterator.return) {
+	                _iterator.return();
+	            }
+	        } finally {
+	            if (_didIteratorError) {
+	                throw _iteratorError;
+	            }
+	        }
+	    }
+	
+	    return errorMessages;
+	}
+	function validateLanguageStructure(query, options) {
+	    return [];
+	}
+	function validateJoinStructure(query, options) {
+	    return [];
+	}
+	function validateOrderByStructure(query, options) {
+	    return [];
+	}
+	function checkIfSelectIsEmpty(selectClause) {
+	    if (isNil(selectClause)) {
+	        return "'select' clause couldn't be empty";
+	    }
+	}
+	function checkIfSelectHasInvalidStructure(selectClause, key, value) {
+	    if (!isObject(selectClause) || !isArray(key) || !isArray(value)) {
+	        return "'select' clause must have next structure: { key: [...], value: [...] }";
+	    }
+	}
+	function checkIfDatapointsSelectKeyHasInvalidStructure(fromClause, key) {
+	    if (size(key) < 2) {
+	        return "'select.key' clause for '" + fromClause + "' queries must have at least 2 items";
+	    }
+	}
+	function checkIfDatapointsSelectValueHasInvalidStructure(fromClause, value) {
+	    if (size(value) < 1) {
+	        return "'select.value' clause for '" + fromClause + "' queries must have at least 1 item";
+	    }
+	}
+	function checkIfSchemasSelectKeyHasInvalidStructure(fromClause, key) {
+	    if (size(key) < 2) {
+	        return "'select.key' clause for '" + fromClause + "' queries must have at least 2 items: 'key', 'value'";
+	    }
+	}
+	function checkIfSchemasSelectValueHasInvalidStructure(fromClause, value) {
+	    if (!isArray(value) && !isNil(value)) {
+	        return "'select.value' clause for '" + fromClause + "' queries should be array of strings or empty";
+	    }
+	}
+	function checkIfSelectKeyHasInvalidStructure(fromClause, key) {
+	    if (!isArray(key) || size(key) !== 1) {
+	        return "'select.key' clause for '" + fromClause + "' queries must have only 1 item";
+	    }
+	}
+	//# sourceMappingURL=structure.service.js.map
+
+/***/ },
+/* 195 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var baseKeys = __webpack_require__(83),
+	    getTag = __webpack_require__(88),
+	    isArrayLike = __webpack_require__(50),
+	    isString = __webpack_require__(60),
+	    stringSize = __webpack_require__(196);
+	
+	/** `Object#toString` result references. */
+	var mapTag = '[object Map]',
+	    setTag = '[object Set]';
+	
+	/**
+	 * Gets the size of `collection` by returning its length for array-like
+	 * values or the number of own enumerable string keyed properties for objects.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Collection
+	 * @param {Array|Object|string} collection The collection to inspect.
+	 * @returns {number} Returns the collection size.
+	 * @example
+	 *
+	 * _.size([1, 2, 3]);
+	 * // => 3
+	 *
+	 * _.size({ 'a': 1, 'b': 2 });
+	 * // => 2
+	 *
+	 * _.size('pebbles');
+	 * // => 7
+	 */
+	function size(collection) {
+	  if (collection == null) {
+	    return 0;
+	  }
+	  if (isArrayLike(collection)) {
+	    return isString(collection) ? stringSize(collection) : collection.length;
+	  }
+	  var tag = getTag(collection);
+	  if (tag == mapTag || tag == setTag) {
+	    return collection.size;
+	  }
+	  return baseKeys(collection).length;
+	}
+	
+	module.exports = size;
+
+/***/ },
+/* 196 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var asciiSize = __webpack_require__(197),
+	    hasUnicode = __webpack_require__(198),
+	    unicodeSize = __webpack_require__(199);
+	
+	/**
+	 * Gets the number of symbols in `string`.
+	 *
+	 * @private
+	 * @param {string} string The string to inspect.
+	 * @returns {number} Returns the string size.
+	 */
+	function stringSize(string) {
+	    return hasUnicode(string) ? unicodeSize(string) : asciiSize(string);
+	}
+	
+	module.exports = stringSize;
+
+/***/ },
+/* 197 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var baseProperty = __webpack_require__(192);
+	
+	/**
+	 * Gets the size of an ASCII `string`.
+	 *
+	 * @private
+	 * @param {string} string The string inspect.
+	 * @returns {number} Returns the string size.
+	 */
+	var asciiSize = baseProperty('length');
+	
+	module.exports = asciiSize;
+
+/***/ },
+/* 198 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	/** Used to compose unicode character classes. */
+	var rsAstralRange = '\\ud800-\\udfff',
+	    rsComboMarksRange = '\\u0300-\\u036f',
+	    reComboHalfMarksRange = '\\ufe20-\\ufe2f',
+	    rsComboSymbolsRange = '\\u20d0-\\u20ff',
+	    rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange,
+	    rsVarRange = '\\ufe0e\\ufe0f';
+	
+	/** Used to compose unicode capture groups. */
+	var rsZWJ = '\\u200d';
+	
+	/** Used to detect strings with [zero-width joiners or code points from the astral planes](http://eev.ee/blog/2015/09/12/dark-corners-of-unicode/). */
+	var reHasUnicode = RegExp('[' + rsZWJ + rsAstralRange + rsComboRange + rsVarRange + ']');
+	
+	/**
+	 * Checks if `string` contains Unicode symbols.
+	 *
+	 * @private
+	 * @param {string} string The string to inspect.
+	 * @returns {boolean} Returns `true` if a symbol is found, else `false`.
+	 */
+	function hasUnicode(string) {
+	  return reHasUnicode.test(string);
+	}
+	
+	module.exports = hasUnicode;
+
+/***/ },
+/* 199 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	/** Used to compose unicode character classes. */
+	var rsAstralRange = '\\ud800-\\udfff',
+	    rsComboMarksRange = '\\u0300-\\u036f',
+	    reComboHalfMarksRange = '\\ufe20-\\ufe2f',
+	    rsComboSymbolsRange = '\\u20d0-\\u20ff',
+	    rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange,
+	    rsVarRange = '\\ufe0e\\ufe0f';
+	
+	/** Used to compose unicode capture groups. */
+	var rsAstral = '[' + rsAstralRange + ']',
+	    rsCombo = '[' + rsComboRange + ']',
+	    rsFitz = '\\ud83c[\\udffb-\\udfff]',
+	    rsModifier = '(?:' + rsCombo + '|' + rsFitz + ')',
+	    rsNonAstral = '[^' + rsAstralRange + ']',
+	    rsRegional = '(?:\\ud83c[\\udde6-\\uddff]){2}',
+	    rsSurrPair = '[\\ud800-\\udbff][\\udc00-\\udfff]',
+	    rsZWJ = '\\u200d';
+	
+	/** Used to compose unicode regexes. */
+	var reOptMod = rsModifier + '?',
+	    rsOptVar = '[' + rsVarRange + ']?',
+	    rsOptJoin = '(?:' + rsZWJ + '(?:' + [rsNonAstral, rsRegional, rsSurrPair].join('|') + ')' + rsOptVar + reOptMod + ')*',
+	    rsSeq = rsOptVar + reOptMod + rsOptJoin,
+	    rsSymbol = '(?:' + [rsNonAstral + rsCombo + '?', rsCombo, rsRegional, rsSurrPair, rsAstral].join('|') + ')';
+	
+	/** Used to match [string symbols](https://mathiasbynens.be/notes/javascript-unicode). */
+	var reUnicode = RegExp(rsFitz + '(?=' + rsFitz + ')|' + rsSymbol + rsSeq, 'g');
+	
+	/**
+	 * Gets the size of a Unicode `string`.
+	 *
+	 * @private
+	 * @param {string} string The string inspect.
+	 * @returns {number} Returns the string size.
+	 */
+	function unicodeSize(string) {
+	    var result = reUnicode.lastIndex = 0;
+	    while (reUnicode.test(string)) {
+	        ++result;
+	    }
+	    return result;
+	}
+	
+	module.exports = unicodeSize;
 
 /***/ }
 /******/ ]);
