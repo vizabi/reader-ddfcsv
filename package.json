@@ -6,7 +6,7 @@
   "scripts": {
     "tslint": "./node_modules/.bin/tslint -c ./tslint.json 'src/**/*.ts' && ./node_modules/.bin/tslint -c ./test/tslint.json 'test/**/*.ts'",
     "tsc": "./node_modules/.bin/tsc --project tsconfig.json && npm run tslint",
-    "preinstall": "git submodule update --remote -f && rm -rf coverage && rm -rf .nyc_output && rm -rf coverage.lcov",
+    "preinstall": "git submodule update --remote --init -f && rm -rf coverage && rm -rf .nyc_output && rm -rf coverage.lcov",
     "postinstall": "npm run tsc",
     "pree2e": "npm i",
     "e2e": "nyc mocha",
