@@ -2,7 +2,7 @@ import get = require('lodash/get');
 import includes = require('lodash/includes');
 import startsWith = require('lodash/startsWith');
 
-export const SCHEMAS = new Set([ 'concepts.schema', 'entities.schema', 'datapoints.schema' ]);
+export const SCHEMAS = new Set([ 'concepts.schema', 'entities.schema', 'datapoints.schema', '*.schema' ]);
 export const DATAPOINTS = 'datapoints';
 export const ENTITIES = 'entities';
 export const CONCEPTS = 'concepts';

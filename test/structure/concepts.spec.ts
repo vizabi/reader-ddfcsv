@@ -1,5 +1,5 @@
 import * as chai from 'chai';
-import { getDDFCsvReaderObject } from '../src/index';
+import { getDDFCsvReaderObject } from '../../src/index';
 
 const expect = chai.expect;
 import {
@@ -13,13 +13,13 @@ import {
   notExpectedError,
   POP_WPP_PATH,
   STATIC_ASSETS
-} from './common';
+} from '../common';
 
 const EMPTY_TRANSLATIONS_PATH = './test/fixtures/empty-translations';
 
 describe('Concepts supporting', () => {
-  describe('# happy flow', () => {
-    it('translation supporting', done => {
+  describe('should never happen for happy flow', () => {
+    it(`when requests '${GLOBALIS_PATH}' dataset and 'ar-SA' language`, done => {
       const reader = getDDFCsvReaderObject();
 
       reader.init({path: GLOBALIS_PATH});
@@ -41,6 +41,29 @@ describe('Concepts supporting', () => {
         order_by: ['concept']
       }).then(data => {
         expect(data.length).to.equal(8);
+
+        done();
+      });
+    });
+
+    it('list of all concepts', done => {
+      const reader = getDDFCsvReaderObject();
+
+      reader.init({path: GLOBALIS_PATH});
+
+      reader.read({
+        select: {
+          key: ['concept']
+        },
+        from: 'concepts',
+        where: {},
+        order_by: ['concept']
+      }).then(data => {
+        expect(data.length).to.not.equal(8);
+
+        done();
+      }).catch(err => {
+        expect(err).to.not.be.null;
 
         done();
       });
@@ -73,24 +96,6 @@ describe('Concepts supporting', () => {
         done();
       }).catch(err => {
         expect(err).to.not.be.null;
-
-        done();
-      });
-    });
-
-    it('an exception should be raised for empty request', done => {
-      const reader = getDDFCsvReaderObject();
-
-      reader.init({path: GLOBALIS_PATH});
-
-      reader.read({}).then(() => {
-        done(notExpectedError);
-      }).catch(error => {
-        expect(error.toString()).to.contain(expectedError1);
-        expect(error.toString()).to.contain(expectedError2);
-        expect(error.toString()).to.contain(expectedError3);
-        expect(error.toString()).to.contain(expectedError4);
-        expect(error.toString()).to.not.contain(expectedError5);
 
         done();
       });

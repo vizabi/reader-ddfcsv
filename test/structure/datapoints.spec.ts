@@ -1,10 +1,7 @@
 import * as chai from 'chai';
-import { getDDFCsvReaderObject } from '../src/index';
+import { getDDFCsvReaderObject } from '../../src/index';
 import {
   BIG_PATH, checkExpectations,
-  expectedError1,
-  expectedError2,
-  expectedError3,
   expectedError4,
   expectedError5,
   expectedError6,
@@ -15,13 +12,13 @@ import {
   notExpectedError,
   POP_WPP_PATH,
   STATIC_ASSETS
-} from './common';
+} from '../common';
 
 const expect = chai.expect;
 
-describe('Datapoints supporting', () => {
-  describe('# happy flow', () => {
-    it('condition under join supporting', done => {
+describe('Errors in datapoints query structure', () => {
+  describe('should never happen for happy flow', () => {
+    it(`when requests '${GLOBALIS_PATH}' dataset and exists valid condition in 'join' section`, done => {
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: GLOBALIS_PATH });
@@ -74,7 +71,7 @@ describe('Datapoints supporting', () => {
         .catch(done);
     });
 
-    it('big 1', done => {
+    it(`when requests '${BIG_PATH}' dataset`, done => {
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: BIG_PATH });
@@ -170,7 +167,7 @@ describe('Datapoints supporting', () => {
         ]
       })
         .then(result => {
-          const expectedResult = require('./result-fixtures/in-clause-under-conjunction-1.json');
+          const expectedResult = require('../result-fixtures/in-clause-under-conjunction-1.json');
 
           expect(result).to.deep.equal(expectedResult);
 
@@ -179,7 +176,7 @@ describe('Datapoints supporting', () => {
         .catch(done);
     });
 
-    it('big 2', done => {
+    it(`when requests '${POP_WPP_PATH}' dataset`, done => {
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: POP_WPP_PATH });
@@ -225,7 +222,7 @@ describe('Datapoints supporting', () => {
         ]
       })
         .then(result => {
-          const expectedResult = require('./result-fixtures/in-clause-under-conjunction-2.json');
+          const expectedResult = require('../result-fixtures/in-clause-under-conjunction-2.json');
 
           expect(result).to.deep.equal(expectedResult);
 
@@ -234,7 +231,7 @@ describe('Datapoints supporting', () => {
         .catch(done);
     });
 
-    it('assets', (done: Function) => {
+    it(`when requests '${STATIC_ASSETS}' dataset`, (done: Function) => {
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: STATIC_ASSETS });
@@ -256,7 +253,7 @@ describe('Datapoints supporting', () => {
         order_by: [ 'geo', 'time' ]
       })
         .then(result => {
-          const expectedResult = require('./result-fixtures/datapoints-assets.json');
+          const expectedResult = require('../result-fixtures/datapoints-assets.json');
 
           expect(result).to.deep.equal(expectedResult);
           done();
@@ -264,7 +261,7 @@ describe('Datapoints supporting', () => {
         .catch(done);
     });
 
-    it('condition under translations supporting: ar-SA', (done: Function) => {
+    it(`when requests '${GLOBALIS_PATH}' dataset and 'ar-SA' language`, (done: Function) => {
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: GLOBALIS_PATH });
@@ -315,7 +312,7 @@ describe('Datapoints supporting', () => {
         .catch(done);
     });
 
-    it('condition under translations supporting: ru-RU', (done: Function) => {
+    it(`when requests '${GLOBALIS_PATH}' dataset and 'ru-RU' language`, (done: Function) => {
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: GLOBALIS_PATH });
@@ -367,67 +364,8 @@ describe('Datapoints supporting', () => {
     });
   });
 
-  describe('# sad flow, when query is empty', () => {
-    it('return many errors only for \'from\' section', function(done: Function): void {
-      const reader = getDDFCsvReaderObject();
-      reader.init({ path: GLOBALIS_PATH });
-
-      reader.read({})
-        .then(() => {
-          return done(notExpectedError);
-        })
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(error.toString()).to.contain(expectedError1);
-          expect(error.toString()).to.contain(expectedError2);
-          expect(error.toString()).to.contain(expectedError3);
-          expect(error.toString()).to.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
-        }, done));
-    });
-  });
-
-  describe('# sad flow, return only involved errors from this section, when query \'select\' section', () => {
-    it('is absent', function(done: Function): void {
-      const reader = getDDFCsvReaderObject();
-      reader.init({ path: GLOBALIS_PATH });
-
-      reader.read({ from: 'datapoints' })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(error.toString()).to.contain(expectedError4);
-          expect(error.toString()).to.contain(expectedError5);
-        }, done));
-    });
-
-    it('is empty', function(done: Function): void {
-      const reader = getDDFCsvReaderObject();
-      reader.init({ path: GLOBALIS_PATH });
-
-      reader.read({ from: 'datapoints', select: {} })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.contain(expectedError5);
-        }, done));
-    });
-
-    it('is not object', function(done: Function): void {
-      const reader = getDDFCsvReaderObject();
-      reader.init({ path: GLOBALIS_PATH });
-
-      reader.read({ from: 'datapoints', select: 'fail' })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.contain(expectedError5);
-        }, done));
-    });
-
-    it('\'key\' property is not array', function(done: Function): void {
+  describe('should be produced only for \'select.key\' section', () => {
+    it('when it is not array', function(done: Function): void {
       const reader = getDDFCsvReaderObject();
       reader.init({ path: GLOBALIS_PATH });
 
@@ -440,7 +378,7 @@ describe('Datapoints supporting', () => {
         }, done));
     });
 
-    it('\'key\' property has 0 item', function(done: Function): void {
+    it('when it has 0 item', function(done: Function): void {
       const reader = getDDFCsvReaderObject();
       reader.init({ path: GLOBALIS_PATH });
 
@@ -454,7 +392,7 @@ describe('Datapoints supporting', () => {
         }, done));
     });
 
-    it('\'key\' property has 1 item', function(done: Function): void {
+    it('when it has 1 item', function(done: Function): void {
       const reader = getDDFCsvReaderObject();
       reader.init({ path: GLOBALIS_PATH });
 
@@ -467,23 +405,10 @@ describe('Datapoints supporting', () => {
           expect(error.toString()).to.contain(expectedError6);
         }, done));
     });
+  });
 
-    it('\'key\' property has item that is absent in dataset', function(done: Function): void {
-      const reader = getDDFCsvReaderObject();
-      reader.init({ path: GLOBALIS_PATH });
-
-      reader.read({ from: 'datapoints', select: { key: [ 'failed_concept', 'time' ], value: [ 'population_total' ] } })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
-          expect(error.toString()).to.not.contain(expectedError6);
-          expect(error.toString()).to.contain(expectedError7);
-        }, done));
-    });
-
-    it('\'value\' property is absent', function(done: Function): void {
+  describe('should be produced only for \'select.value\' section', () => {
+    it('when it is absent', function(done: Function): void {
       const reader = getDDFCsvReaderObject();
       reader.init({ path: GLOBALIS_PATH });
 
@@ -497,7 +422,7 @@ describe('Datapoints supporting', () => {
         }, done));
     });
 
-    it('\'value\' property is not array', function(done: Function): void {
+    it('when it is not array', function(done: Function): void {
       const reader = getDDFCsvReaderObject();
       reader.init({ path: GLOBALIS_PATH });
 
@@ -511,7 +436,7 @@ describe('Datapoints supporting', () => {
         }, done));
     });
 
-    it('\'value\' property is empty', function(done: Function): void {
+    it('when it is empty', function(done: Function): void {
       const reader = getDDFCsvReaderObject();
       reader.init({ path: GLOBALIS_PATH });
 
@@ -522,69 +447,6 @@ describe('Datapoints supporting', () => {
           expect(error.toString()).to.not.contain(expectedError4);
           expect(error.toString()).to.not.contain(expectedError5);
           expect(error.toString()).to.contain(expectedError8);
-        }, done));
-    });
-
-    it('\'value\' property has item that is absent in dataset', function(done: Function): void {
-      const reader = getDDFCsvReaderObject();
-      reader.init({ path: GLOBALIS_PATH });
-
-      reader.read({ from: 'datapoints', select: { key: [ 'geo', 'time' ], value: [ 'failed_measure' ] } })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.contain(expectedError9);
-        }, done));
-    });
-  });
-
-  describe('# sad flow, return only involved errors from this section, when query \'from\' section', () => {
-    it('is absent', function(done: Function): void {
-      const reader = getDDFCsvReaderObject();
-      reader.init({ path: GLOBALIS_PATH });
-
-      reader.read({ select: { key: [ 'geo', 'time' ], value: [ 'population_total' ] } })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(error.toString()).to.contain(expectedError1);
-          expect(error.toString()).to.contain(expectedError2);
-          expect(error.toString()).to.contain(expectedError3);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
-        }, done));
-    });
-
-    it('is object', function(done: Function): void {
-      const reader = getDDFCsvReaderObject();
-      reader.init({ path: GLOBALIS_PATH });
-
-      reader.read({ from: {}, select: { key: [ 'geo', 'time' ], value: [ 'population_total' ] } })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError1);
-          expect(error.toString()).to.contain(expectedError2);
-          expect(error.toString()).to.contain(expectedError3);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
-        }, done));
-    });
-
-    it('doesn\'t have available value', function(done: Function): void {
-      const reader = getDDFCsvReaderObject();
-      reader.init({ path: GLOBALIS_PATH });
-
-      reader.read({ from: 'fail', select: { key: [ 'geo', 'time' ], value: [ 'population_total' ] } })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError1);
-          expect(error.toString()).to.not.contain(expectedError2);
-          expect(error.toString()).to.contain(expectedError3);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
         }, done));
     });
   });

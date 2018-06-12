@@ -76,12 +76,14 @@ function validateSelectStructure (query, options): string[] {
     case (isEntitiesQuery(query)):
       errorMessages.push(
         checkIfSelectIsEmpty(selectClause),
+        checkIfEntitiesOrConceptsSelectHasInvalidStructure(selectClause, key, value),
         checkIfSelectKeyHasInvalidStructure(fromClause, key)
       );
       break;
     case (isConceptsQuery(query)):
       errorMessages.push(
         checkIfSelectIsEmpty(selectClause),
+        checkIfEntitiesOrConceptsSelectHasInvalidStructure(selectClause, key, value),
         checkIfSelectKeyHasInvalidStructure(fromClause, key)
       );
       break;
@@ -174,6 +176,12 @@ function checkIfSchemasSelectValueHasInvalidStructure(fromClause, value) {
 }
 
 // * specific concepts/entities select errors
+function checkIfEntitiesOrConceptsSelectHasInvalidStructure(selectClause, key, value) {
+  if (!isObject(selectClause) || !isArray(key)) {
+    return `'select' clause must have next structure: { key: [...], value: [...] }`;
+  }
+}
+
 function checkIfSelectKeyHasInvalidStructure(fromClause, key) {
   if (!isArray(key) || size(key) !== 1) {
     return `'select.key' clause for '${fromClause}' queries must have only 1 item`;

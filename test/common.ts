@@ -13,6 +13,7 @@ export const expectedError6 = `'select.key' clause for 'datapoints' queries must
 export const expectedError7 = `'select.key' clause for 'datapoints' queries contains unavailable item(s): failed_concept [repo: ${GLOBALIS_PATH}/]`;
 export const expectedError8 = `'select.value' clause for 'datapoints' queries must have at least 1 item`;
 export const expectedError9 = `'select.value' clause for 'datapoints' queries contains unavailable item(s): failed_measure [repo: ${GLOBALIS_PATH}/]`;
+export const expectedError10 = `'select.key' clause for 'entities' queries must have only 1 item`;
 
 export const notExpectedError = 'this should never be called';
 
