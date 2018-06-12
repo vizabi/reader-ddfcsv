@@ -1,5 +1,6 @@
 .idea
 
+package-lock.json
 lib
 *js
 !dist/*js
@@ -34,9 +35,6 @@ coverage.lcov
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
-
-# For checking ddf-query-validator coverage
-src/ddf-query-validator
 
 # Dependency directories
 node_modules
