@@ -16,7 +16,7 @@ import {
 
 const expect = chai.expect;
 
-describe('Errors in datapoints query definition', () => {
+describe('Datapoints definition errors in query', () => {
   describe('should be produced only for \'select\' section', () => {
     it('when \'key\' property has item that is absent in dataset', function(done: Function): void {
       const reader = getDDFCsvReaderObject();

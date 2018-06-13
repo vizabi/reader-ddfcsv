@@ -16,7 +16,10 @@ export const AVAILABLE_FROM_CLAUSE_VALUES = new Set([
   CONCEPTS, ENTITIES, DATAPOINTS, ...SCHEMAS
 ]);
 
-export const SORT_DIRECTIONS = new Set([ 'asc', 'desc' ]);
+export const AVAILABLE_ORDER_BY_CLAUSE_VALUES = new Set([
+  'asc', 'desc', 1, -1
+]);
+
 export const MAX_AMOUNT_OF_MEASURES_IN_SELECT = 5;
 
 export function isSchemaQuery (query) {

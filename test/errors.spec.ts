@@ -8,7 +8,7 @@ const sandbox = sinon.createSandbox();
 const GLOBALIS_PATH = './test/fixtures/systema_globalis';
 const BROKEN_DATAPACKAGE_PATH = './test/fixtures/ds_broken_datapackage';
 
-describe('Errors in ddfcsv reader', () => {
+describe('General errors in ddfcsv reader', () => {
   afterEach(() => sandbox.restore());
 
   describe('should be processed correctly', () => {

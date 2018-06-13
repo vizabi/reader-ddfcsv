@@ -16,7 +16,7 @@ import {
 
 const expect = chai.expect;
 
-describe('Errors in datapoints query structure', () => {
+describe('Datapoints structure errors in query', () => {
   describe('should never happen for happy flow', () => {
     it(`when requests '${GLOBALIS_PATH}' dataset and exists valid condition in 'join' section`, done => {
       const reader = getDDFCsvReaderObject();
@@ -65,6 +65,29 @@ describe('Errors in datapoints query structure', () => {
 
           expect(data.length).to.equal(1155);
           expect(countryAntData).to.be.an('array').that.is.empty;
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it(`when requests '${GLOBALIS_PATH}' dataset and ordering by complex fields`, done => {
+      const reader = getDDFCsvReaderObject();
+
+      reader.init({ path: GLOBALIS_PATH });
+
+      reader.read({
+        select: {
+          key: [ 'geo', 'time' ],
+          value: [
+            'life_expectancy_years', 'population_total'
+          ]
+        },
+        from: 'datapoints',
+        order_by: [ 'time', { geo: 'asc' }, { life_expectancy_years: -1 } ]
+      })
+        .then(data => {
+          expect(data.length).to.equal(52091);
 
           done();
         })

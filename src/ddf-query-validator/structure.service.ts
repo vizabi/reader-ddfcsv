@@ -3,12 +3,17 @@ import isNil = require('lodash/isNil');
 import isObject = require('lodash/isObject');
 import isArray = require('lodash/isArray');
 import size = require('lodash/size');
+import values = require('lodash/values');
+import first = require('lodash/first');
 import get = require('lodash/get');
+import has = require('lodash/has');
+import every = require('lodash/every');
 import compact = require('lodash/compact');
 import isString = require('lodash/isString');
 
 import {
   AVAILABLE_FROM_CLAUSE_VALUES,
+  AVAILABLE_ORDER_BY_CLAUSE_VALUES,
   isConceptsQuery,
   isDatapointsQuery,
   isEntitiesQuery,
@@ -61,6 +66,10 @@ function validateSelectStructure (query, options): string[] {
   const errorMessages = [];
   const selectClause = get(query, 'select', null);
   const fromClause = get(query, 'from', null);
+  const languageClause = get(query, 'language', null);
+  const joinClause = get(query, 'join', null);
+  const whereClause = get(query, 'where', null);
+  const orderByClause = get(query, 'order_by', null);
   const key = get(selectClause, 'key');
   const value = get(selectClause, 'value');
 
@@ -70,21 +79,35 @@ function validateSelectStructure (query, options): string[] {
         checkIfSelectIsEmpty(selectClause),
         // checkIfSelectHasInvalidStructure(selectClause, key, value),
         checkIfSchemasSelectKeyHasInvalidStructure(fromClause, key),
-        checkIfSchemasSelectValueHasInvalidStructure(fromClause, value)
+        checkIfSelectValueHasInvalidStructure(fromClause, value),
+        checkIfSchemaLanguageIsPresent(query),
+        checkIfSchemaJoinIsPresent(query),
+        checkIfWhereHasInvalidStructure(whereClause),
+        checkIfOrderByHasInvalidStructure(orderByClause),
       );
       break;
     case (isEntitiesQuery(query)):
       errorMessages.push(
         checkIfSelectIsEmpty(selectClause),
         checkIfEntitiesOrConceptsSelectHasInvalidStructure(selectClause, key, value),
-        checkIfSelectKeyHasInvalidStructure(fromClause, key)
+        checkIfSelectKeyHasInvalidStructure(fromClause, key),
+        checkIfSelectValueHasInvalidStructure(fromClause, value),
+        checkIfLanguageHasInvalidStructure(languageClause),
+        checkIfJoinHasInvalidStructure(joinClause),
+        checkIfWhereHasInvalidStructure(whereClause),
+        checkIfOrderByHasInvalidStructure(orderByClause),
       );
       break;
     case (isConceptsQuery(query)):
       errorMessages.push(
         checkIfSelectIsEmpty(selectClause),
         checkIfEntitiesOrConceptsSelectHasInvalidStructure(selectClause, key, value),
-        checkIfSelectKeyHasInvalidStructure(fromClause, key)
+        checkIfSelectKeyHasInvalidStructure(fromClause, key),
+        checkIfSelectValueHasInvalidStructure(fromClause, value),
+        checkIfLanguageHasInvalidStructure(languageClause),
+        checkIfJoinHasInvalidStructure(joinClause),
+        checkIfWhereHasInvalidStructure(whereClause),
+        checkIfOrderByHasInvalidStructure(orderByClause),
       );
       break;
     case (isDatapointsQuery(query)):
@@ -92,7 +115,11 @@ function validateSelectStructure (query, options): string[] {
         checkIfSelectIsEmpty(selectClause),
         checkIfSelectHasInvalidStructure(selectClause, key, value),
         checkIfDatapointsSelectKeyHasInvalidStructure(fromClause, key),
-        checkIfDatapointsSelectValueHasInvalidStructure(fromClause, value)
+        checkIfDatapointsSelectValueHasInvalidStructure(fromClause, value),
+        checkIfLanguageHasInvalidStructure(languageClause),
+        checkIfJoinHasInvalidStructure(joinClause),
+        checkIfWhereHasInvalidStructure(whereClause),
+        checkIfOrderByHasInvalidStructure(orderByClause),
       );
       break;
     default:
@@ -136,53 +163,105 @@ function validateOrderByStructure (query, options): string[] {
   return [];
 }
 
-// Common select structure errors
-function checkIfSelectIsEmpty(selectClause) {
+// Common structure errors
+function checkIfSelectIsEmpty (selectClause): string | void {
   if (isNil(selectClause)) {
     return `'select' clause couldn't be empty`;
   }
 }
 
-function checkIfSelectHasInvalidStructure(selectClause, key, value) {
+function checkIfSelectHasInvalidStructure (selectClause, key, value): string | void {
   if (!isObject(selectClause) || !isArray(key) || !isArray(value)) {
     return `'select' clause must have next structure: { key: [...], value: [...] }`;
   }
 }
 
+function checkIfJoinHasInvalidStructure(joinClause): string | void {
+  if (!isNil(joinClause) && !isStrictObject(joinClause)) {
+    return `'join' clause must be object only`;
+  }
+}
+
+function checkIfLanguageHasInvalidStructure(languageClause): string | void {
+  if (!isNil(languageClause) && !isString(languageClause)) {
+    return `'language' clause must be string only`;
+  }
+}
+
+function checkIfWhereHasInvalidStructure(whereClause): string | void {
+  if (!isNil(whereClause) && !isStrictObject(whereClause)) {
+    return `'where' clause must be object only`;
+  }
+}
+
+function checkIfOrderByHasInvalidStructure(orderByClause): string | void {
+  if (!isNil(orderByClause) && !isString(orderByClause) && !isArrayOfStrings(orderByClause) && !isArrayOfSpecialItems(orderByClause, isOrderBySubclause)) {
+    return `'order_by' clause must be string or array of strings || objects only`;
+  }
+}
+
+function isStrictObject(clause): boolean {
+  return isObject(clause) && !isArray(clause);
+}
+
+function isArrayOfStrings(clause): boolean {
+  return isArray(clause) && every(clause, isString);
+}
+
+function isOrderBySubclause(subclause) {
+  return isString(subclause) || (isStrictObject(subclause) && size(subclause) === 1 && AVAILABLE_ORDER_BY_CLAUSE_VALUES.has(first(values(subclause))));
+}
+
+function isArrayOfSpecialItems(clause, isSpecialItem): boolean {
+  return isArray(clause) && every(clause, isSpecialItem);
+}
+
 // * specific datapoints select errors
-function checkIfDatapointsSelectKeyHasInvalidStructure(fromClause, key) {
+function checkIfDatapointsSelectKeyHasInvalidStructure (fromClause, key): string | void {
   if (size(key) < 2) {
     return `'select.key' clause for '${fromClause}' queries must have at least 2 items`;
   }
 }
 
-function checkIfDatapointsSelectValueHasInvalidStructure(fromClause, value) {
+function checkIfDatapointsSelectValueHasInvalidStructure (fromClause, value): string | void {
   if (size(value) < 1) {
     return `'select.value' clause for '${fromClause}' queries must have at least 1 item`;
   }
 }
 
 // * specific schemas select errors
-function checkIfSchemasSelectKeyHasInvalidStructure(fromClause, key) {
-  if (size(key) < 2) {
-    return `'select.key' clause for '${fromClause}' queries must have at least 2 items: 'key', 'value'`;
+function checkIfSchemasSelectKeyHasInvalidStructure (fromClause, key): string | void {
+  if (!isArray(key) || size(key) !== 2) {
+    return `'select.key' clause for '${fromClause}' queries must have exactly 2 items: 'key', 'value'`;
   }
 }
 
-function checkIfSchemasSelectValueHasInvalidStructure(fromClause, value) {
+function checkIfSelectValueHasInvalidStructure (fromClause, value): string | void {
   if (!isArray(value) && !isNil(value)) {
     return `'select.value' clause for '${fromClause}' queries should be array of strings or empty`;
   }
 }
 
+function checkIfSchemaJoinIsPresent(query): string | void {
+  if (has(query, 'join')) {
+    return `'join' clause for '*.schema' queries shouldn't be present in query`;
+  }
+}
+
+function checkIfSchemaLanguageIsPresent(query): string | void {
+  if (has(query, 'language')) {
+    return `'language' clause for '*.schema' queries shouldn't be present in query`;
+  }
+}
+
 // * specific concepts/entities select errors
-function checkIfEntitiesOrConceptsSelectHasInvalidStructure(selectClause, key, value) {
+function checkIfEntitiesOrConceptsSelectHasInvalidStructure (selectClause, key, value): string | void {
   if (!isObject(selectClause) || !isArray(key)) {
     return `'select' clause must have next structure: { key: [...], value: [...] }`;
   }
 }
 
-function checkIfSelectKeyHasInvalidStructure(fromClause, key) {
+function checkIfSelectKeyHasInvalidStructure (fromClause, key): string | void {
   if (!isArray(key) || size(key) !== 1) {
     return `'select.key' clause for '${fromClause}' queries must have only 1 item`;
   }

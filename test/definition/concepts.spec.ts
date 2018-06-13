@@ -5,7 +5,7 @@ const expect = chai.expect;
 
 const GLOBALIS_PATH = './test/fixtures/systema_globalis';
 
-describe('Entities definition errors in query', () => {
+describe('Concepts definition errors in query', () => {
   describe('should be produced only for \'select\' section', () => {
     it('when \'key\' property has item that is absent in dataset', done => {
       const reader = getDDFCsvReaderObject();
@@ -15,9 +15,9 @@ describe('Entities definition errors in query', () => {
       reader.read({
         select: {
           key: [ 'wrong_concept' ],
-          value: [ 'world_4region', 'un_state' ]
+          value: [ 'concept_type', 'name', 'description' ]
         },
-        from: 'entities'
+        from: 'concepts'
       }).then(data => {
         expect(data.length).to.not.equal(8);
 
