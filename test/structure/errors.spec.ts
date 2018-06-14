@@ -6,7 +6,7 @@ import {
   expectedError1,
   expectedError18,
   expectedError19,
-  expectedError2, expectedError20, expectedError21,
+  expectedError2, expectedError20, expectedError21, expectedError22,
   expectedError3,
   expectedError4,
   expectedError5,
@@ -169,6 +169,20 @@ describe('General structure errors in query', () => {
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
           expect(error.toString()).to.contain(expectedError20);
+        }, done));
+    });
+
+    it('when it has not allowed operator', function(done: Function): void {
+      const reader = getDDFCsvReaderObject();
+      reader.init({ path: GLOBALIS_PATH });
+
+      reader.read({
+        where: { '$concept': { '$exists': true } }, select: { key: [ 'concept' ] }, from: 'concepts'
+      })
+        .then(() => done(notExpectedError))
+        .catch(checkExpectations((error) => {
+          // console.log(error.stack);
+          expect(error.toString()).to.contain(expectedError22);
         }, done));
     });
   });

@@ -27,6 +27,8 @@ export const expectedError19 = `'join' clause must be object only`;
 export const expectedError20 = `'where' clause must be object only`;
 export const expectedError21 = `'order_by' clause must be string or array of strings || objects only`;
 
+export const expectedError22 = `'where' clause has unknown operator(s) '$concept', replace it with allowed operators: `;
+
 export const notExpectedError = 'this should never be called';
 
 export const checkExpectations = (fn: Function, done: Function) => {

@@ -4,7 +4,11 @@ import isObject = require('lodash/isObject');
 import isArray = require('lodash/isArray');
 import size = require('lodash/size');
 import values = require('lodash/values');
+import keys = require('lodash/keys');
 import first = require('lodash/first');
+import map = require('lodash/map');
+import filter = require('lodash/filter');
+import startsWith = require('lodash/startsWith');
 import get = require('lodash/get');
 import has = require('lodash/has');
 import every = require('lodash/every');
@@ -14,6 +18,7 @@ import isString = require('lodash/isString');
 import {
   AVAILABLE_FROM_CLAUSE_VALUES,
   AVAILABLE_ORDER_BY_CLAUSE_VALUES,
+  AVAILABLE_QUERY_OPERATORS,
   isConceptsQuery,
   isDatapointsQuery,
   isEntitiesQuery,
@@ -72,6 +77,7 @@ function validateSelectStructure (query, options): string[] {
   const orderByClause = get(query, 'order_by', null);
   const key = get(selectClause, 'key');
   const value = get(selectClause, 'value');
+  const whereOperators = getWhereOperators(whereClause);
 
   switch (true) {
     case (isSchemaQuery(query)):
@@ -107,6 +113,7 @@ function validateSelectStructure (query, options): string[] {
         checkIfLanguageHasInvalidStructure(languageClause),
         checkIfJoinHasInvalidStructure(joinClause),
         checkIfWhereHasInvalidStructure(whereClause),
+        checkIfWhereHasUnknownOperators(joinClause, whereOperators),
         checkIfOrderByHasInvalidStructure(orderByClause),
       );
       break;
@@ -194,6 +201,16 @@ function checkIfWhereHasInvalidStructure(whereClause): string | void {
   }
 }
 
+function checkIfWhereHasUnknownOperators(joinClause = {}, operators): string | void {
+  const notAllowedOperators = filter(operators, (operator) => !isAllowedOperator(joinClause, operator)).map((operator) => operator.name);
+  const allowedOperatorsByDataset = [...AVAILABLE_QUERY_OPERATORS.values(), ...keys(joinClause)];
+
+  if (!isEmpty(notAllowedOperators)) {
+    return `'where' clause has unknown operator(s) '${notAllowedOperators.join(', ')}', replace it with allowed operators: ${allowedOperatorsByDataset.join(', ')}`;
+  }
+
+}
+
 function checkIfOrderByHasInvalidStructure(orderByClause): string | void {
   if (!isNil(orderByClause) && !isString(orderByClause) && !isArrayOfStrings(orderByClause) && !isArrayOfSpecialItems(orderByClause, isOrderBySubclause)) {
     return `'order_by' clause must be string or array of strings || objects only`;
@@ -214,6 +231,40 @@ function isOrderBySubclause(subclause) {
 
 function isArrayOfSpecialItems(clause, isSpecialItem): boolean {
   return isArray(clause) && every(clause, isSpecialItem);
+}
+
+function isAllowedOperator(joinClause, operator) {
+  return isMongoLikeOperator(operator) || isJoinOperator(joinClause, operator);
+}
+
+function isMongoLikeOperator(operator) {
+  return !operator.isLeaf && AVAILABLE_QUERY_OPERATORS.has(operator.name);
+}
+
+function isJoinOperator(joinClause, operator) {
+  return operator.isLeaf && startsWith(operator.name, '$') && has(joinClause, operator.name);
+}
+
+function isLeaf(operator) {
+  return size(operator) === 0;
+}
+
+function getWhereOperators(whereClause): string[] {
+  const operators = [];
+
+  for (const field in whereClause) {
+    // no support for deeper object structures (mongo style)
+    if (startsWith(field, '$')) {
+      if (isLeaf(field)) {
+        operators.push({name: field, isLeaf: true});
+      } else {
+        operators.push({name: field, isLeaf: false});
+        map(whereClause[ field ], getWhereOperators).forEach(subFields => operators.push(...subFields));
+      }
+    }
+  }
+
+  return operators;
 }
 
 // * specific datapoints select errors
