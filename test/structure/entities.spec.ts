@@ -2,11 +2,16 @@ import * as chai from 'chai';
 import { getDDFCsvReaderObject } from '../../src/index';
 import {
   checkExpectations,
-  expectedError10, expectedError11, expectedError12, expectedError13,
-  expectedError4,
-  expectedError5,
-  expectedError6,
-  notExpectedError
+  selectKeyClauseMustHaveOnly1Item,
+  selectValueClauseMustHaveCertainStructure,
+  selectClauseCouldnotBeEmpty,
+  selectClauseMustHaveStructure,
+  selectKeyClauseMustHaveAtLeast2Items,
+  notExpectedError,
+  getAmountOfErrors,
+  EXPECTS_EXACTLY_FOUR_ERRORS,
+  EXPECTS_EXACTLY_ONE_ERROR,
+  EXPECTS_EXACTLY_TWO_ERRORS
 } from '../common';
 
 const expect = chai.expect;
@@ -101,9 +106,9 @@ describe('Entities structure errors in query', () => {
         .then(data => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.contain(expectedError5);
-          expect(error.toString()).to.contain(expectedError10);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_TWO_ERRORS);
+          expect(error.toString()).to.match(selectClauseMustHaveStructure);
+          expect(error.toString()).to.match(selectKeyClauseMustHaveOnly1Item);
         }, done));
     });
 
@@ -122,9 +127,8 @@ describe('Entities structure errors in query', () => {
         .then(data => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
-          expect(error.toString()).to.contain(expectedError10);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(selectKeyClauseMustHaveOnly1Item);
         }, done));
     });
 
@@ -143,9 +147,8 @@ describe('Entities structure errors in query', () => {
         .then(data => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
-          expect(error.toString()).to.contain(expectedError10);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(selectKeyClauseMustHaveOnly1Item);
         }, done));
     });
   });
@@ -172,10 +175,8 @@ describe('Entities structure errors in query', () => {
         .then(data => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
-          expect(error.toString()).to.not.contain(expectedError10);
-          expect(error.toString()).to.contain(expectedError13);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(selectValueClauseMustHaveCertainStructure);
         }, done));
     });
   });

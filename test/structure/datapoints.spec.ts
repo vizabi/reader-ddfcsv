@@ -1,16 +1,15 @@
 import * as chai from 'chai';
 import { getDDFCsvReaderObject } from '../../src/index';
 import {
-  BIG_PATH, checkExpectations,
-  expectedError4,
-  expectedError5,
-  expectedError6,
-  expectedError7,
-  expectedError8,
-  expectedError9,
+  BIG_PATH,
+  checkExpectations, EXPECTS_EXACTLY_ONE_ERROR, EXPECTS_EXACTLY_TWO_ERRORS, getAmountOfErrors,
   GLOBALIS_PATH,
   notExpectedError,
   POP_WPP_PATH,
+  selectClauseCouldnotBeEmpty,
+  selectClauseMustHaveStructure,
+  selectKeyClauseMustHaveAtLeast2Items,
+  selectValueClauseMustHaveAtLeast1Item,
   STATIC_ASSETS
 } from '../common';
 
@@ -396,8 +395,8 @@ describe('Datapoints structure errors in query', () => {
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.contain(expectedError5);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(selectClauseMustHaveStructure);
         }, done));
     });
 
@@ -409,9 +408,8 @@ describe('Datapoints structure errors in query', () => {
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
-          expect(error.toString()).to.contain(expectedError6);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(selectKeyClauseMustHaveAtLeast2Items);
         }, done));
     });
 
@@ -423,9 +421,8 @@ describe('Datapoints structure errors in query', () => {
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
-          expect(error.toString()).to.contain(expectedError6);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(selectKeyClauseMustHaveAtLeast2Items);
         }, done));
     });
   });
@@ -439,9 +436,9 @@ describe('Datapoints structure errors in query', () => {
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.contain(expectedError5);
-          expect(error.toString()).to.contain(expectedError8);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_TWO_ERRORS);
+          expect(error.toString()).to.match(selectClauseMustHaveStructure);
+          expect(error.toString()).to.match(selectValueClauseMustHaveAtLeast1Item);
         }, done));
     });
 
@@ -453,9 +450,8 @@ describe('Datapoints structure errors in query', () => {
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.contain(expectedError5);
-          expect(error.toString()).to.not.contain(expectedError8);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(selectClauseMustHaveStructure);
         }, done));
     });
 
@@ -467,9 +463,8 @@ describe('Datapoints structure errors in query', () => {
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
-          expect(error.toString()).to.contain(expectedError8);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(selectValueClauseMustHaveAtLeast1Item);
         }, done));
     });
   });

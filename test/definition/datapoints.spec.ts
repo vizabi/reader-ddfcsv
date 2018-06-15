@@ -2,16 +2,16 @@ import * as chai from 'chai';
 import { getDDFCsvReaderObject } from '../../src/index';
 import {
   BIG_PATH, checkExpectations,
-  expectedError4,
-  expectedError5,
-  expectedError6,
-  expectedError7,
-  expectedError8,
-  expectedError9,
+  selectClauseCouldnotBeEmpty,
+  selectClauseMustHaveStructure,
+  selectKeyClauseMustHaveAtLeast2Items,
+  selectKeyClauseContainsUnavailableItems,
+  selectValueClauseMustHaveAtLeast1Item,
+  selectValueClauseContainsUnavailableItems,
   GLOBALIS_PATH,
   notExpectedError,
   POP_WPP_PATH,
-  STATIC_ASSETS
+  STATIC_ASSETS, EXPECTS_EXACTLY_ONE_ERROR, getAmountOfErrors
 } from '../common';
 
 const expect = chai.expect;
@@ -26,10 +26,8 @@ describe('Datapoints definition errors in query', () => {
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
-          expect(error.toString()).to.not.contain(expectedError6);
-          expect(error.toString()).to.contain(expectedError7);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(selectKeyClauseContainsUnavailableItems);
         }, done));
     });
 
@@ -41,8 +39,8 @@ describe('Datapoints definition errors in query', () => {
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.contain(expectedError9);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(selectValueClauseContainsUnavailableItems);
         }, done));
     });
   });

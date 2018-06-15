@@ -2,11 +2,15 @@ import * as chai from 'chai';
 import { getDDFCsvReaderObject } from '../../src/index';
 import {
   checkExpectations,
-  expectedError11,
-  expectedError12, expectedError14, expectedError15, expectedError16, expectedError17,
-  expectedError4,
-  expectedError5,
-  notExpectedError
+  selectKeyClauseMustHaveOnly1Item,
+  selectValueClauseMustHaveCertainStructure,
+  selectValueClauseMustHaveCertainStructureInSchemaQueries,
+  joinClauseShouldnotBeInSchemaQueries,
+  languageClauseShouldnotBeInSchemaQueries,
+  selectClauseCouldnotBeEmpty,
+  selectClauseMustHaveStructure,
+  notExpectedError,
+  selectKeyClauseMustHaveOnly2ItemsInSchemaQueries, EXPECTS_EXACTLY_ONE_ERROR, getAmountOfErrors
 } from '../common';
 
 const expect = chai.expect;
@@ -128,9 +132,8 @@ describe('Schemas structure errors in query', () => {
         .then(data => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
-          expect(error.toString()).to.contain(expectedError14);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(selectKeyClauseMustHaveOnly2ItemsInSchemaQueries);
         }, done));
     });
 
@@ -149,9 +152,8 @@ describe('Schemas structure errors in query', () => {
         .then(data => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
-          expect(error.toString()).to.contain(expectedError14);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(selectKeyClauseMustHaveOnly2ItemsInSchemaQueries);
         }, done));
     });
 
@@ -170,9 +172,8 @@ describe('Schemas structure errors in query', () => {
         .then(data => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
-          expect(error.toString()).to.contain(expectedError14);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(selectKeyClauseMustHaveOnly2ItemsInSchemaQueries);
         }, done));
     });
   });
@@ -193,10 +194,8 @@ describe('Schemas structure errors in query', () => {
         .then(data => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
-          expect(error.toString()).to.not.contain(expectedError11);
-          expect(error.toString()).to.contain(expectedError15);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(selectValueClauseMustHaveCertainStructureInSchemaQueries);
         }, done));
     });
   });
@@ -217,10 +216,8 @@ describe('Schemas structure errors in query', () => {
         .then(data => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
-          expect(error.toString()).to.not.contain(expectedError11);
-          expect(error.toString()).to.contain(expectedError17);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(languageClauseShouldnotBeInSchemaQueries);
         }, done));
     });
   });
@@ -241,10 +238,8 @@ describe('Schemas structure errors in query', () => {
         .then(data => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
-          expect(error.toString()).to.not.contain(expectedError11);
-          expect(error.toString()).to.contain(expectedError16);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(joinClauseShouldnotBeInSchemaQueries);
         }, done));
     });
   });

@@ -25,6 +25,7 @@ import {
   isInvalidQueryOperator,
   isSchemaQuery
 } from './helper.service';
+import { isPrimitive } from 'util';
 
 export function validateQueryStructure (query, options = {}): Promise<string | void> {
   return new Promise((resolve, reject) => {
@@ -89,6 +90,7 @@ function validateSelectStructure (query, options): string[] {
         checkIfSchemaLanguageIsPresent(query),
         checkIfSchemaJoinIsPresent(query),
         checkIfWhereHasInvalidStructure(whereClause),
+        checkIfWhereHasUnknownOperators(joinClause, whereOperators),
         checkIfOrderByHasInvalidStructure(orderByClause),
       );
       break;
@@ -101,6 +103,7 @@ function validateSelectStructure (query, options): string[] {
         checkIfLanguageHasInvalidStructure(languageClause),
         checkIfJoinHasInvalidStructure(joinClause),
         checkIfWhereHasInvalidStructure(whereClause),
+        checkIfWhereHasUnknownOperators(joinClause, whereOperators),
         checkIfOrderByHasInvalidStructure(orderByClause),
       );
       break;
@@ -126,6 +129,7 @@ function validateSelectStructure (query, options): string[] {
         checkIfLanguageHasInvalidStructure(languageClause),
         checkIfJoinHasInvalidStructure(joinClause),
         checkIfWhereHasInvalidStructure(whereClause),
+        checkIfWhereHasUnknownOperators(joinClause, whereOperators),
         checkIfOrderByHasInvalidStructure(orderByClause),
       );
       break;
@@ -135,11 +139,6 @@ function validateSelectStructure (query, options): string[] {
       );
       break;
   }
-
-  // if (!AVAILABLE_FROM_CLAUSE_VALUES.has(clause)) {
-  //   const listAvaliableValues = [...AVAILABLE_FROM_CLAUSE_VALUES];
-  //   errorMessages.push(`'from' clause must be one of the list: ${listAvaliableValues.join(', ')}`);
-  // }
 
   return compact(errorMessages);
 }
@@ -245,22 +244,22 @@ function isJoinOperator(joinClause, operator) {
   return operator.isLeaf && startsWith(operator.name, '$') && has(joinClause, operator.name);
 }
 
-function isLeaf(operator) {
-  return size(operator) === 0;
-}
-
 function getWhereOperators(whereClause): string[] {
   const operators = [];
 
   for (const field in whereClause) {
     // no support for deeper object structures (mongo style)
+
     if (startsWith(field, '$')) {
-      if (isLeaf(field)) {
-        operators.push({name: field, isLeaf: true});
-      } else {
-        operators.push({name: field, isLeaf: false});
-        map(whereClause[ field ], getWhereOperators).forEach(subFields => operators.push(...subFields));
+      operators.push({name: field, isLeaf: false});
+    }
+
+    if (isPrimitive(whereClause[field])) {
+      if (startsWith(whereClause[field], '$')) {
+        operators.push({name: whereClause[field], isLeaf: true});
       }
+    } else {
+      operators.push(...getWhereOperators(whereClause[field]));
     }
   }
 

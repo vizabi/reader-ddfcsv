@@ -3,14 +3,24 @@ import * as sinon from 'sinon';
 import { getDDFCsvReaderObject } from '../../src/index';
 import {
   checkExpectations,
-  expectedError1,
-  expectedError18,
-  expectedError19,
-  expectedError2, expectedError20, expectedError21, expectedError22,
-  expectedError3,
-  expectedError4,
-  expectedError5,
-  notExpectedError
+  fromClauseCouldnotBeEmpty,
+  languageClauseMustBeString,
+  joinClauseMustBeObject,
+  fromClauseMustBeString,
+  whereClauseMustBeObject,
+  orderByClauseMustHaveCertainStructure,
+  whereClauseHasUnknownOperator,
+  selectClauseCouldnotBeEmpty,
+  selectClauseMustHaveStructure,
+  fromClauseValueMustBeAllowed,
+  notExpectedError,
+  EXPECTS_EXACTLY_THREE_ERRORS,
+  getAmountOfErrors,
+  EXPECTS_EXACTLY_FOUR_ERRORS,
+  EXPECTS_EXACTLY_TWO_ERRORS,
+  EXPECTS_EXACTLY_ONE_ERROR,
+  selectKeyClauseMustHaveAtLeast2Items,
+  selectValueClauseMustHaveAtLeast1Item, whereClauseHasUnknownOperator1
 } from '../common';
 
 const expect = chai.expect;
@@ -33,11 +43,11 @@ describe('General structure errors in query', () => {
         })
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.contain(expectedError1);
-          expect(error.toString()).to.contain(expectedError2);
-          expect(error.toString()).to.contain(expectedError3);
-          expect(error.toString()).to.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_FOUR_ERRORS);
+          expect(error.toString()).to.match(fromClauseCouldnotBeEmpty);
+          expect(error.toString()).to.match(fromClauseMustBeString);
+          expect(error.toString()).to.match(fromClauseValueMustBeAllowed);
+          expect(error.toString()).to.match(selectClauseCouldnotBeEmpty);
         }, done));
     });
 
@@ -49,11 +59,10 @@ describe('General structure errors in query', () => {
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.contain(expectedError1);
-          expect(error.toString()).to.contain(expectedError2);
-          expect(error.toString()).to.contain(expectedError3);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_THREE_ERRORS);
+          expect(error.toString()).to.match(fromClauseCouldnotBeEmpty);
+          expect(error.toString()).to.match(fromClauseMustBeString);
+          expect(error.toString()).to.match(fromClauseValueMustBeAllowed);
         }, done));
     });
 
@@ -65,11 +74,9 @@ describe('General structure errors in query', () => {
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError1);
-          expect(error.toString()).to.contain(expectedError2);
-          expect(error.toString()).to.contain(expectedError3);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_TWO_ERRORS);
+          expect(error.toString()).to.match(fromClauseMustBeString);
+          expect(error.toString()).to.match(fromClauseValueMustBeAllowed);
         }, done));
     });
 
@@ -81,11 +88,8 @@ describe('General structure errors in query', () => {
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError1);
-          expect(error.toString()).to.not.contain(expectedError2);
-          expect(error.toString()).to.contain(expectedError3);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.not.contain(expectedError5);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(fromClauseValueMustBeAllowed);
         }, done));
     });
   });
@@ -99,8 +103,11 @@ describe('General structure errors in query', () => {
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.contain(expectedError4);
-          expect(error.toString()).to.contain(expectedError5);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_FOUR_ERRORS);
+          expect(error.toString()).to.match(selectClauseCouldnotBeEmpty);
+          expect(error.toString()).to.match(selectClauseMustHaveStructure);
+          expect(error.toString()).to.match(selectKeyClauseMustHaveAtLeast2Items);
+          expect(error.toString()).to.match(selectValueClauseMustHaveAtLeast1Item);
         }, done));
     });
 
@@ -112,8 +119,10 @@ describe('General structure errors in query', () => {
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.contain(expectedError5);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_THREE_ERRORS);
+          expect(error.toString()).to.match(selectClauseMustHaveStructure);
+          expect(error.toString()).to.match(selectKeyClauseMustHaveAtLeast2Items);
+          expect(error.toString()).to.match(selectValueClauseMustHaveAtLeast1Item);
         }, done));
     });
 
@@ -125,8 +134,10 @@ describe('General structure errors in query', () => {
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.not.contain(expectedError4);
-          expect(error.toString()).to.contain(expectedError5);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_THREE_ERRORS);
+          expect(error.toString()).to.match(selectClauseMustHaveStructure);
+          expect(error.toString()).to.match(selectKeyClauseMustHaveAtLeast2Items);
+          expect(error.toString()).to.match(selectValueClauseMustHaveAtLeast1Item);
         }, done));
     });
   });
@@ -140,7 +151,8 @@ describe('General structure errors in query', () => {
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.contain(expectedError18);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(languageClauseMustBeString);
         }, done));
     });
   });
@@ -154,7 +166,23 @@ describe('General structure errors in query', () => {
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.contain(expectedError19);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(joinClauseMustBeObject);
+        }, done));
+    });
+
+    it('when it has not allowed operator in `join.$.where` clause', function(done: Function): void {
+      const reader = getDDFCsvReaderObject();
+      reader.init({ path: GLOBALIS_PATH });
+
+      reader.read({
+        where: { '$concept': { $eq: 'country' } }, select: { key: [ 'concept' ] }, from: 'concepts'
+      })
+        .then(() => done(notExpectedError))
+        .catch(checkExpectations((error) => {
+          // console.log(error.stack);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(whereClauseHasUnknownOperator);
         }, done));
     });
   });
@@ -168,21 +196,64 @@ describe('General structure errors in query', () => {
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.contain(expectedError20);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(whereClauseMustBeObject);
         }, done));
     });
 
-    it('when it has not allowed operator', function(done: Function): void {
+    it('when it has not allowed operator (even if it is present in \'join\' clause)', function(done: Function): void {
       const reader = getDDFCsvReaderObject();
       reader.init({ path: GLOBALIS_PATH });
 
       reader.read({
-        where: { '$concept': { '$exists': true } }, select: { key: [ 'concept' ] }, from: 'concepts'
+        where: { $concept: { $eq: 'country' } },
+        select: { key: [ 'concept' ] },
+        from: 'concepts',
+        join: { $concept: {} }
       })
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.contain(expectedError22);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(whereClauseHasUnknownOperator);
+        }, done));
+    });
+
+    it(`when it has not allowed operator (which is absent in 'join' clause)`, function(done: Function): void {
+      const reader = getDDFCsvReaderObject();
+      reader.init({ path: GLOBALIS_PATH });
+
+      reader.read({
+        select: {
+          key: [ 'geo', 'time' ],
+          value: [
+            'life_expectancy_years', 'population_total'
+          ]
+        },
+        from: 'datapoints',
+        where: {
+          $and: [
+            { time: '$time' },
+            {
+              $or: [
+                { population_total: { $gt: 10000 }, geo: '$geo' },
+                { life_expectancy_years: { $gt: 30, $lt: 70 } }
+              ]
+            }
+          ]
+        },
+        join: {
+          $time: {
+            key: 'time',
+            where: { $and: [ { time: { $gt: '1990', $lte: '2015' } } ] }
+          }
+        },
+      })
+        .then(() => done(notExpectedError))
+        .catch(checkExpectations((error) => {
+          // console.log(error.stack);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(whereClauseHasUnknownOperator1);
         }, done));
     });
   });
@@ -196,7 +267,8 @@ describe('General structure errors in query', () => {
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
-          expect(error.toString()).to.contain(expectedError21);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(orderByClauseMustHaveCertainStructure);
         }, done));
     });
   });
