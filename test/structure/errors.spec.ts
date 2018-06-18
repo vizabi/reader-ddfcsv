@@ -3,24 +3,25 @@ import * as sinon from 'sinon';
 import { getDDFCsvReaderObject } from '../../src/index';
 import {
   checkExpectations,
+  EXPECTS_EXACTLY_FOUR_ERRORS,
+  EXPECTS_EXACTLY_ONE_ERROR,
+  EXPECTS_EXACTLY_THREE_ERRORS,
+  EXPECTS_EXACTLY_TWO_ERRORS,
   fromClauseCouldnotBeEmpty,
-  languageClauseMustBeString,
-  joinClauseMustBeObject,
   fromClauseMustBeString,
-  whereClauseMustBeObject,
+  fromClauseValueMustBeAllowed,
+  getAmountOfErrors,
+  joinClauseMustBeObject,
+  languageClauseMustBeString,
+  notExpectedError,
   orderByClauseMustHaveCertainStructure,
-  whereClauseHasUnknownOperator,
   selectClauseCouldnotBeEmpty,
   selectClauseMustHaveStructure,
-  fromClauseValueMustBeAllowed,
-  notExpectedError,
-  EXPECTS_EXACTLY_THREE_ERRORS,
-  getAmountOfErrors,
-  EXPECTS_EXACTLY_FOUR_ERRORS,
-  EXPECTS_EXACTLY_TWO_ERRORS,
-  EXPECTS_EXACTLY_ONE_ERROR,
   selectKeyClauseMustHaveAtLeast2Items,
-  selectValueClauseMustHaveAtLeast1Item, whereClauseHasUnknownOperator1
+  selectValueClauseMustHaveAtLeast1Item,
+  whereClauseHasUnknownOperator,
+  whereClauseHasUnknownOperator1,
+  whereClauseMustBeObject
 } from '../common';
 
 const expect = chai.expect;
@@ -176,7 +177,7 @@ describe('General structure errors in query', () => {
       reader.init({ path: GLOBALIS_PATH });
 
       reader.read({
-        where: { '$concept': { $eq: 'country' } }, select: { key: [ 'concept' ] }, from: 'concepts'
+        where: { $concept: { $eq: 'country' } }, select: { key: [ 'concept' ] }, from: 'concepts'
       })
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {

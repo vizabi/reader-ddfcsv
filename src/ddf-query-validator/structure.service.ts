@@ -22,7 +22,6 @@ import {
   isConceptsQuery,
   isDatapointsQuery,
   isEntitiesQuery,
-  isInvalidQueryOperator,
   isSchemaQuery
 } from './helper.service';
 import { isPrimitive } from 'util';
@@ -32,7 +31,7 @@ export function validateQueryStructure (query, options = {}): Promise<string | v
     const validationResult = [
       ...validateFromStructure(query, options),
       ...validateSelectStructure(query, options),
-      // ...validateWhereStructure(query, options),
+      ...validateWhereStructure(query, options),
       ...validateLanguageStructure(query, options),
       ...validateJoinStructure(query, options),
       ...validateOrderByStructure(query, options)
@@ -72,26 +71,15 @@ function validateSelectStructure (query, options): string[] {
   const errorMessages = [];
   const selectClause = get(query, 'select', null);
   const fromClause = get(query, 'from', null);
-  const languageClause = get(query, 'language', null);
-  const joinClause = get(query, 'join', null);
-  const whereClause = get(query, 'where', null);
-  const orderByClause = get(query, 'order_by', null);
   const key = get(selectClause, 'key');
   const value = get(selectClause, 'value');
-  const whereOperators = getWhereOperators(whereClause);
 
   switch (true) {
     case (isSchemaQuery(query)):
       errorMessages.push(
         checkIfSelectIsEmpty(selectClause),
-        // checkIfSelectHasInvalidStructure(selectClause, key, value),
         checkIfSchemasSelectKeyHasInvalidStructure(fromClause, key),
         checkIfSelectValueHasInvalidStructure(fromClause, value),
-        checkIfSchemaLanguageIsPresent(query),
-        checkIfSchemaJoinIsPresent(query),
-        checkIfWhereHasInvalidStructure(whereClause),
-        checkIfWhereHasUnknownOperators(joinClause, whereOperators),
-        checkIfOrderByHasInvalidStructure(orderByClause),
       );
       break;
     case (isEntitiesQuery(query)):
@@ -100,11 +88,6 @@ function validateSelectStructure (query, options): string[] {
         checkIfEntitiesOrConceptsSelectHasInvalidStructure(selectClause, key, value),
         checkIfSelectKeyHasInvalidStructure(fromClause, key),
         checkIfSelectValueHasInvalidStructure(fromClause, value),
-        checkIfLanguageHasInvalidStructure(languageClause),
-        checkIfJoinHasInvalidStructure(joinClause),
-        checkIfWhereHasInvalidStructure(whereClause),
-        checkIfWhereHasUnknownOperators(joinClause, whereOperators),
-        checkIfOrderByHasInvalidStructure(orderByClause),
       );
       break;
     case (isConceptsQuery(query)):
@@ -113,11 +96,6 @@ function validateSelectStructure (query, options): string[] {
         checkIfEntitiesOrConceptsSelectHasInvalidStructure(selectClause, key, value),
         checkIfSelectKeyHasInvalidStructure(fromClause, key),
         checkIfSelectValueHasInvalidStructure(fromClause, value),
-        checkIfLanguageHasInvalidStructure(languageClause),
-        checkIfJoinHasInvalidStructure(joinClause),
-        checkIfWhereHasInvalidStructure(whereClause),
-        checkIfWhereHasUnknownOperators(joinClause, whereOperators),
-        checkIfOrderByHasInvalidStructure(orderByClause),
       );
       break;
     case (isDatapointsQuery(query)):
@@ -126,11 +104,6 @@ function validateSelectStructure (query, options): string[] {
         checkIfSelectHasInvalidStructure(selectClause, key, value),
         checkIfDatapointsSelectKeyHasInvalidStructure(fromClause, key),
         checkIfDatapointsSelectValueHasInvalidStructure(fromClause, value),
-        checkIfLanguageHasInvalidStructure(languageClause),
-        checkIfJoinHasInvalidStructure(joinClause),
-        checkIfWhereHasInvalidStructure(whereClause),
-        checkIfWhereHasUnknownOperators(joinClause, whereOperators),
-        checkIfOrderByHasInvalidStructure(orderByClause),
       );
       break;
     default:
@@ -145,28 +118,73 @@ function validateSelectStructure (query, options): string[] {
 
 function validateWhereStructure (query, options): string[] {
   const errorMessages = [];
-  const clausesUnderValidating = [];
-  const operatorsUnderValidating = Object.keys(query);
+  const joinClause = get(query, 'join', null);
+  const whereClause = get(query, 'where', null);
+  const whereOperators = getWhereOperators(whereClause);
 
-  for (const key of operatorsUnderValidating) {
-    if (isInvalidQueryOperator(key.toString())) {
-      errorMessages.push('Invalid DDFQL-query. Validation by Operators, not acceptable: ' + key);
-    }
-  }
+  errorMessages.push(
+    checkIfWhereHasInvalidStructure(whereClause),
+    checkIfWhereHasUnknownOperators(joinClause, whereOperators),
+  );
 
-  return errorMessages;
+  return compact(errorMessages);
 }
 
 function validateLanguageStructure (query, options): string[] {
-  return [];
+  const errorMessages = [];
+  const languageClause = get(query, 'language', null);
+
+  switch (true) {
+    case (isSchemaQuery(query)):
+      errorMessages.push(
+        checkIfSchemaLanguageIsPresent(query),
+      );
+      break;
+    case (isEntitiesQuery(query)):
+    case (isConceptsQuery(query)):
+    case (isDatapointsQuery(query)):
+    default:
+      errorMessages.push(
+        checkIfLanguageHasInvalidStructure(languageClause),
+      );
+      break;
+  }
+
+  return compact(errorMessages);
 }
 
 function validateJoinStructure (query, options): string[] {
-  return [];
+  const errorMessages = [];
+  const joinClause = get(query, 'join', null);
+
+  switch (true) {
+    case (isSchemaQuery(query)):
+      errorMessages.push(
+        checkIfSchemaJoinIsPresent(query),
+      );
+      break;
+    case (isEntitiesQuery(query)):
+    case (isConceptsQuery(query)):
+    case (isDatapointsQuery(query)):
+    default:
+      errorMessages.push(
+        checkIfJoinHasInvalidStructure(joinClause),
+      );
+      break;
+  }
+
+  return compact(errorMessages);
 }
 
 function validateOrderByStructure (query, options): string[] {
-  return [];
+  const errorMessages = [];
+  const orderByClause = get(query, 'order_by', null);
+
+  errorMessages.push(
+    checkIfOrderByHasInvalidStructure(orderByClause),
+  );
+
+  return compact(errorMessages);
 }
 
 // Common structure errors

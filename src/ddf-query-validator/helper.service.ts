@@ -44,10 +44,6 @@ export function isConceptsQuery (query) {
 
 // UTILS
 
-export function isInvalidQueryOperator (operator: string): boolean {
-  return startsWith(operator, '$') && !AVAILABLE_QUERY_OPERATORS.has(operator);
-}
-
 export function isEntityDomainOrSet (conceptType: string): boolean {
   return includes([ 'entity_domain', 'entity_set', 'time' ], conceptType);
 }
