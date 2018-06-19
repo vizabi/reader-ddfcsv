@@ -257,6 +257,23 @@ describe('General structure errors in query', () => {
           expect(error.toString()).to.match(whereClauseHasUnknownOperator1);
         }, done));
     });
+
+    it(`when it has not allowed operator (and 'join' clause is absent)`, function(done: Function): void {
+      const reader = getDDFCsvReaderObject();
+      reader.init({ path: GLOBALIS_PATH });
+
+      reader.read({
+        select: { key: [ 'geo', 'time' ], value: ['population_total'] },
+        from: 'datapoints',
+        where: { $geo: { $eq: 'usa' } }
+      })
+        .then(() => done(notExpectedError))
+        .catch(checkExpectations((error) => {
+          // console.log(error.stack);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(whereClauseHasUnknownOperator1);
+        }, done));
+    });
   });
 
   describe('should be produced only for \'order_by\' section', () => {

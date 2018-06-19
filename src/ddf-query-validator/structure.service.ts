@@ -218,7 +218,7 @@ function checkIfWhereHasInvalidStructure(whereClause): string | void {
   }
 }
 
-function checkIfWhereHasUnknownOperators(joinClause = {}, operators): string | void {
+function checkIfWhereHasUnknownOperators(joinClause, operators): string | void {
   const notAllowedOperators = filter(operators, (operator) => !isAllowedOperator(joinClause, operator)).map((operator) => operator.name);
   const allowedOperatorsByDataset = [...AVAILABLE_QUERY_OPERATORS.values(), ...keys(joinClause)];
 
