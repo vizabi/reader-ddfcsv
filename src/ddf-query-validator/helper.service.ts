@@ -20,6 +20,10 @@ export const AVAILABLE_ORDER_BY_CLAUSE_VALUES = new Set([
   'asc', 'desc', 1, -1
 ]);
 
+export const DEFAULT_DATASET_NAME = process.env.DEFAULT_DATASET_NAME || 'systema_globalis';
+export const DEFAULT_DATASET_COMMIT = process.env.DEFAULT_DATASET_COMMIT || 'HEAD';
+export const DEFAULT_DATASET_BRANCH = process.env.DEFAULT_DATASET_BRANCH || 'master';
+
 export const MAX_AMOUNT_OF_MEASURES_IN_SELECT = 5;
 
 export function isSchemaQuery (query) {

@@ -6,7 +6,6 @@ import size = require('lodash/size');
 import values = require('lodash/values');
 import keys = require('lodash/keys');
 import first = require('lodash/first');
-import map = require('lodash/map');
 import filter = require('lodash/filter');
 import startsWith = require('lodash/startsWith');
 import get = require('lodash/get');
@@ -14,21 +13,22 @@ import has = require('lodash/has');
 import every = require('lodash/every');
 import compact = require('lodash/compact');
 import isString = require('lodash/isString');
-
 import {
+  DEFAULT_DATASET_NAME,
   AVAILABLE_FROM_CLAUSE_VALUES,
   AVAILABLE_ORDER_BY_CLAUSE_VALUES,
   AVAILABLE_QUERY_OPERATORS,
   isConceptsQuery,
   isDatapointsQuery,
   isEntitiesQuery,
-  isSchemaQuery
+  isSchemaQuery, DEFAULT_DATASET_BRANCH, DEFAULT_DATASET_COMMIT
 } from './helper.service';
 import { isPrimitive } from 'util';
 
 export function validateQueryStructure (query, options = {}): Promise<string | void> {
   return new Promise((resolve, reject) => {
     const validationResult = [
+      ...validateDatasetStructure(query, options),
       ...validateFromStructure(query, options),
       ...validateSelectStructure(query, options),
       ...validateWhereStructure(query, options),
@@ -45,6 +45,27 @@ export function validateQueryStructure (query, options = {}): Promise<string | v
 
     return resolve();
   });
+}
+
+function validateDatasetStructure(query, options): string[] {
+  const errorMessages = [];
+  const datasetClause = get(query, 'dataset');
+  const branchClause = get(query, 'branch');
+  const commitClause = get(query, 'commit');
+
+  if (!isNil(datasetClause) && !isString(datasetClause)) {
+    errorMessages.push(`'dataset' clause must be string only`);
+  }
+
+  if (!isNil(branchClause) && !isString(branchClause)) {
+    errorMessages.push(`'branch' clause must be string only`);
+  }
+
+  if (!isNil(commitClause) && !isString(commitClause)) {
+    errorMessages.push(`'commit' clause must be string only`);
+  }
+
+  return errorMessages;
 }
 
 function validateFromStructure (query: any, options): string[] {
@@ -200,27 +221,27 @@ function checkIfSelectHasInvalidStructure (selectClause, key, value): string | v
   }
 }
 
-function checkIfJoinHasInvalidStructure(joinClause): string | void {
+function checkIfJoinHasInvalidStructure (joinClause): string | void {
   if (!isNil(joinClause) && !isStrictObject(joinClause)) {
     return `'join' clause must be object only`;
   }
 }
 
-function checkIfLanguageHasInvalidStructure(languageClause): string | void {
+function checkIfLanguageHasInvalidStructure (languageClause): string | void {
   if (!isNil(languageClause) && !isString(languageClause)) {
     return `'language' clause must be string only`;
   }
 }
 
-function checkIfWhereHasInvalidStructure(whereClause): string | void {
+function checkIfWhereHasInvalidStructure (whereClause): string | void {
   if (!isNil(whereClause) && !isStrictObject(whereClause)) {
     return `'where' clause must be object only`;
   }
 }
 
-function checkIfWhereHasUnknownOperators(joinClause, operators): string | void {
+function checkIfWhereHasUnknownOperators (joinClause, operators): string | void {
   const notAllowedOperators = filter(operators, (operator) => !isAllowedOperator(joinClause, operator)).map((operator) => operator.name);
-  const allowedOperatorsByDataset = [...AVAILABLE_QUERY_OPERATORS.values(), ...keys(joinClause)];
+  const allowedOperatorsByDataset = [ ...AVAILABLE_QUERY_OPERATORS.values(), ...keys(joinClause) ];
 
   if (!isEmpty(notAllowedOperators)) {
     return `'where' clause has unknown operator(s) '${notAllowedOperators.join(', ')}', replace it with allowed operators: ${allowedOperatorsByDataset.join(', ')}`;
@@ -228,56 +249,56 @@ function checkIfWhereHasUnknownOperators(joinClause, operators): string | void {
 
 }
 
-function checkIfOrderByHasInvalidStructure(orderByClause): string | void {
+function checkIfOrderByHasInvalidStructure (orderByClause): string | void {
   if (!isNil(orderByClause) && !isString(orderByClause) && !isArrayOfStrings(orderByClause) && !isArrayOfSpecialItems(orderByClause, isOrderBySubclause)) {
     return `'order_by' clause must be string or array of strings || objects only`;
   }
 }
 
-function isStrictObject(clause): boolean {
+function isStrictObject (clause): boolean {
   return isObject(clause) && !isArray(clause);
 }
 
-function isArrayOfStrings(clause): boolean {
+function isArrayOfStrings (clause): boolean {
   return isArray(clause) && every(clause, isString);
 }
 
-function isOrderBySubclause(subclause) {
+function isOrderBySubclause (subclause) {
   return isString(subclause) || (isStrictObject(subclause) && size(subclause) === 1 && AVAILABLE_ORDER_BY_CLAUSE_VALUES.has(first(values(subclause))));
 }
 
-function isArrayOfSpecialItems(clause, isSpecialItem): boolean {
+function isArrayOfSpecialItems (clause, isSpecialItem): boolean {
   return isArray(clause) && every(clause, isSpecialItem);
 }
 
-function isAllowedOperator(joinClause, operator) {
+function isAllowedOperator (joinClause, operator) {
   return isMongoLikeOperator(operator) || isJoinOperator(joinClause, operator);
 }
 
-function isMongoLikeOperator(operator) {
+function isMongoLikeOperator (operator) {
   return !operator.isLeaf && AVAILABLE_QUERY_OPERATORS.has(operator.name);
 }
 
-function isJoinOperator(joinClause, operator) {
+function isJoinOperator (joinClause, operator) {
   return operator.isLeaf && startsWith(operator.name, '$') && has(joinClause, operator.name);
 }
 
-function getWhereOperators(whereClause): string[] {
+function getWhereOperators (whereClause): string[] {
   const operators = [];
 
   for (const field in whereClause) {
     // no support for deeper object structures (mongo style)
 
     if (startsWith(field, '$')) {
-      operators.push({name: field, isLeaf: false});
+      operators.push({ name: field, isLeaf: false });
     }
 
-    if (isPrimitive(whereClause[field])) {
-      if (startsWith(whereClause[field], '$')) {
-        operators.push({name: whereClause[field], isLeaf: true});
+    if (isPrimitive(whereClause[ field ])) {
+      if (startsWith(whereClause[ field ], '$')) {
+        operators.push({ name: whereClause[ field ], isLeaf: true });
       }
     } else {
-      operators.push(...getWhereOperators(whereClause[field]));
+      operators.push(...getWhereOperators(whereClause[ field ]));
     }
   }
 
@@ -310,13 +331,13 @@ function checkIfSelectValueHasInvalidStructure (fromClause, value): string | voi
   }
 }
 
-function checkIfSchemaJoinIsPresent(query): string | void {
+function checkIfSchemaJoinIsPresent (query): string | void {
   if (has(query, 'join')) {
     return `'join' clause for '*.schema' queries shouldn't be present in query`;
   }
 }
 
-function checkIfSchemaLanguageIsPresent(query): string | void {
+function checkIfSchemaLanguageIsPresent (query): string | void {
   if (has(query, 'language')) {
     return `'language' clause for '*.schema' queries shouldn't be present in query`;
   }

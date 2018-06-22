@@ -1,12 +1,15 @@
 import * as chai from 'chai';
 import { getDDFCsvReaderObject } from '../../src/index';
 import {
+  BASE_PATH,
   BIG_PATH,
-  checkExpectations, EXPECTS_EXACTLY_ONE_ERROR, EXPECTS_EXACTLY_TWO_ERRORS, getAmountOfErrors,
+  checkExpectations,
+  EXPECTS_EXACTLY_ONE_ERROR,
+  EXPECTS_EXACTLY_TWO_ERRORS,
+  getAmountOfErrors,
   GLOBALIS_PATH,
   notExpectedError,
   POP_WPP_PATH,
-  selectClauseCouldnotBeEmpty,
   selectClauseMustHaveStructure,
   selectKeyClauseMustHaveAtLeast2Items,
   selectValueClauseMustHaveAtLeast1Item,
@@ -17,10 +20,10 @@ const expect = chai.expect;
 
 describe('Datapoints structure errors in query', () => {
   describe('should never happen for happy flow', () => {
-    it(`when requests '${GLOBALIS_PATH}' dataset and exists valid condition in 'join' section`, done => {
+    it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and exists valid condition in 'join' section`, done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
         select: {
@@ -70,10 +73,10 @@ describe('Datapoints structure errors in query', () => {
         .catch(done);
     });
 
-    it(`when requests '${GLOBALIS_PATH}' dataset and ordering by complex fields`, done => {
+    it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and ordering by complex fields`, done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
         select: {
@@ -93,13 +96,14 @@ describe('Datapoints structure errors in query', () => {
         .catch(done);
     });
 
-    it(`when requests '${BIG_PATH}' dataset`, done => {
+    xit(`when requests '${BASE_PATH + BIG_PATH}' dataset`, done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BIG_PATH });
+      reader.init({ path: BASE_PATH });
       reader.read({
         language: 'en',
         from: 'datapoints',
+        dataset: BIG_PATH,
         animatable: 'year',
         select: {
           key: [
@@ -198,13 +202,14 @@ describe('Datapoints structure errors in query', () => {
         .catch(done);
     });
 
-    it(`when requests '${POP_WPP_PATH}' dataset`, done => {
+    it(`when requests '${BASE_PATH + POP_WPP_PATH}' dataset`, done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: POP_WPP_PATH });
+      reader.init({ path: BASE_PATH });
       reader.read({
         language: 'en',
         from: 'datapoints',
+        dataset: POP_WPP_PATH,
         animatable: 'year',
         select: {
           key: [
@@ -253,13 +258,14 @@ describe('Datapoints structure errors in query', () => {
         .catch(done);
     });
 
-    it(`when requests '${STATIC_ASSETS}' dataset`, (done: Function) => {
+    it(`when requests '${BASE_PATH + STATIC_ASSETS}' dataset`, (done: Function) => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: STATIC_ASSETS });
+      reader.init({ path: BASE_PATH });
       reader.read({
         language: 'en',
         from: 'datapoints',
+        dataset: STATIC_ASSETS,
         animatable: 'time',
         select: {
           key: [ 'geo', 'time' ],
@@ -283,10 +289,10 @@ describe('Datapoints structure errors in query', () => {
         .catch(done);
     });
 
-    it(`when requests '${GLOBALIS_PATH}' dataset and 'ar-SA' language`, (done: Function) => {
+    it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and 'ar-SA' language`, (done: Function) => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
           language: 'ar-SA',
@@ -334,10 +340,10 @@ describe('Datapoints structure errors in query', () => {
         .catch(done);
     });
 
-    it(`when requests '${GLOBALIS_PATH}' dataset and 'ru-RU' language`, (done: Function) => {
+    it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and 'ru-RU' language`, (done: Function) => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
           language: 'ru-RU',
@@ -389,7 +395,7 @@ describe('Datapoints structure errors in query', () => {
   describe('should be produced only for \'select.key\' section', () => {
     it('when it is not array', function(done: Function): void {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({ from: 'datapoints', select: { key: 'fail', value: [ 'population_total' ] } })
         .then(() => done(notExpectedError))
@@ -402,7 +408,7 @@ describe('Datapoints structure errors in query', () => {
 
     it('when it has 0 item', function(done: Function): void {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({ from: 'datapoints', select: { key: [], value: [ 'population_total' ] } })
         .then(() => done(notExpectedError))
@@ -415,7 +421,7 @@ describe('Datapoints structure errors in query', () => {
 
     it('when it has 1 item', function(done: Function): void {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({ from: 'datapoints', select: { key: [ 'geo' ], value: [ 'population_total' ] } })
         .then(() => done(notExpectedError))
@@ -430,7 +436,7 @@ describe('Datapoints structure errors in query', () => {
   describe('should be produced only for \'select.value\' section', () => {
     it('when it is absent', function(done: Function): void {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({ from: 'datapoints', select: { key: [ 'geo', 'time' ] } })
         .then(() => done(notExpectedError))
@@ -444,7 +450,7 @@ describe('Datapoints structure errors in query', () => {
 
     it('when it is not array', function(done: Function): void {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({ from: 'datapoints', select: { key: [ 'geo', 'time' ], value: 'fail' } })
         .then(() => done(notExpectedError))
@@ -457,7 +463,7 @@ describe('Datapoints structure errors in query', () => {
 
     it('when it is empty', function(done: Function): void {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({ from: 'datapoints', select: { key: [ 'geo', 'time' ], value: [] } })
         .then(() => done(notExpectedError))

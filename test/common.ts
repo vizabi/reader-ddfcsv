@@ -1,7 +1,10 @@
-export const GLOBALIS_PATH = './test/fixtures/systema_globalis';
-export const BIG_PATH = './test/fixtures/ddf--gapminder--population.big';
-export const POP_WPP_PATH = './test/fixtures/population_wpp';
-export const STATIC_ASSETS = './test/fixtures/static-assets';
+export const BASE_PATH = './test/fixtures/';
+export const GLOBALIS_PATH = 'systema_globalis';
+export const BIG_PATH = 'ddf--gapminder--population.big';
+export const POP_WPP_PATH = 'population_wpp';
+export const STATIC_ASSETS = 'static-assets';
+export const EMPTY_TRANSLATIONS_PATH = 'empty-translations';
+export const BROKEN_DATAPACKAGE_PATH = 'ds_broken_datapackage';
 
 export const fromClauseCouldnotBeEmpty = new RegExp(`'from' clause couldn't be empty`);
 export const fromClauseMustBeString = new RegExp(`'from' clause must be string only`);
@@ -10,9 +13,9 @@ export const fromClauseValueMustBeAllowed = new RegExp(`'from' clause must be on
 export const selectClauseCouldnotBeEmpty = new RegExp(`'select' clause couldn't be empty`);
 export const selectClauseMustHaveStructure = new RegExp(`'select' clause must have next structure: { key: \\[...\\], value: \\[...\\] }`);
 export const selectKeyClauseMustHaveAtLeast2Items = new RegExp(`'select.key' clause for '\\w*' queries must have at least 2 items`);
-export const selectKeyClauseContainsUnavailableItems = new RegExp(`'select.key' clause for '\\w*' queries contains unavailable item\\(s\\): failed_concept \\[repo: ${GLOBALIS_PATH}/\\]`);
+export const selectKeyClauseContainsUnavailableItems = new RegExp(`'select.key' clause for '\\w*' queries contains unavailable item\\(s\\): failed_concept \\[repo: ${GLOBALIS_PATH}\\]`);
 export const selectValueClauseMustHaveAtLeast1Item = new RegExp(`'select.value' clause for '\\w*' queries must have at least 1 item`);
-export const selectValueClauseContainsUnavailableItems = new RegExp(`'select.value' clause for '\\w*' queries contains unavailable item\\(s\\): failed_measure \\[repo: ${GLOBALIS_PATH}/\\]`);
+export const selectValueClauseContainsUnavailableItems = new RegExp(`'select.value' clause for '\\w*' queries contains unavailable item\\(s\\): failed_measure \\[repo: ${GLOBALIS_PATH}\\]`);
 export const selectKeyClauseMustHaveOnly1Item = new RegExp(`'select.key' clause for '\\w*' queries must have only 1 item`);
 export const selectKeyClauseMustHaveOnly2ItemsInSchemaQueries = new RegExp(`'select.key' clause for '[\\w\\*]*.schema' queries must have exactly 2 items: 'key', 'value'`);
 export const selectValueClauseMustHaveCertainStructure = new RegExp(`'select.value' clause for '\\w*' queries should be array of strings or empty`);

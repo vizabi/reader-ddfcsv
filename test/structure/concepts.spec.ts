@@ -1,25 +1,27 @@
 import * as chai from 'chai';
 import { getDDFCsvReaderObject } from '../../src/index';
 import {
+  BASE_PATH,
   checkExpectations,
-  selectKeyClauseMustHaveOnly1Item,
-  selectValueClauseMustHaveCertainStructure,
-  selectClauseCouldnotBeEmpty,
-  selectClauseMustHaveStructure,
+  EMPTY_TRANSLATIONS_PATH,
+  EXPECTS_EXACTLY_ONE_ERROR,
+  EXPECTS_EXACTLY_TWO_ERRORS,
+  getAmountOfErrors,
   GLOBALIS_PATH,
-  notExpectedError, getAmountOfErrors, EXPECTS_EXACTLY_ONE_ERROR, EXPECTS_EXACTLY_TWO_ERRORS
+  notExpectedError,
+  selectClauseMustHaveStructure,
+  selectKeyClauseMustHaveOnly1Item,
+  selectValueClauseMustHaveCertainStructure
 } from '../common';
 
 const expect = chai.expect;
 
-const EMPTY_TRANSLATIONS_PATH = './test/fixtures/empty-translations';
-
 describe('Concepts structure errors in query', () => {
   describe('should never happen for happy flow', () => {
-    it(`when requests '${GLOBALIS_PATH}' dataset and 'ar-SA' language`, done => {
+    it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and 'ar-SA' language`, done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
         language: 'ar-SA',
@@ -43,10 +45,10 @@ describe('Concepts structure errors in query', () => {
       });
     });
 
-    it(`when requests \'${EMPTY_TRANSLATIONS_PATH}\' dataset without \'en\' language in datapackage.json`, done => {
+    it(`when requests \'${BASE_PATH + EMPTY_TRANSLATIONS_PATH}\' dataset without \'en\' language in datapackage.json`, done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: EMPTY_TRANSLATIONS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
         from: 'concepts',
@@ -55,7 +57,8 @@ describe('Concepts structure errors in query', () => {
           key: [ 'concept' ],
           value: [ 'concept_type', 'name' ]
         },
-        where: {}
+        where: {},
+        dataset: EMPTY_TRANSLATIONS_PATH
       }).then(data => {
         expect(data.length).to.equal(595);
 
@@ -63,10 +66,10 @@ describe('Concepts structure errors in query', () => {
       }).catch(error => done(error));
     });
 
-    it(`when requests only one column '${GLOBALIS_PATH}' dataset with no \'select.value\'`, done => {
+    it(`when requests only one column '${BASE_PATH + GLOBALIS_PATH}' dataset with no \'select.value\'`, done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
         select: {
@@ -86,10 +89,10 @@ describe('Concepts structure errors in query', () => {
       });
     });
 
-    it(`when requests only one column '${GLOBALIS_PATH}' dataset with empty \'select.value\'`, done => {
+    it(`when requests only one column '${BASE_PATH + GLOBALIS_PATH}' dataset with empty \'select.value\'`, done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
         select: {
@@ -115,7 +118,7 @@ describe('Concepts structure errors in query', () => {
     it('when it is not array', done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
         select: {
@@ -136,7 +139,7 @@ describe('Concepts structure errors in query', () => {
     it('when it has 0 item', done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
         select: {
@@ -156,7 +159,7 @@ describe('Concepts structure errors in query', () => {
     it('when it has 2 items', done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
         select: {
@@ -178,7 +181,7 @@ describe('Concepts structure errors in query', () => {
     it('when it is not array or empty', done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
         select: {

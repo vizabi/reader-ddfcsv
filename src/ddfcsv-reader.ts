@@ -11,7 +11,7 @@ export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
         this.fileReader = externalFileReader || defaultFileReader;
         this.logger = logger;
         this.resultTransformer = readerInfo.resultTransformer;
-        this.reader = ddfCsvReader(`${this._basepath}/datapackage.json`, this.fileReader, this.logger);
+        this.reader = ddfCsvReader(this._basepath, this.fileReader, this.logger);
       },
 
       getAsset(asset) {

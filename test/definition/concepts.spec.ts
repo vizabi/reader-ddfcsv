@@ -1,16 +1,15 @@
 import * as chai from 'chai';
 import { getDDFCsvReaderObject } from '../../src/index';
+import { BASE_PATH } from '../common';
 
 const expect = chai.expect;
-
-const GLOBALIS_PATH = './test/fixtures/systema_globalis';
 
 describe('Concepts definition errors in query', () => {
   describe('should be produced only for \'select\' section', () => {
     it('when \'key\' property has item that is absent in dataset', done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
         select: {

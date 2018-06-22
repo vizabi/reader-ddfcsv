@@ -1,30 +1,26 @@
 import * as chai from 'chai';
 import { getDDFCsvReaderObject } from '../../src/index';
 import {
+  BASE_PATH,
   checkExpectations,
-  selectKeyClauseMustHaveOnly1Item,
-  selectValueClauseMustHaveCertainStructure,
-  selectClauseCouldnotBeEmpty,
-  selectClauseMustHaveStructure,
-  selectKeyClauseMustHaveAtLeast2Items,
-  notExpectedError,
-  getAmountOfErrors,
-  EXPECTS_EXACTLY_FOUR_ERRORS,
   EXPECTS_EXACTLY_ONE_ERROR,
-  EXPECTS_EXACTLY_TWO_ERRORS
+  EXPECTS_EXACTLY_TWO_ERRORS,
+  getAmountOfErrors,
+  GLOBALIS_PATH,
+  notExpectedError,
+  selectClauseMustHaveStructure,
+  selectKeyClauseMustHaveOnly1Item,
+  selectValueClauseMustHaveCertainStructure
 } from '../common';
 
 const expect = chai.expect;
 
-const GLOBALIS_PATH = './test/fixtures/systema_globalis';
-const EMPTY_TRANSLATIONS_PATH = './test/fixtures/empty-translations';
-
 describe('Entities structure errors in query', () => {
   describe('should never happen for happy flow', () => {
-    it(`when requests '${GLOBALIS_PATH}' dataset and 'ar-SA' language`, done => {
+    it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and 'ar-SA' language`, done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
         language: 'ar-SA',
@@ -46,10 +42,10 @@ describe('Entities structure errors in query', () => {
       }).catch(done);
     });
 
-    it(`when requests '${GLOBALIS_PATH}' dataset without 'en' language in datapackage.json`, done => {
+    it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset without 'en' language in datapackage.json`, done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
         from: 'entities',
@@ -66,10 +62,10 @@ describe('Entities structure errors in query', () => {
       }).catch(done);
     });
 
-    it(`when requests only one column '${GLOBALIS_PATH}' dataset`, done => {
+    it(`when requests only one column '${BASE_PATH + GLOBALIS_PATH}' dataset`, done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
         language: 'ar-SA',
@@ -94,7 +90,7 @@ describe('Entities structure errors in query', () => {
     it('when it is not array', done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
         select: {
@@ -115,7 +111,7 @@ describe('Entities structure errors in query', () => {
     it('when it has 0 item', done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
         select: {
@@ -135,7 +131,7 @@ describe('Entities structure errors in query', () => {
     it('when it has 2 items', done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
         select: {
@@ -157,7 +153,7 @@ describe('Entities structure errors in query', () => {
     it('when it is not array or empty', done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: GLOBALIS_PATH });
+      reader.init({ path: BASE_PATH });
 
       reader.read({
         language: 'ar-SA',

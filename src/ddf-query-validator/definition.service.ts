@@ -51,8 +51,8 @@ function validateSelectDefinitions (query, options): string[] {
       break;
     case (isDatapointsQuery(query)):
       errorMessages.push(
-        checkIfSelectKeyHasInvalidDefinitions(fromClause, key, options),
-        checkIfSelectValueHasInvalidDefinitions(fromClause, value, options)
+        checkIfSelectKeyHasInvalidDefinitions(query, key, options),
+        checkIfSelectValueHasInvalidDefinitions(query, value, options)
       );
       break;
     default:
@@ -63,17 +63,19 @@ function validateSelectDefinitions (query, options): string[] {
 }
 
 // Common select definitions error
-function checkIfSelectKeyHasInvalidDefinitions (fromClause, key, options): string | void {
+function checkIfSelectKeyHasInvalidDefinitions (query, key, options): string | void {
+  const fromClause = get(query, 'from', null);
   const unavailableKeys: string[] = getUnavailableSelectKeys(key, options);
   if (!isEmpty(unavailableKeys)) {
-    return `'select.key' clause for '${fromClause}' queries contains unavailable item(s): ${unavailableKeys.join(', ')} [repo: ${options.basePath}]`;
+    return `'select.key' clause for '${fromClause}' queries contains unavailable item(s): ${unavailableKeys.join(', ')} [repo: ${query.dataset}]`;
   }
 }
 
-function checkIfSelectValueHasInvalidDefinitions (fromClause, value, options): string | void {
+function checkIfSelectValueHasInvalidDefinitions (query, value, options): string | void {
+  const fromClause = get(query, 'from', null);
   const unavailableValues: string[] = getUnavailableSelectValues(value, options);
   if (!isEmpty(unavailableValues)) {
-    return `'select.value' clause for '${fromClause}' queries contains unavailable item(s): ${unavailableValues.join(', ')} [repo: ${options.basePath}]`;
+    return `'select.value' clause for '${fromClause}' queries contains unavailable item(s): ${unavailableValues.join(', ')} [repo: ${query.dataset}]`;
   }
 }
 

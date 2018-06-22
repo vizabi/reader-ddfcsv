@@ -1,12 +1,10 @@
 import * as chai from 'chai';
 import * as sinon from 'sinon';
 import { getDDFCsvReaderObject, DdfCsvError } from '../src/index';
+import { BASE_PATH, BROKEN_DATAPACKAGE_PATH, GLOBALIS_PATH } from './common';
 
 const expect = chai.expect;
 const sandbox = sinon.createSandbox();
-
-const GLOBALIS_PATH = './test/fixtures/systema_globalis';
-const BROKEN_DATAPACKAGE_PATH = './test/fixtures/ds_broken_datapackage';
 
 describe('General errors in ddfcsv reader', () => {
   afterEach(() => sandbox.restore());
@@ -15,7 +13,7 @@ describe('General errors in ddfcsv reader', () => {
     it(`when 'File not found' happens`, done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({path: GLOBALIS_PATH});
+      reader.init({path: BASE_PATH});
 
       sandbox.stub(reader.fileReader, 'readText').callsArgWithAsync(1, 'file is not found');
 
@@ -26,14 +24,15 @@ describe('General errors in ddfcsv reader', () => {
             'concept_type', 'name'
           ]
         },
+        dataset: GLOBALIS_PATH,
         from: 'concepts',
         where: {},
         order_by: ['concept']
       }).catch((error: DdfCsvError) => {
         expect(error.details).to.equal('file is not found');
-        expect(error.file).to.equal('./test/fixtures/systema_globalis/ddf--concepts.csv');
+        expect(error.file).to.equal('./test/fixtures/systema_globalis/datapackage.json');
         expect(error.name).to.equal('DdfCsvError');
-        expect(error.message).to.equal('File reading error [filepath: ./test/fixtures/systema_globalis/ddf--concepts.csv]. file is not found.');
+        expect(error.message).to.equal('File reading error [filepath: ./test/fixtures/systema_globalis/datapackage.json]. file is not found.');
 
         done();
       });
@@ -50,13 +49,14 @@ describe('General errors in ddfcsv reader', () => {
             'concept_type', 'name'
           ]
         },
+        dataset: GLOBALIS_PATH,
         from: 'concepts',
         where: {},
         order_by: ['concept']
       }).catch((error: DdfCsvError) => {
-        expect(error.file).to.equal('foo path/datapackage.json');
+        expect(error.file).to.equal('foo path/systema_globalis/datapackage.json');
         expect(error.name).to.equal('DdfCsvError');
-        expect(error.message).to.equal('File reading error [filepath: foo path/datapackage.json]. No such file: foo path/datapackage.json.');
+        expect(error.message).to.equal('File reading error [filepath: foo path/systema_globalis/datapackage.json]. No such file: foo path/systema_globalis/datapackage.json.');
 
         done();
       });
@@ -65,7 +65,7 @@ describe('General errors in ddfcsv reader', () => {
     it(`when 'JSON parsing error' happens`, done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({path: BROKEN_DATAPACKAGE_PATH});
+      reader.init({path: BASE_PATH});
       reader.read({
         select: {
           key: ['concept'],
@@ -73,6 +73,7 @@ describe('General errors in ddfcsv reader', () => {
             'concept_type', 'name'
           ]
         },
+        dataset: BROKEN_DATAPACKAGE_PATH,
         from: 'concepts',
         where: {},
         order_by: ['concept']

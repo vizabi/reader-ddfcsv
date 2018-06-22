@@ -14,3 +14,7 @@
 	path = test/fixtures/static-assets
 	url = git@github.com:buchslava/readers-test-ds-static-assets.git
 	branch = master
+[submodule "path_test"]
+	path = test/fixtures/VS-work/path_test/master
+	url = git@github.com:VS-work/ddf--ws-testing.git
+	branch = master
