@@ -14,7 +14,15 @@
 	path = test/fixtures/static-assets/master-HEAD
 	url = git@github.com:buchslava/readers-test-ds-static-assets.git
 	branch = master
-[submodule "path_test"]
-	path = test/fixtures/VS-work/path_test/master-HEAD
+[submodule "account_1--dataset_name_1--master--head"]
+	path = test/fixtures/VS-work/dataset_name_1/master-HEAD
+	url = git@github.com:VS-work/ddf--ws-testing.git
+	branch = master
+[submodule "account_1--dataset_name_1--master_twin--head"]
+	path = test/fixtures/VS-work/dataset_name_1/master-twin-HEAD
+	url = git@github.com:VS-work/ddf--ws-testing.git
+	branch = master
+[submodule "account_1--dataset_name_1--master_twin--c2db557"]
+	path = test/fixtures/VS-work/dataset_name_1/master-twin-c2db557
 	url = git@github.com:VS-work/ddf--ws-testing.git
 	branch = master

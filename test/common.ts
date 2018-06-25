@@ -6,6 +6,15 @@ export const STATIC_ASSETS = 'static-assets';
 export const EMPTY_TRANSLATIONS_PATH = 'empty-translations';
 export const BROKEN_DATAPACKAGE_PATH = 'ds_broken_datapackage';
 
+export const NOT_EXISTED_DATASET = 'default_unexisted_dataset';
+export const EXISTED_DATASET = 'VS-work/dataset_name_1';
+
+export const NOT_EXISTED_BRANCH = 'unexisted_branch';
+export const EXISTED_BRANCH = 'master';
+
+export const NOT_EXISTED_COMMIT = 'unexisted_commit';
+export const EXISTED_COMMIT = 'HEAD';
+
 export const fromClauseCouldnotBeEmpty = new RegExp(`'from' clause couldn't be empty`);
 export const fromClauseMustBeString = new RegExp(`'from' clause must be string only`);
 export const fromClauseValueMustBeAllowed = new RegExp(`'from' clause must be one of the list: `);
