@@ -1,21 +1,11 @@
 import includes = require('lodash/includes');
 import isEmpty = require('lodash/isEmpty');
-import pick = require('lodash/pick');
-import get = require('lodash/get');
 import { IReader } from './file-readers/reader';
-import { getAppropriatePlugin } from './query-optimization-plugins';
+import { getAppropriatePlugin, IDatapackage } from './query-optimization-plugins';
 import { CSV_PARSING_ERROR, DDF_ERROR, DdfCsvError, FILE_READING_ERROR, JSON_PARSING_ERROR } from './ddfcsv-error';
-import {
-  isSchemaQuery,
-  validateQueryDefinitions,
-  validateQueryStructure,
-  validateQueryAvailability,
-  extendQueryParamWithDatasetProps
-} from './ddf-query-validator';
-import * as path from 'path';
+import { isSchemaQuery, validateQueryStructure, validateQueryDefinitions } from './ddf-query-validator';
 
-const Promise = require('bluebird');
-const Papa = require('papaparse');
+import * as Papa from 'papaparse';
 
 const isValidNumeric = val => typeof val !== 'number' && !val ? false : true;
 
@@ -44,51 +34,83 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
     [ '$nin', (rowValue, filterValue) => !filterValue.has(rowValue) ],
   ]);
 
+  const options: any = {
+    basePath,
+    datapackagePath: getDatapackagePath( basePath + 'systema_globalis'),
+    datasetPath: basePath + 'systema_globalis',
+    dataset: 'systema_globalis'
+  };
+
   const keyValueLookup = new Map<string, any>();
   const resourcesLookup = new Map();
   const conceptsLookup = new Map<string, any>();
 
-  let datapackage;
   let optimalFilesSet = [];
 
-  function loadDataPackage (queryParam) {
-    const {datapackagePath} = queryParam;
+  function getDatapackagePath (pathParam): string {
+    if (!pathParam.endsWith('datapackage.json')) {
+      if (!pathParam.endsWith('/')) {
+        pathParam = pathParam + '/';
+      }
+
+      pathParam = pathParam + 'datapackage.json';
+    }
+
+    return pathParam;
+  }
+
+  function getBasePath ({datapackagePath: datapackagePathParam}) {
+    const dpPathSplit = datapackagePathParam.split('/');
+
+    dpPathSplit.pop();
+
+    return dpPathSplit.join('/') + '/';
+  }
+
+  function loadDataPackage (datapackagePath: string): Promise<IDatapackage> {
     return new Promise((resolve, reject) => {
       fileReader.readText(datapackagePath, (err, data) => {
         if (err) {
           return reject(new DdfCsvError(FILE_READING_ERROR, err, datapackagePath));
         }
 
+        let datapackage;
+
         try {
           datapackage = JSON.parse(data);
           optimalFilesSet = [];
+          buildResourcesLookup(datapackage);
+          buildKeyValueLookup(datapackage);
         } catch (parseErr) {
           return reject(new DdfCsvError(JSON_PARSING_ERROR, parseErr.message, datapackagePath));
         }
-
-        buildResourcesLookup(datapackage);
-        buildKeyValueLookup(datapackage);
 
         resolve(datapackage);
       });
     });
   }
 
-  function loadConcepts (queryParam) {
+  async function loadConcepts (tOptions): Promise<object> {
     // start off with internal concepts
     setConceptsLookup(internalConcepts);
-
     // query concepts
-    const conceptQuery = inheritKeyQueryProps(queryParam, {
+    const conceptQuery = {
       select: { key: [ 'concept' ], value: [ 'concept_type', 'domain' ] },
       from: 'concepts'
-    });
+    };
+    let result;
+
     // not using query() to circumvent the conceptPromise resolving
-    return queryData(conceptQuery)
-      .then(buildConceptsLookup)
+    try {
+      const tConcepts = await queryData(conceptQuery, tOptions);
+      const tConceptsLookup = await buildConceptsLookup(tConcepts);
       // with conceptsLookup built, we can parse other concept properties
       // according to their concept_type
-      .then(reparseConcepts);
+      result = await reparseConcepts(tConceptsLookup);
+    } catch (error) {
+      console.log(error);
+    }
+    return result;
   }
 
   function buildConceptsLookup (concepts) {
@@ -115,7 +137,7 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
    * Impure function as it parses data in-place.
    * @return {[type]}       [description]
    */
-  function reparseConcepts () {
+  function reparseConcepts (tConceptsLookup) {
     const parsingFunctions = new Map<string, Function>([
       [ 'boolean', (str) => str === 'true' || str === 'TRUE' ],
       [ 'measure', (str) => parseFloat(str) ]
@@ -131,7 +153,7 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
         const parsingConcepts = new Map<string, Function>();
 
         resourceConcepts.forEach(concept => {
-          const type = conceptsLookup.get(concept).concept_type;
+          const type = tConceptsLookup.get(concept).concept_type;
           const fn = parsingFunctions.get(type);
 
           if (fn) {
@@ -158,63 +180,79 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
     concepts.forEach(row => conceptsLookup.set(row.concept, row));
   }
 
-  function query (queryParam) {
-    const options = { basePath, conceptsLookup };
-    if (isSchemaQuery(queryParam)) {
-      return validateQueryStructure(queryParam, options)
-        .then(() => validateQueryAvailability(queryParam, options))
-        .then(() => extendQueryParamWithDatasetProps(queryParam, options))
-        .then(() => loadDataPackage(queryParam))
-        .then(() => validateQueryDefinitions(queryParam, options))
-        .then(() => querySchema(queryParam));
-    } else {
-      return validateQueryStructure(queryParam, options)
-        .then(() => validateQueryAvailability(queryParam, options))
-        .then(() => extendQueryParamWithDatasetProps(queryParam, options))
-        .then(() => loadDataPackage(queryParam))
-        .then(() => loadConcepts(queryParam))
-        .then(() => validateQueryDefinitions(queryParam, options))
-        .then(() => {
-          const appropriatePlugin = getAppropriatePlugin(fileReader, basePath, queryParam, datapackage);
+  async function query (queryParam) {
+    const {
+      select: { key = [], value = [] } = {},
+      from = '',
+      where = {},
+      join = {},
+      order_by = [],
+      language,
+      dataset = options.dataset,
+      branch = options.branch,
+      commit = options.commit,
+    } = queryParam;
+    // console.log(JSON.stringify(queryParam, null, '\t'))
+    queryParam.datasetName = dataset;
+    queryParam.dataset = dataset;
+    queryParam.branch = branch;
+    queryParam.commit = commit;
+    queryParam.datasetPath = basePath + dataset;
+    options.datapackagePath = queryParam.datapackagePath = basePath  + dataset + '/datapackage.json';
+    let data;
 
-          return new Promise((resolve: Function) => {
-            if (!appropriatePlugin) {
-              return resolve();
-            }
+    try {
+      options.dataset = dataset;
+      options.branch = branch;
+      options.commit = commit;
+      options.basePath = basePath;
+      options.fileReader = fileReader;
+      options.datasetName = queryParam.datasetName;
+      options.datasetPath = queryParam.datasetPath;
+      await validateQueryStructure(queryParam);
+      const datapackage =  await loadDataPackage(queryParam.datapackagePath);
+      options.datapackage = datapackage;
+      await loadConcepts(options);
+      options.conceptsLookup = conceptsLookup;
+      await validateQueryDefinitions(queryParam, options);
 
-            appropriatePlugin.getOptimalFilesSet().then(files => {
-              optimalFilesSet = files;
-              resolve();
-            }).catch(() => {
-              optimalFilesSet = [];
-              resolve();
-            });
-          });
-        })
-        .then(() => queryData(queryParam));
+      if (isSchemaQuery(queryParam)) {
+        data = await querySchema(queryParam, {datapackage});
+      } else {
+        const appropriatePlugin = getAppropriatePlugin(queryParam, options);
+        if (appropriatePlugin) {
+          optimalFilesSet = [];
+          const files = await appropriatePlugin.getOptimalFilesSet();
+          optimalFilesSet = files;
+        }
+        data = await queryData(queryParam, options);
+      }
+    } catch (error) {
+      throw error;
     }
+
+    return data;
   }
 
-  function queryData (queryParam) {
+  function queryData (queryParam, tOptions) {
     const {
       select: { key = [], value = [] },
       from = '',
       where = {},
       join = {},
       order_by = [],
-      language,
-      datasetPath
+      language
     } = queryParam;
     const select = { key, value };
 
     const projection = new Set(select.key.concat(select.value));
     const filterFields = getFilterFields(where).filter(field => !projection.has(field));
     // load all relevant resources
-    const resourcesPromise = loadResources(datasetPath, select.key, [ ...select.value, ...filterFields ], language);
+    const resourcesPromise = loadResources(select.key, [ ...select.value, ...filterFields ], language, tOptions);
     // list of entities selected from a join clause, later insterted in where clause
-    const joinsPromise = getJoinFilters(queryParam);
+    const joinsPromise = getJoinFilters(join, tOptions);
     // filter which ensures result only includes queried entity sets
-    const entitySetFilterPromise = getEntitySetFilter(queryParam);
+    const entitySetFilterPromise = getEntitySetFilter(select.key, tOptions);
 
     return Promise.all([ resourcesPromise, entitySetFilterPromise, joinsPromise ])
       .then(([ resourceResponses, entitySetFilter, joinFilters ]) => {
@@ -322,14 +360,14 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
     }, { $and: [] });
   }
 
-  function querySchema (queryPar) {
+  function querySchema (queryParam, {datapackage}) {
     const getSchemaFromCollection = collectionPar => {
       return datapackage.ddfSchema[ collectionPar ].map(
         ({ primaryKey, value }) => ({ key: primaryKey, value })
       );
     };
 
-    const collection = queryPar.from.split('.')[ 0 ];
+    const collection = queryParam.from.split('.')[ 0 ];
 
     if (datapackage.ddfSchema[ collection ]) {
       return getSchemaFromCollection(collection);
@@ -371,9 +409,8 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
     });
   }
 
-  function getJoinFilters (queryParam) {
-    const join = get(queryParam, 'join', {});
-    return Promise.all(Object.keys(join).map(joinID => getJoinFilter(queryParam, joinID, join[ joinID ])))
+  function getJoinFilters (join, tOptions) {
+    return Promise.all(Object.keys(join).map(joinID => getJoinFilter(joinID, join[ joinID ], tOptions)))
       .then(results => results.reduce(mergeObjects, {}));
   }
 
@@ -381,7 +418,7 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
     return Object.assign(a, b);
   }
 
-  function getJoinFilter (queryParam, joinID, join) {
+  function getJoinFilter (joinID, join, tOptions) {
     // assumption: join.key is same as field in where clause
     //  - where: { geo: $geo }, join: { "$geo": { key: geo, where: { ... }}}
     //  - where: { year: $year }, join: { "$year": { key: year, where { ... }}}
@@ -390,13 +427,15 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
       // assumption: there are no time-properties. E.g. data like <year>,population
       return Promise.resolve({ [ joinID ]: join.where });
     } else {
-      const newQueryParams = inheritKeyQueryProps(queryParam, {
+      // entity concept
+      return query({
         select: { key: [ join.key ] },
         where: join.where,
-        from: conceptsLookup.has(join.key) ? 'concepts' : 'entities'
-      });
-      // entity concept
-      return query(newQueryParams)
+        from: conceptsLookup.has(join.key) ? 'concepts' : 'entities',
+        dataset: tOptions.dataset,
+        branch: tOptions.branch,
+        commit: tOptions.commit
+      })
         .then(result => ({
           [ joinID ]: {
             [ join.key ]: {
@@ -480,26 +519,20 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
       ).reduce((mapA, mapB) => new Map([ ...mapA, ...mapB ]), new Map());
   }
 
-  function inheritKeyQueryProps (oldQueryParam, newQueryParam) {
-    return Object.assign(pick(oldQueryParam, [ 'dataset', 'branch', 'commit', 'datasetPath', 'datapackagePath' ]), newQueryParam);
-  }
-
   /**
    * Get a "$in" filter containing all entities for a entity concept.
    * @param  {Array} conceptStrings Array of concept strings for which entities should be found
    * @return {Array}                Array of filter objects for each entity concept
    */
-  function getEntitySetFilter (queryParam) {
-    const conceptStrings = get(queryParam, 'select.key', []);
-
+  function getEntitySetFilter (conceptStrings, tOptions) {
     const promises = filterConceptsByType([ 'entity_set' ], conceptStrings)
-      .map(concept => {
-        const newQueryParams = inheritKeyQueryProps(queryParam, {
+      .map(concept => query({
           select: { key: [ concept.domain ], value: [ 'is--' + concept.concept ] },
-          from: 'entities'
-        });
-
-        return query(newQueryParams)
+          from: 'entities',
+          dataset: tOptions.dataset,
+          branch: tOptions.branch,
+          commit: tOptions.commit
+        })
           .then(result => ({
             [ concept.concept ]:
               {
@@ -509,8 +542,8 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
                     .map(row => row[ concept.domain ])
                 )
               }
-          }));
-      });
+          }))
+      );
 
     return Promise.all(promises).then(results => {
       return results.reduce((a, b) => Object.assign(a, b), {});
@@ -571,12 +604,12 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
       .map(row => renameHeaderRow(row, renameMap));    // rename header rows (must happen **after** projection)
   }
 
-  function loadResources (datasetPath, key, value, language) {
+  function loadResources (key, value, language, tOptions) {
 
     const resources = getResources(key, value);
 
     return Promise.all([ ...resources ].map(
-      resource => loadResource(datasetPath, resource, language)
+      resource => loadResource(resource, language, tOptions)
     ));
   }
 
@@ -677,21 +710,21 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
     }
   }
 
-  function loadResource (datasetPath, resource, language) {
+  function loadResource (resource, language, tOptions) {
     const filePromises = [];
 
     if (typeof resource.data === 'undefined') {
-      resource.data = loadFile(datasetPath + '/' + resource.path);
+      resource.data = loadFile(tOptions.datasetPath + '/' + resource.path);
     }
 
     filePromises.push(resource.data);
 
-    const languageValid = typeof language !== 'undefined' && getLanguages().includes(language);
+    const languageValid = typeof language !== 'undefined' && getLanguages(tOptions).includes(language);
     const languageLoaded = typeof resource.translations[ language ] !== 'undefined';
 
     if (languageValid) {
       if (!languageLoaded) {
-        const translationPath = datasetPath + '/lang/' + language + '/' + resource.path;
+        const translationPath = `${tOptions.datasetPath}/lang/${language}/${resource.path}`;
 
         // error loading translation file is expected when specific file is not translated
         // more correct would be to only resolve file-not-found errors but current solution is sufficient
@@ -712,7 +745,7 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
 
   }
 
-  function getLanguages (): string[] {
+  function getLanguages ({datapackage}): string[] {
     if (!datapackage.translations) {
       return [];
     }

@@ -1,4 +1,7 @@
 import * as path from 'path';
+import { IQueryOptimizationPlugin } from './query-optimization-plugin';
+import { IReader } from '../file-readers/reader';
+import { IDatapackage } from './index';
 import head = require('lodash/head');
 import values = require('lodash/values');
 import keys = require('lodash/keys');
@@ -8,8 +11,7 @@ import isEmpty = require('lodash/isEmpty');
 import startsWith = require('lodash/startsWith');
 import includes = require('lodash/includes');
 import compact = require('lodash/compact');
-import {IQueryOptimizationPlugin} from './query-optimization-plugin';
-import {IReader} from '../file-readers/reader';
+import { DdfCsvError } from '../../lib/ddfcsv-error';
 
 const Papa = require('papaparse');
 
@@ -25,11 +27,19 @@ const isOneKeyBased = obj => keys(obj).length === 1;
 
 export class InClauseUnderConjunctionPlugin implements IQueryOptimizationPlugin {
   private flow: any = {};
+  private fileReader: IReader;
+  private datasetPath: string;
+  private query: object;
+  private datapackage: IDatapackage;
 
-  constructor(private fileReader: IReader, private basePath: string, private query, private datapackage) {
+  constructor (queryParam, options) {
+    this.fileReader = options.fileReader;
+    this.datasetPath = options.datasetPath;
+    this.query = queryParam;
+    this.datapackage = options.datapackage;
   }
 
-  isMatched(): boolean {
+  isMatched (): boolean {
     this.flow.joinObject = get(this.query, JOIN_KEYWORD);
     const mainAndClause = get(this.query, WHERE_KEYWORD);
     const isMainAndClauseCorrect = isOneKeyBased(mainAndClause);
@@ -39,9 +49,9 @@ export class InClauseUnderConjunctionPlugin implements IQueryOptimizationPlugin 
 
     for (const key of joinKeys) {
       const joinPart = get(this.flow.joinObject, key, {});
-      const firstKey = getFirstKey(joinPart[WHERE_KEYWORD]);
+      const firstKey = getFirstKey(joinPart[ WHERE_KEYWORD ]);
 
-      if (joinPart[KEY_KEYWORD] !== firstKey && firstKey !== KEY_AND) {
+      if (joinPart[ KEY_KEYWORD ] !== firstKey && firstKey !== KEY_AND) {
         areJoinKeysSameAsKeyInWhereClause = false;
         break;
       }
@@ -50,23 +60,27 @@ export class InClauseUnderConjunctionPlugin implements IQueryOptimizationPlugin 
     return isMainAndClauseCorrect && !!this.flow.joinObject && areJoinKeysSameAsKeyInWhereClause;
   }
 
-  getOptimalFilesSet(): Promise<string[]> {
-    return new Promise((resolve, reject) => {
-      if (this.isMatched()) {
-        this.fillResourceToFileHash().collectProcessableClauses().collectEntityFilesNames().collectEntities()
-          .then((data) => {
-            const result = this.fillEntityValuesHash(data).getFilesGroupsQueryClause().getOptimalFilesGroup();
-
-            resolve(result);
-          }).catch(err => reject(err));
-
-      } else {
-        reject(`Plugin "InClauseUnderConjunction" is not matched!`);
+  async getOptimalFilesSet (): Promise<string[]> {
+    if (this.isMatched()) {
+      let result;
+      try {
+        this.fillResourceToFileHash();
+        this.collectProcessableClauses();
+        this.collectEntityFilesNames();
+        const data = await this.collectEntities();
+        this.fillEntityValuesHash(data);
+        this.getFilesGroupsQueryClause();
+        result = this.getOptimalFilesGroup();
+      } catch (err) {
+        return [];
       }
-    });
+      return result;
+    } else {
+      throw new DdfCsvError(`Plugin "InClauseUnderConjunction" is not matched!`, 'InClauseUnderConjunction plugin');
+    }
   }
 
-  private fillResourceToFileHash(): InClauseUnderConjunctionPlugin {
+  private fillResourceToFileHash (): InClauseUnderConjunctionPlugin {
     this.flow.resourceToFile = get(this.datapackage, 'resources', []).reduce((hash, resource) => {
       hash.set(resource.name, resource.path);
 
@@ -76,16 +90,16 @@ export class InClauseUnderConjunctionPlugin implements IQueryOptimizationPlugin 
     return this;
   }
 
-  private collectProcessableClauses(): InClauseUnderConjunctionPlugin {
+  private collectProcessableClauses (): InClauseUnderConjunctionPlugin {
     const joinKeys = keys(this.flow.joinObject);
 
     this.flow.processableClauses = [];
 
     for (const joinKey of joinKeys) {
-      const where = get(this.flow.joinObject[joinKey], WHERE_KEYWORD);
+      const where = get(this.flow.joinObject, `${joinKey}.${WHERE_KEYWORD}`, {});
 
       if (this.singleAndField(where)) {
-        this.flow.processableClauses.push(...flattenDeep(where[KEY_AND].map(el => this.getProcessableClauses(el))));
+        this.flow.processableClauses.push(...flattenDeep(where[ KEY_AND ].map(el => this.getProcessableClauses(el))));
       } else {
         this.flow.processableClauses.push(...this.getProcessableClauses(where));
       }
@@ -94,7 +108,7 @@ export class InClauseUnderConjunctionPlugin implements IQueryOptimizationPlugin 
     return this;
   }
 
-  private collectEntityFilesNames(): InClauseUnderConjunctionPlugin {
+  private collectEntityFilesNames (): InClauseUnderConjunctionPlugin {
     this.flow.entityFilesNames = [];
     this.flow.fileNameToPrimaryKeyHash = new Map();
 
@@ -116,9 +130,10 @@ export class InClauseUnderConjunctionPlugin implements IQueryOptimizationPlugin 
     return this;
   }
 
-  private collectEntities(): Promise<any> {
-    const actions = this.flow.entityFilesNames.map(file => new Promise((actResolve, actReject) => {
-      this.fileReader.readText(path.resolve(this.basePath, file), (err, text) => {
+  private collectEntities (): Promise<any> {
+    const self = this;
+    const actions = self.flow.entityFilesNames.map(file => new Promise((actResolve, actReject) => {
+      self.fileReader.readText(path.resolve(self.datasetPath, file), (err, text) => {
         if (err) {
           return actReject(err);
         }
@@ -126,7 +141,7 @@ export class InClauseUnderConjunctionPlugin implements IQueryOptimizationPlugin 
         Papa.parse(text, {
           header: true,
           skipEmptyLines: true,
-          complete: result => actResolve({file, result}),
+          complete: result => actResolve({ file, result }),
           error: error => actReject(error)
         });
       });
@@ -135,9 +150,9 @@ export class InClauseUnderConjunctionPlugin implements IQueryOptimizationPlugin 
     return Promise.all(actions);
   }
 
-  private fillEntityValuesHash(entitiesData): InClauseUnderConjunctionPlugin {
+  private fillEntityValuesHash (entitiesData): InClauseUnderConjunctionPlugin {
     const getSubdomainsFromRecord = record => compact(keys(record)
-      .filter(key => startsWith(key, 'is--') && (record[key] === 'TRUE' || record[key] === 'true'))
+      .filter(key => startsWith(key, 'is--') && (record[ key ] === 'TRUE' || record[ key ] === 'true'))
       .map(key => key.replace(/^is--/, '')));
 
     this.flow.entityValueToFileHash = new Map();
@@ -146,8 +161,8 @@ export class InClauseUnderConjunctionPlugin implements IQueryOptimizationPlugin 
     for (const entityFileDescriptor of entitiesData) {
       for (const entityRecord of entityFileDescriptor.result.data) {
         const primaryKeyForThisFile = this.flow.fileNameToPrimaryKeyHash.get(entityFileDescriptor.file);
-        const primaryKeyCellValue = entityRecord[primaryKeyForThisFile];
-        const domainsForCurrentRecord = [...getSubdomainsFromRecord(entityRecord)];
+        const primaryKeyCellValue = entityRecord[ primaryKeyForThisFile ];
+        const domainsForCurrentRecord = [ ...getSubdomainsFromRecord(entityRecord) ];
 
         if (isEmpty(domainsForCurrentRecord)) {
           domainsForCurrentRecord.push(primaryKeyForThisFile);
@@ -161,7 +176,7 @@ export class InClauseUnderConjunctionPlugin implements IQueryOptimizationPlugin 
     return this;
   }
 
-  private getFilesGroupsQueryClause(): InClauseUnderConjunctionPlugin {
+  private getFilesGroupsQueryClause (): InClauseUnderConjunctionPlugin {
     const filesGroupsByClause = new Map();
 
     for (const clause of this.flow.processableClauses) {
@@ -202,7 +217,7 @@ export class InClauseUnderConjunctionPlugin implements IQueryOptimizationPlugin 
     return this;
   }
 
-  private getOptimalFilesGroup(): string[] {
+  private getOptimalFilesGroup (): string[] {
     const clauseKeys = this.flow.filesGroupsByClause.keys();
 
     let appropriateClauseKey;
@@ -226,17 +241,17 @@ export class InClauseUnderConjunctionPlugin implements IQueryOptimizationPlugin 
     ] as string[];
   }
 
-  private getProcessableClauses(clause) {
+  private getProcessableClauses (clause) {
     const result = [];
     const clauseKeys = keys(clause);
 
     for (const key of clauseKeys) {
-      if (!startsWith(key, '$') && isOneKeyBased(clause[key])) {
+      if (!startsWith(key, '$') && isOneKeyBased(clause[ key ])) {
         // attention! this functionality process only first clause
         // for example, { geo: { '$in': ['world'] } }
         // in this example { geo: { '$in': ['world'] }, foo: { '$in': ['bar', 'baz'] }  }]
         // foo: { '$in': ['bar', 'baz'] } will NOT be processed
-        const conditionKey = head(keys(clause[key]));
+        const conditionKey = head(keys(clause[ key ]));
 
         if (conditionKey === KEY_IN) {
           result.push(clause);
@@ -247,7 +262,7 @@ export class InClauseUnderConjunctionPlugin implements IQueryOptimizationPlugin 
     return result;
   }
 
-  private singleAndField(clause): boolean {
+  private singleAndField (clause): boolean {
     return isOneKeyBased(clause) && !!get(clause, KEY_AND);
   }
 }

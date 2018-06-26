@@ -42,13 +42,11 @@
   "author": "Vyacheslav Chub<vyacheslav.chub@valor-software.com>",
   "license": "GPL-3.0",
   "dependencies": {
-    "bluebird": "3.5.0",
     "fetch-polyfill": "0.8.2",
     "lodash": "4.17.4",
     "papaparse": "4.3.6"
   },
   "devDependencies": {
-    "@types/bluebird": "3.5.2",
     "@types/chai": "4.0.10",
     "@types/core-js": "0.9.43",
     "@types/lodash": "4.14.91",

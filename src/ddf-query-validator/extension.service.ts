@@ -36,6 +36,6 @@ export function extendQueryParamWithDatasetProps (queryParam, options = {}): Pro
   Object.assign(queryParam, {dataset, branch, commit, datasetPath, datapackagePath});
 
   return new Promise((resolve, reject) => {
-    return resolve();
+    return resolve(queryParam);
   });
 }

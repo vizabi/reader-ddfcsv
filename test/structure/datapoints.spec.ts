@@ -33,6 +33,7 @@ describe('Datapoints structure errors in query', () => {
           ]
         },
         from: 'datapoints',
+        dataset: GLOBALIS_PATH,
         where: {
           $and: [
             { geo: '$geo' },
@@ -96,7 +97,7 @@ describe('Datapoints structure errors in query', () => {
         .catch(done);
     });
 
-    xit(`when requests '${BASE_PATH + BIG_PATH}' dataset`, done => {
+    it(`when requests '${BASE_PATH + BIG_PATH}' dataset`, done => {
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: BASE_PATH });

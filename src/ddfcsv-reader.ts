@@ -1,6 +1,6 @@
-import * as Promise from 'bluebird';
 import { ddfCsvReader } from './ddf-csv';
 import { IReader } from './file-readers/reader';
+import { DdfCsvError } from './ddfcsv-error';
 
 export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
   return function (externalFileReader?: IReader, logger?: any) {
@@ -37,22 +37,27 @@ export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
         });
       },
 
-      read(queryPar, parsers) {
-        return this.reader.query(queryPar)
-          .then(result => {
-            result = parsers ? this._prettifyData(result, parsers) : result;
+      async read(queryParam, parsers) {
+        let result;
 
-            if (this.resultTransformer) {
-              result = this.resultTransformer(result);
-            }
+        try {
+          result = await this.reader.query(queryParam);
+          result = parsers ? this._prettifyData(result, parsers) : result;
 
-            if (this.logger && this.logger.log) {
-              logger.log(JSON.stringify(queryPar), result.length);
-              logger.log(result);
-            }
+          if (this.resultTransformer) {
+            result = this.resultTransformer(result);
+          }
 
-            return result;
-          });
+          if (this.logger && this.logger.log) {
+            logger.log(JSON.stringify(queryParam), result.length);
+            logger.log(result);
+          }
+
+        } catch (error) {
+          throw error;
+        }
+
+        return result;
       },
 
       _prettifyData(data, parsers) {
