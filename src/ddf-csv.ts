@@ -1,11 +1,16 @@
 import includes = require('lodash/includes');
 import isEmpty = require('lodash/isEmpty');
-import { IReader } from './file-readers/reader';
-import { getAppropriatePlugin, IDatapackage } from './query-optimization-plugins';
+import { getAppropriatePlugin } from './query-optimization-plugins';
 import { CSV_PARSING_ERROR, DDF_ERROR, DdfCsvError, FILE_READING_ERROR, JSON_PARSING_ERROR } from './ddfcsv-error';
-import { isSchemaQuery, validateQueryStructure, validateQueryDefinitions } from './ddf-query-validator';
+import {
+  isSchemaQuery,
+  validateQueryStructure,
+  validateQueryDefinitions,
+  extendQueryParamWithDatasetProps, validateQueryAvailability
+} from './ddf-query-validator';
 
 import * as Papa from 'papaparse';
+import { IDatapackage, IReader } from './interfaces';
 
 const isValidNumeric = val => typeof val !== 'number' && !val ? false : true;
 
@@ -34,38 +39,18 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
     [ '$nin', (rowValue, filterValue) => !filterValue.has(rowValue) ],
   ]);
 
-  const options: any = {
+  const baseOptions: any = {
     basePath,
-    datapackagePath: getDatapackagePath( basePath + 'systema_globalis'),
-    datasetPath: basePath + 'systema_globalis',
-    dataset: 'systema_globalis'
+    conceptsLookup: new Map<string, any>(),
+    datapackagePath: '',
+    datasetPath: '',
+    dataset: ''
   };
 
   const keyValueLookup = new Map<string, any>();
   const resourcesLookup = new Map();
-  const conceptsLookup = new Map<string, any>();
 
   let optimalFilesSet = [];
-
-  function getDatapackagePath (pathParam): string {
-    if (!pathParam.endsWith('datapackage.json')) {
-      if (!pathParam.endsWith('/')) {
-        pathParam = pathParam + '/';
-      }
-
-      pathParam = pathParam + 'datapackage.json';
-    }
-
-    return pathParam;
-  }
-
-  function getBasePath ({datapackagePath: datapackagePathParam}) {
-    const dpPathSplit = datapackagePathParam.split('/');
-
-    dpPathSplit.pop();
-
-    return dpPathSplit.join('/') + '/';
-  }
 
   function loadDataPackage (datapackagePath: string): Promise<IDatapackage> {
     return new Promise((resolve, reject) => {
@@ -90,30 +75,34 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
     });
   }
 
-  async function loadConcepts (tOptions): Promise<object> {
+  async function loadConcepts (queryParam, options): Promise<object> {
     // start off with internal concepts
-    setConceptsLookup(internalConcepts);
+    setConceptsLookup(internalConcepts, options);
     // query concepts
     const conceptQuery = {
       select: { key: [ 'concept' ], value: [ 'concept_type', 'domain' ] },
-      from: 'concepts'
+      from: 'concepts',
+      dataset: queryParam.dataset,
+      branch: queryParam.branch,
+      commit: queryParam.commit
     };
+
     let result;
 
     // not using query() to circumvent the conceptPromise resolving
     try {
-      const tConcepts = await queryData(conceptQuery, tOptions);
-      const tConceptsLookup = await buildConceptsLookup(tConcepts);
+      const concepts = await queryData(conceptQuery, options);
+      buildConceptsLookup(concepts, options);
       // with conceptsLookup built, we can parse other concept properties
       // according to their concept_type
-      result = await reparseConcepts(tConceptsLookup);
+      result = await reparseConcepts(options);
     } catch (error) {
-      console.log(error);
+      throw error;
     }
     return result;
   }
 
-  function buildConceptsLookup (concepts) {
+  function buildConceptsLookup (concepts, options) {
     const entitySetMembershipConcepts = concepts
       .filter(concept => concept.concept_type === 'entity_set')
       .map(concept => ({
@@ -126,9 +115,7 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
       .concat(entitySetMembershipConcepts)
       .concat(internalConcepts);
 
-    setConceptsLookup(concepts);
-
-    return conceptsLookup;
+    setConceptsLookup(concepts, options);
   }
 
   /**
@@ -137,7 +124,7 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
    * Impure function as it parses data in-place.
    * @return {[type]}       [description]
    */
-  function reparseConcepts (tConceptsLookup) {
+  function reparseConcepts ({conceptsLookup}) {
     const parsingFunctions = new Map<string, Function>([
       [ 'boolean', (str) => str === 'true' || str === 'TRUE' ],
       [ 'measure', (str) => parseFloat(str) ]
@@ -153,7 +140,7 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
         const parsingConcepts = new Map<string, Function>();
 
         resourceConcepts.forEach(concept => {
-          const type = tConceptsLookup.get(concept).concept_type;
+          const type = conceptsLookup.get(concept).concept_type;
           const fn = parsingFunctions.get(type);
 
           if (fn) {
@@ -175,57 +162,36 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
   }
 
   // can only take single-dimensional key
-  function setConceptsLookup (concepts) {
-    conceptsLookup.clear();
-    concepts.forEach(row => conceptsLookup.set(row.concept, row));
+  function setConceptsLookup (concepts, options) {
+    options.conceptsLookup.clear();
+    concepts.forEach(row => options.conceptsLookup.set(row.concept, row));
   }
 
   async function query (queryParam) {
-    const {
-      select: { key = [], value = [] } = {},
-      from = '',
-      where = {},
-      join = {},
-      order_by = [],
-      language,
-      dataset = options.dataset,
-      branch = options.branch,
-      commit = options.commit,
-    } = queryParam;
     // console.log(JSON.stringify(queryParam, null, '\t'))
-    queryParam.datasetName = dataset;
-    queryParam.dataset = dataset;
-    queryParam.branch = branch;
-    queryParam.commit = commit;
-    queryParam.datasetPath = basePath + dataset;
-    options.datapackagePath = queryParam.datapackagePath = basePath  + dataset + '/datapackage.json';
     let data;
 
     try {
-      options.dataset = dataset;
-      options.branch = branch;
-      options.commit = commit;
-      options.basePath = basePath;
-      options.fileReader = fileReader;
-      options.datasetName = queryParam.datasetName;
-      options.datasetPath = queryParam.datasetPath;
-      await validateQueryStructure(queryParam);
-      const datapackage =  await loadDataPackage(queryParam.datapackagePath);
-      options.datapackage = datapackage;
-      await loadConcepts(options);
-      options.conceptsLookup = conceptsLookup;
-      await validateQueryDefinitions(queryParam, options);
+      baseOptions.fileReader = fileReader;
+      await validateQueryStructure(queryParam, baseOptions);
+      await validateQueryAvailability(queryParam, baseOptions);
+      await extendQueryParamWithDatasetProps(queryParam, baseOptions);
+      const datapackage =  await loadDataPackage(baseOptions.datapackagePath);
+      baseOptions.datapackage = datapackage;
+      await loadConcepts(queryParam, baseOptions);
+      // baseOptions.conceptsLookup = conceptsLookup;
+      await validateQueryDefinitions(queryParam, baseOptions);
 
       if (isSchemaQuery(queryParam)) {
         data = await querySchema(queryParam, {datapackage});
       } else {
-        const appropriatePlugin = getAppropriatePlugin(queryParam, options);
+        const appropriatePlugin = getAppropriatePlugin(queryParam, baseOptions);
         if (appropriatePlugin) {
           optimalFilesSet = [];
           const files = await appropriatePlugin.getOptimalFilesSet();
           optimalFilesSet = files;
         }
-        data = await queryData(queryParam, options);
+        data = await queryData(queryParam, baseOptions);
       }
     } catch (error) {
       throw error;
@@ -234,7 +200,7 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
     return data;
   }
 
-  function queryData (queryParam, tOptions) {
+  function queryData (queryParam, options) {
     const {
       select: { key = [], value = [] },
       from = '',
@@ -248,11 +214,11 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
     const projection = new Set(select.key.concat(select.value));
     const filterFields = getFilterFields(where).filter(field => !projection.has(field));
     // load all relevant resources
-    const resourcesPromise = loadResources(select.key, [ ...select.value, ...filterFields ], language, tOptions);
+    const resourcesPromise = loadResources(select.key, [ ...select.value, ...filterFields ], language, options);
     // list of entities selected from a join clause, later insterted in where clause
-    const joinsPromise = getJoinFilters(join, tOptions);
+    const joinsPromise = getJoinFilters(join, queryParam, options);
     // filter which ensures result only includes queried entity sets
-    const entitySetFilterPromise = getEntitySetFilter(select.key, tOptions);
+    const entitySetFilterPromise = getEntitySetFilter(select.key, queryParam, options);
 
     return Promise.all([ resourcesPromise, entitySetFilterPromise, joinsPromise ])
       .then(([ resourceResponses, entitySetFilter, joinFilters ]) => {
@@ -262,7 +228,7 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
 
         const dataTables = resourceResponses
         // rename key-columns and remove irrelevant value-columns
-          .map(response => processResourceResponse(response, select, filterFields));
+          .map(response => processResourceResponse(response, select, filterFields, options));
 
         // join (reduce) data to one data table
         const queryResult = joinData(select.key, 'overwrite', ...dataTables)
@@ -409,8 +375,8 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
     });
   }
 
-  function getJoinFilters (join, tOptions) {
-    return Promise.all(Object.keys(join).map(joinID => getJoinFilter(joinID, join[ joinID ], tOptions)))
+  function getJoinFilters (join, queryParam, options) {
+    return Promise.all(Object.keys(join).map(joinID => getJoinFilter(joinID, join[ joinID ], queryParam, options)))
       .then(results => results.reduce(mergeObjects, {}));
   }
 
@@ -418,11 +384,11 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
     return Object.assign(a, b);
   }
 
-  function getJoinFilter (joinID, join, tOptions) {
+  function getJoinFilter (joinID, join, queryParam, options) {
     // assumption: join.key is same as field in where clause
     //  - where: { geo: $geo }, join: { "$geo": { key: geo, where: { ... }}}
     //  - where: { year: $year }, join: { "$year": { key: year, where { ... }}}
-    if (conceptsLookup.get(join.key).concept_type === 'time') {
+    if (options.conceptsLookup.get(join.key).concept_type === 'time') {
       // time, no query needed as time values are not explicit in the dataSource
       // assumption: there are no time-properties. E.g. data like <year>,population
       return Promise.resolve({ [ joinID ]: join.where });
@@ -431,10 +397,10 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
       return query({
         select: { key: [ join.key ] },
         where: join.where,
-        from: conceptsLookup.has(join.key) ? 'concepts' : 'entities',
-        dataset: tOptions.dataset,
-        branch: tOptions.branch,
-        commit: tOptions.commit
+        from: options.conceptsLookup.has(join.key) ? 'concepts' : 'entities',
+        dataset: queryParam.dataset,
+        branch: queryParam.branch,
+        commit: queryParam.commit
       })
         .then(result => ({
           [ joinID ]: {
@@ -467,11 +433,12 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
    * @param  {Array} conceptTypes    Array of concept types to filter out
    * @return {Array}                  Array of concept strings only of given types
    */
-  function filterConceptsByType (conceptTypes, conceptStrings = Array.from(conceptsLookup.keys())) {
+  function filterConceptsByType (conceptTypes, queryKey, options) {
+    const conceptStrings = queryKey || Array.from(options.conceptsLookup.keys());
     const concepts = [];
 
     for (const conceptString of conceptStrings) {
-      const concept = conceptsLookup.get(conceptString);
+      const concept = options.conceptsLookup.get(conceptString);
 
       if (conceptTypes.includes(concept.concept_type)) {
         concepts.push(concept);
@@ -487,16 +454,16 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
    * are found if they're entity concepts
    * @return {Map}   Map with all aliases as keys and the entity concept as value
    */
-  function getEntityConceptRenameMap (queryKey, resourceKey) {
+  function getEntityConceptRenameMap (queryKey, resourceKey, options) {
     const resourceKeySet = new Set(resourceKey);
     const entityConceptTypes = [ 'entity_set', 'entity_domain' ];
-    const queryEntityConcepts = filterConceptsByType(entityConceptTypes, queryKey);
+    const queryEntityConcepts = filterConceptsByType(entityConceptTypes, queryKey, options);
 
     if (queryEntityConcepts.length === 0) {
       return new Map();
     }
 
-    const allEntityConcepts = filterConceptsByType(entityConceptTypes);
+    const allEntityConcepts = filterConceptsByType(entityConceptTypes, null, options);
 
     return queryEntityConcepts
       .map(concept => allEntityConcepts
@@ -524,14 +491,14 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
    * @param  {Array} conceptStrings Array of concept strings for which entities should be found
    * @return {Array}                Array of filter objects for each entity concept
    */
-  function getEntitySetFilter (conceptStrings, tOptions) {
-    const promises = filterConceptsByType([ 'entity_set' ], conceptStrings)
+  function getEntitySetFilter (conceptStrings, queryParam, options) {
+    const promises = filterConceptsByType([ 'entity_set' ], conceptStrings, options)
       .map(concept => query({
           select: { key: [ concept.domain ], value: [ 'is--' + concept.concept ] },
           from: 'entities',
-          dataset: tOptions.dataset,
-          branch: tOptions.branch,
-          commit: tOptions.commit
+          dataset: queryParam.dataset,
+          branch: queryParam.branch,
+          commit: queryParam.commit
         })
           .then(result => ({
             [ concept.concept ]:
@@ -585,12 +552,12 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
     return new Set(oneKeyOneValueResourcesArray);
   }
 
-  function processResourceResponse (response, select, filterFields) {
+  function processResourceResponse (response, select, filterFields, options) {
     const resourcePK = response.resource.schema.primaryKey;
     // all fields used for select or filters
     const resourceProjection = new Set([ ...resourcePK, ...select.value, ...filterFields ]);
     // rename map to rename relevant entity headers to requested entity concepts
-    const renameMap = getEntityConceptRenameMap(select.key, resourcePK);
+    const renameMap = getEntityConceptRenameMap(select.key, resourcePK, options);
 
     // Renaming must happen after projection to prevent ambiguity
     // E.g. a resource with `<geo>,name,region` fields.
@@ -604,12 +571,12 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
       .map(row => renameHeaderRow(row, renameMap));    // rename header rows (must happen **after** projection)
   }
 
-  function loadResources (key, value, language, tOptions) {
+  function loadResources (key, value, language, options) {
 
     const resources = getResources(key, value);
 
     return Promise.all([ ...resources ].map(
-      resource => loadResource(resource, language, tOptions)
+      resource => loadResource(resource, language, options)
     ));
   }
 
@@ -710,25 +677,25 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
     }
   }
 
-  function loadResource (resource, language, tOptions) {
+  function loadResource (resource, language, options) {
     const filePromises = [];
 
     if (typeof resource.data === 'undefined') {
-      resource.data = loadFile(tOptions.datasetPath + '/' + resource.path);
+      resource.data = loadFile(options.datasetPath + '/' + resource.path, options);
     }
 
     filePromises.push(resource.data);
 
-    const languageValid = typeof language !== 'undefined' && getLanguages(tOptions).includes(language);
+    const languageValid = typeof language !== 'undefined' && getLanguages(options).includes(language);
     const languageLoaded = typeof resource.translations[ language ] !== 'undefined';
 
     if (languageValid) {
       if (!languageLoaded) {
-        const translationPath = `${tOptions.datasetPath}/lang/${language}/${resource.path}`;
+        const translationPath = `${options.datasetPath}/lang/${language}/${resource.path}`;
 
         // error loading translation file is expected when specific file is not translated
         // more correct would be to only resolve file-not-found errors but current solution is sufficient
-        resource.translations[ language ] = loadFile(translationPath).catch(err => Promise.resolve({}));
+        resource.translations[ language ] = loadFile(translationPath, options).catch(err => Promise.resolve({}));
       }
 
       filePromises.push(resource.translations[ language ]);
@@ -753,7 +720,7 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
     return datapackage.translations.map(lang => lang.id);
   }
 
-  function loadFile (filePath) {
+  function loadFile (filePath, options) {
     return new Promise((resolve, reject) => {
       fileReader.readText(filePath, (err, data) => {
         if (err) {
@@ -767,12 +734,12 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
             // can't do dynamic typing without concept types loaded.
             // concept properties are not parsed in first concept query
             // reparsing of concepts resource is done in conceptLookup building
-            if (!conceptsLookup) {
+            if (!options.conceptsLookup) {
               return true;
             }
 
             // parsing to number/boolean based on concept type
-            const concept: any = conceptsLookup.get(headerName) || {};
+            const concept: any = options.conceptsLookup.get(headerName) || {};
 
             return [ 'boolean', 'measure' ].includes(concept.concept_type);
           },

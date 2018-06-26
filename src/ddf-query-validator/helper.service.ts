@@ -23,6 +23,7 @@ export const AVAILABLE_ORDER_BY_CLAUSE_VALUES = new Set([
 export const DEFAULT_DATASET_NAME = process.env.DEFAULT_DATASET_NAME || 'systema_globalis';
 export const DEFAULT_DATASET_COMMIT = process.env.DEFAULT_DATASET_COMMIT || 'HEAD';
 export const DEFAULT_DATASET_BRANCH = process.env.DEFAULT_DATASET_BRANCH || 'master';
+export const DEFAULT_DATASET_DIR = process.env.DEFAULT_DATASET_DIR || './datasets';
 
 export const MAX_AMOUNT_OF_MEASURES_IN_SELECT = 5;
 

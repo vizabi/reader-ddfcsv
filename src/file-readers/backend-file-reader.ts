@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { IReader } from './reader';
+import { IReader } from '../interfaces';
 
 export class BackendFileReader implements IReader {
   public recordTransformer: Function;

@@ -1,6 +1,6 @@
 import { ddfCsvReader } from './ddf-csv';
-import { IReader } from './file-readers/reader';
 import { DdfCsvError } from './ddfcsv-error';
+import { IReader } from './interfaces';
 
 export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
   return function (externalFileReader?: IReader, logger?: any) {

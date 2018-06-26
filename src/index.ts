@@ -1,4 +1,3 @@
-export {IReader} from './file-readers/reader';
 import {BackendFileReader} from './file-readers/backend-file-reader';
 export {BackendFileReader} from './file-readers/backend-file-reader';
 import {GithubFileReader} from './file-readers/github-file-reader';

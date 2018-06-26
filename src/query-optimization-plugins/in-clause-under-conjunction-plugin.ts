@@ -1,7 +1,4 @@
 import * as path from 'path';
-import { IQueryOptimizationPlugin } from './query-optimization-plugin';
-import { IReader } from '../file-readers/reader';
-import { IDatapackage } from './index';
 import head = require('lodash/head');
 import values = require('lodash/values');
 import keys = require('lodash/keys');
@@ -11,7 +8,8 @@ import isEmpty = require('lodash/isEmpty');
 import startsWith = require('lodash/startsWith');
 import includes = require('lodash/includes');
 import compact = require('lodash/compact');
-import { DdfCsvError } from '../../lib/ddfcsv-error';
+import { DdfCsvError } from '../ddfcsv-error';
+import { IDatapackage, IQueryOptimizationPlugin, IReader } from '../interfaces';
 
 const Papa = require('papaparse');
 

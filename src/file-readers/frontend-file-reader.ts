@@ -1,4 +1,4 @@
-import { IReader } from './reader';
+import { IReader } from '../interfaces';
 
 require('fetch-polyfill');
 

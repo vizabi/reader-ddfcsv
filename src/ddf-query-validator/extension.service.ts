@@ -1,14 +1,9 @@
-import trim = require('lodash/trim');
 import get = require('lodash/get');
 import {
   DEFAULT_DATASET_BRANCH,
-  DEFAULT_DATASET_COMMIT, DEFAULT_DATASET_NAME,
-  isConceptsQuery,
-  isDatapointsQuery,
-  isEntitiesQuery,
-  isEntityDomainOrSet,
-  isMeasure,
-  isSchemaQuery
+  DEFAULT_DATASET_COMMIT,
+  DEFAULT_DATASET_DIR,
+  DEFAULT_DATASET_NAME
 } from './helper.service';
 
 function getDatasetPath (basePath, queryParam) {
@@ -17,8 +12,7 @@ function getDatasetPath (basePath, queryParam) {
     branch,
     commit
   } = queryParam;
-  // return `${dataset}${branch ? '/' + branch : ''}${commit && branch ? '-' + commit : ''}`;
-  return `${basePath}/${dataset}`;
+  return `${basePath}${dataset}/${branch}-${commit}`;
 }
 
 function getDatapackagePath (datasetPath): string {
@@ -29,13 +23,13 @@ export function extendQueryParamWithDatasetProps (queryParam, options = {}): Pro
   const dataset = get(queryParam, 'dataset', DEFAULT_DATASET_NAME);
   const branch = get(queryParam, 'branch', DEFAULT_DATASET_BRANCH);
   const commit = get(queryParam, 'commit', DEFAULT_DATASET_COMMIT);
-  const basePath = trim(get(options, 'basePath', ''), '/');
-  const datasetPath = getDatasetPath(basePath, {dataset, branch, commit});
+  const basePath = get(options, 'basePath', DEFAULT_DATASET_DIR);
+  const datasetName = dataset;
+  const datasetPath = getDatasetPath(basePath, { dataset, branch, commit });
   const datapackagePath = getDatapackagePath(datasetPath);
 
-  Object.assign(queryParam, {dataset, branch, commit, datasetPath, datapackagePath});
+  Object.assign(queryParam, { dataset, branch, commit });
+  Object.assign(options, { datasetPath, datapackagePath, datasetName });
 
-  return new Promise((resolve, reject) => {
-    return resolve(queryParam);
-  });
+  return queryParam;
 }
