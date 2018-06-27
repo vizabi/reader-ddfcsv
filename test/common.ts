@@ -32,6 +32,39 @@ export const whereClauseHasUnknownOperator = new RegExp(`'where' clause has unkn
 export const whereClauseHasUnknownOperator1 = new RegExp(`'where' clause has unknown operator\\(s\\) '\\$geo'\, replace it with allowed operators: `);
 
 export const notExpectedError = 'this should never be called';
+export const expectedConcepts = [ {
+  concept: 'additional_column',
+  concept_type: 'string',
+  name: null
+},
+  { concept: 'anno', concept_type: 'time', name: null },
+  { concept: 'company', concept_type: 'entity_domain', name: null },
+  {
+    concept: 'company_scale',
+    concept_type: 'entity_set',
+    name: null
+  },
+  { concept: 'country', concept_type: 'string', name: null },
+  { concept: 'domain', concept_type: 'string', name: null },
+  {
+    concept: 'english_speaking',
+    concept_type: 'entity_set',
+    name: null
+  },
+  {
+    concept: 'full_name_changed',
+    concept_type: 'string',
+    name: null
+  },
+  { concept: 'latitude', concept_type: 'measure', name: null },
+  { concept: 'lines_of_code', concept_type: 'measure', name: null },
+  { concept: 'longitude', concept_type: 'measure', name: null },
+  { concept: 'meeting_style', concept_type: 'string', name: null },
+  { concept: 'methodology', concept_type: 'string', name: null },
+  { concept: 'name', concept_type: 'string', name: null },
+  { concept: 'popular_appeal', concept_type: 'string', name: null },
+  { concept: 'project', concept_type: 'entity_domain', name: null },
+  { concept: 'region', concept_type: 'entity_domain', name: null } ];
 
 export const EXPECTS_EXACTLY_ONE_ERROR = 1;
 export const EXPECTS_EXACTLY_TWO_ERRORS = 2;
