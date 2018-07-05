@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 import * as sinon from 'sinon';
 import { DdfCsvError, getDDFCsvReaderObject } from '../src/index';
-import { BASE_PATH, BROKEN_DATAPACKAGE_PATH, GLOBALIS_PATH, notExpectedError } from './common';
+import { BASE_PATH, BROKEN_DATAPACKAGE_PATH, expectedConcepts, GLOBALIS_PATH, notExpectedError } from './common';
 
 const expect = chai.expect;
 const sandbox = sinon.createSandbox();
@@ -10,6 +10,33 @@ describe('General errors in ddfcsv reader', () => {
   afterEach(() => sandbox.restore());
 
   describe('should be processed correctly', () => {
+    it(`when dataset path is already in ddf csv reader base path`, async function() {
+      const reader = getDDFCsvReaderObject();
+
+      reader.init({ path: './test/fixtures/VS-work/path_test/master-HEAD' });
+
+      let result;
+
+      try {
+        result = await reader.read({
+          select: {
+            key: [ 'concept' ],
+            value: [
+              'concept_type', 'name'
+            ]
+          },
+          dataset: GLOBALIS_PATH,
+          from: 'concepts',
+          where: {},
+          order_by: [ 'concept' ]
+        });
+      } catch (error) {
+        throw new Error(notExpectedError);
+      }
+
+      expect(result).to.deep.equal(expectedConcepts);
+    });
+
     it(`when 'File not found' happens`, async function() {
       const reader = getDDFCsvReaderObject();
 

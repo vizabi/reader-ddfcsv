@@ -10350,6 +10350,7 @@ var DDFCsvReader =
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
+	var tslib_1 = __webpack_require__(5);
 	var get = __webpack_require__(67);
 	var helper_service_1 = __webpack_require__(109);
 	function getDatasetPath(basePath, queryParam) {
@@ -10362,19 +10363,70 @@ var DDFCsvReader =
 	function getDatapackagePath(datasetPath) {
 	    return datasetPath + '/datapackage.json';
 	}
+	function isDatasetPathAlreadyInBasePath(fileReader, basePath) {
+	    return new Promise(function (resolve) {
+	        fileReader.readText(getDatapackagePath(basePath), function (error) {
+	            return resolve(!error);
+	        });
+	    });
+	}
 	function extendQueryParamWithDatasetProps(queryParam) {
 	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 	
-	    var dataset = get(queryParam, 'dataset', helper_service_1.DEFAULT_DATASET_NAME);
-	    var branch = get(queryParam, 'branch', helper_service_1.DEFAULT_DATASET_BRANCH);
-	    var commit = get(queryParam, 'commit', helper_service_1.DEFAULT_DATASET_COMMIT);
-	    var basePath = get(options, 'basePath', helper_service_1.DEFAULT_DATASET_DIR);
-	    var datasetName = dataset;
-	    var datasetPath = getDatasetPath(basePath, { dataset: dataset, branch: branch, commit: commit });
-	    var datapackagePath = getDatapackagePath(datasetPath);
-	    Object.assign(queryParam, { dataset: dataset, branch: branch, commit: commit });
-	    Object.assign(options, { datasetPath: datasetPath, datapackagePath: datapackagePath, datasetName: datasetName });
-	    return queryParam;
+	    return tslib_1.__awaiter(this, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+	        var dataset, branch, commit, basePath, fileReader, datasetName, datasetPath, datapackagePath;
+	        return regeneratorRuntime.wrap(function _callee$(_context) {
+	            while (1) {
+	                switch (_context.prev = _context.next) {
+	                    case 0:
+	                        dataset = get(queryParam, 'dataset', helper_service_1.DEFAULT_DATASET_NAME);
+	                        branch = get(queryParam, 'branch', helper_service_1.DEFAULT_DATASET_BRANCH);
+	                        commit = get(queryParam, 'commit', helper_service_1.DEFAULT_DATASET_COMMIT);
+	                        basePath = get(options, 'basePath', helper_service_1.DEFAULT_DATASET_DIR);
+	                        fileReader = get(options, 'fileReader');
+	                        datasetName = dataset;
+	                        datasetPath = void 0;
+	                        datapackagePath = void 0;
+	                        _context.prev = 8;
+	                        _context.next = 11;
+	                        return isDatasetPathAlreadyInBasePath(fileReader, basePath);
+	
+	                    case 11:
+	                        if (!_context.sent) {
+	                            _context.next = 16;
+	                            break;
+	                        }
+	
+	                        datasetPath = basePath;
+	                        datapackagePath = getDatapackagePath(basePath);
+	                        _context.next = 18;
+	                        break;
+	
+	                    case 16:
+	                        datasetPath = getDatasetPath(basePath, { dataset: dataset, branch: branch, commit: commit });
+	                        datapackagePath = getDatapackagePath(datasetPath);
+	
+	                    case 18:
+	                        _context.next = 23;
+	                        break;
+	
+	                    case 20:
+	                        _context.prev = 20;
+	                        _context.t0 = _context["catch"](8);
+	                        throw _context.t0;
+	
+	                    case 23:
+	                        Object.assign(queryParam, { dataset: dataset, branch: branch, commit: commit });
+	                        Object.assign(options, { datasetPath: datasetPath, datapackagePath: datapackagePath, datasetName: datasetName });
+	                        return _context.abrupt("return", queryParam);
+	
+	                    case 26:
+	                    case "end":
+	                        return _context.stop();
+	                }
+	            }
+	        }, _callee, this, [[8, 20]]);
+	    }));
 	}
 	exports.extendQueryParamWithDatasetProps = extendQueryParamWithDatasetProps;
 	//# sourceMappingURL=extension.service.js.map
