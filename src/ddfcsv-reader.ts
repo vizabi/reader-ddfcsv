@@ -1,24 +1,32 @@
+import isObject = require('lodash/isObject');
 import { ddfCsvReader } from './ddf-csv';
 import { DdfCsvError } from './ddfcsv-error';
 import { IReader } from './interfaces';
+import { getDatasetPath } from './ddf-query-validator';
 
 export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
   return function (externalFileReader?: IReader, logger?: any) {
     return {
       init(readerInfo) {
-        this._basepath = readerInfo.path;
+        this._basePath = readerInfo.path;
         this._lastModified = readerInfo._lastModified;
         this.fileReader = externalFileReader || defaultFileReader;
         this.logger = logger;
         this.resultTransformer = readerInfo.resultTransformer;
-        this.reader = ddfCsvReader(this._basepath, this.fileReader, this.logger);
+        this.reader = ddfCsvReader(this._basePath, this.fileReader, this.logger);
       },
 
       getAsset(asset) {
         const isJsonAsset = asset.slice(-'.json'.length) === '.json';
+        let assetPath = `${this._basePath}/${asset}`;
+
+        // TODO: check validity of assets path in query validator
+        if (isObject(asset)) {
+          assetPath = getDatasetPath(this._basePath, asset);
+        }
 
         return new Promise((resolve, reject) => {
-          this.fileReader.readText(`${this._basepath}/${asset}`, (err, data) => {
+          this.fileReader.readText(assetPath, (err, data) => {
             if (err) {
               reject(err);
               return;

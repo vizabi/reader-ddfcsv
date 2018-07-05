@@ -7,7 +7,7 @@ import {
 } from './helper.service';
 import { IReader } from '../interfaces';
 
-function getDatasetPath (basePath, queryParam) {
+export function getDatasetPath (basePath, queryParam) {
   const {
     dataset,
     branch,
