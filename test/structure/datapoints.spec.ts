@@ -3,7 +3,7 @@ import { getDDFCsvReaderObject } from '../../src/index';
 import {
   BASE_PATH,
   BIG_PATH,
-  checkExpectations,
+  checkExpectations, EMPTY_TRANSLATIONS_PATH,
   EXPECTS_EXACTLY_ONE_ERROR,
   EXPECTS_EXACTLY_TWO_ERRORS,
   getAmountOfErrors,
@@ -100,7 +100,10 @@ describe('Datapoints structure errors in query', () => {
     it(`when requests '${BASE_PATH + BIG_PATH}' dataset`, done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: BASE_PATH, datasetsConfig: {
+          [ BIG_PATH ]: { master: [ 'HEAD' ] },
+          default: { dataset: BIG_PATH, branch: 'master', commit: 'HEAD' }
+        } });
       reader.read({
         language: 'en',
         from: 'datapoints',
@@ -206,7 +209,10 @@ describe('Datapoints structure errors in query', () => {
     it(`when requests '${BASE_PATH + POP_WPP_PATH}' dataset`, done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: BASE_PATH, datasetsConfig: {
+          [ POP_WPP_PATH ]: { master: [ 'HEAD' ] },
+          default: { dataset: POP_WPP_PATH, branch: 'master', commit: 'HEAD' }
+        } });
       reader.read({
         language: 'en',
         from: 'datapoints',
@@ -262,7 +268,10 @@ describe('Datapoints structure errors in query', () => {
     it(`when requests '${BASE_PATH + STATIC_ASSETS}' dataset`, (done: Function) => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: BASE_PATH, datasetsConfig: {
+          [ STATIC_ASSETS ]: { master: [ 'HEAD' ] },
+          default: { dataset: STATIC_ASSETS, branch: 'master', commit: 'HEAD' }
+        } });
       reader.read({
         language: 'en',
         from: 'datapoints',

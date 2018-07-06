@@ -6,7 +6,7 @@ export const STATIC_ASSETS = 'static-assets';
 export const EMPTY_TRANSLATIONS_PATH = 'empty-translations';
 export const BROKEN_DATAPACKAGE_PATH = 'ds_broken_datapackage';
 
-export const NOT_EXISTED_DATASET = 'default_unexisted_dataset';
+export const NOT_EXISTED_DATASET = 'unexisted_dataset';
 export const EXISTED_DATASET = 'VS-work/dataset_name_1';
 
 export const NOT_EXISTED_BRANCH = 'unexisted_branch';
@@ -40,7 +40,7 @@ export const orderByClauseMustHaveCertainStructure = new RegExp(`'order_by' clau
 export const whereClauseHasUnknownOperator = new RegExp(`'where' clause has unknown operator\\(s\\) '\\$concept'\, replace it with allowed operators: `);
 export const whereClauseHasUnknownOperator1 = new RegExp(`'where' clause has unknown operator\\(s\\) '\\$geo'\, replace it with allowed operators: `);
 
-export const notExpectedError = 'this should never be called';
+export const notExpectedError = 'This should never be called.';
 export const expectedConcepts = [ {
   concept: 'additional_column',
   concept_type: 'string',

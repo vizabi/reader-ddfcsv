@@ -506,24 +506,39 @@ var DDFCsvReader =
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var tslib_1 = __webpack_require__(5);
-	var ddf_csv_1 = __webpack_require__(6);
+	var isNil = __webpack_require__(6);
+	var isObject = __webpack_require__(7);
+	var ddf_csv_1 = __webpack_require__(8);
+	var ddf_query_validator_1 = __webpack_require__(109);
 	function prepareDDFCsvReaderObject(defaultFileReader) {
 	    return function (externalFileReader, logger) {
 	        return {
 	            init: function init(readerInfo) {
-	                this._basepath = readerInfo.path;
+	                this._basePath = readerInfo.path;
 	                this._lastModified = readerInfo._lastModified;
 	                this.fileReader = externalFileReader || defaultFileReader;
 	                this.logger = logger;
 	                this.resultTransformer = readerInfo.resultTransformer;
-	                this.reader = ddf_csv_1.ddfCsvReader(this._basepath, this.fileReader, this.logger);
+	                this.datasetsConfig = readerInfo.datasetsConfig;
+	                this.isLocalReader = isNil(this.datasetsConfig) ? true : false;
+	                this.isServerReader = !this.isLocalReader;
+	                this.reader = ddf_csv_1.ddfCsvReader({
+	                    basePath: this._basePath,
+	                    fileReader: this.fileReader,
+	                    logger: this.logger,
+	                    datasetsConfig: this.datasetsConfig
+	                });
 	            },
 	            getAsset: function getAsset(asset) {
 	                var _this = this;
 	
 	                var isJsonAsset = asset.slice(-'.json'.length) === '.json';
+	                var assetPath = this._basePath + "/" + asset;
+	                if (isObject(asset)) {
+	                    assetPath = ddf_query_validator_1.getDatasetPath(this._basePath, asset);
+	                }
 	                return new Promise(function (resolve, reject) {
-	                    _this.fileReader.readText(_this._basepath + "/" + asset, function (err, data) {
+	                    _this.fileReader.readText(assetPath, function (err, data) {
 	                        if (err) {
 	                            reject(err);
 	                            return;
@@ -969,6 +984,78 @@ var DDFCsvReader =
 
 /***/ },
 /* 6 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	/**
+	 * Checks if `value` is `null` or `undefined`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is nullish, else `false`.
+	 * @example
+	 *
+	 * _.isNil(null);
+	 * // => true
+	 *
+	 * _.isNil(void 0);
+	 * // => true
+	 *
+	 * _.isNil(NaN);
+	 * // => false
+	 */
+	function isNil(value) {
+	  return value == null;
+	}
+	
+	module.exports = isNil;
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	/**
+	 * Checks if `value` is the
+	 * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+	 * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(_.noop);
+	 * // => true
+	 *
+	 * _.isObject(null);
+	 * // => false
+	 */
+	function isObject(value) {
+	  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+	  return value != null && (type == 'object' || type == 'function');
+	}
+	
+	module.exports = isObject;
+
+/***/ },
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -983,16 +1070,21 @@ var DDFCsvReader =
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var tslib_1 = __webpack_require__(5);
-	var includes = __webpack_require__(7);
-	var isEmpty = __webpack_require__(49);
-	var query_optimization_plugins_1 = __webpack_require__(62);
+	var includes = __webpack_require__(9);
+	var isEmpty = __webpack_require__(50);
+	var query_optimization_plugins_1 = __webpack_require__(63);
 	var ddfcsv_error_1 = __webpack_require__(3);
-	var ddf_query_validator_1 = __webpack_require__(108);
-	var Papa = __webpack_require__(107);
+	var ddf_query_validator_1 = __webpack_require__(109);
+	var Papa = __webpack_require__(108);
 	var isValidNumeric = function isValidNumeric(val) {
 	    return typeof val !== 'number' && !val ? false : true;
 	};
-	function ddfCsvReader(basePath, fileReader, logger) {
+	function ddfCsvReader(readerOptions) {
+	    var basePath = readerOptions.basePath,
+	        fileReader = readerOptions.fileReader,
+	        logger = readerOptions.logger,
+	        datasetsConfig = readerOptions.datasetsConfig;
+	
 	    var internalConcepts = [{ concept: 'concept', concept_type: 'string', domain: null }, { concept: 'concept_type', concept_type: 'string', domain: null }];
 	    var operators = new Map([['$and', function (row, predicates) {
 	        return predicates.every(function (p) {
@@ -1027,6 +1119,7 @@ var DDFCsvReader =
 	    }]]);
 	    var baseOptions = {
 	        basePath: basePath,
+	        datasetsConfig: datasetsConfig,
 	        conceptsLookup: new Map(),
 	        datapackagePath: '',
 	        datasetPath: '',
@@ -1189,83 +1282,79 @@ var DDFCsvReader =
 	
 	                        case 5:
 	                            _context2.next = 7;
-	                            return ddf_query_validator_1.validateQueryAvailability(queryParam, baseOptions);
+	                            return ddf_query_validator_1.extendQueryParamWithDatasetProps(queryParam, baseOptions);
 	
 	                        case 7:
 	                            _context2.next = 9;
-	                            return ddf_query_validator_1.extendQueryParamWithDatasetProps(queryParam, baseOptions);
-	
-	                        case 9:
-	                            _context2.next = 11;
 	                            return loadDataPackage(baseOptions.datapackagePath);
 	
-	                        case 11:
+	                        case 9:
 	                            datapackage = _context2.sent;
 	
 	                            baseOptions.datapackage = datapackage;
-	                            _context2.next = 15;
+	                            _context2.next = 13;
 	                            return loadConcepts(queryParam, baseOptions);
 	
-	                        case 15:
-	                            _context2.next = 17;
+	                        case 13:
+	                            _context2.next = 15;
 	                            return ddf_query_validator_1.validateQueryDefinitions(queryParam, baseOptions);
 	
-	                        case 17:
+	                        case 15:
 	                            if (!ddf_query_validator_1.isSchemaQuery(queryParam)) {
-	                                _context2.next = 23;
+	                                _context2.next = 21;
 	                                break;
 	                            }
 	
-	                            _context2.next = 20;
+	                            _context2.next = 18;
 	                            return querySchema(queryParam, { datapackage: datapackage });
 	
-	                        case 20:
+	                        case 18:
 	                            data = _context2.sent;
-	                            _context2.next = 33;
+	                            _context2.next = 31;
 	                            break;
 	
-	                        case 23:
+	                        case 21:
 	                            appropriatePlugin = query_optimization_plugins_1.getAppropriatePlugin(queryParam, baseOptions);
 	
 	                            if (!appropriatePlugin) {
-	                                _context2.next = 30;
+	                                _context2.next = 28;
 	                                break;
 	                            }
 	
 	                            optimalFilesSet = [];
-	                            _context2.next = 28;
+	                            _context2.next = 26;
 	                            return appropriatePlugin.getOptimalFilesSet();
 	
-	                        case 28:
+	                        case 26:
 	                            files = _context2.sent;
 	
 	                            optimalFilesSet = files;
 	
-	                        case 30:
-	                            _context2.next = 32;
+	                        case 28:
+	                            _context2.next = 30;
 	                            return queryData(queryParam, baseOptions);
 	
-	                        case 32:
+	                        case 30:
 	                            data = _context2.sent;
 	
-	                        case 33:
-	                            _context2.next = 38;
+	                        case 31:
+	                            _context2.next = 36;
 	                            break;
 	
-	                        case 35:
-	                            _context2.prev = 35;
+	                        case 33:
+	                            _context2.prev = 33;
 	                            _context2.t0 = _context2["catch"](1);
 	                            throw _context2.t0;
 	
-	                        case 38:
+	                        case 36:
 	                            return _context2.abrupt("return", data);
 	
-	                        case 39:
+	                        case 37:
 	                        case "end":
 	                            return _context2.stop();
 	                    }
 	                }
-	            }, _callee2, this, [[1, 35]]);
+	            }, _callee2, this, [[1, 33]]);
 	        }));
 	    }
 	    function queryData(queryParam, options) {
@@ -1780,16 +1869,16 @@ var DDFCsvReader =
 	//# sourceMappingURL=ddf-csv.js.map
 
 /***/ },
-/* 7 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseIndexOf = __webpack_require__(8),
-	    isArrayLike = __webpack_require__(12),
-	    isString = __webpack_require__(22),
-	    toInteger = __webpack_require__(25),
-	    values = __webpack_require__(29);
+	var baseIndexOf = __webpack_require__(10),
+	    isArrayLike = __webpack_require__(14),
+	    isString = __webpack_require__(23),
+	    toInteger = __webpack_require__(26),
+	    values = __webpack_require__(30);
 	
 	/* Built-in method references for those with the same name as other `lodash` methods. */
 	var nativeMax = Math.max;
@@ -1838,14 +1927,14 @@ var DDFCsvReader =
 	module.exports = includes;
 
 /***/ },
-/* 8 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseFindIndex = __webpack_require__(9),
-	    baseIsNaN = __webpack_require__(10),
-	    strictIndexOf = __webpack_require__(11);
+	var baseFindIndex = __webpack_require__(11),
+	    baseIsNaN = __webpack_require__(12),
+	    strictIndexOf = __webpack_require__(13);
 	
 	/**
 	 * The base implementation of `_.indexOf` without `fromIndex` bounds checks.
@@ -1863,7 +1952,7 @@ var DDFCsvReader =
 	module.exports = baseIndexOf;
 
 /***/ },
-/* 9 */
+/* 11 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1894,7 +1983,7 @@ var DDFCsvReader =
 	module.exports = baseFindIndex;
 
 /***/ },
-/* 10 */
+/* 12 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1913,7 +2002,7 @@ var DDFCsvReader =
 	module.exports = baseIsNaN;
 
 /***/ },
-/* 11 */
+/* 13 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1943,13 +2032,13 @@ var DDFCsvReader =
 	module.exports = strictIndexOf;
 
 /***/ },
-/* 12 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var isFunction = __webpack_require__(13),
-	    isLength = __webpack_require__(21);
+	var isFunction = __webpack_require__(15),
+	    isLength = __webpack_require__(22);
 	
 	/**
 	 * Checks if `value` is array-like. A value is considered array-like if it's
@@ -1983,13 +2072,13 @@ var DDFCsvReader =
 	module.exports = isArrayLike;
 
 /***/ },
-/* 13 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseGetTag = __webpack_require__(14),
-	    isObject = __webpack_require__(20);
+	var baseGetTag = __webpack_require__(16),
+	    isObject = __webpack_require__(7);
 	
 	/** `Object#toString` result references. */
 	var asyncTag = '[object AsyncFunction]',
@@ -2027,14 +2116,14 @@ var DDFCsvReader =
 	module.exports = isFunction;
 
 /***/ },
-/* 14 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _Symbol = __webpack_require__(15),
-	    getRawTag = __webpack_require__(18),
-	    objectToString = __webpack_require__(19);
+	var _Symbol = __webpack_require__(17),
+	    getRawTag = __webpack_require__(20),
+	    objectToString = __webpack_require__(21);
 	
 	/** `Object#toString` result references. */
 	var nullTag = '[object Null]',
@@ -2060,12 +2149,12 @@ var DDFCsvReader =
 	module.exports = baseGetTag;
 
 /***/ },
-/* 15 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var root = __webpack_require__(16);
+	var root = __webpack_require__(18);
 	
 	/** Built-in value references. */
 	var _Symbol = root.Symbol;
@@ -2073,14 +2162,14 @@ var DDFCsvReader =
 	module.exports = _Symbol;
 
 /***/ },
-/* 16 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
-	var freeGlobal = __webpack_require__(17);
+	var freeGlobal = __webpack_require__(19);
 	
 	/** Detect free variable `self`. */
 	var freeSelf = (typeof self === 'undefined' ? 'undefined' : _typeof(self)) == 'object' && self && self.Object === Object && self;
@@ -2091,7 +2180,7 @@ var DDFCsvReader =
 	module.exports = root;
 
 /***/ },
-/* 17 */
+/* 19 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
@@ -2105,12 +2194,12 @@ var DDFCsvReader =
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 18 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _Symbol = __webpack_require__(15);
+	var _Symbol = __webpack_require__(17);
 	
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -2158,7 +2247,7 @@ var DDFCsvReader =
 	module.exports = getRawTag;
 
 /***/ },
-/* 19 */
+/* 21 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2187,47 +2276,7 @@ var DDFCsvReader =
 	module.exports = objectToString;
 
 /***/ },
-/* 20 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-	
-	/**
-	 * Checks if `value` is the
-	 * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
-	 * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
-	 * @example
-	 *
-	 * _.isObject({});
-	 * // => true
-	 *
-	 * _.isObject([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isObject(_.noop);
-	 * // => true
-	 *
-	 * _.isObject(null);
-	 * // => false
-	 */
-	function isObject(value) {
-	  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
-	  return value != null && (type == 'object' || type == 'function');
-	}
-	
-	module.exports = isObject;
-
-/***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2268,14 +2317,14 @@ var DDFCsvReader =
 	module.exports = isLength;
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseGetTag = __webpack_require__(14),
-	    isArray = __webpack_require__(23),
-	    isObjectLike = __webpack_require__(24);
+	var baseGetTag = __webpack_require__(16),
+	    isArray = __webpack_require__(24),
+	    isObjectLike = __webpack_require__(25);
 	
 	/** `Object#toString` result references. */
 	var stringTag = '[object String]';
@@ -2304,7 +2353,7 @@ var DDFCsvReader =
 	module.exports = isString;
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2337,7 +2386,7 @@ var DDFCsvReader =
 	module.exports = isArray;
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2375,12 +2424,12 @@ var DDFCsvReader =
 	module.exports = isObjectLike;
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var toFinite = __webpack_require__(26);
+	var toFinite = __webpack_require__(27);
 	
 	/**
 	 * Converts `value` to an integer.
@@ -2418,12 +2467,12 @@ var DDFCsvReader =
 	module.exports = toInteger;
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var toNumber = __webpack_require__(27);
+	var toNumber = __webpack_require__(28);
 	
 	/** Used as references for various `Number` constants. */
 	var INFINITY = 1 / 0,
@@ -2467,13 +2516,13 @@ var DDFCsvReader =
 	module.exports = toFinite;
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var isObject = __webpack_require__(20),
-	    isSymbol = __webpack_require__(28);
+	var isObject = __webpack_require__(7),
+	    isSymbol = __webpack_require__(29);
 	
 	/** Used as references for various `Number` constants. */
 	var NAN = 0 / 0;
@@ -2538,15 +2587,15 @@ var DDFCsvReader =
 	module.exports = toNumber;
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
-	var baseGetTag = __webpack_require__(14),
-	    isObjectLike = __webpack_require__(24);
+	var baseGetTag = __webpack_require__(16),
+	    isObjectLike = __webpack_require__(25);
 	
 	/** `Object#toString` result references. */
 	var symbolTag = '[object Symbol]';
@@ -2575,13 +2624,13 @@ var DDFCsvReader =
 	module.exports = isSymbol;
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseValues = __webpack_require__(30),
-	    keys = __webpack_require__(32);
+	var baseValues = __webpack_require__(31),
+	    keys = __webpack_require__(33);
 	
 	/**
 	 * Creates an array of the own enumerable string keyed property values of `object`.
@@ -2616,12 +2665,12 @@ var DDFCsvReader =
 	module.exports = values;
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var arrayMap = __webpack_require__(31);
+	var arrayMap = __webpack_require__(32);
 	
 	/**
 	 * The base implementation of `_.values` and `_.valuesIn` which creates an
@@ -2642,7 +2691,7 @@ var DDFCsvReader =
 	module.exports = baseValues;
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2670,14 +2719,14 @@ var DDFCsvReader =
 	module.exports = arrayMap;
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var arrayLikeKeys = __webpack_require__(33),
-	    baseKeys = __webpack_require__(45),
-	    isArrayLike = __webpack_require__(12);
+	var arrayLikeKeys = __webpack_require__(34),
+	    baseKeys = __webpack_require__(46),
+	    isArrayLike = __webpack_require__(14);
 	
 	/**
 	 * Creates an array of the own enumerable property names of `object`.
@@ -2714,17 +2763,17 @@ var DDFCsvReader =
 	module.exports = keys;
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseTimes = __webpack_require__(34),
-	    isArguments = __webpack_require__(35),
-	    isArray = __webpack_require__(23),
-	    isBuffer = __webpack_require__(37),
-	    isIndex = __webpack_require__(40),
-	    isTypedArray = __webpack_require__(41);
+	var baseTimes = __webpack_require__(35),
+	    isArguments = __webpack_require__(36),
+	    isArray = __webpack_require__(24),
+	    isBuffer = __webpack_require__(38),
+	    isIndex = __webpack_require__(41),
+	    isTypedArray = __webpack_require__(42);
 	
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -2768,7 +2817,7 @@ var DDFCsvReader =
 	module.exports = arrayLikeKeys;
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2795,13 +2844,13 @@ var DDFCsvReader =
 	module.exports = baseTimes;
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseIsArguments = __webpack_require__(36),
-	    isObjectLike = __webpack_require__(24);
+	var baseIsArguments = __webpack_require__(37),
+	    isObjectLike = __webpack_require__(25);
 	
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -2839,13 +2888,13 @@ var DDFCsvReader =
 	module.exports = isArguments;
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseGetTag = __webpack_require__(14),
-	    isObjectLike = __webpack_require__(24);
+	var baseGetTag = __webpack_require__(16),
+	    isObjectLike = __webpack_require__(25);
 	
 	/** `Object#toString` result references. */
 	var argsTag = '[object Arguments]';
@@ -2864,15 +2913,15 @@ var DDFCsvReader =
 	module.exports = baseIsArguments;
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {'use strict';
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
-	var root = __webpack_require__(16),
-	    stubFalse = __webpack_require__(39);
+	var root = __webpack_require__(18),
+	    stubFalse = __webpack_require__(40);
 	
 	/** Detect free variable `exports`. */
 	var freeExports = ( false ? 'undefined' : _typeof(exports)) == 'object' && exports && !exports.nodeType && exports;
@@ -2909,10 +2958,10 @@ var DDFCsvReader =
 	var isBuffer = nativeIsBuffer || stubFalse;
 	
 	module.exports = isBuffer;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(38)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(39)(module)))
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2929,7 +2978,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2954,7 +3003,7 @@ var DDFCsvReader =
 	module.exports = stubFalse;
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2981,14 +3030,14 @@ var DDFCsvReader =
 	module.exports = isIndex;
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseIsTypedArray = __webpack_require__(42),
-	    baseUnary = __webpack_require__(43),
-	    nodeUtil = __webpack_require__(44);
+	var baseIsTypedArray = __webpack_require__(43),
+	    baseUnary = __webpack_require__(44),
+	    nodeUtil = __webpack_require__(45);
 	
 	/* Node.js helper references. */
 	var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
@@ -3015,14 +3064,14 @@ var DDFCsvReader =
 	module.exports = isTypedArray;
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseGetTag = __webpack_require__(14),
-	    isLength = __webpack_require__(21),
-	    isObjectLike = __webpack_require__(24);
+	var baseGetTag = __webpack_require__(16),
+	    isLength = __webpack_require__(22),
+	    isObjectLike = __webpack_require__(25);
 	
 	/** `Object#toString` result references. */
 	var argsTag = '[object Arguments]',
@@ -3070,7 +3119,7 @@ var DDFCsvReader =
 	module.exports = baseIsTypedArray;
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3091,14 +3140,14 @@ var DDFCsvReader =
 	module.exports = baseUnary;
 
 /***/ },
-/* 44 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {'use strict';
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
-	var freeGlobal = __webpack_require__(17);
+	var freeGlobal = __webpack_require__(19);
 	
 	/** Detect free variable `exports`. */
 	var freeExports = ( false ? 'undefined' : _typeof(exports)) == 'object' && exports && !exports.nodeType && exports;
@@ -3120,16 +3169,16 @@ var DDFCsvReader =
 	}();
 	
 	module.exports = nodeUtil;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(38)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(39)(module)))
 
 /***/ },
-/* 45 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var isPrototype = __webpack_require__(46),
-	    nativeKeys = __webpack_require__(47);
+	var isPrototype = __webpack_require__(47),
+	    nativeKeys = __webpack_require__(48);
 	
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -3160,7 +3209,7 @@ var DDFCsvReader =
 	module.exports = baseKeys;
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -3185,12 +3234,12 @@ var DDFCsvReader =
 	module.exports = isPrototype;
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var overArg = __webpack_require__(48);
+	var overArg = __webpack_require__(49);
 	
 	/* Built-in method references for those with the same name as other `lodash` methods. */
 	var nativeKeys = overArg(Object.keys, Object);
@@ -3198,7 +3247,7 @@ var DDFCsvReader =
 	module.exports = nativeKeys;
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3220,19 +3269,19 @@ var DDFCsvReader =
 	module.exports = overArg;
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseKeys = __webpack_require__(45),
-	    getTag = __webpack_require__(50),
-	    isArguments = __webpack_require__(35),
-	    isArray = __webpack_require__(23),
-	    isArrayLike = __webpack_require__(12),
-	    isBuffer = __webpack_require__(37),
-	    isPrototype = __webpack_require__(46),
-	    isTypedArray = __webpack_require__(41);
+	var baseKeys = __webpack_require__(46),
+	    getTag = __webpack_require__(51),
+	    isArguments = __webpack_require__(36),
+	    isArray = __webpack_require__(24),
+	    isArrayLike = __webpack_require__(14),
+	    isBuffer = __webpack_require__(38),
+	    isPrototype = __webpack_require__(47),
+	    isTypedArray = __webpack_require__(42);
 	
 	/** `Object#toString` result references. */
 	var mapTag = '[object Map]',
@@ -3302,18 +3351,18 @@ var DDFCsvReader =
 	module.exports = isEmpty;
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var DataView = __webpack_require__(51),
-	    Map = __webpack_require__(58),
-	    Promise = __webpack_require__(59),
-	    Set = __webpack_require__(60),
-	    WeakMap = __webpack_require__(61),
-	    baseGetTag = __webpack_require__(14),
-	    toSource = __webpack_require__(56);
+	var DataView = __webpack_require__(52),
+	    Map = __webpack_require__(59),
+	    Promise = __webpack_require__(60),
+	    Set = __webpack_require__(61),
+	    WeakMap = __webpack_require__(62),
+	    baseGetTag = __webpack_require__(16),
+	    toSource = __webpack_require__(57);
 	
 	/** `Object#toString` result references. */
 	var mapTag = '[object Map]',
@@ -3368,13 +3417,13 @@ var DDFCsvReader =
 	module.exports = getTag;
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var getNative = __webpack_require__(52),
-	    root = __webpack_require__(16);
+	var getNative = __webpack_require__(53),
+	    root = __webpack_require__(18);
 	
 	/* Built-in method references that are verified to be native. */
 	var DataView = getNative(root, 'DataView');
@@ -3382,13 +3431,13 @@ var DDFCsvReader =
 	module.exports = DataView;
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseIsNative = __webpack_require__(53),
-	    getValue = __webpack_require__(57);
+	var baseIsNative = __webpack_require__(54),
+	    getValue = __webpack_require__(58);
 	
 	/**
 	 * Gets the native function at `key` of `object`.
@@ -3406,15 +3455,15 @@ var DDFCsvReader =
 	module.exports = getNative;
 
 /***/ },
-/* 53 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var isFunction = __webpack_require__(13),
-	    isMasked = __webpack_require__(54),
-	    isObject = __webpack_require__(20),
-	    toSource = __webpack_require__(56);
+	var isFunction = __webpack_require__(15),
+	    isMasked = __webpack_require__(55),
+	    isObject = __webpack_require__(7),
+	    toSource = __webpack_require__(57);
 	
 	/**
 	 * Used to match `RegExp`
@@ -3457,12 +3506,12 @@ var DDFCsvReader =
 	module.exports = baseIsNative;
 
 /***/ },
-/* 54 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var coreJsData = __webpack_require__(55);
+	var coreJsData = __webpack_require__(56);
 	
 	/** Used to detect methods masquerading as native. */
 	var maskSrcKey = function () {
@@ -3484,12 +3533,12 @@ var DDFCsvReader =
 	module.exports = isMasked;
 
 /***/ },
-/* 55 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var root = __webpack_require__(16);
+	var root = __webpack_require__(18);
 	
 	/** Used to detect overreaching core-js shims. */
 	var coreJsData = root['__core-js_shared__'];
@@ -3497,7 +3546,7 @@ var DDFCsvReader =
 	module.exports = coreJsData;
 
 /***/ },
-/* 56 */
+/* 57 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -3530,7 +3579,7 @@ var DDFCsvReader =
 	module.exports = toSource;
 
 /***/ },
-/* 57 */
+/* 58 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3550,13 +3599,13 @@ var DDFCsvReader =
 	module.exports = getValue;
 
 /***/ },
-/* 58 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var getNative = __webpack_require__(52),
-	    root = __webpack_require__(16);
+	var getNative = __webpack_require__(53),
+	    root = __webpack_require__(18);
 	
 	/* Built-in method references that are verified to be native. */
 	var Map = getNative(root, 'Map');
@@ -3564,13 +3613,13 @@ var DDFCsvReader =
 	module.exports = Map;
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var getNative = __webpack_require__(52),
-	    root = __webpack_require__(16);
+	var getNative = __webpack_require__(53),
+	    root = __webpack_require__(18);
 	
 	/* Built-in method references that are verified to be native. */
 	var Promise = getNative(root, 'Promise');
@@ -3578,13 +3627,13 @@ var DDFCsvReader =
 	module.exports = Promise;
 
 /***/ },
-/* 60 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var getNative = __webpack_require__(52),
-	    root = __webpack_require__(16);
+	var getNative = __webpack_require__(53),
+	    root = __webpack_require__(18);
 	
 	/* Built-in method references that are verified to be native. */
 	var Set = getNative(root, 'Set');
@@ -3592,13 +3641,13 @@ var DDFCsvReader =
 	module.exports = Set;
 
 /***/ },
-/* 61 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var getNative = __webpack_require__(52),
-	    root = __webpack_require__(16);
+	var getNative = __webpack_require__(53),
+	    root = __webpack_require__(18);
 	
 	/* Built-in method references that are verified to be native. */
 	var WeakMap = getNative(root, 'WeakMap');
@@ -3606,14 +3655,14 @@ var DDFCsvReader =
 	module.exports = WeakMap;
 
 /***/ },
-/* 62 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
-	var in_clause_under_conjunction_plugin_1 = __webpack_require__(63);
-	var head = __webpack_require__(66);
+	var in_clause_under_conjunction_plugin_1 = __webpack_require__(64);
+	var head = __webpack_require__(67);
 	function getAppropriatePlugin(queryParam, options) {
 	    var plugins = [new in_clause_under_conjunction_plugin_1.InClauseUnderConjunctionPlugin(queryParam, options)];
 	    return head(plugins.filter(function (plugin) {
@@ -3624,7 +3673,7 @@ var DDFCsvReader =
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 63 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3637,18 +3686,18 @@ var DDFCsvReader =
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var tslib_1 = __webpack_require__(5);
-	var path = __webpack_require__(64);
-	var head = __webpack_require__(66);
-	var values = __webpack_require__(29);
-	var keys = __webpack_require__(32);
-	var get = __webpack_require__(67);
-	var flattenDeep = __webpack_require__(100);
-	var isEmpty = __webpack_require__(49);
-	var startsWith = __webpack_require__(104);
-	var includes = __webpack_require__(7);
-	var compact = __webpack_require__(106);
+	var path = __webpack_require__(65);
+	var head = __webpack_require__(67);
+	var values = __webpack_require__(30);
+	var keys = __webpack_require__(33);
+	var get = __webpack_require__(68);
+	var flattenDeep = __webpack_require__(101);
+	var isEmpty = __webpack_require__(50);
+	var startsWith = __webpack_require__(105);
+	var includes = __webpack_require__(9);
+	var compact = __webpack_require__(107);
 	var ddfcsv_error_1 = __webpack_require__(3);
-	var Papa = __webpack_require__(107);
+	var Papa = __webpack_require__(108);
 	var WHERE_KEYWORD = 'where';
 	var JOIN_KEYWORD = 'join';
 	var KEY_KEYWORD = 'key';
@@ -4264,7 +4313,7 @@ var DDFCsvReader =
 	//# sourceMappingURL=in-clause-under-conjunction-plugin.js.map
 
 /***/ },
-/* 64 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -4488,10 +4537,10 @@ var DDFCsvReader =
 	  if (start < 0) start = str.length + start;
 	  return str.substr(start, len);
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(65)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(66)))
 
 /***/ },
-/* 65 */
+/* 66 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -4683,7 +4732,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 66 */
+/* 67 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4713,12 +4762,12 @@ var DDFCsvReader =
 	module.exports = head;
 
 /***/ },
-/* 67 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseGet = __webpack_require__(68);
+	var baseGet = __webpack_require__(69);
 	
 	/**
 	 * Gets the value at `path` of `object`. If the resolved value is
@@ -4753,13 +4802,13 @@ var DDFCsvReader =
 	module.exports = get;
 
 /***/ },
-/* 68 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var castPath = __webpack_require__(69),
-	    toKey = __webpack_require__(99);
+	var castPath = __webpack_require__(70),
+	    toKey = __webpack_require__(100);
 	
 	/**
 	 * The base implementation of `_.get` without support for default values.
@@ -4784,15 +4833,15 @@ var DDFCsvReader =
 	module.exports = baseGet;
 
 /***/ },
-/* 69 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var isArray = __webpack_require__(23),
-	    isKey = __webpack_require__(70),
-	    stringToPath = __webpack_require__(71),
-	    toString = __webpack_require__(97);
+	var isArray = __webpack_require__(24),
+	    isKey = __webpack_require__(71),
+	    stringToPath = __webpack_require__(72),
+	    toString = __webpack_require__(98);
 	
 	/**
 	 * Casts `value` to a path array if it's not one.
@@ -4812,15 +4861,15 @@ var DDFCsvReader =
 	module.exports = castPath;
 
 /***/ },
-/* 70 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
-	var isArray = __webpack_require__(23),
-	    isSymbol = __webpack_require__(28);
+	var isArray = __webpack_require__(24),
+	    isSymbol = __webpack_require__(29);
 	
 	/** Used to match property names within property paths. */
 	var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
@@ -4848,12 +4897,12 @@ var DDFCsvReader =
 	module.exports = isKey;
 
 /***/ },
-/* 71 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var memoizeCapped = __webpack_require__(72);
+	var memoizeCapped = __webpack_require__(73);
 	
 	/** Used to match property names within property paths. */
 	var reLeadingDot = /^\./,
@@ -4883,12 +4932,12 @@ var DDFCsvReader =
 	module.exports = stringToPath;
 
 /***/ },
-/* 72 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var memoize = __webpack_require__(73);
+	var memoize = __webpack_require__(74);
 	
 	/** Used as the maximum memoize cache size. */
 	var MAX_MEMOIZE_SIZE = 500;
@@ -4916,12 +4965,12 @@ var DDFCsvReader =
 	module.exports = memoizeCapped;
 
 /***/ },
-/* 73 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var MapCache = __webpack_require__(74);
+	var MapCache = __webpack_require__(75);
 	
 	/** Error message constants. */
 	var FUNC_ERROR_TEXT = 'Expected a function';
@@ -4996,16 +5045,16 @@ var DDFCsvReader =
 	module.exports = memoize;
 
 /***/ },
-/* 74 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var mapCacheClear = __webpack_require__(75),
-	    mapCacheDelete = __webpack_require__(91),
-	    mapCacheGet = __webpack_require__(94),
-	    mapCacheHas = __webpack_require__(95),
-	    mapCacheSet = __webpack_require__(96);
+	var mapCacheClear = __webpack_require__(76),
+	    mapCacheDelete = __webpack_require__(92),
+	    mapCacheGet = __webpack_require__(95),
+	    mapCacheHas = __webpack_require__(96),
+	    mapCacheSet = __webpack_require__(97);
 	
 	/**
 	 * Creates a map cache object to store key-value pairs.
@@ -5035,14 +5084,14 @@ var DDFCsvReader =
 	module.exports = MapCache;
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Hash = __webpack_require__(76),
-	    ListCache = __webpack_require__(83),
-	    Map = __webpack_require__(58);
+	var Hash = __webpack_require__(77),
+	    ListCache = __webpack_require__(84),
+	    Map = __webpack_require__(59);
 	
 	/**
 	 * Removes all key-value entries from the map.
@@ -5063,16 +5112,16 @@ var DDFCsvReader =
 	module.exports = mapCacheClear;
 
 /***/ },
-/* 76 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var hashClear = __webpack_require__(77),
-	    hashDelete = __webpack_require__(79),
-	    hashGet = __webpack_require__(80),
-	    hashHas = __webpack_require__(81),
-	    hashSet = __webpack_require__(82);
+	var hashClear = __webpack_require__(78),
+	    hashDelete = __webpack_require__(80),
+	    hashGet = __webpack_require__(81),
+	    hashHas = __webpack_require__(82),
+	    hashSet = __webpack_require__(83);
 	
 	/**
 	 * Creates a hash object.
@@ -5102,12 +5151,12 @@ var DDFCsvReader =
 	module.exports = Hash;
 
 /***/ },
-/* 77 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var nativeCreate = __webpack_require__(78);
+	var nativeCreate = __webpack_require__(79);
 	
 	/**
 	 * Removes all key-value entries from the hash.
@@ -5124,12 +5173,12 @@ var DDFCsvReader =
 	module.exports = hashClear;
 
 /***/ },
-/* 78 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var getNative = __webpack_require__(52);
+	var getNative = __webpack_require__(53);
 	
 	/* Built-in method references that are verified to be native. */
 	var nativeCreate = getNative(Object, 'create');
@@ -5137,7 +5186,7 @@ var DDFCsvReader =
 	module.exports = nativeCreate;
 
 /***/ },
-/* 79 */
+/* 80 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -5161,12 +5210,12 @@ var DDFCsvReader =
 	module.exports = hashDelete;
 
 /***/ },
-/* 80 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var nativeCreate = __webpack_require__(78);
+	var nativeCreate = __webpack_require__(79);
 	
 	/** Used to stand-in for `undefined` hash values. */
 	var HASH_UNDEFINED = '__lodash_hash_undefined__';
@@ -5198,12 +5247,12 @@ var DDFCsvReader =
 	module.exports = hashGet;
 
 /***/ },
-/* 81 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var nativeCreate = __webpack_require__(78);
+	var nativeCreate = __webpack_require__(79);
 	
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -5228,12 +5277,12 @@ var DDFCsvReader =
 	module.exports = hashHas;
 
 /***/ },
-/* 82 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var nativeCreate = __webpack_require__(78);
+	var nativeCreate = __webpack_require__(79);
 	
 	/** Used to stand-in for `undefined` hash values. */
 	var HASH_UNDEFINED = '__lodash_hash_undefined__';
@@ -5258,16 +5307,16 @@ var DDFCsvReader =
 	module.exports = hashSet;
 
 /***/ },
-/* 83 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var listCacheClear = __webpack_require__(84),
-	    listCacheDelete = __webpack_require__(85),
-	    listCacheGet = __webpack_require__(88),
-	    listCacheHas = __webpack_require__(89),
-	    listCacheSet = __webpack_require__(90);
+	var listCacheClear = __webpack_require__(85),
+	    listCacheDelete = __webpack_require__(86),
+	    listCacheGet = __webpack_require__(89),
+	    listCacheHas = __webpack_require__(90),
+	    listCacheSet = __webpack_require__(91);
 	
 	/**
 	 * Creates an list cache object.
@@ -5297,7 +5346,7 @@ var DDFCsvReader =
 	module.exports = ListCache;
 
 /***/ },
-/* 84 */
+/* 85 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -5317,12 +5366,12 @@ var DDFCsvReader =
 	module.exports = listCacheClear;
 
 /***/ },
-/* 85 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var assocIndexOf = __webpack_require__(86);
+	var assocIndexOf = __webpack_require__(87);
 	
 	/** Used for built-in method references. */
 	var arrayProto = Array.prototype;
@@ -5359,12 +5408,12 @@ var DDFCsvReader =
 	module.exports = listCacheDelete;
 
 /***/ },
-/* 86 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var eq = __webpack_require__(87);
+	var eq = __webpack_require__(88);
 	
 	/**
 	 * Gets the index at which the `key` is found in `array` of key-value pairs.
@@ -5387,7 +5436,7 @@ var DDFCsvReader =
 	module.exports = assocIndexOf;
 
 /***/ },
-/* 87 */
+/* 88 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -5431,12 +5480,12 @@ var DDFCsvReader =
 	module.exports = eq;
 
 /***/ },
-/* 88 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var assocIndexOf = __webpack_require__(86);
+	var assocIndexOf = __webpack_require__(87);
 	
 	/**
 	 * Gets the list cache value for `key`.
@@ -5457,12 +5506,12 @@ var DDFCsvReader =
 	module.exports = listCacheGet;
 
 /***/ },
-/* 89 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var assocIndexOf = __webpack_require__(86);
+	var assocIndexOf = __webpack_require__(87);
 	
 	/**
 	 * Checks if a list cache value for `key` exists.
@@ -5480,12 +5529,12 @@ var DDFCsvReader =
 	module.exports = listCacheHas;
 
 /***/ },
-/* 90 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var assocIndexOf = __webpack_require__(86);
+	var assocIndexOf = __webpack_require__(87);
 	
 	/**
 	 * Sets the list cache `key` to `value`.
@@ -5513,12 +5562,12 @@ var DDFCsvReader =
 	module.exports = listCacheSet;
 
 /***/ },
-/* 91 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var getMapData = __webpack_require__(92);
+	var getMapData = __webpack_require__(93);
 	
 	/**
 	 * Removes `key` and its value from the map.
@@ -5538,12 +5587,12 @@ var DDFCsvReader =
 	module.exports = mapCacheDelete;
 
 /***/ },
-/* 92 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var isKeyable = __webpack_require__(93);
+	var isKeyable = __webpack_require__(94);
 	
 	/**
 	 * Gets the data for `map`.
@@ -5561,7 +5610,7 @@ var DDFCsvReader =
 	module.exports = getMapData;
 
 /***/ },
-/* 93 */
+/* 94 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -5583,12 +5632,12 @@ var DDFCsvReader =
 	module.exports = isKeyable;
 
 /***/ },
-/* 94 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var getMapData = __webpack_require__(92);
+	var getMapData = __webpack_require__(93);
 	
 	/**
 	 * Gets the map value for `key`.
@@ -5606,12 +5655,12 @@ var DDFCsvReader =
 	module.exports = mapCacheGet;
 
 /***/ },
-/* 95 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var getMapData = __webpack_require__(92);
+	var getMapData = __webpack_require__(93);
 	
 	/**
 	 * Checks if a map value for `key` exists.
@@ -5629,12 +5678,12 @@ var DDFCsvReader =
 	module.exports = mapCacheHas;
 
 /***/ },
-/* 96 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var getMapData = __webpack_require__(92);
+	var getMapData = __webpack_require__(93);
 	
 	/**
 	 * Sets the map `key` to `value`.
@@ -5658,12 +5707,12 @@ var DDFCsvReader =
 	module.exports = mapCacheSet;
 
 /***/ },
-/* 97 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseToString = __webpack_require__(98);
+	var baseToString = __webpack_require__(99);
 	
 	/**
 	 * Converts `value` to a string. An empty string is returned for `null`
@@ -5693,15 +5742,15 @@ var DDFCsvReader =
 	module.exports = toString;
 
 /***/ },
-/* 98 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _Symbol = __webpack_require__(15),
-	    arrayMap = __webpack_require__(31),
-	    isArray = __webpack_require__(23),
-	    isSymbol = __webpack_require__(28);
+	var _Symbol = __webpack_require__(17),
+	    arrayMap = __webpack_require__(32),
+	    isArray = __webpack_require__(24),
+	    isSymbol = __webpack_require__(29);
 	
 	/** Used as references for various `Number` constants. */
 	var INFINITY = 1 / 0;
@@ -5737,12 +5786,12 @@ var DDFCsvReader =
 	module.exports = baseToString;
 
 /***/ },
-/* 99 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var isSymbol = __webpack_require__(28);
+	var isSymbol = __webpack_require__(29);
 	
 	/** Used as references for various `Number` constants. */
 	var INFINITY = 1 / 0;
@@ -5765,12 +5814,12 @@ var DDFCsvReader =
 	module.exports = toKey;
 
 /***/ },
-/* 100 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseFlatten = __webpack_require__(101);
+	var baseFlatten = __webpack_require__(102);
 	
 	/** Used as references for various `Number` constants. */
 	var INFINITY = 1 / 0;
@@ -5797,13 +5846,13 @@ var DDFCsvReader =
 	module.exports = flattenDeep;
 
 /***/ },
-/* 101 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var arrayPush = __webpack_require__(102),
-	    isFlattenable = __webpack_require__(103);
+	var arrayPush = __webpack_require__(103),
+	    isFlattenable = __webpack_require__(104);
 	
 	/**
 	 * The base implementation of `_.flatten` with support for restricting flattening.
@@ -5842,7 +5891,7 @@ var DDFCsvReader =
 	module.exports = baseFlatten;
 
 /***/ },
-/* 102 */
+/* 103 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -5869,14 +5918,14 @@ var DDFCsvReader =
 	module.exports = arrayPush;
 
 /***/ },
-/* 103 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _Symbol = __webpack_require__(15),
-	    isArguments = __webpack_require__(35),
-	    isArray = __webpack_require__(23);
+	var _Symbol = __webpack_require__(17),
+	    isArguments = __webpack_require__(36),
+	    isArray = __webpack_require__(24);
 	
 	/** Built-in value references. */
 	var spreadableSymbol = _Symbol ? _Symbol.isConcatSpreadable : undefined;
@@ -5895,15 +5944,15 @@ var DDFCsvReader =
 	module.exports = isFlattenable;
 
 /***/ },
-/* 104 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var baseClamp = __webpack_require__(105),
-	    baseToString = __webpack_require__(98),
-	    toInteger = __webpack_require__(25),
-	    toString = __webpack_require__(97);
+	var baseClamp = __webpack_require__(106),
+	    baseToString = __webpack_require__(99),
+	    toInteger = __webpack_require__(26),
+	    toString = __webpack_require__(98);
 	
 	/**
 	 * Checks if `string` starts with the given target string.
@@ -5939,7 +5988,7 @@ var DDFCsvReader =
 	module.exports = startsWith;
 
 /***/ },
-/* 105 */
+/* 106 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -5968,7 +6017,7 @@ var DDFCsvReader =
 	module.exports = baseClamp;
 
 /***/ },
-/* 106 */
+/* 107 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -6006,7 +6055,7 @@ var DDFCsvReader =
 	module.exports = compact;
 
 /***/ },
-/* 107 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -7284,22 +7333,21 @@ var DDFCsvReader =
 	});
 
 /***/ },
-/* 108 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var tslib_1 = __webpack_require__(5);
-	tslib_1.__exportStar(__webpack_require__(109), exports);
 	tslib_1.__exportStar(__webpack_require__(110), exports);
+	tslib_1.__exportStar(__webpack_require__(111), exports);
 	tslib_1.__exportStar(__webpack_require__(157), exports);
 	tslib_1.__exportStar(__webpack_require__(173), exports);
-	tslib_1.__exportStar(__webpack_require__(174), exports);
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 109 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -7307,8 +7355,8 @@ var DDFCsvReader =
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
-	var get = __webpack_require__(67);
-	var includes = __webpack_require__(7);
+	var get = __webpack_require__(68);
+	var includes = __webpack_require__(9);
 	exports.SCHEMAS = new Set(['concepts.schema', 'entities.schema', 'datapoints.schema', '*.schema']);
 	exports.DATAPOINTS = 'datapoints';
 	exports.ENTITIES = 'entities';
@@ -7317,8 +7365,8 @@ var DDFCsvReader =
 	exports.AVAILABLE_FROM_CLAUSE_VALUES = new Set([exports.CONCEPTS, exports.ENTITIES, exports.DATAPOINTS].concat(_toConsumableArray(exports.SCHEMAS)));
 	exports.AVAILABLE_ORDER_BY_CLAUSE_VALUES = new Set(['asc', 'desc', 1, -1]);
 	exports.DEFAULT_DATASET_NAME = process.env.DEFAULT_DATASET_NAME || 'systema_globalis';
-	exports.DEFAULT_DATASET_COMMIT = process.env.DEFAULT_DATASET_COMMIT || 'HEAD';
 	exports.DEFAULT_DATASET_BRANCH = process.env.DEFAULT_DATASET_BRANCH || 'master';
+	exports.DEFAULT_DATASET_COMMIT = 'HEAD';
 	exports.DEFAULT_DATASET_DIR = process.env.DEFAULT_DATASET_DIR || './datasets';
 	exports.MAX_AMOUNT_OF_MEASURES_IN_SELECT = 5;
 	function isSchemaQuery(query) {
@@ -7350,10 +7398,10 @@ var DDFCsvReader =
 	}
 	exports.isMeasure = isMeasure;
 	//# sourceMappingURL=helper.service.js.map
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(65)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(66)))
 
 /***/ },
-/* 110 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -7361,12 +7409,12 @@ var DDFCsvReader =
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
-	var isEmpty = __webpack_require__(49);
-	var isNil = __webpack_require__(111);
+	var isEmpty = __webpack_require__(50);
+	var isNil = __webpack_require__(6);
 	var filter = __webpack_require__(112);
-	var get = __webpack_require__(67);
-	var compact = __webpack_require__(106);
-	var helper_service_1 = __webpack_require__(109);
+	var get = __webpack_require__(68);
+	var compact = __webpack_require__(107);
+	var helper_service_1 = __webpack_require__(110);
 	function validateQueryDefinitions(query) {
 	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 	
@@ -7439,38 +7487,6 @@ var DDFCsvReader =
 	//# sourceMappingURL=definition.service.js.map
 
 /***/ },
-/* 111 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	/**
-	 * Checks if `value` is `null` or `undefined`.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is nullish, else `false`.
-	 * @example
-	 *
-	 * _.isNil(null);
-	 * // => true
-	 *
-	 * _.isNil(void 0);
-	 * // => true
-	 *
-	 * _.isNil(NaN);
-	 * // => false
-	 */
-	function isNil(value) {
-	  return value == null;
-	}
-	
-	module.exports = isNil;
-
-/***/ },
 /* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -7479,7 +7495,7 @@ var DDFCsvReader =
 	var arrayFilter = __webpack_require__(113),
 	    baseFilter = __webpack_require__(114),
 	    baseIteratee = __webpack_require__(120),
-	    isArray = __webpack_require__(23);
+	    isArray = __webpack_require__(24);
 	
 	/**
 	 * Iterates over elements of `collection`, returning an array of all elements
@@ -7613,7 +7629,7 @@ var DDFCsvReader =
 	'use strict';
 	
 	var baseFor = __webpack_require__(117),
-	    keys = __webpack_require__(32);
+	    keys = __webpack_require__(33);
 	
 	/**
 	 * The base implementation of `_.forOwn` without support for iteratee shorthands.
@@ -7690,7 +7706,7 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	var isArrayLike = __webpack_require__(12);
+	var isArrayLike = __webpack_require__(14);
 	
 	/**
 	 * Creates a `baseEach` or `baseEachRight` function.
@@ -7734,7 +7750,7 @@ var DDFCsvReader =
 	var baseMatches = __webpack_require__(121),
 	    baseMatchesProperty = __webpack_require__(149),
 	    identity = __webpack_require__(153),
-	    isArray = __webpack_require__(23),
+	    isArray = __webpack_require__(24),
 	    property = __webpack_require__(154);
 	
 	/**
@@ -7859,7 +7875,7 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	var ListCache = __webpack_require__(83),
+	var ListCache = __webpack_require__(84),
 	    stackClear = __webpack_require__(124),
 	    stackDelete = __webpack_require__(125),
 	    stackGet = __webpack_require__(126),
@@ -7893,7 +7909,7 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	var ListCache = __webpack_require__(83);
+	var ListCache = __webpack_require__(84);
 	
 	/**
 	 * Removes all key-value entries from the stack.
@@ -7982,9 +7998,9 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	var ListCache = __webpack_require__(83),
-	    Map = __webpack_require__(58),
-	    MapCache = __webpack_require__(74);
+	var ListCache = __webpack_require__(84),
+	    Map = __webpack_require__(59),
+	    MapCache = __webpack_require__(75);
 	
 	/** Used as the size to enable large array optimizations. */
 	var LARGE_ARRAY_SIZE = 200;
@@ -8024,7 +8040,7 @@ var DDFCsvReader =
 	'use strict';
 	
 	var baseIsEqualDeep = __webpack_require__(130),
-	    isObjectLike = __webpack_require__(24);
+	    isObjectLike = __webpack_require__(25);
 	
 	/**
 	 * The base implementation of `_.isEqual` which supports partial comparisons
@@ -8062,10 +8078,10 @@ var DDFCsvReader =
 	    equalArrays = __webpack_require__(131),
 	    equalByTag = __webpack_require__(137),
 	    equalObjects = __webpack_require__(141),
-	    getTag = __webpack_require__(50),
-	    isArray = __webpack_require__(23),
-	    isBuffer = __webpack_require__(37),
-	    isTypedArray = __webpack_require__(41);
+	    getTag = __webpack_require__(51),
+	    isArray = __webpack_require__(24),
+	    isBuffer = __webpack_require__(38),
+	    isTypedArray = __webpack_require__(42);
 	
 	/** Used to compose bitmasks for value comparisons. */
 	var COMPARE_PARTIAL_FLAG = 1;
@@ -8230,7 +8246,7 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	var MapCache = __webpack_require__(74),
+	var MapCache = __webpack_require__(75),
 	    setCacheAdd = __webpack_require__(133),
 	    setCacheHas = __webpack_require__(134);
 	
@@ -8361,9 +8377,9 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	var _Symbol = __webpack_require__(15),
+	var _Symbol = __webpack_require__(17),
 	    Uint8Array = __webpack_require__(138),
-	    eq = __webpack_require__(87),
+	    eq = __webpack_require__(88),
 	    equalArrays = __webpack_require__(131),
 	    mapToArray = __webpack_require__(139),
 	    setToArray = __webpack_require__(140);
@@ -8478,7 +8494,7 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	var root = __webpack_require__(16);
+	var root = __webpack_require__(18);
 	
 	/** Built-in value references. */
 	var Uint8Array = root.Uint8Array;
@@ -8631,7 +8647,7 @@ var DDFCsvReader =
 	
 	var baseGetAllKeys = __webpack_require__(143),
 	    getSymbols = __webpack_require__(144),
-	    keys = __webpack_require__(32);
+	    keys = __webpack_require__(33);
 	
 	/**
 	 * Creates an array of own enumerable property names and symbols of `object`.
@@ -8652,8 +8668,8 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	var arrayPush = __webpack_require__(102),
-	    isArray = __webpack_require__(23);
+	var arrayPush = __webpack_require__(103),
+	    isArray = __webpack_require__(24);
 	
 	/**
 	 * The base implementation of `getAllKeys` and `getAllKeysIn` which uses
@@ -8747,7 +8763,7 @@ var DDFCsvReader =
 	'use strict';
 	
 	var isStrictComparable = __webpack_require__(147),
-	    keys = __webpack_require__(32);
+	    keys = __webpack_require__(33);
 	
 	/**
 	 * Gets the property names, values, and compare flags of `object`.
@@ -8777,7 +8793,7 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	var isObject = __webpack_require__(20);
+	var isObject = __webpack_require__(7);
 	
 	/**
 	 * Checks if `value` is suitable for strict equality comparisons, i.e. `===`.
@@ -8826,12 +8842,12 @@ var DDFCsvReader =
 	'use strict';
 	
 	var baseIsEqual = __webpack_require__(129),
-	    get = __webpack_require__(67),
+	    get = __webpack_require__(68),
 	    hasIn = __webpack_require__(150),
-	    isKey = __webpack_require__(70),
+	    isKey = __webpack_require__(71),
 	    isStrictComparable = __webpack_require__(147),
 	    matchesStrictComparable = __webpack_require__(148),
-	    toKey = __webpack_require__(99);
+	    toKey = __webpack_require__(100);
 	
 	/** Used to compose bitmasks for value comparisons. */
 	var COMPARE_PARTIAL_FLAG = 1,
@@ -8924,12 +8940,12 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	var castPath = __webpack_require__(69),
-	    isArguments = __webpack_require__(35),
-	    isArray = __webpack_require__(23),
-	    isIndex = __webpack_require__(40),
-	    isLength = __webpack_require__(21),
-	    toKey = __webpack_require__(99);
+	var castPath = __webpack_require__(70),
+	    isArguments = __webpack_require__(36),
+	    isArray = __webpack_require__(24),
+	    isIndex = __webpack_require__(41),
+	    isLength = __webpack_require__(22),
+	    toKey = __webpack_require__(100);
 	
 	/**
 	 * Checks if `path` exists on `object`.
@@ -8999,8 +9015,8 @@ var DDFCsvReader =
 	
 	var baseProperty = __webpack_require__(155),
 	    basePropertyDeep = __webpack_require__(156),
-	    isKey = __webpack_require__(70),
-	    toKey = __webpack_require__(99);
+	    isKey = __webpack_require__(71),
+	    toKey = __webpack_require__(100);
 	
 	/**
 	 * Creates a function that returns the value at `path` of a given object.
@@ -9057,7 +9073,7 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	var baseGet = __webpack_require__(68);
+	var baseGet = __webpack_require__(69);
 	
 	/**
 	 * A specialized version of `baseProperty` which supports deep paths.
@@ -9083,22 +9099,22 @@ var DDFCsvReader =
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
-	var isEmpty = __webpack_require__(49);
-	var isNil = __webpack_require__(111);
-	var isObject = __webpack_require__(20);
-	var isArray = __webpack_require__(23);
+	var isEmpty = __webpack_require__(50);
+	var isNil = __webpack_require__(6);
+	var isObject = __webpack_require__(7);
+	var isArray = __webpack_require__(24);
 	var size = __webpack_require__(158);
-	var values = __webpack_require__(29);
-	var keys = __webpack_require__(32);
+	var values = __webpack_require__(30);
+	var keys = __webpack_require__(33);
 	var first = __webpack_require__(163);
 	var filter = __webpack_require__(112);
-	var startsWith = __webpack_require__(104);
-	var get = __webpack_require__(67);
+	var startsWith = __webpack_require__(105);
+	var get = __webpack_require__(68);
 	var has = __webpack_require__(164);
 	var every = __webpack_require__(166);
-	var compact = __webpack_require__(106);
-	var isString = __webpack_require__(22);
-	var helper_service_1 = __webpack_require__(109);
+	var compact = __webpack_require__(107);
+	var isString = __webpack_require__(23);
+	var helper_service_1 = __webpack_require__(110);
 	var util_1 = __webpack_require__(170);
 	function validateQueryStructure(query) {
 	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -9341,10 +9357,10 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	var baseKeys = __webpack_require__(45),
-	    getTag = __webpack_require__(50),
-	    isArrayLike = __webpack_require__(12),
-	    isString = __webpack_require__(22),
+	var baseKeys = __webpack_require__(46),
+	    getTag = __webpack_require__(51),
+	    isArrayLike = __webpack_require__(14),
+	    isString = __webpack_require__(23),
 	    stringSize = __webpack_require__(159);
 	
 	/** `Object#toString` result references. */
@@ -9520,7 +9536,7 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	module.exports = __webpack_require__(66);
+	module.exports = __webpack_require__(67);
 
 /***/ },
 /* 164 */
@@ -9599,7 +9615,7 @@ var DDFCsvReader =
 	var arrayEvery = __webpack_require__(167),
 	    baseEvery = __webpack_require__(168),
 	    baseIteratee = __webpack_require__(120),
-	    isArray = __webpack_require__(23),
+	    isArray = __webpack_require__(24),
 	    isIterateeCall = __webpack_require__(169);
 	
 	/**
@@ -9719,10 +9735,10 @@ var DDFCsvReader =
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
-	var eq = __webpack_require__(87),
-	    isArrayLike = __webpack_require__(12),
-	    isIndex = __webpack_require__(40),
-	    isObject = __webpack_require__(20);
+	var eq = __webpack_require__(88),
+	    isArrayLike = __webpack_require__(14),
+	    isIndex = __webpack_require__(41),
+	    isObject = __webpack_require__(7);
 	
 	/**
 	 * Checks if the given arguments are from an iteratee call.
@@ -10299,7 +10315,7 @@ var DDFCsvReader =
 	function hasOwnProperty(obj, prop) {
 	  return Object.prototype.hasOwnProperty.call(obj, prop);
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(65)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(66)))
 
 /***/ },
 /* 171 */
@@ -10349,10 +10365,14 @@ var DDFCsvReader =
 
 	"use strict";
 	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var tslib_1 = __webpack_require__(5);
-	var get = __webpack_require__(67);
-	var helper_service_1 = __webpack_require__(109);
+	var isNil = __webpack_require__(6);
+	var includes = __webpack_require__(9);
+	var get = __webpack_require__(68);
+	var helper_service_1 = __webpack_require__(110);
 	function getDatasetPath(basePath, queryParam) {
 	    var dataset = queryParam.dataset,
 	        branch = queryParam.branch,
@@ -10360,6 +10380,7 @@ var DDFCsvReader =
 	
 	    return "" + basePath + dataset + "/" + branch + "-" + commit;
 	}
+	exports.getDatasetPath = getDatasetPath;
 	function getDatapackagePath(datasetPath) {
 	    return datasetPath + '/datapackage.json';
 	}
@@ -10374,82 +10395,95 @@ var DDFCsvReader =
 	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 	
 	    return tslib_1.__awaiter(this, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-	        var dataset, branch, commit, basePath, fileReader, datasetName, datasetPath, datapackagePath;
+	        var _get;
+	
+	        var datasetsConfig, _datasetsConfig$defau, DEFAULT_DATASET, DEFAULT_BRANCH, DEFAULT_COMMIT, originDataset, originBranch, originCommit, _queryParam$dataset, dataset, _queryParam$branch, branch, _queryParam$commit, commit, basePath, fileReader, datasetName, datasetPath, datapackagePath;
+	
 	        return regeneratorRuntime.wrap(function _callee$(_context) {
 	            while (1) {
 	                switch (_context.prev = _context.next) {
 	                    case 0:
-	                        dataset = get(queryParam, 'dataset', helper_service_1.DEFAULT_DATASET_NAME);
-	                        branch = get(queryParam, 'branch', helper_service_1.DEFAULT_DATASET_BRANCH);
-	                        commit = get(queryParam, 'commit', helper_service_1.DEFAULT_DATASET_COMMIT);
+	                        datasetsConfig = get(options, 'datasetsConfig', (_get = {}, _defineProperty(_get, helper_service_1.DEFAULT_DATASET_NAME, _defineProperty({}, helper_service_1.DEFAULT_DATASET_BRANCH, [helper_service_1.DEFAULT_DATASET_COMMIT])), _defineProperty(_get, "default", {
+	                            dataset: helper_service_1.DEFAULT_DATASET_NAME,
+	                            branch: helper_service_1.DEFAULT_DATASET_BRANCH,
+	                            commit: helper_service_1.DEFAULT_DATASET_COMMIT
+	                        }), _get));
+	                        _datasetsConfig$defau = datasetsConfig['default'], DEFAULT_DATASET = _datasetsConfig$defau.dataset, DEFAULT_BRANCH = _datasetsConfig$defau.branch, DEFAULT_COMMIT = _datasetsConfig$defau.commit;
+	                        originDataset = queryParam.dataset, originBranch = queryParam.branch, originCommit = queryParam.commit;
+	                        _queryParam$dataset = queryParam.dataset, dataset = _queryParam$dataset === undefined ? DEFAULT_DATASET : _queryParam$dataset, _queryParam$branch = queryParam.branch, branch = _queryParam$branch === undefined ? DEFAULT_BRANCH : _queryParam$branch, _queryParam$commit = queryParam.commit, commit = _queryParam$commit === undefined ? DEFAULT_COMMIT : _queryParam$commit;
 	                        basePath = get(options, 'basePath', helper_service_1.DEFAULT_DATASET_DIR);
 	                        fileReader = get(options, 'fileReader');
 	                        datasetName = dataset;
-	                        datasetPath = void 0;
-	                        datapackagePath = void 0;
-	                        _context.prev = 8;
-	                        _context.next = 11;
-	                        return isDatasetPathAlreadyInBasePath(fileReader, basePath);
+	
+	                        if (!isNil(datasetsConfig[dataset])) {
+	                            _context.next = 9;
+	                            break;
+	                        }
+	
+	                        throw new Error("No " + (isNil(originDataset) ? 'default ' : '') + "dataset '" + dataset + "' was found");
+	
+	                    case 9:
+	                        if (!isNil(datasetsConfig[dataset][branch])) {
+	                            _context.next = 11;
+	                            break;
+	                        }
+	
+	                        throw new Error("No " + (isNil(originBranch) ? 'default ' : '') + "branch '" + branch + "' in " + (isNil(originDataset) ? 'default ' : '') + "dataset '" + dataset + "' was found");
 	
 	                    case 11:
+	                        if (includes(datasetsConfig[dataset][branch], commit)) {
+	                            _context.next = 13;
+	                            break;
+	                        }
+	
+	                        throw new Error("No " + (isNil(originCommit) ? 'default ' : '') + "commit '" + commit + "' in " + (isNil(originBranch) ? 'default ' : '') + "branch '" + branch + "' in " + (isNil(originDataset) ? 'default ' : '') + "dataset '" + dataset + "' was found");
+	
+	                    case 13:
+	                        datasetPath = void 0;
+	                        datapackagePath = void 0;
+	                        _context.prev = 15;
+	                        _context.next = 18;
+	                        return isDatasetPathAlreadyInBasePath(fileReader, basePath);
+	
+	                    case 18:
 	                        if (!_context.sent) {
-	                            _context.next = 16;
+	                            _context.next = 23;
 	                            break;
 	                        }
 	
 	                        datasetPath = basePath;
 	                        datapackagePath = getDatapackagePath(basePath);
-	                        _context.next = 18;
+	                        _context.next = 25;
 	                        break;
 	
-	                    case 16:
+	                    case 23:
 	                        datasetPath = getDatasetPath(basePath, { dataset: dataset, branch: branch, commit: commit });
 	                        datapackagePath = getDatapackagePath(datasetPath);
 	
-	                    case 18:
-	                        _context.next = 23;
+	                    case 25:
+	                        _context.next = 30;
 	                        break;
 	
-	                    case 20:
-	                        _context.prev = 20;
-	                        _context.t0 = _context["catch"](8);
+	                    case 27:
+	                        _context.prev = 27;
+	                        _context.t0 = _context["catch"](15);
 	                        throw _context.t0;
 	
-	                    case 23:
+	                    case 30:
 	                        Object.assign(queryParam, { dataset: dataset, branch: branch, commit: commit });
 	                        Object.assign(options, { datasetPath: datasetPath, datapackagePath: datapackagePath, datasetName: datasetName });
 	                        return _context.abrupt("return", queryParam);
 	
-	                    case 26:
+	                    case 33:
 	                    case "end":
 	                        return _context.stop();
 	                }
 	            }
-	        }, _callee, this, [[8, 20]]);
+	        }, _callee, this, [[15, 27]]);
 	    }));
 	}
 	exports.extendQueryParamWithDatasetProps = extendQueryParamWithDatasetProps;
 	//# sourceMappingURL=extension.service.js.map
-
-/***/ },
-/* 174 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", { value: true });
-	function validateQueryAvailability(queryParam) {
-	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-	    var dataset = queryParam.dataset,
-	        branch = queryParam.branch,
-	        commit = queryParam.commit;
-	
-	    return new Promise(function (resolve, reject) {
-	        return resolve();
-	    });
-	}
-	exports.validateQueryAvailability = validateQueryAvailability;
-	//# sourceMappingURL=availability.service.js.map
 
 /***/ }
 /******/ ]);

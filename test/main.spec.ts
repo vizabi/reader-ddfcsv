@@ -7,13 +7,17 @@ const expect = chai.expect;
 const sandbox = sinon.createSandbox();
 
 describe('General errors in ddfcsv reader', () => {
-  afterEach(() => sandbox.restore());
+  afterEach(() => {
+    sandbox.restore();
+  });
 
   describe('should be processed correctly', () => {
     it(`when dataset path is already in ddf csv reader base path`, async function() {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: './test/fixtures/VS-work/path_test/master-HEAD' });
+      reader.init({
+        path: './test/fixtures/VS-work/dataset_name_1/master-HEAD'
+      });
 
       let result;
 
@@ -25,13 +29,12 @@ describe('General errors in ddfcsv reader', () => {
               'concept_type', 'name'
             ]
           },
-          dataset: GLOBALIS_PATH,
           from: 'concepts',
           where: {},
           order_by: [ 'concept' ]
         });
       } catch (error) {
-        throw new Error(notExpectedError);
+        throw new Error(`${notExpectedError} ${error}`);
       }
 
       expect(result).to.deep.equal(expectedConcepts);
@@ -72,7 +75,11 @@ describe('General errors in ddfcsv reader', () => {
     it(`when 'File not found' happens (stubless version)`, done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: 'foo path/' });
+      reader.init({ path: 'foo path/', datasetsConfig: {
+          [ GLOBALIS_PATH ]: { master: [ 'HEAD' ] },
+          default: { dataset: GLOBALIS_PATH, branch: 'master', commit: 'HEAD' }
+        }
+      });
       reader.read({
         select: {
           key: [ 'concept' ],
@@ -80,7 +87,6 @@ describe('General errors in ddfcsv reader', () => {
             'concept_type', 'name'
           ]
         },
-        dataset: GLOBALIS_PATH,
         from: 'concepts',
         where: {},
         order_by: [ 'concept' ]
@@ -96,7 +102,13 @@ describe('General errors in ddfcsv reader', () => {
     it(`when 'JSON parsing error' happens`, done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH });
+      reader.init({
+        path: BASE_PATH,
+        datasetsConfig: {
+          [ BROKEN_DATAPACKAGE_PATH ]: { master: [ 'HEAD' ] },
+          default: { dataset: BROKEN_DATAPACKAGE_PATH, branch: 'master', commit: 'HEAD' }
+        }
+      });
       reader.read({
         select: {
           key: [ 'concept' ],
@@ -113,7 +125,6 @@ describe('General errors in ddfcsv reader', () => {
         expect(error.name).to.equal('DdfCsvError');
         expect(error.message).to.equal('JSON parsing error [filepath: ./test/fixtures/ds_broken_datapackage/master-HEAD/datapackage.json]. Unexpected token ( in JSON at position 0.');
         expect(error.details).to.equal('Unexpected token ( in JSON at position 0');
-
         done();
       });
     });

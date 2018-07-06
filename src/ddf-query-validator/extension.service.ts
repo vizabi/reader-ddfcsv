@@ -1,3 +1,5 @@
+import isNil = require('lodash/isNil');
+import includes = require('lodash/includes');
 import get = require('lodash/get');
 import {
   DEFAULT_DATASET_BRANCH,
@@ -27,12 +29,49 @@ function isDatasetPathAlreadyInBasePath (fileReader: IReader, basePath: string):
 }
 
 export async function extendQueryParamWithDatasetProps (queryParam, options = {}): Promise<string | void> {
-  const dataset = get(queryParam, 'dataset', DEFAULT_DATASET_NAME);
-  const branch = get(queryParam, 'branch', DEFAULT_DATASET_BRANCH);
-  const commit = get(queryParam, 'commit', DEFAULT_DATASET_COMMIT);
+  const datasetsConfig = get(options, 'datasetsConfig', {
+    [DEFAULT_DATASET_NAME]: {[DEFAULT_DATASET_BRANCH]: [DEFAULT_DATASET_COMMIT]},
+    default: {
+      dataset: DEFAULT_DATASET_NAME,
+      branch: DEFAULT_DATASET_BRANCH,
+      commit: DEFAULT_DATASET_COMMIT
+    }
+  });
+
+  const {
+    'default': {
+      dataset: DEFAULT_DATASET,
+      branch: DEFAULT_BRANCH,
+      commit: DEFAULT_COMMIT
+    }
+  } = datasetsConfig;
+  const {
+    dataset: originDataset,
+    branch: originBranch,
+    commit: originCommit
+  } = queryParam;
+  const {
+    dataset = DEFAULT_DATASET,
+    branch = DEFAULT_BRANCH,
+    commit = DEFAULT_COMMIT
+  } = queryParam;
+
   const basePath = get(options, 'basePath', DEFAULT_DATASET_DIR);
   const fileReader = get(options, 'fileReader');
   const datasetName = dataset;
+
+  if (isNil(datasetsConfig[dataset])) {
+    throw new Error(`No ${isNil(originDataset) ? 'default ' : ''}dataset '${dataset}' was found`);
+  }
+
+  if (isNil(datasetsConfig[dataset][branch])) {
+    throw new Error(`No ${isNil(originBranch) ? 'default ' : ''}branch '${branch}' in ${isNil(originDataset) ? 'default ' : ''}dataset '${dataset}' was found`);
+  }
+
+  if (!includes(datasetsConfig[dataset][branch], commit)) {
+    throw new Error(`No ${isNil(originCommit) ? 'default ' : ''}commit '${commit}' in ${isNil(originBranch) ? 'default ' : ''}branch '${branch}' in ${isNil(originDataset) ? 'default ' : ''}dataset '${dataset}' was found`);
+  }
+
   let datasetPath;
   let datapackagePath;
 

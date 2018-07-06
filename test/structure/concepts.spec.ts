@@ -48,7 +48,11 @@ describe('Concepts structure errors in query', () => {
     it(`when requests \'${BASE_PATH + EMPTY_TRANSLATIONS_PATH}\' dataset without \'en\' language in datapackage.json`, done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: BASE_PATH, datasetsConfig: {
+          [ EMPTY_TRANSLATIONS_PATH ]: { master: [ 'HEAD' ] },
+          default: { dataset: EMPTY_TRANSLATIONS_PATH, branch: 'master', commit: 'HEAD' }
+        }
+      });
 
       reader.read({
         from: 'concepts',

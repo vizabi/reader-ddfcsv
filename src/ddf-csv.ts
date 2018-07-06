@@ -6,7 +6,7 @@ import {
   isSchemaQuery,
   validateQueryStructure,
   validateQueryDefinitions,
-  extendQueryParamWithDatasetProps, validateQueryAvailability
+  extendQueryParamWithDatasetProps
 } from './ddf-query-validator';
 
 import * as Papa from 'papaparse';
@@ -14,7 +14,8 @@ import { IDatapackage, IReader } from './interfaces';
 
 const isValidNumeric = val => typeof val !== 'number' && !val ? false : true;
 
-export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
+export function ddfCsvReader (readerOptions: {basePath, fileReader: IReader, logger?, datasetsConfig?}) {
+  const {basePath, fileReader, logger, datasetsConfig} = readerOptions;
 
   const internalConcepts = [
     { concept: 'concept', concept_type: 'string', domain: null },
@@ -41,6 +42,7 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
 
   const baseOptions: any = {
     basePath,
+    datasetsConfig,
     conceptsLookup: new Map<string, any>(),
     datapackagePath: '',
     datasetPath: '',
@@ -174,7 +176,6 @@ export function ddfCsvReader (basePath: string, fileReader: IReader, logger?) {
     try {
       baseOptions.fileReader = fileReader;
       await validateQueryStructure(queryParam, baseOptions);
-      await validateQueryAvailability(queryParam, baseOptions);
       await extendQueryParamWithDatasetProps(queryParam, baseOptions);
       const datapackage =  await loadDataPackage(baseOptions.datapackagePath);
       baseOptions.datapackage = datapackage;
