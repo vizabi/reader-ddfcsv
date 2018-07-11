@@ -1,4 +1,5 @@
 import includes = require('lodash/includes');
+import cloneDeep = require('lodash/cloneDeep');
 import isEmpty = require('lodash/isEmpty');
 import { getAppropriatePlugin } from './query-optimization-plugins';
 import { CSV_PARSING_ERROR, DDF_ERROR, DdfCsvError, FILE_READING_ERROR, JSON_PARSING_ERROR } from './ddfcsv-error';
@@ -10,13 +11,11 @@ import {
 } from './ddf-query-validator';
 
 import * as Papa from 'papaparse';
-import { IDatapackage, IReader } from './interfaces';
+import { IBaseReaderOptions, IDatapackage, IReader } from './interfaces';
 
 const isValidNumeric = val => typeof val !== 'number' && !val ? false : true;
 
-export function ddfCsvReader (readerOptions: {basePath, fileReader: IReader, logger?, datasetsConfig?}) {
-  const {basePath, fileReader, logger, datasetsConfig} = readerOptions;
-
+export function ddfCsvReader (logger?: any) {
   const internalConcepts = [
     { concept: 'concept', concept_type: 'string', domain: null },
     { concept: 'concept_type', concept_type: 'string', domain: null }
@@ -40,25 +39,16 @@ export function ddfCsvReader (readerOptions: {basePath, fileReader: IReader, log
     [ '$nin', (rowValue, filterValue) => !filterValue.has(rowValue) ],
   ]);
 
-  const baseOptions: any = {
-    basePath,
-    datasetsConfig,
-    conceptsLookup: new Map<string, any>(),
-    datapackagePath: '',
-    datasetPath: '',
-    dataset: ''
-  };
-
   const keyValueLookup = new Map<string, any>();
   const resourcesLookup = new Map();
 
   let optimalFilesSet = [];
 
-  function loadDataPackage (datapackagePath: string): Promise<IDatapackage> {
+  function loadDataPackage (baseOptions: IBaseReaderOptions): Promise<IDatapackage> {
     return new Promise((resolve, reject) => {
-      fileReader.readText(datapackagePath, (err, data) => {
+      baseOptions.fileReader.readText(baseOptions.datapackagePath, (err, data) => {
         if (err) {
-          return reject(new DdfCsvError(FILE_READING_ERROR, err, datapackagePath));
+          return reject(new DdfCsvError(FILE_READING_ERROR, err, baseOptions.datapackagePath));
         }
 
         let datapackage;
@@ -69,7 +59,7 @@ export function ddfCsvReader (readerOptions: {basePath, fileReader: IReader, log
           buildResourcesLookup(datapackage);
           buildKeyValueLookup(datapackage);
         } catch (parseErr) {
-          return reject(new DdfCsvError(JSON_PARSING_ERROR, parseErr.message, datapackagePath));
+          return reject(new DdfCsvError(JSON_PARSING_ERROR, parseErr.message, baseOptions.datapackagePath));
         }
 
         resolve(datapackage);
@@ -169,15 +159,14 @@ export function ddfCsvReader (readerOptions: {basePath, fileReader: IReader, log
     concepts.forEach(row => options.conceptsLookup.set(row.concept, row));
   }
 
-  async function query (queryParam) {
+  async function query (queryParam, baseOptions) {
     // console.log(JSON.stringify(queryParam, null, '\t'))
     let data;
 
     try {
-      baseOptions.fileReader = fileReader;
       await validateQueryStructure(queryParam, baseOptions);
       await extendQueryParamWithDatasetProps(queryParam, baseOptions);
-      const datapackage =  await loadDataPackage(baseOptions.datapackagePath);
+      const datapackage =  await loadDataPackage(baseOptions);
       baseOptions.datapackage = datapackage;
       await loadConcepts(queryParam, baseOptions);
       // baseOptions.conceptsLookup = conceptsLookup;
@@ -402,7 +391,7 @@ export function ddfCsvReader (readerOptions: {basePath, fileReader: IReader, log
         dataset: queryParam.dataset,
         branch: queryParam.branch,
         commit: queryParam.commit
-      })
+      }, Object.assign({joinID}, cloneDeep(options)))
         .then(result => ({
           [ joinID ]: {
             [ join.key ]: {
@@ -500,7 +489,7 @@ export function ddfCsvReader (readerOptions: {basePath, fileReader: IReader, log
           dataset: queryParam.dataset,
           branch: queryParam.branch,
           commit: queryParam.commit
-        })
+        }, Object.assign({}, cloneDeep(options)))
           .then(result => ({
             [ concept.concept ]:
               {
@@ -723,7 +712,7 @@ export function ddfCsvReader (readerOptions: {basePath, fileReader: IReader, log
 
   function loadFile (filePath, options) {
     return new Promise((resolve, reject) => {
-      fileReader.readText(filePath, (err, data) => {
+      options.fileReader.readText(filePath, (err, data) => {
         if (err) {
           return reject(new DdfCsvError(FILE_READING_ERROR, err, filePath));
         }

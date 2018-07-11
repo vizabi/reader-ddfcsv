@@ -35,10 +35,12 @@ export const languageClauseShouldnotBeInSchemaQueries = new RegExp(`'language' c
 export const languageClauseMustBeString = new RegExp(`'language' clause must be string only`);
 export const joinClauseMustBeObject = new RegExp(`'join' clause must be object only`);
 export const whereClauseMustBeObject = new RegExp(`'where' clause must be object only`);
+export const joinWhereClauseMustBeObject = new RegExp(`'join.\\$test.where' clause must be object only`);
+export const joinKeyClauseMustBeString = new RegExp(`'join.\\$test.key' clause must be string only`);
 export const orderByClauseMustHaveCertainStructure = new RegExp(`'order_by' clause must be string or array of strings \\|\\| objects only`);
 
-export const whereClauseHasUnknownOperator = new RegExp(`'where' clause has unknown operator\\(s\\) '\\$concept'\, replace it with allowed operators: `);
-export const whereClauseHasUnknownOperator1 = new RegExp(`'where' clause has unknown operator\\(s\\) '\\$geo'\, replace it with allowed operators: `);
+export const whereClauseHasUnknownOperator = new RegExp(`'where' clause has unknown operator\\(s\\) '\\$geo'\, replace it with allowed operators: `);
+export const joinWhereClauseHasUnknownOperator = new RegExp(`'join\.\\$test\.where' clause has unknown operator\\(s\\) '\\$geo'\, replace it with allowed operators: `);
 
 export const notExpectedError = 'This should never be called.';
 export const expectedConcepts = [ {

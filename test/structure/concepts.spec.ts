@@ -7,7 +7,7 @@ import {
   EXPECTS_EXACTLY_ONE_ERROR,
   EXPECTS_EXACTLY_TWO_ERRORS,
   getAmountOfErrors,
-  GLOBALIS_PATH,
+  GLOBALIS_PATH, joinClauseShouldnotBeInSchemaQueries,
   notExpectedError,
   selectClauseMustHaveStructure,
   selectKeyClauseMustHaveOnly1Item,
@@ -199,6 +199,28 @@ describe('Concepts structure errors in query', () => {
           // console.log(error.stack);
           expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
           expect(error.toString()).to.match(selectValueClauseMustHaveCertainStructure);
+        }, done));
+    });
+  });
+
+  describe('should be produced only for \'join\' section', () => {
+    it('when it is present', done => {
+      const reader = getDDFCsvReaderObject();
+
+      reader.init({ path: BASE_PATH });
+
+      reader.read({
+        select: {
+          key: [ 'key', 'value' ]
+        },
+        from: 'concepts.schema',
+        join: ''
+      })
+        .then(data => done(notExpectedError))
+        .catch(checkExpectations((error) => {
+          // console.log(error.stack);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(joinClauseShouldnotBeInSchemaQueries);
         }, done));
     });
   });

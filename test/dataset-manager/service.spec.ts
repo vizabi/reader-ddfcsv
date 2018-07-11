@@ -106,7 +106,7 @@ describe('Availability of dataset&branch&commit', () => {
               await reader.init({ path: BASE_PATH, datasetsConfig });
               data = await reader.read(fullQuery);
             } catch (error) {
-              expect(error.message, 'Failure happens somewhere outside extension service').to.not.contain('File reading error');
+              expect(error.message, 'Failure happens somewhere outside dataset-manager service').to.not.contain('File reading error');
 
               expect(error.message).to.include(`dataset '${EXPECTED_DATASET}'`);
               if (!IS_DEFAULT_DATASET) {

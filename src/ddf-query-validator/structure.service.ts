@@ -5,6 +5,7 @@ import isArray = require('lodash/isArray');
 import size = require('lodash/size');
 import values = require('lodash/values');
 import keys = require('lodash/keys');
+import map = require('lodash/map');
 import first = require('lodash/first');
 import filter = require('lodash/filter');
 import startsWith = require('lodash/startsWith');
@@ -144,8 +145,8 @@ function validateWhereStructure (query, options): string[] {
   const whereOperators = getWhereOperators(whereClause);
 
   errorMessages.push(
-    checkIfWhereHasInvalidStructure(whereClause),
-    checkIfWhereHasUnknownOperators(joinClause, whereOperators),
+    checkIfWhereHasInvalidStructure(whereClause, getJoinIDPathIfExists(options)),
+    checkIfWhereHasUnknownOperators(joinClause, whereOperators, getJoinIDPathIfExists(options)),
   );
 
   return compact(errorMessages);
@@ -180,16 +181,17 @@ function validateJoinStructure (query, options): string[] {
 
   switch (true) {
     case (isSchemaQuery(query)):
+    case (isConceptsQuery(query)):
       errorMessages.push(
         checkIfSchemaJoinIsPresent(query),
       );
       break;
     case (isEntitiesQuery(query)):
-    case (isConceptsQuery(query)):
     case (isDatapointsQuery(query)):
     default:
       errorMessages.push(
         checkIfJoinHasInvalidStructure(joinClause),
+        ...map(joinClause, (item, joinID) => checkIfJoinKeyHasInvalidStructure(item, getJoinIDPathIfExists({joinID})))
       );
       break;
   }
@@ -233,18 +235,24 @@ function checkIfLanguageHasInvalidStructure (languageClause): string | void {
   }
 }
 
-function checkIfWhereHasInvalidStructure (whereClause): string | void {
-  if (!isNil(whereClause) && !isStrictObject(whereClause)) {
-    return `'where' clause must be object only`;
+function checkIfJoinKeyHasInvalidStructure (joinClause, joinPath: string): string | void {
+  if (!isNil(joinClause.key) && !isString(joinClause.key)) {
+    return `'${joinPath}key' clause must be string only`;
   }
 }
 
-function checkIfWhereHasUnknownOperators (joinClause, operators): string | void {
+function checkIfWhereHasInvalidStructure (whereClause, joinPath: string): string | void {
+  if (!isNil(whereClause) && !isStrictObject(whereClause)) {
+    return `'${joinPath}where' clause must be object only`;
+  }
+}
+
+function checkIfWhereHasUnknownOperators (joinClause, operators, joinPath: string): string | void {
   const notAllowedOperators = filter(operators, (operator) => !isAllowedOperator(joinClause, operator)).map((operator) => operator.name);
   const allowedOperatorsByDataset = [ ...AVAILABLE_QUERY_OPERATORS.values(), ...keys(joinClause) ];
 
   if (!isEmpty(notAllowedOperators)) {
-    return `'where' clause has unknown operator(s) '${notAllowedOperators.join(', ')}', replace it with allowed operators: ${allowedOperatorsByDataset.join(', ')}`;
+    return `'${joinPath}where' clause has unknown operator(s) '${notAllowedOperators.join(', ')}', replace it with allowed operators: ${allowedOperatorsByDataset.join(', ')}`;
   }
 
 }
@@ -281,6 +289,10 @@ function isMongoLikeOperator (operator) {
 
 function isJoinOperator (joinClause, operator) {
   return operator.isLeaf && startsWith(operator.name, '$') && has(joinClause, operator.name);
+}
+
+function getJoinIDPathIfExists(options) {
+  return get(options, 'joinID', false) ? `join.${options.joinID}.` : '';
 }
 
 function getWhereOperators (whereClause): string[] {
@@ -333,7 +345,7 @@ function checkIfSelectValueHasInvalidStructure (fromClause, value): string | voi
 
 function checkIfSchemaJoinIsPresent (query): string | void {
   if (has(query, 'join')) {
-    return `'join' clause for '*.schema' queries shouldn't be present in query`;
+    return `'join' clause for '${query.from}' queries shouldn't be present in query`;
   }
 }
 

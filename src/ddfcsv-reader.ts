@@ -19,13 +19,14 @@ export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
         this.datasetsConfig = readerInfo.datasetsConfig;
         this.isLocalReader = isNil(this.datasetsConfig) ? true : false;
         this.isServerReader = !this.isLocalReader;
-
-        this.reader = ddfCsvReader({
+        this.readerOptions = {
           basePath: this._basePath,
           fileReader: this.fileReader,
           logger: this.logger,
           datasetsConfig: this.datasetsConfig
-        });
+        };
+
+        this.reader = ddfCsvReader(this.logger);
       },
 
       getAsset (asset) {
@@ -61,7 +62,16 @@ export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
         let result;
 
         try {
-          result = await this.reader.query(queryParam);
+          result = await this.reader.query(queryParam, {
+            basePath: this._basePath,
+            datasetsConfig: this.datasetsConfig,
+            fileReader: this.fileReader,
+            logger: this.logger,
+            conceptsLookup: new Map<string, any>(),
+            datapackagePath: '',
+            datasetPath: '',
+            dataset: ''
+          });
           result = parsers ? this._prettifyData(result, parsers) : result;
 
           if (this.resultTransformer) {

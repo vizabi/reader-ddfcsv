@@ -24,8 +24,6 @@ export const DEFAULT_DATASET_BRANCH = process.env.DEFAULT_DATASET_BRANCH || 'mas
 export const DEFAULT_DATASET_COMMIT = 'HEAD';
 export const DEFAULT_DATASET_DIR = process.env.DEFAULT_DATASET_DIR || './datasets';
 
-export const MAX_AMOUNT_OF_MEASURES_IN_SELECT = 5;
-
 export function isSchemaQuery (query) {
   const fromClause = get(query, 'from');
   return SCHEMAS.has(fromClause);

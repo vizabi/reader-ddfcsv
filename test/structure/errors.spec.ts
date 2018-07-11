@@ -1,5 +1,5 @@
 import * as chai from 'chai';
-import * as sinon from 'sinon';
+import cloneDeep = require('lodash/cloneDeep');
 import { getDDFCsvReaderObject } from '../../src/index';
 import {
   BASE_PATH,
@@ -12,7 +12,7 @@ import {
   fromClauseMustBeString,
   fromClauseValueMustBeAllowed,
   getAmountOfErrors,
-  joinClauseMustBeObject,
+  joinClauseMustBeObject, joinWhereClauseMustBeObject,
   languageClauseMustBeString,
   notExpectedError,
   orderByClauseMustHaveCertainStructure,
@@ -21,15 +21,15 @@ import {
   selectKeyClauseMustHaveAtLeast2Items,
   selectValueClauseMustHaveAtLeast1Item,
   whereClauseHasUnknownOperator,
-  whereClauseHasUnknownOperator1,
-  whereClauseMustBeObject
+  whereClauseMustBeObject,
+  joinWhereClauseHasUnknownOperator,
+  joinKeyClauseMustBeString,
 } from '../common';
+import { DATAPOINTS, ENTITIES, CONCEPTS } from '../../src/ddf-query-validator';
 
 const expect = chai.expect;
-const sandbox = sinon.createSandbox();
 
 describe('General structure errors in query', () => {
-  afterEach(() => sandbox.restore());
 
   describe('should be produced only for \'from\' section', () => {
     it('when query is empty', function(done: Function): void {
@@ -142,11 +142,40 @@ describe('General structure errors in query', () => {
   });
 
   describe('should be produced only for \'language\' section', () => {
-    it('when it is not string', function(done: Function): void {
+    it('when it is not string for \'concepts\'', function(done: Function): void {
+      const FIXTURE_GENERIC_QUERY = { select: { key: [ 'concept' ] }, from: CONCEPTS };
       const reader = getDDFCsvReaderObject();
       reader.init({ path: BASE_PATH });
 
-      reader.read({ language: [], select: { key: [ 'concept' ] }, from: 'concepts' })
+      reader.read(Object.assign({ language: [] }, cloneDeep(FIXTURE_GENERIC_QUERY)))
+        .then(() => done(notExpectedError))
+        .catch(checkExpectations((error) => {
+          // console.log(error.stack);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(languageClauseMustBeString);
+        }, done));
+    });
+
+    it('when it is not string for \'entities\'', function(done: Function): void {
+      const FIXTURE_GENERIC_QUERY = { select: { key: [ 'country' ], value: [ 'world_6region', 'world_6region', 'landlocked' ] }, from: ENTITIES };
+      const reader = getDDFCsvReaderObject();
+      reader.init({ path: BASE_PATH });
+
+      reader.read(Object.assign({ language: [] }, cloneDeep(FIXTURE_GENERIC_QUERY)))
+        .then(() => done(notExpectedError))
+        .catch(checkExpectations((error) => {
+          // console.log(error.stack);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(languageClauseMustBeString);
+        }, done));
+    });
+
+    it('when it is not string for \'datapoints\'', function(done: Function): void {
+      const FIXTURE_GENERIC_QUERY = { select: { key: [ 'geo', 'time' ], value: [ 'population_total' ] }, from: DATAPOINTS };
+      const reader = getDDFCsvReaderObject();
+      reader.init({ path: BASE_PATH });
+
+      reader.read(Object.assign({ language: [] }, cloneDeep(FIXTURE_GENERIC_QUERY)))
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
@@ -156,12 +185,14 @@ describe('General structure errors in query', () => {
     });
   });
 
-  describe('should be produced only for \'join\' section', () => {
+  describe('should be produced only for \'join\' section and for \'entities\'', () => {
+    const FIXTURE_GENERIC_QUERY = { select: { key: [ 'country' ], value: [ 'world_6region', 'world_6region', 'landlocked' ] }, from: ENTITIES };
+
     it('when it is not object', function(done: Function): void {
       const reader = getDDFCsvReaderObject();
       reader.init({ path: BASE_PATH });
 
-      reader.read({ join: [], select: { key: [ 'concept' ] }, from: 'concepts' })
+      reader.read(Object.assign({ join: [] }, cloneDeep(FIXTURE_GENERIC_QUERY)))
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
@@ -170,18 +201,157 @@ describe('General structure errors in query', () => {
         }, done));
     });
 
-    it('when it has not allowed operator in `join.$.where` clause', function(done: Function): void {
+    it('when `join.$world_6region.where` clause is not object', function(done: Function): void {
+      const FIXTURE_SUBQUERY = { where: { world_6region: '$test' }, join: { $test: { key: 'world_6region', where: '' } }};
       const reader = getDDFCsvReaderObject();
       reader.init({ path: BASE_PATH });
 
-      reader.read({
-        where: { $concept: { $eq: 'country' } }, select: { key: [ 'concept' ] }, from: 'concepts'
-      })
+      reader.read(Object.assign(cloneDeep(FIXTURE_GENERIC_QUERY), FIXTURE_SUBQUERY))
+        .then((result) => {
+          // console.log(JSON.stringify(result, null, '\t'));
+          return done(notExpectedError);
+        })
+        .catch(checkExpectations((error) => {
+          // console.log(error.stack);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(joinWhereClauseMustBeObject);
+        }, done));
+    });
+
+    it('when it has not allowed operator in `join.$world_6region.where` clause', function(done: Function): void {
+      const FIXTURE_SUBQUERY = { where: { world_6region: '$test' }, join: { $geo: {key: 'country', where: {}}, $test: { key: 'world_6region', where: {$geo: 'country'} } }};
+      const reader = getDDFCsvReaderObject();
+      reader.init({ path: BASE_PATH });
+
+      reader.read(Object.assign(cloneDeep(FIXTURE_GENERIC_QUERY), FIXTURE_SUBQUERY))
+        .then((result) => {
+          // console.log(JSON.stringify(result, null, '\t'));
+          return done(notExpectedError);
+        })
+        .catch(checkExpectations((error) => {
+          // console.log(error.stack);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(joinWhereClauseHasUnknownOperator);
+        }, done));
+    });
+
+    it('when it has not allowed link to another join section in `join.$test.where` clause', function(done: Function): void {
+      const FIXTURE_SUBQUERY = { where: { world_6region: '$test' }, join: { $geo: {key: 'country', where: {}}, $test: { key: 'world_6region', where: { country: '$geo' } } }};
+      const reader = getDDFCsvReaderObject();
+      reader.init({ path: BASE_PATH });
+
+      reader.read(Object.assign(cloneDeep(FIXTURE_GENERIC_QUERY), FIXTURE_SUBQUERY))
+        .then((result) => {
+          // console.log(JSON.stringify(result, null, '\t'));
+          return done(notExpectedError);
+        })
+        .catch(checkExpectations((error) => {
+          // console.log(error.stack);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(joinWhereClauseHasUnknownOperator);
+        }, done));
+    });
+
+    it('when `join.$test.key` clause is not string', function(done: Function): void {
+      const FIXTURE_SUBQUERY = { where: { world_6region: '$test' }, join: { $test: { key: {}, where: {} } } };
+      const reader = getDDFCsvReaderObject();
+      reader.init({ path: BASE_PATH });
+
+      reader.read(Object.assign(cloneDeep(FIXTURE_GENERIC_QUERY), FIXTURE_SUBQUERY))
+        .then((result) => {
+          // console.log(JSON.stringify(result, null, '\t'));
+          return done(notExpectedError);
+        })
+        .catch(checkExpectations((error) => {
+          // console.log(error.stack);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(joinKeyClauseMustBeString);
+        }, done));
+    });
+  });
+
+  describe('should be produced only for \'join\' section and for \'datapoints\'', () => {
+    const FIXTURE_GENERIC_QUERY = { select: { key: [ 'geo', 'time' ], value: [ 'population_total' ] }, from: DATAPOINTS };
+
+    it('when it is not object', function(done: Function): void {
+      const FIXTURE_SUBQUERY = { join: [] };
+      const reader = getDDFCsvReaderObject();
+      reader.init({ path: BASE_PATH });
+
+      reader.read(Object.assign(FIXTURE_SUBQUERY, cloneDeep(FIXTURE_GENERIC_QUERY)))
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
           expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-          expect(error.toString()).to.match(whereClauseHasUnknownOperator);
+          expect(error.toString()).to.match(joinClauseMustBeObject);
+        }, done));
+    });
+
+    it('when `join.$world_6region.where` clause is not object', function(done: Function): void {
+      const FIXTURE_SUBQUERY = { where: { geo: '$test' }, join: { $test: { key: 'country', where: '' } }};
+      const reader = getDDFCsvReaderObject();
+      reader.init({ path: BASE_PATH });
+
+      reader.read(Object.assign(cloneDeep(FIXTURE_GENERIC_QUERY), FIXTURE_SUBQUERY))
+        .then((result) => {
+          // console.log(JSON.stringify(result, null, '\t'));
+          return done(notExpectedError);
+        })
+        .catch(checkExpectations((error) => {
+          // console.log(error.stack);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(joinWhereClauseMustBeObject);
+        }, done));
+    });
+
+    it('when it has not allowed operator in `join.$world_6region.where` clause', function(done: Function): void {
+      const FIXTURE_SUBQUERY = { where: { geo: '$test' }, join: { $geo: {key: 'country', where: {}}, $test: { key: 'country', where: {$geo: 'usa'} } }};
+      const reader = getDDFCsvReaderObject();
+      reader.init({ path: BASE_PATH });
+
+      reader.read(Object.assign(cloneDeep(FIXTURE_GENERIC_QUERY), FIXTURE_SUBQUERY))
+        .then((result) => {
+          // console.log(JSON.stringify(result, null, '\t'));
+          return done(notExpectedError);
+        })
+        .catch(checkExpectations((error) => {
+          // console.log(error.stack);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(joinWhereClauseHasUnknownOperator);
+        }, done));
+    });
+
+    it('when it has not allowed link to another join section in `join.$test.where` clause', function(done: Function): void {
+      const FIXTURE_SUBQUERY = { where: { geo: '$test' }, join: { $geo: {key: 'country', where: {}}, $test: { key: 'country', where: { country: '$geo'} } }};
+      const reader = getDDFCsvReaderObject();
+      reader.init({ path: BASE_PATH });
+
+      reader.read(Object.assign(cloneDeep(FIXTURE_GENERIC_QUERY), FIXTURE_SUBQUERY))
+        .then((result) => {
+          // console.log(JSON.stringify(result, null, '\t'));
+          return done(notExpectedError);
+        })
+        .catch(checkExpectations((error) => {
+          // console.log(error.stack);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(joinWhereClauseHasUnknownOperator);
+        }, done));
+    });
+
+    it('when `join.$test.key` clause is not string', function(done: Function): void {
+      const FIXTURE_SUBQUERY = { where: { country: '$test' }, join: { $test: { key: {}, where: {} } } };
+      const reader = getDDFCsvReaderObject();
+      reader.init({ path: BASE_PATH });
+
+      reader.read(Object.assign(cloneDeep(FIXTURE_GENERIC_QUERY), FIXTURE_SUBQUERY))
+        .then((result) => {
+          // console.log(JSON.stringify(result, null, '\t'));
+          return done(notExpectedError);
+        })
+        .catch(checkExpectations((error) => {
+          // console.log(error.stack);
+          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+          expect(error.toString()).to.match(joinKeyClauseMustBeString);
         }, done));
     });
   });
@@ -205,10 +375,10 @@ describe('General structure errors in query', () => {
       reader.init({ path: BASE_PATH });
 
       reader.read({
-        where: { $concept: { $eq: 'country' } },
-        select: { key: [ 'concept' ] },
-        from: 'concepts',
-        join: { $concept: {} }
+        where: { $geo: { $eq: 'usa' } },
+        select: { key: [ 'country' ] },
+        from: 'entities',
+        join: { $geo: {} }
       })
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
@@ -252,7 +422,7 @@ describe('General structure errors in query', () => {
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
           expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-          expect(error.toString()).to.match(whereClauseHasUnknownOperator1);
+          expect(error.toString()).to.match(whereClauseHasUnknownOperator);
         }, done));
     });
 
@@ -261,7 +431,7 @@ describe('General structure errors in query', () => {
       reader.init({ path: BASE_PATH });
 
       reader.read({
-        select: { key: [ 'geo', 'time' ], value: ['population_total'] },
+        select: { key: [ 'geo', 'time' ], value: [ 'population_total' ] },
         from: 'datapoints',
         where: { $geo: { $eq: 'usa' } }
       })
@@ -269,7 +439,7 @@ describe('General structure errors in query', () => {
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
           expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-          expect(error.toString()).to.match(whereClauseHasUnknownOperator1);
+          expect(error.toString()).to.match(whereClauseHasUnknownOperator);
         }, done));
     });
   });
