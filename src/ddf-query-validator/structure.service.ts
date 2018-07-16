@@ -14,15 +14,16 @@ import has = require('lodash/has');
 import every = require('lodash/every');
 import compact = require('lodash/compact');
 import isString = require('lodash/isString');
+import includes = require('lodash/includes');
+import uniq = require('lodash/uniq');
 import {
-  DEFAULT_DATASET_NAME,
   AVAILABLE_FROM_CLAUSE_VALUES,
   AVAILABLE_ORDER_BY_CLAUSE_VALUES,
   AVAILABLE_QUERY_OPERATORS,
   isConceptsQuery,
   isDatapointsQuery,
   isEntitiesQuery,
-  isSchemaQuery, DEFAULT_DATASET_BRANCH, DEFAULT_DATASET_COMMIT
+  isSchemaQuery,
 } from './helper.service';
 import { isPrimitive } from 'util';
 
@@ -125,6 +126,7 @@ function validateSelectStructure (query, options): string[] {
         checkIfSelectIsEmpty(selectClause),
         checkIfSelectHasInvalidStructure(selectClause, key, value),
         checkIfDatapointsSelectKeyHasInvalidStructure(fromClause, key),
+        checkIfDatapointsSelectKeyHasDuplicates(fromClause, key),
         checkIfDatapointsSelectValueHasInvalidStructure(fromClause, value),
       );
       break;
@@ -291,6 +293,10 @@ function isJoinOperator (joinClause, operator) {
   return operator.isLeaf && startsWith(operator.name, '$') && has(joinClause, operator.name);
 }
 
+function getDuplicates (array: string[]): string[] {
+  return filter(array, (value, index: number, iteratee) => includes(iteratee, value, index + 1));
+}
+
 function getJoinIDPathIfExists(options) {
   return get(options, 'joinID', false) ? `join.${options.joinID}.` : '';
 }
@@ -321,6 +327,14 @@ function getWhereOperators (whereClause): string[] {
 function checkIfDatapointsSelectKeyHasInvalidStructure (fromClause, key): string | void {
   if (size(key) < 2) {
     return `'select.key' clause for '${fromClause}' queries must have at least 2 items`;
+  }
+}
+
+function checkIfDatapointsSelectKeyHasDuplicates (fromClause, key): string | void {
+  const duplicates = getDuplicates(key);
+
+  if (size(duplicates) > 0) {
+    return `'select.key' clause for '${fromClause}' queries contains duplicates: ${uniq(duplicates).join(',')}`;
   }
 }
 

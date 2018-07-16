@@ -6,6 +6,18 @@ export const DATAPOINTS = 'datapoints';
 export const ENTITIES = 'entities';
 export const CONCEPTS = 'concepts';
 
+export const CONCEPT_TYPE_MEASURE = 'measure';
+export const CONCEPT_TYPE_STRING = 'string';
+export const CONCEPT_TYPE_ENTITY_DOMAIN = 'entity_domain';
+export const CONCEPT_TYPE_ENTITY_SET = 'entity_set';
+export const CONCEPT_TYPE_TIME = 'time';
+
+export const RESERVED_CONCEPT = 'concept';
+export const RESERVED_CONCEPT_TYPE = 'concept_type';
+export const RESERVED_DOMAIN = 'domain';
+export const RESERVED_KEY = 'key';
+export const RESERVED_VALUE = 'value';
+
 export const AVAILABLE_QUERY_OPERATORS = new Set([
   '$eq', '$gt', '$gte', '$lt', '$lte', '$ne', '$in', '$nin',
   '$or', '$and', '$not', '$nor', '$size', '$all', '$elemMatch'
@@ -46,10 +58,14 @@ export function isConceptsQuery (query) {
 
 // UTILS
 
-export function isEntityDomainOrSet (conceptType: string): boolean {
-  return includes([ 'entity_domain', 'entity_set', 'time' ], conceptType);
+export function isEntityDomainOrSet (conceptType: string, allowedValues: string[]): boolean {
+  return includes(allowedValues, conceptType);
 }
 
 export function isMeasure (conceptType: string): boolean {
-  return includes([ 'measure', 'string' ], conceptType);
+  return includes([ CONCEPT_TYPE_MEASURE ], conceptType);
+}
+
+export function isIndicator (conceptType: string): boolean {
+  return includes([ CONCEPT_TYPE_MEASURE, CONCEPT_TYPE_STRING ], conceptType);
 }

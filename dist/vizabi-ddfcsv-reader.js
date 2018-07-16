@@ -1537,7 +1537,7 @@ var DDFCsvReader =
 	            return query({
 	                select: { key: [join.key] },
 	                where: join.where,
-	                from: options.conceptsLookup.has(join.key) ? 'concepts' : 'entities',
+	                from: options.conceptsLookup.has(join.key) ? 'entities' : 'concepts',
 	                dataset: queryParam.dataset,
 	                branch: queryParam.branch,
 	                commit: queryParam.commit
@@ -8827,8 +8827,8 @@ var DDFCsvReader =
 	var tslib_1 = __webpack_require__(5);
 	tslib_1.__exportStar(__webpack_require__(157), exports);
 	tslib_1.__exportStar(__webpack_require__(158), exports);
-	tslib_1.__exportStar(__webpack_require__(190), exports);
-	tslib_1.__exportStar(__webpack_require__(208), exports);
+	tslib_1.__exportStar(__webpack_require__(192), exports);
+	tslib_1.__exportStar(__webpack_require__(214), exports);
 	//# sourceMappingURL=index.js.map
 
 /***/ },
@@ -8846,6 +8846,16 @@ var DDFCsvReader =
 	exports.DATAPOINTS = 'datapoints';
 	exports.ENTITIES = 'entities';
 	exports.CONCEPTS = 'concepts';
+	exports.CONCEPT_TYPE_MEASURE = 'measure';
+	exports.CONCEPT_TYPE_STRING = 'string';
+	exports.CONCEPT_TYPE_ENTITY_DOMAIN = 'entity_domain';
+	exports.CONCEPT_TYPE_ENTITY_SET = 'entity_set';
+	exports.CONCEPT_TYPE_TIME = 'time';
+	exports.RESERVED_CONCEPT = 'concept';
+	exports.RESERVED_CONCEPT_TYPE = 'concept_type';
+	exports.RESERVED_DOMAIN = 'domain';
+	exports.RESERVED_KEY = 'key';
+	exports.RESERVED_VALUE = 'value';
 	exports.AVAILABLE_QUERY_OPERATORS = new Set(['$eq', '$gt', '$gte', '$lt', '$lte', '$ne', '$in', '$nin', '$or', '$and', '$not', '$nor', '$size', '$all', '$elemMatch']);
 	exports.AVAILABLE_FROM_CLAUSE_VALUES = new Set([exports.CONCEPTS, exports.ENTITIES, exports.DATAPOINTS].concat(_toConsumableArray(exports.SCHEMAS)));
 	exports.AVAILABLE_ORDER_BY_CLAUSE_VALUES = new Set(['asc', 'desc', 1, -1]);
@@ -8873,14 +8883,18 @@ var DDFCsvReader =
 	    return fromClause === exports.CONCEPTS;
 	}
 	exports.isConceptsQuery = isConceptsQuery;
-	function isEntityDomainOrSet(conceptType) {
-	    return includes(['entity_domain', 'entity_set', 'time'], conceptType);
+	function isEntityDomainOrSet(conceptType, allowedValues) {
+	    return includes(allowedValues, conceptType);
 	}
 	exports.isEntityDomainOrSet = isEntityDomainOrSet;
 	function isMeasure(conceptType) {
-	    return includes(['measure', 'string'], conceptType);
+	    return includes([exports.CONCEPT_TYPE_MEASURE], conceptType);
 	}
 	exports.isMeasure = isMeasure;
+	function isIndicator(conceptType) {
+	    return includes([exports.CONCEPT_TYPE_MEASURE, exports.CONCEPT_TYPE_STRING], conceptType);
+	}
+	exports.isIndicator = isIndicator;
 	//# sourceMappingURL=helper.service.js.map
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(137)))
 
@@ -8894,10 +8908,11 @@ var DDFCsvReader =
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var isEmpty = __webpack_require__(133);
-	var isNil = __webpack_require__(6);
 	var filter = __webpack_require__(159);
+	var map = __webpack_require__(190);
 	var get = __webpack_require__(139);
 	var compact = __webpack_require__(154);
+	var includes = __webpack_require__(9);
 	var helper_service_1 = __webpack_require__(157);
 	function validateQueryDefinitions(query) {
 	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -8906,7 +8921,7 @@ var DDFCsvReader =
 	        var validationResult = [].concat(_toConsumableArray(validateSelectDefinitions(query, options)));
 	        var isQueryValid = isEmpty(validationResult);
 	        if (!isQueryValid) {
-	            return reject("Too many query definition errors: \n* " + validationResult.join('\n* '));
+	            return reject("Too many query definition errors [repo: " + query.dataset + "]: \n* " + validationResult.join('\n* '));
 	        }
 	        return resolve();
 	    });
@@ -8914,59 +8929,60 @@ var DDFCsvReader =
 	exports.validateQueryDefinitions = validateQueryDefinitions;
 	function validateSelectDefinitions(query, options) {
 	    var errorMessages = [];
-	    var selectClause = get(query, 'select', null);
 	    var fromClause = get(query, 'from', null);
+	    var selectClause = get(query, 'select', null);
 	    var key = get(selectClause, 'key');
 	    var value = get(selectClause, 'value');
+	    var ALLOWED_KEYS = [];
+	    var ALLOWED_VALUES = [];
+	    var conceptsLookup = options.conceptsLookup;
+	
 	    switch (true) {
-	        case helper_service_1.isSchemaQuery(query):
-	            errorMessages.push.apply(errorMessages, []);
+	        case helper_service_1.isDatapointsQuery(query):
+	            var CONCEPT_TYPES_FOR_DATAPOINTS = [helper_service_1.CONCEPT_TYPE_ENTITY_SET, helper_service_1.CONCEPT_TYPE_ENTITY_DOMAIN, helper_service_1.CONCEPT_TYPE_TIME];
+	            ALLOWED_KEYS.push.apply(ALLOWED_KEYS, _toConsumableArray(getAllowedConceptGidsByConceptType(CONCEPT_TYPES_FOR_DATAPOINTS, conceptsLookup)));
+	            ALLOWED_VALUES.push.apply(ALLOWED_VALUES, _toConsumableArray(conceptsLookup.keys()));
 	            break;
 	        case helper_service_1.isEntitiesQuery(query):
-	            errorMessages.push.apply(errorMessages, []);
+	            var CONCEPT_TYPES_FOR_ENTITIES = [helper_service_1.CONCEPT_TYPE_ENTITY_SET, helper_service_1.CONCEPT_TYPE_ENTITY_DOMAIN];
+	            ALLOWED_KEYS.push.apply(ALLOWED_KEYS, _toConsumableArray(getAllowedConceptGidsByConceptType(CONCEPT_TYPES_FOR_ENTITIES, conceptsLookup)));
+	            ALLOWED_VALUES.push.apply(ALLOWED_VALUES, _toConsumableArray(conceptsLookup.keys()));
 	            break;
 	        case helper_service_1.isConceptsQuery(query):
-	            errorMessages.push.apply(errorMessages, []);
-	            break;
-	        case helper_service_1.isDatapointsQuery(query):
-	            errorMessages.push(checkIfSelectKeyHasInvalidDefinitions(query, key, options), checkIfSelectValueHasInvalidDefinitions(query, value, options));
+	            ALLOWED_KEYS.push(helper_service_1.RESERVED_CONCEPT);
+	            ALLOWED_VALUES.push.apply(ALLOWED_VALUES, _toConsumableArray(conceptsLookup.keys()).concat([helper_service_1.RESERVED_CONCEPT, helper_service_1.RESERVED_CONCEPT_TYPE, helper_service_1.RESERVED_DOMAIN]));
 	            break;
 	        default:
+	            ALLOWED_KEYS.push(helper_service_1.RESERVED_KEY, helper_service_1.RESERVED_VALUE);
+	            ALLOWED_VALUES.push(helper_service_1.RESERVED_KEY, helper_service_1.RESERVED_VALUE);
 	            break;
 	    }
+	    errorMessages.push(checkIfSelectKeyHasInvalidDefinitions(fromClause, key, ALLOWED_KEYS), checkIfSelectValueHasInvalidDefinitions(fromClause, value, ALLOWED_VALUES));
 	    return compact(errorMessages);
 	}
-	function checkIfSelectKeyHasInvalidDefinitions(query, key, options) {
-	    var fromClause = get(query, 'from', null);
-	    var unavailableKeys = getUnavailableSelectKeys(key, options);
+	function checkIfSelectKeyHasInvalidDefinitions(fromClause, key, ALLOWED_KEYS) {
+	    var unavailableKeys = getUnavailableSelectItems(key, ALLOWED_KEYS);
 	    if (!isEmpty(unavailableKeys)) {
-	        return "'select.key' clause for '" + fromClause + "' queries contains unavailable item(s): " + unavailableKeys.join(', ') + " [repo: " + query.dataset + "]";
+	        return "'select.key' clause for '" + fromClause + "' query contains unavailable item(s): " + unavailableKeys.join(', ');
 	    }
 	}
-	function checkIfSelectValueHasInvalidDefinitions(query, value, options) {
-	    var fromClause = get(query, 'from', null);
-	    var unavailableValues = getUnavailableSelectValues(value, options);
-	    if (!isEmpty(unavailableValues)) {
-	        return "'select.value' clause for '" + fromClause + "' queries contains unavailable item(s): " + unavailableValues.join(', ') + " [repo: " + query.dataset + "]";
+	function checkIfSelectValueHasInvalidDefinitions(fromClause, value, ALLOWED_VALUES) {
+	    var unavailableValues = getUnavailableSelectItems(value, ALLOWED_VALUES);
+	    if (!isEmpty(value) && !isEmpty(unavailableValues)) {
+	        return "'select.value' clause for '" + fromClause + "' query contains unavailable item(s): " + unavailableValues.join(', ');
 	    }
 	}
-	function getUnavailableSelectKeys(key, options) {
-	    return filter(key, function (keyItem) {
-	        var concept = options.conceptsLookup.get(keyItem);
-	        if (isNil(concept) || !helper_service_1.isEntityDomainOrSet(concept.concept_type)) {
-	            return true;
-	        }
-	        return false;
+	function getUnavailableSelectItems(selectItems, ALLOWED_ITEMS) {
+	    return filter(selectItems, function (value) {
+	        return !includes(ALLOWED_ITEMS, value);
 	    });
 	}
-	function getUnavailableSelectValues(value, options) {
-	    return filter(value, function (valueItem) {
-	        var concept = options.conceptsLookup.get(valueItem);
-	        if (isNil(concept) || !helper_service_1.isMeasure(concept.concept_type)) {
-	            return true;
-	        }
-	        return false;
+	function getAllowedConceptGidsByConceptType(allowedConceptTypes, conceptsLookup) {
+	    var filteredAllowedConcepts = filter([].concat(_toConsumableArray(conceptsLookup.values())), function (_ref) {
+	        var concept_type = _ref.concept_type;
+	        return includes(allowedConceptTypes, concept_type);
 	    });
+	    return map(filteredAllowedConcepts, 'concept');
 	}
 	//# sourceMappingURL=definition.service.js.map
 
@@ -10202,6 +10218,95 @@ var DDFCsvReader =
 /* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	var arrayMap = __webpack_require__(32),
+	    baseIteratee = __webpack_require__(166),
+	    baseMap = __webpack_require__(191),
+	    isArray = __webpack_require__(24);
+	
+	/**
+	 * Creates an array of values by running each element in `collection` thru
+	 * `iteratee`. The iteratee is invoked with three arguments:
+	 * (value, index|key, collection).
+	 *
+	 * Many lodash methods are guarded to work as iteratees for methods like
+	 * `_.every`, `_.filter`, `_.map`, `_.mapValues`, `_.reject`, and `_.some`.
+	 *
+	 * The guarded methods are:
+	 * `ary`, `chunk`, `curry`, `curryRight`, `drop`, `dropRight`, `every`,
+	 * `fill`, `invert`, `parseInt`, `random`, `range`, `rangeRight`, `repeat`,
+	 * `sampleSize`, `slice`, `some`, `sortBy`, `split`, `take`, `takeRight`,
+	 * `template`, `trim`, `trimEnd`, `trimStart`, and `words`
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Collection
+	 * @param {Array|Object} collection The collection to iterate over.
+	 * @param {Function} [iteratee=_.identity] The function invoked per iteration.
+	 * @returns {Array} Returns the new mapped array.
+	 * @example
+	 *
+	 * function square(n) {
+	 *   return n * n;
+	 * }
+	 *
+	 * _.map([4, 8], square);
+	 * // => [16, 64]
+	 *
+	 * _.map({ 'a': 4, 'b': 8 }, square);
+	 * // => [16, 64] (iteration order is not guaranteed)
+	 *
+	 * var users = [
+	 *   { 'user': 'barney' },
+	 *   { 'user': 'fred' }
+	 * ];
+	 *
+	 * // The `_.property` iteratee shorthand.
+	 * _.map(users, 'user');
+	 * // => ['barney', 'fred']
+	 */
+	function map(collection, iteratee) {
+	  var func = isArray(collection) ? arrayMap : baseMap;
+	  return func(collection, baseIteratee(iteratee, 3));
+	}
+	
+	module.exports = map;
+
+/***/ },
+/* 191 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var baseEach = __webpack_require__(161),
+	    isArrayLike = __webpack_require__(14);
+	
+	/**
+	 * The base implementation of `_.map` without support for iteratee shorthands.
+	 *
+	 * @private
+	 * @param {Array|Object} collection The collection to iterate over.
+	 * @param {Function} iteratee The function invoked per iteration.
+	 * @returns {Array} Returns the new mapped array.
+	 */
+	function baseMap(collection, iteratee) {
+	  var index = -1,
+	      result = isArrayLike(collection) ? Array(collection.length) : [];
+	
+	  baseEach(collection, function (value, key, collection) {
+	    result[++index] = iteratee(value, key, collection);
+	  });
+	  return result;
+	}
+	
+	module.exports = baseMap;
+
+/***/ },
+/* 192 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 	
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -10211,10 +10316,10 @@ var DDFCsvReader =
 	var isNil = __webpack_require__(6);
 	var isObject = __webpack_require__(7);
 	var isArray = __webpack_require__(24);
-	var size = __webpack_require__(191);
+	var size = __webpack_require__(193);
 	var values = __webpack_require__(30);
 	var keys = __webpack_require__(33);
-	var map = __webpack_require__(196);
+	var map = __webpack_require__(190);
 	var first = __webpack_require__(198);
 	var filter = __webpack_require__(159);
 	var startsWith = __webpack_require__(152);
@@ -10223,8 +10328,10 @@ var DDFCsvReader =
 	var every = __webpack_require__(201);
 	var compact = __webpack_require__(154);
 	var isString = __webpack_require__(23);
+	var includes = __webpack_require__(9);
+	var uniq = __webpack_require__(205);
 	var helper_service_1 = __webpack_require__(157);
-	var util_1 = __webpack_require__(205);
+	var util_1 = __webpack_require__(211);
 	function validateQueryStructure(query) {
 	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 	
@@ -10286,7 +10393,7 @@ var DDFCsvReader =
 	            errorMessages.push(checkIfSelectIsEmpty(selectClause), checkIfEntitiesOrConceptsSelectHasInvalidStructure(selectClause, key, value), checkIfSelectKeyHasInvalidStructure(fromClause, key), checkIfSelectValueHasInvalidStructure(fromClause, value));
 	            break;
 	        case helper_service_1.isDatapointsQuery(query):
-	            errorMessages.push(checkIfSelectIsEmpty(selectClause), checkIfSelectHasInvalidStructure(selectClause, key, value), checkIfDatapointsSelectKeyHasInvalidStructure(fromClause, key), checkIfDatapointsSelectValueHasInvalidStructure(fromClause, value));
+	            errorMessages.push(checkIfSelectIsEmpty(selectClause), checkIfSelectHasInvalidStructure(selectClause, key, value), checkIfDatapointsSelectKeyHasInvalidStructure(fromClause, key), checkIfDatapointsSelectKeyHasDuplicates(fromClause, key), checkIfDatapointsSelectValueHasInvalidStructure(fromClause, value));
 	            break;
 	        default:
 	            errorMessages.push(checkIfSelectIsEmpty(selectClause));
@@ -10409,6 +10516,11 @@ var DDFCsvReader =
 	function isJoinOperator(joinClause, operator) {
 	    return operator.isLeaf && startsWith(operator.name, '$') && has(joinClause, operator.name);
 	}
+	function getDuplicates(array) {
+	    return filter(array, function (value, index, iteratee) {
+	        return includes(iteratee, value, index + 1);
+	    });
+	}
 	function getJoinIDPathIfExists(options) {
 	    return get(options, 'joinID', false) ? "join." + options.joinID + "." : '';
 	}
@@ -10431,6 +10543,12 @@ var DDFCsvReader =
 	function checkIfDatapointsSelectKeyHasInvalidStructure(fromClause, key) {
 	    if (size(key) < 2) {
 	        return "'select.key' clause for '" + fromClause + "' queries must have at least 2 items";
+	    }
+	}
+	function checkIfDatapointsSelectKeyHasDuplicates(fromClause, key) {
+	    var duplicates = getDuplicates(key);
+	    if (size(duplicates) > 0) {
+	        return "'select.key' clause for '" + fromClause + "' queries contains duplicates: " + uniq(duplicates).join(',');
 	    }
 	}
 	function checkIfDatapointsSelectValueHasInvalidStructure(fromClause, value) {
@@ -10471,7 +10589,7 @@ var DDFCsvReader =
 	//# sourceMappingURL=structure.service.js.map
 
 /***/ },
-/* 191 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10480,7 +10598,7 @@ var DDFCsvReader =
 	    getTag = __webpack_require__(111),
 	    isArrayLike = __webpack_require__(14),
 	    isString = __webpack_require__(23),
-	    stringSize = __webpack_require__(192);
+	    stringSize = __webpack_require__(194);
 	
 	/** `Object#toString` result references. */
 	var mapTag = '[object Map]',
@@ -10524,14 +10642,14 @@ var DDFCsvReader =
 	module.exports = size;
 
 /***/ },
-/* 192 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var asciiSize = __webpack_require__(193),
-	    hasUnicode = __webpack_require__(194),
-	    unicodeSize = __webpack_require__(195);
+	var asciiSize = __webpack_require__(195),
+	    hasUnicode = __webpack_require__(196),
+	    unicodeSize = __webpack_require__(197);
 	
 	/**
 	 * Gets the number of symbols in `string`.
@@ -10547,7 +10665,7 @@ var DDFCsvReader =
 	module.exports = stringSize;
 
 /***/ },
-/* 193 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10566,7 +10684,7 @@ var DDFCsvReader =
 	module.exports = asciiSize;
 
 /***/ },
-/* 194 */
+/* 196 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -10599,7 +10717,7 @@ var DDFCsvReader =
 	module.exports = hasUnicode;
 
 /***/ },
-/* 195 */
+/* 197 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -10648,95 +10766,6 @@ var DDFCsvReader =
 	}
 	
 	module.exports = unicodeSize;
-
-/***/ },
-/* 196 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var arrayMap = __webpack_require__(32),
-	    baseIteratee = __webpack_require__(166),
-	    baseMap = __webpack_require__(197),
-	    isArray = __webpack_require__(24);
-	
-	/**
-	 * Creates an array of values by running each element in `collection` thru
-	 * `iteratee`. The iteratee is invoked with three arguments:
-	 * (value, index|key, collection).
-	 *
-	 * Many lodash methods are guarded to work as iteratees for methods like
-	 * `_.every`, `_.filter`, `_.map`, `_.mapValues`, `_.reject`, and `_.some`.
-	 *
-	 * The guarded methods are:
-	 * `ary`, `chunk`, `curry`, `curryRight`, `drop`, `dropRight`, `every`,
-	 * `fill`, `invert`, `parseInt`, `random`, `range`, `rangeRight`, `repeat`,
-	 * `sampleSize`, `slice`, `some`, `sortBy`, `split`, `take`, `takeRight`,
-	 * `template`, `trim`, `trimEnd`, `trimStart`, and `words`
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Collection
-	 * @param {Array|Object} collection The collection to iterate over.
-	 * @param {Function} [iteratee=_.identity] The function invoked per iteration.
-	 * @returns {Array} Returns the new mapped array.
-	 * @example
-	 *
-	 * function square(n) {
-	 *   return n * n;
-	 * }
-	 *
-	 * _.map([4, 8], square);
-	 * // => [16, 64]
-	 *
-	 * _.map({ 'a': 4, 'b': 8 }, square);
-	 * // => [16, 64] (iteration order is not guaranteed)
-	 *
-	 * var users = [
-	 *   { 'user': 'barney' },
-	 *   { 'user': 'fred' }
-	 * ];
-	 *
-	 * // The `_.property` iteratee shorthand.
-	 * _.map(users, 'user');
-	 * // => ['barney', 'fred']
-	 */
-	function map(collection, iteratee) {
-	  var func = isArray(collection) ? arrayMap : baseMap;
-	  return func(collection, baseIteratee(iteratee, 3));
-	}
-	
-	module.exports = map;
-
-/***/ },
-/* 197 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var baseEach = __webpack_require__(161),
-	    isArrayLike = __webpack_require__(14);
-	
-	/**
-	 * The base implementation of `_.map` without support for iteratee shorthands.
-	 *
-	 * @private
-	 * @param {Array|Object} collection The collection to iterate over.
-	 * @param {Function} iteratee The function invoked per iteration.
-	 * @returns {Array} Returns the new mapped array.
-	 */
-	function baseMap(collection, iteratee) {
-	  var index = -1,
-	      result = isArrayLike(collection) ? Array(collection.length) : [];
-	
-	  baseEach(collection, function (value, key, collection) {
-	    result[++index] = iteratee(value, key, collection);
-	  });
-	  return result;
-	}
-	
-	module.exports = baseMap;
 
 /***/ },
 /* 198 */
@@ -10973,6 +11002,216 @@ var DDFCsvReader =
 
 /***/ },
 /* 205 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var baseUniq = __webpack_require__(206);
+	
+	/**
+	 * Creates a duplicate-free version of an array, using
+	 * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+	 * for equality comparisons, in which only the first occurrence of each element
+	 * is kept. The order of result values is determined by the order they occur
+	 * in the array.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Array
+	 * @param {Array} array The array to inspect.
+	 * @returns {Array} Returns the new duplicate free array.
+	 * @example
+	 *
+	 * _.uniq([2, 1, 2]);
+	 * // => [2, 1]
+	 */
+	function uniq(array) {
+	  return array && array.length ? baseUniq(array) : [];
+	}
+	
+	module.exports = uniq;
+
+/***/ },
+/* 206 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var SetCache = __webpack_require__(172),
+	    arrayIncludes = __webpack_require__(207),
+	    arrayIncludesWith = __webpack_require__(208),
+	    cacheHas = __webpack_require__(176),
+	    createSet = __webpack_require__(209),
+	    setToArray = __webpack_require__(128);
+	
+	/** Used as the size to enable large array optimizations. */
+	var LARGE_ARRAY_SIZE = 200;
+	
+	/**
+	 * The base implementation of `_.uniqBy` without support for iteratee shorthands.
+	 *
+	 * @private
+	 * @param {Array} array The array to inspect.
+	 * @param {Function} [iteratee] The iteratee invoked per element.
+	 * @param {Function} [comparator] The comparator invoked per element.
+	 * @returns {Array} Returns the new duplicate free array.
+	 */
+	function baseUniq(array, iteratee, comparator) {
+	  var index = -1,
+	      includes = arrayIncludes,
+	      length = array.length,
+	      isCommon = true,
+	      result = [],
+	      seen = result;
+	
+	  if (comparator) {
+	    isCommon = false;
+	    includes = arrayIncludesWith;
+	  } else if (length >= LARGE_ARRAY_SIZE) {
+	    var set = iteratee ? null : createSet(array);
+	    if (set) {
+	      return setToArray(set);
+	    }
+	    isCommon = false;
+	    includes = cacheHas;
+	    seen = new SetCache();
+	  } else {
+	    seen = iteratee ? [] : result;
+	  }
+	  outer: while (++index < length) {
+	    var value = array[index],
+	        computed = iteratee ? iteratee(value) : value;
+	
+	    value = comparator || value !== 0 ? value : 0;
+	    if (isCommon && computed === computed) {
+	      var seenIndex = seen.length;
+	      while (seenIndex--) {
+	        if (seen[seenIndex] === computed) {
+	          continue outer;
+	        }
+	      }
+	      if (iteratee) {
+	        seen.push(computed);
+	      }
+	      result.push(value);
+	    } else if (!includes(seen, computed, comparator)) {
+	      if (seen !== result) {
+	        seen.push(computed);
+	      }
+	      result.push(value);
+	    }
+	  }
+	  return result;
+	}
+	
+	module.exports = baseUniq;
+
+/***/ },
+/* 207 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var baseIndexOf = __webpack_require__(10);
+	
+	/**
+	 * A specialized version of `_.includes` for arrays without support for
+	 * specifying an index to search from.
+	 *
+	 * @private
+	 * @param {Array} [array] The array to inspect.
+	 * @param {*} target The value to search for.
+	 * @returns {boolean} Returns `true` if `target` is found, else `false`.
+	 */
+	function arrayIncludes(array, value) {
+	  var length = array == null ? 0 : array.length;
+	  return !!length && baseIndexOf(array, value, 0) > -1;
+	}
+	
+	module.exports = arrayIncludes;
+
+/***/ },
+/* 208 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	/**
+	 * This function is like `arrayIncludes` except that it accepts a comparator.
+	 *
+	 * @private
+	 * @param {Array} [array] The array to inspect.
+	 * @param {*} target The value to search for.
+	 * @param {Function} comparator The comparator invoked per element.
+	 * @returns {boolean} Returns `true` if `target` is found, else `false`.
+	 */
+	function arrayIncludesWith(array, value, comparator) {
+	  var index = -1,
+	      length = array == null ? 0 : array.length;
+	
+	  while (++index < length) {
+	    if (comparator(value, array[index])) {
+	      return true;
+	    }
+	  }
+	  return false;
+	}
+	
+	module.exports = arrayIncludesWith;
+
+/***/ },
+/* 209 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Set = __webpack_require__(114),
+	    noop = __webpack_require__(210),
+	    setToArray = __webpack_require__(128);
+	
+	/** Used as references for various `Number` constants. */
+	var INFINITY = 1 / 0;
+	
+	/**
+	 * Creates a set object of `values`.
+	 *
+	 * @private
+	 * @param {Array} values The values to add to the set.
+	 * @returns {Object} Returns the new set.
+	 */
+	var createSet = !(Set && 1 / setToArray(new Set([, -0]))[1] == INFINITY) ? noop : function (values) {
+	  return new Set(values);
+	};
+	
+	module.exports = createSet;
+
+/***/ },
+/* 210 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	/**
+	 * This method returns `undefined`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 2.3.0
+	 * @category Util
+	 * @example
+	 *
+	 * _.times(2, _.noop);
+	 * // => [undefined, undefined]
+	 */
+	function noop() {
+	  // No operation performed.
+	}
+	
+	module.exports = noop;
+
+/***/ },
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {'use strict';
@@ -11469,7 +11708,7 @@ var DDFCsvReader =
 	}
 	exports.isPrimitive = isPrimitive;
 	
-	exports.isBuffer = __webpack_require__(206);
+	exports.isBuffer = __webpack_require__(212);
 	
 	function objectToString(o) {
 	  return Object.prototype.toString.call(o);
@@ -11506,7 +11745,7 @@ var DDFCsvReader =
 	 *     prototype.
 	 * @param {function} superCtor Constructor function to inherit prototype from.
 	 */
-	exports.inherits = __webpack_require__(207);
+	exports.inherits = __webpack_require__(213);
 	
 	exports._extend = function (origin, add) {
 	  // Don't do anything if add isn't an object
@@ -11526,7 +11765,7 @@ var DDFCsvReader =
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(137)))
 
 /***/ },
-/* 206 */
+/* 212 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -11538,7 +11777,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 207 */
+/* 213 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -11568,7 +11807,7 @@ var DDFCsvReader =
 	}
 
 /***/ },
-/* 208 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

@@ -7,7 +7,8 @@ import {
   getAmountOfErrors,
   notExpectedError,
   selectKeyClauseContainsUnavailableItems,
-  selectValueClauseContainsUnavailableItems
+  selectValueClauseContainsUnavailableItems,
+  tooManyQueryDefinitionErrors
 } from '../common';
 
 const expect = chai.expect;
@@ -19,10 +20,12 @@ describe('Datapoints definition errors in query', () => {
       reader.init({ path: BASE_PATH });
 
       reader.read({
-        from: 'datapoints', select: { key: [ 'failed_concept', 'time' ], value: [ 'population_total' ] } })
+        from: 'datapoints', select: { key: [ 'failed_concept', 'time' ], value: [ 'population_total' ] }
+      })
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
+          expect(error).to.match(tooManyQueryDefinitionErrors);
           expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
           expect(error.toString()).to.match(selectKeyClauseContainsUnavailableItems);
         }, done));
@@ -36,6 +39,7 @@ describe('Datapoints definition errors in query', () => {
         .then(() => done(notExpectedError))
         .catch(checkExpectations((error) => {
           // console.log(error.stack);
+          expect(error).to.match(tooManyQueryDefinitionErrors);
           expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
           expect(error.toString()).to.match(selectValueClauseContainsUnavailableItems);
         }, done));

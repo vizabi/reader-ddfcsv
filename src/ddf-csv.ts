@@ -387,7 +387,7 @@ export function ddfCsvReader (logger?: any) {
       return query({
         select: { key: [ join.key ] },
         where: join.where,
-        from: options.conceptsLookup.has(join.key) ? 'concepts' : 'entities',
+        from: options.conceptsLookup.has(join.key) ? 'entities' : 'concepts',
         dataset: queryParam.dataset,
         branch: queryParam.branch,
         commit: queryParam.commit

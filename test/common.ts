@@ -21,13 +21,15 @@ export const fromClauseValueMustBeAllowed = new RegExp(`'from' clause must be on
 
 export const selectClauseCouldnotBeEmpty = new RegExp(`'select' clause couldn't be empty`);
 export const selectClauseMustHaveStructure = new RegExp(`'select' clause must have next structure: { key: \\[...\\], value: \\[...\\] }`);
-export const selectKeyClauseMustHaveAtLeast2Items = new RegExp(`'select.key' clause for '\\w*' queries must have at least 2 items`);
-export const selectKeyClauseContainsUnavailableItems = new RegExp(`'select.key' clause for '\\w*' queries contains unavailable item\\(s\\): failed_concept \\[repo: ${GLOBALIS_PATH}\\]`);
-export const selectValueClauseMustHaveAtLeast1Item = new RegExp(`'select.value' clause for '\\w*' queries must have at least 1 item`);
-export const selectValueClauseContainsUnavailableItems = new RegExp(`'select.value' clause for '\\w*' queries contains unavailable item\\(s\\): failed_measure \\[repo: ${GLOBALIS_PATH}\\]`);
-export const selectKeyClauseMustHaveOnly1Item = new RegExp(`'select.key' clause for '\\w*' queries must have only 1 item`);
+export const selectKeyClauseMustHaveAtLeast2Items = new RegExp(`'select.key' clause for '[\\w\\.]*' queries must have at least 2 items`);
+export const selectKeyClauseContainsUnavailableItems = new RegExp(`'select.key' clause for '[\\w\\.]*' query contains unavailable item\\(s\\): failed_concept`);
+export const selectValueClauseMustHaveAtLeast1Item = new RegExp(`'select.value' clause for '[\\w\\.]*' queries must have at least 1 item`);
+export const selectValueClauseContainsUnavailableItems = new RegExp(`'select.value' clause for '[\\w\\.]*' query contains unavailable item\\(s\\): failed_measure`);
+export const selectValueClauseContainsUnavailableItems1 = new RegExp(`'select.value' clause for '[\\w\\.]*' query contains unavailable item\\(s\\): failed_concept, failed_concept2`);
+export const selectValueClauseContainsUnavailableItems2 = new RegExp(`'select.value' clause for '[\\w\\.]*' query contains unavailable item\\(s\\): failed_concept, failed_concept2, concept`);
+export const selectKeyClauseMustHaveOnly1Item = new RegExp(`'select.key' clause for '[\\w\\.]*' queries must have only 1 item`);
 export const selectKeyClauseMustHaveOnly2ItemsInSchemaQueries = new RegExp(`'select.key' clause for '[\\w\\*]*.schema' queries must have exactly 2 items: 'key', 'value'`);
-export const selectValueClauseMustHaveCertainStructure = new RegExp(`'select.value' clause for '\\w*' queries should be array of strings or empty`);
+export const selectValueClauseMustHaveCertainStructure = new RegExp(`'select.value' clause for '[\\w\\.]*' queries should be array of strings or empty`);
 export const selectValueClauseMustHaveCertainStructureInSchemaQueries = new RegExp(`'select.value' clause for '[\\w\\*]*.schema' queries should be array of strings or empty`);
 export const joinClauseShouldnotBeInSchemaQueries = new RegExp(`'join' clause for '[\\w\\*]*.schema' queries shouldn't be present in query`);
 export const languageClauseShouldnotBeInSchemaQueries = new RegExp(`'language' clause for '\[\\w\\*\]*.schema' queries shouldn't be present in query`);
@@ -41,6 +43,8 @@ export const orderByClauseMustHaveCertainStructure = new RegExp(`'order_by' clau
 
 export const whereClauseHasUnknownOperator = new RegExp(`'where' clause has unknown operator\\(s\\) '\\$geo'\, replace it with allowed operators: `);
 export const joinWhereClauseHasUnknownOperator = new RegExp(`'join\.\\$test\.where' clause has unknown operator\\(s\\) '\\$geo'\, replace it with allowed operators: `);
+
+export const tooManyQueryDefinitionErrors = new RegExp(`Too many query definition errors \\[repo: systema_globalis\\]`);
 
 export const notExpectedError = 'This should never be called.';
 export const expectedConcepts = [ {
