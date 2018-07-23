@@ -1,5 +1,6 @@
 export const BASE_PATH = './test/fixtures/';
 export const GLOBALIS_PATH = 'systema_globalis';
+export const WS_TESTING_PATH = 'VS-work/dataset_name_1';
 export const BIG_PATH = 'ddf--gapminder--population.big';
 export const POP_WPP_PATH = 'population_wpp';
 export const STATIC_ASSETS = 'static-assets';

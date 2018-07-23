@@ -8827,8 +8827,8 @@ var DDFCsvReader =
 	var tslib_1 = __webpack_require__(5);
 	tslib_1.__exportStar(__webpack_require__(157), exports);
 	tslib_1.__exportStar(__webpack_require__(158), exports);
-	tslib_1.__exportStar(__webpack_require__(192), exports);
-	tslib_1.__exportStar(__webpack_require__(214), exports);
+	tslib_1.__exportStar(__webpack_require__(204), exports);
+	tslib_1.__exportStar(__webpack_require__(222), exports);
 	//# sourceMappingURL=index.js.map
 
 /***/ },
@@ -8854,6 +8854,8 @@ var DDFCsvReader =
 	exports.RESERVED_CONCEPT = 'concept';
 	exports.RESERVED_CONCEPT_TYPE = 'concept_type';
 	exports.RESERVED_DOMAIN = 'domain';
+	exports.RESERVED_UNIT = 'unit';
+	exports.RESERVED_DRILL_UP = 'drill_up';
 	exports.RESERVED_KEY = 'key';
 	exports.RESERVED_VALUE = 'value';
 	exports.AVAILABLE_QUERY_OPERATORS = new Set(['$eq', '$gt', '$gte', '$lt', '$lte', '$ne', '$in', '$nin', '$or', '$and', '$not', '$nor', '$size', '$all', '$elemMatch']);
@@ -8904,6 +8906,8 @@ var DDFCsvReader =
 
 	"use strict";
 	
+	function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
+	
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -8913,12 +8917,17 @@ var DDFCsvReader =
 	var get = __webpack_require__(139);
 	var compact = __webpack_require__(154);
 	var includes = __webpack_require__(9);
+	var startsWith = __webpack_require__(152);
+	var isNil = __webpack_require__(6);
+	var trimStart = __webpack_require__(192);
+	var flatMap = __webpack_require__(200);
 	var helper_service_1 = __webpack_require__(157);
+	var util_1 = __webpack_require__(201);
 	function validateQueryDefinitions(query) {
 	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 	
 	    return new Promise(function (resolve, reject) {
-	        var validationResult = [].concat(_toConsumableArray(validateSelectDefinitions(query, options)));
+	        var validationResult = [].concat(_toConsumableArray(validateSelectDefinitions(query, options)), _toConsumableArray(validateWhereDefinitions(query, options)));
 	        var isQueryValid = isEmpty(validationResult);
 	        if (!isQueryValid) {
 	            return reject("Too many query definition errors [repo: " + query.dataset + "]: \n* " + validationResult.join('\n* '));
@@ -8950,7 +8959,7 @@ var DDFCsvReader =
 	            break;
 	        case helper_service_1.isConceptsQuery(query):
 	            ALLOWED_KEYS.push(helper_service_1.RESERVED_CONCEPT);
-	            ALLOWED_VALUES.push.apply(ALLOWED_VALUES, _toConsumableArray(conceptsLookup.keys()).concat([helper_service_1.RESERVED_CONCEPT, helper_service_1.RESERVED_CONCEPT_TYPE, helper_service_1.RESERVED_DOMAIN]));
+	            ALLOWED_VALUES.push.apply(ALLOWED_VALUES, _toConsumableArray(conceptsLookup.keys()).concat([helper_service_1.RESERVED_CONCEPT, helper_service_1.RESERVED_CONCEPT_TYPE, helper_service_1.RESERVED_DOMAIN, helper_service_1.RESERVED_UNIT, helper_service_1.RESERVED_DRILL_UP]));
 	            break;
 	        default:
 	            ALLOWED_KEYS.push(helper_service_1.RESERVED_KEY, helper_service_1.RESERVED_VALUE);
@@ -8959,6 +8968,56 @@ var DDFCsvReader =
 	    }
 	    errorMessages.push(checkIfSelectKeyHasInvalidDefinitions(fromClause, key, ALLOWED_KEYS), checkIfSelectValueHasInvalidDefinitions(fromClause, value, ALLOWED_VALUES));
 	    return compact(errorMessages);
+	}
+	function validateWhereDefinitions(query, options) {
+	    var errorMessages = [];
+	    var whereClause = get(query, 'where', null);
+	    var fromClause = get(query, 'from', null);
+	    var selectClause = get(query, 'select', null);
+	    var key = get(selectClause, 'key');
+	    var value = get(selectClause, 'value');
+	    var operators = getWhereOperators(whereClause);
+	    var conceptsLookup = options.conceptsLookup;
+	
+	    switch (true) {
+	        case helper_service_1.isDatapointsQuery(query):
+	            var CONCEPT_TYPES_FOR_DATAPOINTS = [];
+	            CONCEPT_TYPES_FOR_DATAPOINTS.push(helper_service_1.CONCEPT_TYPE_ENTITY_SET, helper_service_1.CONCEPT_TYPE_ENTITY_DOMAIN, helper_service_1.CONCEPT_TYPE_TIME);
+	            errorMessages.push();
+	            break;
+	        default:
+	            break;
+	    }
+	    return compact(errorMessages);
+	}
+	function getWhereOperators(whereClause) {
+	    var operators = {};
+	    getWhereOperatorsRecursively(whereClause, operators);
+	    return operators;
+	}
+	function getWhereOperatorsRecursively(whereClause, operators, сandidate) {
+	    for (var field in whereClause) {
+	        var hasCandidate = !isNil(сandidate);
+	        var isCandidate = !hasCandidate && !startsWith(field, '$') && isNaN(+field);
+	
+	        var _field$split = field.split('.'),
+	            _field$split2 = _toArray(_field$split),
+	            domain = _field$split2[0],
+	            set = _field$split2.slice(1);
+	
+	        if (isCandidate) {
+	            if (isNil(operators[domain])) {
+	                operators[trimStart(domain, 'is--')] = [];
+	            }
+	            if (!isEmpty(set)) {
+	                operators[domain].push(trimStart(set.join('.'), 'is--'));
+	            }
+	        }
+	        if (util_1.isPrimitive(whereClause[field])) {
+	            continue;
+	        }
+	        getWhereOperatorsRecursively(whereClause[field], operators, isCandidate ? domain : сandidate);
+	    }
 	}
 	function checkIfSelectKeyHasInvalidDefinitions(fromClause, key, ALLOWED_KEYS) {
 	    var unavailableKeys = getUnavailableSelectItems(key, ALLOWED_KEYS);
@@ -8970,6 +9029,34 @@ var DDFCsvReader =
 	    var unavailableValues = getUnavailableSelectItems(value, ALLOWED_VALUES);
 	    if (!isEmpty(value) && !isEmpty(unavailableValues)) {
 	        return "'select.value' clause for '" + fromClause + "' query contains unavailable item(s): " + unavailableValues.join(', ');
+	    }
+	}
+	function checkIfWhereHasAbsentDefinitions(fromClause, candidates, conceptsLookup) {
+	    var unavailableValues = filter(candidates, function (candidate) {
+	        return !conceptsLookup.has(candidate);
+	    });
+	    if (!isEmpty(unavailableValues)) {
+	        return "'where' clause for '" + fromClause + "' query contains unavailable item(s) that is not present in dataset: " + unavailableValues.join(', ');
+	    }
+	}
+	function checkIfWhereHasUnavailableDimensionDefinitions(fromClause, candidates, select) {
+	    var unavailableValues = filter(candidates, function (candidate) {
+	        return !includes(select, candidate);
+	    });
+	    if (!isEmpty(unavailableValues)) {
+	        return "'where' clause for '" + fromClause + "' query contains item(s) that is not present in 'select': " + unavailableValues.join(', ');
+	    }
+	}
+	function checkIfWhereHasWrongRelativesDefinitions(fromClause, operators, conceptsLookup) {
+	    var unavailableValues = flatMap(operators, function (children, parent) {
+	        var unavailableChildren = map(children, function (child) {
+	            var childConcept = conceptsLookup.get(child);
+	            return childConcept.domain === parent || childConcept.drill_up === parent ? null : parent + "." + child;
+	        });
+	        return unavailableChildren;
+	    });
+	    if (!isEmpty(unavailableValues)) {
+	        return "'where' clause for '" + fromClause + "' query contains item(s) that has wrong relatives: " + compact(unavailableValues).join(', ');
 	    }
 	}
 	function getUnavailableSelectItems(selectItems, ALLOWED_ITEMS) {
@@ -10307,286 +10394,51 @@ var DDFCsvReader =
 /* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	var baseToString = __webpack_require__(147),
+	    castSlice = __webpack_require__(193),
+	    charsStartIndex = __webpack_require__(195),
+	    stringToArray = __webpack_require__(196),
+	    toString = __webpack_require__(146);
 	
-	Object.defineProperty(exports, "__esModule", { value: true });
-	var isEmpty = __webpack_require__(133);
-	var isNil = __webpack_require__(6);
-	var isObject = __webpack_require__(7);
-	var isArray = __webpack_require__(24);
-	var size = __webpack_require__(193);
-	var values = __webpack_require__(30);
-	var keys = __webpack_require__(33);
-	var map = __webpack_require__(190);
-	var first = __webpack_require__(198);
-	var filter = __webpack_require__(159);
-	var startsWith = __webpack_require__(152);
-	var get = __webpack_require__(139);
-	var has = __webpack_require__(199);
-	var every = __webpack_require__(201);
-	var compact = __webpack_require__(154);
-	var isString = __webpack_require__(23);
-	var includes = __webpack_require__(9);
-	var uniq = __webpack_require__(205);
-	var helper_service_1 = __webpack_require__(157);
-	var util_1 = __webpack_require__(211);
-	function validateQueryStructure(query) {
-	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	/** Used to match leading and trailing whitespace. */
+	var reTrimStart = /^\s+/;
 	
-	    return new Promise(function (resolve, reject) {
-	        var validationResult = [].concat(_toConsumableArray(validateDatasetStructure(query, options)), _toConsumableArray(validateFromStructure(query, options)), _toConsumableArray(validateSelectStructure(query, options)), _toConsumableArray(validateWhereStructure(query, options)), _toConsumableArray(validateLanguageStructure(query, options)), _toConsumableArray(validateJoinStructure(query, options)), _toConsumableArray(validateOrderByStructure(query, options)));
-	        var isQueryValid = isEmpty(validationResult);
-	        if (!isQueryValid) {
-	            return reject("Too many query structure errors: \n* " + validationResult.join('\n* '));
-	        }
-	        return resolve();
-	    });
+	/**
+	 * Removes leading whitespace or specified characters from `string`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category String
+	 * @param {string} [string=''] The string to trim.
+	 * @param {string} [chars=whitespace] The characters to trim.
+	 * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+	 * @returns {string} Returns the trimmed string.
+	 * @example
+	 *
+	 * _.trimStart('  abc  ');
+	 * // => 'abc  '
+	 *
+	 * _.trimStart('-_-abc-_-', '_-');
+	 * // => 'abc-_-'
+	 */
+	function trimStart(string, chars, guard) {
+	  string = toString(string);
+	  if (string && (guard || chars === undefined)) {
+	    return string.replace(reTrimStart, '');
+	  }
+	  if (!string || !(chars = baseToString(chars))) {
+	    return string;
+	  }
+	  var strSymbols = stringToArray(string),
+	      start = charsStartIndex(strSymbols, stringToArray(chars));
+	
+	  return castSlice(strSymbols, start).join('');
 	}
-	exports.validateQueryStructure = validateQueryStructure;
-	function validateDatasetStructure(query, options) {
-	    var errorMessages = [];
-	    var datasetClause = get(query, 'dataset');
-	    var branchClause = get(query, 'branch');
-	    var commitClause = get(query, 'commit');
-	    if (!isNil(datasetClause) && !isString(datasetClause)) {
-	        errorMessages.push("'dataset' clause must be string only");
-	    }
-	    if (!isNil(branchClause) && !isString(branchClause)) {
-	        errorMessages.push("'branch' clause must be string only");
-	    }
-	    if (!isNil(commitClause) && !isString(commitClause)) {
-	        errorMessages.push("'commit' clause must be string only");
-	    }
-	    return errorMessages;
-	}
-	function validateFromStructure(query, options) {
-	    var errorMessages = [];
-	    var clause = get(query, 'from', null);
-	    if (isNil(clause)) {
-	        errorMessages.push("'from' clause couldn't be empty");
-	    }
-	    if (!isString(clause)) {
-	        errorMessages.push("'from' clause must be string only");
-	    }
-	    if (!helper_service_1.AVAILABLE_FROM_CLAUSE_VALUES.has(clause)) {
-	        var listAvaliableValues = [].concat(_toConsumableArray(helper_service_1.AVAILABLE_FROM_CLAUSE_VALUES));
-	        errorMessages.push("'from' clause must be one of the list: " + listAvaliableValues.join(', '));
-	    }
-	    return errorMessages;
-	}
-	function validateSelectStructure(query, options) {
-	    var errorMessages = [];
-	    var selectClause = get(query, 'select', null);
-	    var fromClause = get(query, 'from', null);
-	    var key = get(selectClause, 'key');
-	    var value = get(selectClause, 'value');
-	    switch (true) {
-	        case helper_service_1.isSchemaQuery(query):
-	            errorMessages.push(checkIfSelectIsEmpty(selectClause), checkIfSchemasSelectKeyHasInvalidStructure(fromClause, key), checkIfSelectValueHasInvalidStructure(fromClause, value));
-	            break;
-	        case helper_service_1.isEntitiesQuery(query):
-	            errorMessages.push(checkIfSelectIsEmpty(selectClause), checkIfEntitiesOrConceptsSelectHasInvalidStructure(selectClause, key, value), checkIfSelectKeyHasInvalidStructure(fromClause, key), checkIfSelectValueHasInvalidStructure(fromClause, value));
-	            break;
-	        case helper_service_1.isConceptsQuery(query):
-	            errorMessages.push(checkIfSelectIsEmpty(selectClause), checkIfEntitiesOrConceptsSelectHasInvalidStructure(selectClause, key, value), checkIfSelectKeyHasInvalidStructure(fromClause, key), checkIfSelectValueHasInvalidStructure(fromClause, value));
-	            break;
-	        case helper_service_1.isDatapointsQuery(query):
-	            errorMessages.push(checkIfSelectIsEmpty(selectClause), checkIfSelectHasInvalidStructure(selectClause, key, value), checkIfDatapointsSelectKeyHasInvalidStructure(fromClause, key), checkIfDatapointsSelectKeyHasDuplicates(fromClause, key), checkIfDatapointsSelectValueHasInvalidStructure(fromClause, value));
-	            break;
-	        default:
-	            errorMessages.push(checkIfSelectIsEmpty(selectClause));
-	            break;
-	    }
-	    return compact(errorMessages);
-	}
-	function validateWhereStructure(query, options) {
-	    var errorMessages = [];
-	    var joinClause = get(query, 'join', null);
-	    var whereClause = get(query, 'where', null);
-	    var whereOperators = getWhereOperators(whereClause);
-	    errorMessages.push(checkIfWhereHasInvalidStructure(whereClause, getJoinIDPathIfExists(options)), checkIfWhereHasUnknownOperators(joinClause, whereOperators, getJoinIDPathIfExists(options)));
-	    return compact(errorMessages);
-	}
-	function validateLanguageStructure(query, options) {
-	    var errorMessages = [];
-	    var languageClause = get(query, 'language', null);
-	    switch (true) {
-	        case helper_service_1.isSchemaQuery(query):
-	            errorMessages.push(checkIfSchemaLanguageIsPresent(query));
-	            break;
-	        case helper_service_1.isEntitiesQuery(query):
-	        case helper_service_1.isConceptsQuery(query):
-	        case helper_service_1.isDatapointsQuery(query):
-	        default:
-	            errorMessages.push(checkIfLanguageHasInvalidStructure(languageClause));
-	            break;
-	    }
-	    return compact(errorMessages);
-	}
-	function validateJoinStructure(query, options) {
-	    var errorMessages = [];
-	    var joinClause = get(query, 'join', null);
-	    switch (true) {
-	        case helper_service_1.isSchemaQuery(query):
-	        case helper_service_1.isConceptsQuery(query):
-	            errorMessages.push(checkIfSchemaJoinIsPresent(query));
-	            break;
-	        case helper_service_1.isEntitiesQuery(query):
-	        case helper_service_1.isDatapointsQuery(query):
-	        default:
-	            errorMessages.push.apply(errorMessages, [checkIfJoinHasInvalidStructure(joinClause)].concat(_toConsumableArray(map(joinClause, function (item, joinID) {
-	                return checkIfJoinKeyHasInvalidStructure(item, getJoinIDPathIfExists({ joinID: joinID }));
-	            }))));
-	            break;
-	    }
-	    return compact(errorMessages);
-	}
-	function validateOrderByStructure(query, options) {
-	    var errorMessages = [];
-	    var orderByClause = get(query, 'order_by', null);
-	    errorMessages.push(checkIfOrderByHasInvalidStructure(orderByClause));
-	    return compact(errorMessages);
-	}
-	function checkIfSelectIsEmpty(selectClause) {
-	    if (isNil(selectClause)) {
-	        return "'select' clause couldn't be empty";
-	    }
-	}
-	function checkIfSelectHasInvalidStructure(selectClause, key, value) {
-	    if (!isObject(selectClause) || !isArray(key) || !isArray(value)) {
-	        return "'select' clause must have next structure: { key: [...], value: [...] }";
-	    }
-	}
-	function checkIfJoinHasInvalidStructure(joinClause) {
-	    if (!isNil(joinClause) && !isStrictObject(joinClause)) {
-	        return "'join' clause must be object only";
-	    }
-	}
-	function checkIfLanguageHasInvalidStructure(languageClause) {
-	    if (!isNil(languageClause) && !isString(languageClause)) {
-	        return "'language' clause must be string only";
-	    }
-	}
-	function checkIfJoinKeyHasInvalidStructure(joinClause, joinPath) {
-	    if (!isNil(joinClause.key) && !isString(joinClause.key)) {
-	        return "'" + joinPath + "key' clause must be string only";
-	    }
-	}
-	function checkIfWhereHasInvalidStructure(whereClause, joinPath) {
-	    if (!isNil(whereClause) && !isStrictObject(whereClause)) {
-	        return "'" + joinPath + "where' clause must be object only";
-	    }
-	}
-	function checkIfWhereHasUnknownOperators(joinClause, operators, joinPath) {
-	    var notAllowedOperators = filter(operators, function (operator) {
-	        return !isAllowedOperator(joinClause, operator);
-	    }).map(function (operator) {
-	        return operator.name;
-	    });
-	    var allowedOperatorsByDataset = [].concat(_toConsumableArray(helper_service_1.AVAILABLE_QUERY_OPERATORS.values()), _toConsumableArray(keys(joinClause)));
-	    if (!isEmpty(notAllowedOperators)) {
-	        return "'" + joinPath + "where' clause has unknown operator(s) '" + notAllowedOperators.join(', ') + "', replace it with allowed operators: " + allowedOperatorsByDataset.join(', ');
-	    }
-	}
-	function checkIfOrderByHasInvalidStructure(orderByClause) {
-	    if (!isNil(orderByClause) && !isString(orderByClause) && !isArrayOfStrings(orderByClause) && !isArrayOfSpecialItems(orderByClause, isOrderBySubclause)) {
-	        return "'order_by' clause must be string or array of strings || objects only";
-	    }
-	}
-	function isStrictObject(clause) {
-	    return isObject(clause) && !isArray(clause);
-	}
-	function isArrayOfStrings(clause) {
-	    return isArray(clause) && every(clause, isString);
-	}
-	function isOrderBySubclause(subclause) {
-	    return isString(subclause) || isStrictObject(subclause) && size(subclause) === 1 && helper_service_1.AVAILABLE_ORDER_BY_CLAUSE_VALUES.has(first(values(subclause)));
-	}
-	function isArrayOfSpecialItems(clause, isSpecialItem) {
-	    return isArray(clause) && every(clause, isSpecialItem);
-	}
-	function isAllowedOperator(joinClause, operator) {
-	    return isMongoLikeOperator(operator) || isJoinOperator(joinClause, operator);
-	}
-	function isMongoLikeOperator(operator) {
-	    return !operator.isLeaf && helper_service_1.AVAILABLE_QUERY_OPERATORS.has(operator.name);
-	}
-	function isJoinOperator(joinClause, operator) {
-	    return operator.isLeaf && startsWith(operator.name, '$') && has(joinClause, operator.name);
-	}
-	function getDuplicates(array) {
-	    return filter(array, function (value, index, iteratee) {
-	        return includes(iteratee, value, index + 1);
-	    });
-	}
-	function getJoinIDPathIfExists(options) {
-	    return get(options, 'joinID', false) ? "join." + options.joinID + "." : '';
-	}
-	function getWhereOperators(whereClause) {
-	    var operators = [];
-	    for (var field in whereClause) {
-	        if (startsWith(field, '$')) {
-	            operators.push({ name: field, isLeaf: false });
-	        }
-	        if (util_1.isPrimitive(whereClause[field])) {
-	            if (startsWith(whereClause[field], '$')) {
-	                operators.push({ name: whereClause[field], isLeaf: true });
-	            }
-	        } else {
-	            operators.push.apply(operators, _toConsumableArray(getWhereOperators(whereClause[field])));
-	        }
-	    }
-	    return operators;
-	}
-	function checkIfDatapointsSelectKeyHasInvalidStructure(fromClause, key) {
-	    if (size(key) < 2) {
-	        return "'select.key' clause for '" + fromClause + "' queries must have at least 2 items";
-	    }
-	}
-	function checkIfDatapointsSelectKeyHasDuplicates(fromClause, key) {
-	    var duplicates = getDuplicates(key);
-	    if (size(duplicates) > 0) {
-	        return "'select.key' clause for '" + fromClause + "' queries contains duplicates: " + uniq(duplicates).join(',');
-	    }
-	}
-	function checkIfDatapointsSelectValueHasInvalidStructure(fromClause, value) {
-	    if (size(value) < 1) {
-	        return "'select.value' clause for '" + fromClause + "' queries must have at least 1 item";
-	    }
-	}
-	function checkIfSchemasSelectKeyHasInvalidStructure(fromClause, key) {
-	    if (!isArray(key) || size(key) !== 2) {
-	        return "'select.key' clause for '" + fromClause + "' queries must have exactly 2 items: 'key', 'value'";
-	    }
-	}
-	function checkIfSelectValueHasInvalidStructure(fromClause, value) {
-	    if (!isArray(value) && !isNil(value)) {
-	        return "'select.value' clause for '" + fromClause + "' queries should be array of strings or empty";
-	    }
-	}
-	function checkIfSchemaJoinIsPresent(query) {
-	    if (has(query, 'join')) {
-	        return "'join' clause for '" + query.from + "' queries shouldn't be present in query";
-	    }
-	}
-	function checkIfSchemaLanguageIsPresent(query) {
-	    if (has(query, 'language')) {
-	        return "'language' clause for '*.schema' queries shouldn't be present in query";
-	    }
-	}
-	function checkIfEntitiesOrConceptsSelectHasInvalidStructure(selectClause, key, value) {
-	    if (!isObject(selectClause) || !isArray(key)) {
-	        return "'select' clause must have next structure: { key: [...], value: [...] }";
-	    }
-	}
-	function checkIfSelectKeyHasInvalidStructure(fromClause, key) {
-	    if (!isArray(key) || size(key) !== 1) {
-	        return "'select.key' clause for '" + fromClause + "' queries must have only 1 item";
-	    }
-	}
-	//# sourceMappingURL=structure.service.js.map
+	
+	module.exports = trimStart;
 
 /***/ },
 /* 193 */
@@ -10594,75 +10446,62 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	var baseKeys = __webpack_require__(46),
-	    getTag = __webpack_require__(111),
-	    isArrayLike = __webpack_require__(14),
-	    isString = __webpack_require__(23),
-	    stringSize = __webpack_require__(194);
-	
-	/** `Object#toString` result references. */
-	var mapTag = '[object Map]',
-	    setTag = '[object Set]';
+	var baseSlice = __webpack_require__(194);
 	
 	/**
-	 * Gets the size of `collection` by returning its length for array-like
-	 * values or the number of own enumerable string keyed properties for objects.
+	 * Casts `array` to a slice if it's needed.
 	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Collection
-	 * @param {Array|Object|string} collection The collection to inspect.
-	 * @returns {number} Returns the collection size.
-	 * @example
-	 *
-	 * _.size([1, 2, 3]);
-	 * // => 3
-	 *
-	 * _.size({ 'a': 1, 'b': 2 });
-	 * // => 2
-	 *
-	 * _.size('pebbles');
-	 * // => 7
+	 * @private
+	 * @param {Array} array The array to inspect.
+	 * @param {number} start The start position.
+	 * @param {number} [end=array.length] The end position.
+	 * @returns {Array} Returns the cast slice.
 	 */
-	function size(collection) {
-	  if (collection == null) {
-	    return 0;
-	  }
-	  if (isArrayLike(collection)) {
-	    return isString(collection) ? stringSize(collection) : collection.length;
-	  }
-	  var tag = getTag(collection);
-	  if (tag == mapTag || tag == setTag) {
-	    return collection.size;
-	  }
-	  return baseKeys(collection).length;
+	function castSlice(array, start, end) {
+	  var length = array.length;
+	  end = end === undefined ? length : end;
+	  return !start && end >= length ? array : baseSlice(array, start, end);
 	}
 	
-	module.exports = size;
+	module.exports = castSlice;
 
 /***/ },
 /* 194 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-	
-	var asciiSize = __webpack_require__(195),
-	    hasUnicode = __webpack_require__(196),
-	    unicodeSize = __webpack_require__(197);
+	"use strict";
 	
 	/**
-	 * Gets the number of symbols in `string`.
+	 * The base implementation of `_.slice` without an iteratee call guard.
 	 *
 	 * @private
-	 * @param {string} string The string to inspect.
-	 * @returns {number} Returns the string size.
+	 * @param {Array} array The array to slice.
+	 * @param {number} [start=0] The start position.
+	 * @param {number} [end=array.length] The end position.
+	 * @returns {Array} Returns the slice of `array`.
 	 */
-	function stringSize(string) {
-	    return hasUnicode(string) ? unicodeSize(string) : asciiSize(string);
+	function baseSlice(array, start, end) {
+	  var index = -1,
+	      length = array.length;
+	
+	  if (start < 0) {
+	    start = -start > length ? 0 : length + start;
+	  }
+	  end = end > length ? length : end;
+	  if (end < 0) {
+	    end += length;
+	  }
+	  length = start > end ? 0 : end - start >>> 0;
+	  start >>>= 0;
+	
+	  var result = Array(length);
+	  while (++index < length) {
+	    result[index] = array[index + start];
+	  }
+	  return result;
 	}
 	
-	module.exports = stringSize;
+	module.exports = baseSlice;
 
 /***/ },
 /* 195 */
@@ -10670,21 +10509,71 @@ var DDFCsvReader =
 
 	'use strict';
 	
-	var baseProperty = __webpack_require__(188);
+	var baseIndexOf = __webpack_require__(10);
 	
 	/**
-	 * Gets the size of an ASCII `string`.
+	 * Used by `_.trim` and `_.trimStart` to get the index of the first string symbol
+	 * that is not found in the character symbols.
 	 *
 	 * @private
-	 * @param {string} string The string inspect.
-	 * @returns {number} Returns the string size.
+	 * @param {Array} strSymbols The string symbols to inspect.
+	 * @param {Array} chrSymbols The character symbols to find.
+	 * @returns {number} Returns the index of the first unmatched string symbol.
 	 */
-	var asciiSize = baseProperty('length');
+	function charsStartIndex(strSymbols, chrSymbols) {
+	  var index = -1,
+	      length = strSymbols.length;
 	
-	module.exports = asciiSize;
+	  while (++index < length && baseIndexOf(chrSymbols, strSymbols[index], 0) > -1) {}
+	  return index;
+	}
+	
+	module.exports = charsStartIndex;
 
 /***/ },
 /* 196 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var asciiToArray = __webpack_require__(197),
+	    hasUnicode = __webpack_require__(198),
+	    unicodeToArray = __webpack_require__(199);
+	
+	/**
+	 * Converts `string` to an array.
+	 *
+	 * @private
+	 * @param {string} string The string to convert.
+	 * @returns {Array} Returns the converted array.
+	 */
+	function stringToArray(string) {
+	    return hasUnicode(string) ? unicodeToArray(string) : asciiToArray(string);
+	}
+	
+	module.exports = stringToArray;
+
+/***/ },
+/* 197 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	/**
+	 * Converts an ASCII `string` to an array.
+	 *
+	 * @private
+	 * @param {string} string The string to convert.
+	 * @returns {Array} Returns the converted array.
+	 */
+	function asciiToArray(string) {
+	  return string.split('');
+	}
+	
+	module.exports = asciiToArray;
+
+/***/ },
+/* 198 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -10717,7 +10606,7 @@ var DDFCsvReader =
 	module.exports = hasUnicode;
 
 /***/ },
-/* 197 */
+/* 199 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -10751,467 +10640,56 @@ var DDFCsvReader =
 	var reUnicode = RegExp(rsFitz + '(?=' + rsFitz + ')|' + rsSymbol + rsSeq, 'g');
 	
 	/**
-	 * Gets the size of a Unicode `string`.
+	 * Converts a Unicode `string` to an array.
 	 *
 	 * @private
-	 * @param {string} string The string inspect.
-	 * @returns {number} Returns the string size.
+	 * @param {string} string The string to convert.
+	 * @returns {Array} Returns the converted array.
 	 */
-	function unicodeSize(string) {
-	    var result = reUnicode.lastIndex = 0;
-	    while (reUnicode.test(string)) {
-	        ++result;
-	    }
-	    return result;
+	function unicodeToArray(string) {
+	    return string.match(reUnicode) || [];
 	}
 	
-	module.exports = unicodeSize;
-
-/***/ },
-/* 198 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	module.exports = __webpack_require__(138);
-
-/***/ },
-/* 199 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var baseHas = __webpack_require__(200),
-	    hasPath = __webpack_require__(185);
-	
-	/**
-	 * Checks if `path` is a direct property of `object`.
-	 *
-	 * @static
-	 * @since 0.1.0
-	 * @memberOf _
-	 * @category Object
-	 * @param {Object} object The object to query.
-	 * @param {Array|string} path The path to check.
-	 * @returns {boolean} Returns `true` if `path` exists, else `false`.
-	 * @example
-	 *
-	 * var object = { 'a': { 'b': 2 } };
-	 * var other = _.create({ 'a': _.create({ 'b': 2 }) });
-	 *
-	 * _.has(object, 'a');
-	 * // => true
-	 *
-	 * _.has(object, 'a.b');
-	 * // => true
-	 *
-	 * _.has(object, ['a', 'b']);
-	 * // => true
-	 *
-	 * _.has(other, 'a');
-	 * // => false
-	 */
-	function has(object, path) {
-	  return object != null && hasPath(object, path, baseHas);
-	}
-	
-	module.exports = has;
+	module.exports = unicodeToArray;
 
 /***/ },
 /* 200 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-	
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
+	var baseFlatten = __webpack_require__(150),
+	    map = __webpack_require__(190);
 	
 	/**
-	 * The base implementation of `_.has` without support for deep paths.
+	 * Creates a flattened array of values by running each element in `collection`
+	 * thru `iteratee` and flattening the mapped results. The iteratee is invoked
+	 * with three arguments: (value, index|key, collection).
 	 *
-	 * @private
-	 * @param {Object} [object] The object to query.
-	 * @param {Array|string} key The key to check.
-	 * @returns {boolean} Returns `true` if `key` exists, else `false`.
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Collection
+	 * @param {Array|Object} collection The collection to iterate over.
+	 * @param {Function} [iteratee=_.identity] The function invoked per iteration.
+	 * @returns {Array} Returns the new flattened array.
+	 * @example
+	 *
+	 * function duplicate(n) {
+	 *   return [n, n];
+	 * }
+	 *
+	 * _.flatMap([1, 2], duplicate);
+	 * // => [1, 1, 2, 2]
 	 */
-	function baseHas(object, key) {
-	  return object != null && hasOwnProperty.call(object, key);
+	function flatMap(collection, iteratee) {
+	  return baseFlatten(map(collection, iteratee), 1);
 	}
 	
-	module.exports = baseHas;
+	module.exports = flatMap;
 
 /***/ },
 /* 201 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var arrayEvery = __webpack_require__(202),
-	    baseEvery = __webpack_require__(203),
-	    baseIteratee = __webpack_require__(166),
-	    isArray = __webpack_require__(24),
-	    isIterateeCall = __webpack_require__(204);
-	
-	/**
-	 * Checks if `predicate` returns truthy for **all** elements of `collection`.
-	 * Iteration is stopped once `predicate` returns falsey. The predicate is
-	 * invoked with three arguments: (value, index|key, collection).
-	 *
-	 * **Note:** This method returns `true` for
-	 * [empty collections](https://en.wikipedia.org/wiki/Empty_set) because
-	 * [everything is true](https://en.wikipedia.org/wiki/Vacuous_truth) of
-	 * elements of empty collections.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Collection
-	 * @param {Array|Object} collection The collection to iterate over.
-	 * @param {Function} [predicate=_.identity] The function invoked per iteration.
-	 * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
-	 * @returns {boolean} Returns `true` if all elements pass the predicate check,
-	 *  else `false`.
-	 * @example
-	 *
-	 * _.every([true, 1, null, 'yes'], Boolean);
-	 * // => false
-	 *
-	 * var users = [
-	 *   { 'user': 'barney', 'age': 36, 'active': false },
-	 *   { 'user': 'fred',   'age': 40, 'active': false }
-	 * ];
-	 *
-	 * // The `_.matches` iteratee shorthand.
-	 * _.every(users, { 'user': 'barney', 'active': false });
-	 * // => false
-	 *
-	 * // The `_.matchesProperty` iteratee shorthand.
-	 * _.every(users, ['active', false]);
-	 * // => true
-	 *
-	 * // The `_.property` iteratee shorthand.
-	 * _.every(users, 'active');
-	 * // => false
-	 */
-	function every(collection, predicate, guard) {
-	  var func = isArray(collection) ? arrayEvery : baseEvery;
-	  if (guard && isIterateeCall(collection, predicate, guard)) {
-	    predicate = undefined;
-	  }
-	  return func(collection, baseIteratee(predicate, 3));
-	}
-	
-	module.exports = every;
-
-/***/ },
-/* 202 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	/**
-	 * A specialized version of `_.every` for arrays without support for
-	 * iteratee shorthands.
-	 *
-	 * @private
-	 * @param {Array} [array] The array to iterate over.
-	 * @param {Function} predicate The function invoked per iteration.
-	 * @returns {boolean} Returns `true` if all elements pass the predicate check,
-	 *  else `false`.
-	 */
-	function arrayEvery(array, predicate) {
-	  var index = -1,
-	      length = array == null ? 0 : array.length;
-	
-	  while (++index < length) {
-	    if (!predicate(array[index], index, array)) {
-	      return false;
-	    }
-	  }
-	  return true;
-	}
-	
-	module.exports = arrayEvery;
-
-/***/ },
-/* 203 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var baseEach = __webpack_require__(161);
-	
-	/**
-	 * The base implementation of `_.every` without support for iteratee shorthands.
-	 *
-	 * @private
-	 * @param {Array|Object} collection The collection to iterate over.
-	 * @param {Function} predicate The function invoked per iteration.
-	 * @returns {boolean} Returns `true` if all elements pass the predicate check,
-	 *  else `false`
-	 */
-	function baseEvery(collection, predicate) {
-	  var result = true;
-	  baseEach(collection, function (value, index, collection) {
-	    result = !!predicate(value, index, collection);
-	    return result;
-	  });
-	  return result;
-	}
-	
-	module.exports = baseEvery;
-
-/***/ },
-/* 204 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-	
-	var eq = __webpack_require__(57),
-	    isArrayLike = __webpack_require__(14),
-	    isIndex = __webpack_require__(41),
-	    isObject = __webpack_require__(7);
-	
-	/**
-	 * Checks if the given arguments are from an iteratee call.
-	 *
-	 * @private
-	 * @param {*} value The potential iteratee value argument.
-	 * @param {*} index The potential iteratee index or key argument.
-	 * @param {*} object The potential iteratee object argument.
-	 * @returns {boolean} Returns `true` if the arguments are from an iteratee call,
-	 *  else `false`.
-	 */
-	function isIterateeCall(value, index, object) {
-	  if (!isObject(object)) {
-	    return false;
-	  }
-	  var type = typeof index === 'undefined' ? 'undefined' : _typeof(index);
-	  if (type == 'number' ? isArrayLike(object) && isIndex(index, object.length) : type == 'string' && index in object) {
-	    return eq(object[index], value);
-	  }
-	  return false;
-	}
-	
-	module.exports = isIterateeCall;
-
-/***/ },
-/* 205 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var baseUniq = __webpack_require__(206);
-	
-	/**
-	 * Creates a duplicate-free version of an array, using
-	 * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
-	 * for equality comparisons, in which only the first occurrence of each element
-	 * is kept. The order of result values is determined by the order they occur
-	 * in the array.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Array
-	 * @param {Array} array The array to inspect.
-	 * @returns {Array} Returns the new duplicate free array.
-	 * @example
-	 *
-	 * _.uniq([2, 1, 2]);
-	 * // => [2, 1]
-	 */
-	function uniq(array) {
-	  return array && array.length ? baseUniq(array) : [];
-	}
-	
-	module.exports = uniq;
-
-/***/ },
-/* 206 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var SetCache = __webpack_require__(172),
-	    arrayIncludes = __webpack_require__(207),
-	    arrayIncludesWith = __webpack_require__(208),
-	    cacheHas = __webpack_require__(176),
-	    createSet = __webpack_require__(209),
-	    setToArray = __webpack_require__(128);
-	
-	/** Used as the size to enable large array optimizations. */
-	var LARGE_ARRAY_SIZE = 200;
-	
-	/**
-	 * The base implementation of `_.uniqBy` without support for iteratee shorthands.
-	 *
-	 * @private
-	 * @param {Array} array The array to inspect.
-	 * @param {Function} [iteratee] The iteratee invoked per element.
-	 * @param {Function} [comparator] The comparator invoked per element.
-	 * @returns {Array} Returns the new duplicate free array.
-	 */
-	function baseUniq(array, iteratee, comparator) {
-	  var index = -1,
-	      includes = arrayIncludes,
-	      length = array.length,
-	      isCommon = true,
-	      result = [],
-	      seen = result;
-	
-	  if (comparator) {
-	    isCommon = false;
-	    includes = arrayIncludesWith;
-	  } else if (length >= LARGE_ARRAY_SIZE) {
-	    var set = iteratee ? null : createSet(array);
-	    if (set) {
-	      return setToArray(set);
-	    }
-	    isCommon = false;
-	    includes = cacheHas;
-	    seen = new SetCache();
-	  } else {
-	    seen = iteratee ? [] : result;
-	  }
-	  outer: while (++index < length) {
-	    var value = array[index],
-	        computed = iteratee ? iteratee(value) : value;
-	
-	    value = comparator || value !== 0 ? value : 0;
-	    if (isCommon && computed === computed) {
-	      var seenIndex = seen.length;
-	      while (seenIndex--) {
-	        if (seen[seenIndex] === computed) {
-	          continue outer;
-	        }
-	      }
-	      if (iteratee) {
-	        seen.push(computed);
-	      }
-	      result.push(value);
-	    } else if (!includes(seen, computed, comparator)) {
-	      if (seen !== result) {
-	        seen.push(computed);
-	      }
-	      result.push(value);
-	    }
-	  }
-	  return result;
-	}
-	
-	module.exports = baseUniq;
-
-/***/ },
-/* 207 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var baseIndexOf = __webpack_require__(10);
-	
-	/**
-	 * A specialized version of `_.includes` for arrays without support for
-	 * specifying an index to search from.
-	 *
-	 * @private
-	 * @param {Array} [array] The array to inspect.
-	 * @param {*} target The value to search for.
-	 * @returns {boolean} Returns `true` if `target` is found, else `false`.
-	 */
-	function arrayIncludes(array, value) {
-	  var length = array == null ? 0 : array.length;
-	  return !!length && baseIndexOf(array, value, 0) > -1;
-	}
-	
-	module.exports = arrayIncludes;
-
-/***/ },
-/* 208 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	/**
-	 * This function is like `arrayIncludes` except that it accepts a comparator.
-	 *
-	 * @private
-	 * @param {Array} [array] The array to inspect.
-	 * @param {*} target The value to search for.
-	 * @param {Function} comparator The comparator invoked per element.
-	 * @returns {boolean} Returns `true` if `target` is found, else `false`.
-	 */
-	function arrayIncludesWith(array, value, comparator) {
-	  var index = -1,
-	      length = array == null ? 0 : array.length;
-	
-	  while (++index < length) {
-	    if (comparator(value, array[index])) {
-	      return true;
-	    }
-	  }
-	  return false;
-	}
-	
-	module.exports = arrayIncludesWith;
-
-/***/ },
-/* 209 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var Set = __webpack_require__(114),
-	    noop = __webpack_require__(210),
-	    setToArray = __webpack_require__(128);
-	
-	/** Used as references for various `Number` constants. */
-	var INFINITY = 1 / 0;
-	
-	/**
-	 * Creates a set object of `values`.
-	 *
-	 * @private
-	 * @param {Array} values The values to add to the set.
-	 * @returns {Object} Returns the new set.
-	 */
-	var createSet = !(Set && 1 / setToArray(new Set([, -0]))[1] == INFINITY) ? noop : function (values) {
-	  return new Set(values);
-	};
-	
-	module.exports = createSet;
-
-/***/ },
-/* 210 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	/**
-	 * This method returns `undefined`.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 2.3.0
-	 * @category Util
-	 * @example
-	 *
-	 * _.times(2, _.noop);
-	 * // => [undefined, undefined]
-	 */
-	function noop() {
-	  // No operation performed.
-	}
-	
-	module.exports = noop;
-
-/***/ },
-/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {'use strict';
@@ -11708,7 +11186,7 @@ var DDFCsvReader =
 	}
 	exports.isPrimitive = isPrimitive;
 	
-	exports.isBuffer = __webpack_require__(212);
+	exports.isBuffer = __webpack_require__(202);
 	
 	function objectToString(o) {
 	  return Object.prototype.toString.call(o);
@@ -11745,7 +11223,7 @@ var DDFCsvReader =
 	 *     prototype.
 	 * @param {function} superCtor Constructor function to inherit prototype from.
 	 */
-	exports.inherits = __webpack_require__(213);
+	exports.inherits = __webpack_require__(203);
 	
 	exports._extend = function (origin, add) {
 	  // Don't do anything if add isn't an object
@@ -11765,7 +11243,7 @@ var DDFCsvReader =
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(137)))
 
 /***/ },
-/* 212 */
+/* 202 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -11777,7 +11255,7 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 213 */
+/* 203 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -11807,7 +11285,881 @@ var DDFCsvReader =
 	}
 
 /***/ },
+/* 204 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var isEmpty = __webpack_require__(133);
+	var isNil = __webpack_require__(6);
+	var isObject = __webpack_require__(7);
+	var isArray = __webpack_require__(24);
+	var size = __webpack_require__(205);
+	var values = __webpack_require__(30);
+	var keys = __webpack_require__(33);
+	var map = __webpack_require__(190);
+	var first = __webpack_require__(209);
+	var filter = __webpack_require__(159);
+	var startsWith = __webpack_require__(152);
+	var get = __webpack_require__(139);
+	var has = __webpack_require__(210);
+	var every = __webpack_require__(212);
+	var compact = __webpack_require__(154);
+	var isString = __webpack_require__(23);
+	var includes = __webpack_require__(9);
+	var uniq = __webpack_require__(216);
+	var helper_service_1 = __webpack_require__(157);
+	var util_1 = __webpack_require__(201);
+	function validateQueryStructure(query) {
+	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	
+	    return new Promise(function (resolve, reject) {
+	        var validationResult = [].concat(_toConsumableArray(validateDatasetStructure(query, options)), _toConsumableArray(validateFromStructure(query, options)), _toConsumableArray(validateSelectStructure(query, options)), _toConsumableArray(validateWhereStructure(query, options)), _toConsumableArray(validateLanguageStructure(query, options)), _toConsumableArray(validateJoinStructure(query, options)), _toConsumableArray(validateOrderByStructure(query, options)));
+	        var isQueryValid = isEmpty(validationResult);
+	        if (!isQueryValid) {
+	            return reject("Too many query structure errors: \n* " + validationResult.join('\n* '));
+	        }
+	        return resolve();
+	    });
+	}
+	exports.validateQueryStructure = validateQueryStructure;
+	function validateDatasetStructure(query, options) {
+	    var errorMessages = [];
+	    var datasetClause = get(query, 'dataset');
+	    var branchClause = get(query, 'branch');
+	    var commitClause = get(query, 'commit');
+	    if (!isNil(datasetClause) && !isString(datasetClause)) {
+	        errorMessages.push("'dataset' clause must be string only");
+	    }
+	    if (!isNil(branchClause) && !isString(branchClause)) {
+	        errorMessages.push("'branch' clause must be string only");
+	    }
+	    if (!isNil(commitClause) && !isString(commitClause)) {
+	        errorMessages.push("'commit' clause must be string only");
+	    }
+	    return errorMessages;
+	}
+	function validateFromStructure(query, options) {
+	    var errorMessages = [];
+	    var clause = get(query, 'from', null);
+	    if (isNil(clause)) {
+	        errorMessages.push("'from' clause couldn't be empty");
+	    }
+	    if (!isString(clause)) {
+	        errorMessages.push("'from' clause must be string only");
+	    }
+	    if (!helper_service_1.AVAILABLE_FROM_CLAUSE_VALUES.has(clause)) {
+	        var listAvaliableValues = [].concat(_toConsumableArray(helper_service_1.AVAILABLE_FROM_CLAUSE_VALUES));
+	        errorMessages.push("'from' clause must be one of the list: " + listAvaliableValues.join(', '));
+	    }
+	    return errorMessages;
+	}
+	function validateSelectStructure(query, options) {
+	    var errorMessages = [];
+	    var selectClause = get(query, 'select', null);
+	    var fromClause = get(query, 'from', null);
+	    var key = get(selectClause, 'key');
+	    var value = get(selectClause, 'value');
+	    switch (true) {
+	        case helper_service_1.isSchemaQuery(query):
+	            errorMessages.push(checkIfSelectIsEmpty(selectClause), checkIfSchemasSelectKeyHasInvalidStructure(fromClause, key), checkIfSelectValueHasInvalidStructure(fromClause, value));
+	            break;
+	        case helper_service_1.isEntitiesQuery(query):
+	            errorMessages.push(checkIfSelectIsEmpty(selectClause), checkIfEntitiesOrConceptsSelectHasInvalidStructure(selectClause, key, value), checkIfSelectKeyHasInvalidStructure(fromClause, key), checkIfSelectValueHasInvalidStructure(fromClause, value));
+	            break;
+	        case helper_service_1.isConceptsQuery(query):
+	            errorMessages.push(checkIfSelectIsEmpty(selectClause), checkIfEntitiesOrConceptsSelectHasInvalidStructure(selectClause, key, value), checkIfSelectKeyHasInvalidStructure(fromClause, key), checkIfSelectValueHasInvalidStructure(fromClause, value));
+	            break;
+	        case helper_service_1.isDatapointsQuery(query):
+	            errorMessages.push(checkIfSelectIsEmpty(selectClause), checkIfSelectHasInvalidStructure(selectClause, key, value), checkIfDatapointsSelectKeyHasInvalidStructure(fromClause, key), checkIfDatapointsSelectKeyHasDuplicates(fromClause, key), checkIfDatapointsSelectValueHasInvalidStructure(fromClause, value));
+	            break;
+	        default:
+	            errorMessages.push(checkIfSelectIsEmpty(selectClause));
+	            break;
+	    }
+	    return compact(errorMessages);
+	}
+	function validateWhereStructure(query, options) {
+	    var errorMessages = [];
+	    var joinClause = get(query, 'join', null);
+	    var whereClause = get(query, 'where', null);
+	    var whereOperators = getWhereOperators(whereClause);
+	    errorMessages.push(checkIfWhereHasInvalidStructure(whereClause, getJoinIDPathIfExists(options)), checkIfWhereHasUnknownOperators(joinClause, whereOperators, getJoinIDPathIfExists(options)));
+	    return compact(errorMessages);
+	}
+	function validateLanguageStructure(query, options) {
+	    var errorMessages = [];
+	    var languageClause = get(query, 'language', null);
+	    switch (true) {
+	        case helper_service_1.isSchemaQuery(query):
+	            errorMessages.push(checkIfSchemaLanguageIsPresent(query));
+	            break;
+	        case helper_service_1.isEntitiesQuery(query):
+	        case helper_service_1.isConceptsQuery(query):
+	        case helper_service_1.isDatapointsQuery(query):
+	        default:
+	            errorMessages.push(checkIfLanguageHasInvalidStructure(languageClause));
+	            break;
+	    }
+	    return compact(errorMessages);
+	}
+	function validateJoinStructure(query, options) {
+	    var errorMessages = [];
+	    var joinClause = get(query, 'join', null);
+	    switch (true) {
+	        case helper_service_1.isSchemaQuery(query):
+	        case helper_service_1.isConceptsQuery(query):
+	            errorMessages.push(checkIfSchemaJoinIsPresent(query));
+	            break;
+	        case helper_service_1.isEntitiesQuery(query):
+	        case helper_service_1.isDatapointsQuery(query):
+	        default:
+	            errorMessages.push.apply(errorMessages, [checkIfJoinHasInvalidStructure(joinClause)].concat(_toConsumableArray(map(joinClause, function (item, joinID) {
+	                return checkIfJoinKeyHasInvalidStructure(item, getJoinIDPathIfExists({ joinID: joinID }));
+	            }))));
+	            break;
+	    }
+	    return compact(errorMessages);
+	}
+	function validateOrderByStructure(query, options) {
+	    var errorMessages = [];
+	    var orderByClause = get(query, 'order_by', null);
+	    errorMessages.push(checkIfOrderByHasInvalidStructure(orderByClause));
+	    return compact(errorMessages);
+	}
+	function checkIfSelectIsEmpty(selectClause) {
+	    if (isNil(selectClause)) {
+	        return "'select' clause couldn't be empty";
+	    }
+	}
+	function checkIfSelectHasInvalidStructure(selectClause, key, value) {
+	    if (!isObject(selectClause) || !isArray(key) || !isArray(value)) {
+	        return "'select' clause must have next structure: { key: [...], value: [...] }";
+	    }
+	}
+	function checkIfJoinHasInvalidStructure(joinClause) {
+	    if (!isNil(joinClause) && !isStrictObject(joinClause)) {
+	        return "'join' clause must be object only";
+	    }
+	}
+	function checkIfLanguageHasInvalidStructure(languageClause) {
+	    if (!isNil(languageClause) && !isString(languageClause)) {
+	        return "'language' clause must be string only";
+	    }
+	}
+	function checkIfJoinKeyHasInvalidStructure(joinClause, joinPath) {
+	    if (!isNil(joinClause.key) && !isString(joinClause.key)) {
+	        return "'" + joinPath + "key' clause must be string only";
+	    }
+	}
+	function checkIfWhereHasInvalidStructure(whereClause, joinPath) {
+	    if (!isNil(whereClause) && !isStrictObject(whereClause)) {
+	        return "'" + joinPath + "where' clause must be object only";
+	    }
+	}
+	function checkIfWhereHasUnknownOperators(joinClause, operators, joinPath) {
+	    var notAllowedOperators = filter(operators, function (operator) {
+	        return !isAllowedOperator(joinClause, operator);
+	    }).map(function (operator) {
+	        return operator.name;
+	    });
+	    var allowedOperatorsByDataset = [].concat(_toConsumableArray(helper_service_1.AVAILABLE_QUERY_OPERATORS.values()), _toConsumableArray(keys(joinClause)));
+	    if (!isEmpty(notAllowedOperators)) {
+	        return "'" + joinPath + "where' clause has unknown operator(s) '" + notAllowedOperators.join(', ') + "', replace it with allowed operators: " + allowedOperatorsByDataset.join(', ');
+	    }
+	}
+	function checkIfOrderByHasInvalidStructure(orderByClause) {
+	    if (!isNil(orderByClause) && !isString(orderByClause) && !isArrayOfStrings(orderByClause) && !isArrayOfSpecialItems(orderByClause, isOrderBySubclause)) {
+	        return "'order_by' clause must be string or array of strings || objects only";
+	    }
+	}
+	function isStrictObject(clause) {
+	    return isObject(clause) && !isArray(clause);
+	}
+	function isArrayOfStrings(clause) {
+	    return isArray(clause) && every(clause, isString);
+	}
+	function isOrderBySubclause(subclause) {
+	    return isString(subclause) || isStrictObject(subclause) && size(subclause) === 1 && helper_service_1.AVAILABLE_ORDER_BY_CLAUSE_VALUES.has(first(values(subclause)));
+	}
+	function isArrayOfSpecialItems(clause, isSpecialItem) {
+	    return isArray(clause) && every(clause, isSpecialItem);
+	}
+	function isAllowedOperator(joinClause, operator) {
+	    return isMongoLikeOperator(operator) || isJoinOperator(joinClause, operator);
+	}
+	function isMongoLikeOperator(operator) {
+	    return !operator.isLeaf && helper_service_1.AVAILABLE_QUERY_OPERATORS.has(operator.name);
+	}
+	function isJoinOperator(joinClause, operator) {
+	    return operator.isLeaf && startsWith(operator.name, '$') && has(joinClause, operator.name);
+	}
+	function getDuplicates(array) {
+	    return filter(array, function (value, index, iteratee) {
+	        return includes(iteratee, value, index + 1);
+	    });
+	}
+	function getJoinIDPathIfExists(options) {
+	    return get(options, 'joinID', false) ? "join." + options.joinID + "." : '';
+	}
+	function getWhereOperators(whereClause) {
+	    var operators = [];
+	    for (var field in whereClause) {
+	        if (startsWith(field, '$')) {
+	            operators.push({ name: field, isLeaf: false });
+	        }
+	        if (util_1.isPrimitive(whereClause[field])) {
+	            if (startsWith(whereClause[field], '$')) {
+	                operators.push({ name: whereClause[field], isLeaf: true });
+	            }
+	        } else {
+	            operators.push.apply(operators, _toConsumableArray(getWhereOperators(whereClause[field])));
+	        }
+	    }
+	    return operators;
+	}
+	function checkIfDatapointsSelectKeyHasInvalidStructure(fromClause, key) {
+	    if (size(key) < 2) {
+	        return "'select.key' clause for '" + fromClause + "' queries must have at least 2 items";
+	    }
+	}
+	function checkIfDatapointsSelectKeyHasDuplicates(fromClause, key) {
+	    var duplicates = getDuplicates(key);
+	    if (size(duplicates) > 0) {
+	        return "'select.key' clause for '" + fromClause + "' queries contains duplicates: " + uniq(duplicates).join(',');
+	    }
+	}
+	function checkIfDatapointsSelectValueHasInvalidStructure(fromClause, value) {
+	    if (size(value) < 1) {
+	        return "'select.value' clause for '" + fromClause + "' queries must have at least 1 item";
+	    }
+	}
+	function checkIfSchemasSelectKeyHasInvalidStructure(fromClause, key) {
+	    if (!isArray(key) || size(key) !== 2) {
+	        return "'select.key' clause for '" + fromClause + "' queries must have exactly 2 items: 'key', 'value'";
+	    }
+	}
+	function checkIfSelectValueHasInvalidStructure(fromClause, value) {
+	    if (!isArray(value) && !isNil(value)) {
+	        return "'select.value' clause for '" + fromClause + "' queries should be array of strings or empty";
+	    }
+	}
+	function checkIfSchemaJoinIsPresent(query) {
+	    if (has(query, 'join')) {
+	        return "'join' clause for '" + query.from + "' queries shouldn't be present in query";
+	    }
+	}
+	function checkIfSchemaLanguageIsPresent(query) {
+	    if (has(query, 'language')) {
+	        return "'language' clause for '*.schema' queries shouldn't be present in query";
+	    }
+	}
+	function checkIfEntitiesOrConceptsSelectHasInvalidStructure(selectClause, key, value) {
+	    if (!isObject(selectClause) || !isArray(key)) {
+	        return "'select' clause must have next structure: { key: [...], value: [...] }";
+	    }
+	}
+	function checkIfSelectKeyHasInvalidStructure(fromClause, key) {
+	    if (!isArray(key) || size(key) !== 1) {
+	        return "'select.key' clause for '" + fromClause + "' queries must have only 1 item";
+	    }
+	}
+	//# sourceMappingURL=structure.service.js.map
+
+/***/ },
+/* 205 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var baseKeys = __webpack_require__(46),
+	    getTag = __webpack_require__(111),
+	    isArrayLike = __webpack_require__(14),
+	    isString = __webpack_require__(23),
+	    stringSize = __webpack_require__(206);
+	
+	/** `Object#toString` result references. */
+	var mapTag = '[object Map]',
+	    setTag = '[object Set]';
+	
+	/**
+	 * Gets the size of `collection` by returning its length for array-like
+	 * values or the number of own enumerable string keyed properties for objects.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Collection
+	 * @param {Array|Object|string} collection The collection to inspect.
+	 * @returns {number} Returns the collection size.
+	 * @example
+	 *
+	 * _.size([1, 2, 3]);
+	 * // => 3
+	 *
+	 * _.size({ 'a': 1, 'b': 2 });
+	 * // => 2
+	 *
+	 * _.size('pebbles');
+	 * // => 7
+	 */
+	function size(collection) {
+	  if (collection == null) {
+	    return 0;
+	  }
+	  if (isArrayLike(collection)) {
+	    return isString(collection) ? stringSize(collection) : collection.length;
+	  }
+	  var tag = getTag(collection);
+	  if (tag == mapTag || tag == setTag) {
+	    return collection.size;
+	  }
+	  return baseKeys(collection).length;
+	}
+	
+	module.exports = size;
+
+/***/ },
+/* 206 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var asciiSize = __webpack_require__(207),
+	    hasUnicode = __webpack_require__(198),
+	    unicodeSize = __webpack_require__(208);
+	
+	/**
+	 * Gets the number of symbols in `string`.
+	 *
+	 * @private
+	 * @param {string} string The string to inspect.
+	 * @returns {number} Returns the string size.
+	 */
+	function stringSize(string) {
+	    return hasUnicode(string) ? unicodeSize(string) : asciiSize(string);
+	}
+	
+	module.exports = stringSize;
+
+/***/ },
+/* 207 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var baseProperty = __webpack_require__(188);
+	
+	/**
+	 * Gets the size of an ASCII `string`.
+	 *
+	 * @private
+	 * @param {string} string The string inspect.
+	 * @returns {number} Returns the string size.
+	 */
+	var asciiSize = baseProperty('length');
+	
+	module.exports = asciiSize;
+
+/***/ },
+/* 208 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	/** Used to compose unicode character classes. */
+	var rsAstralRange = '\\ud800-\\udfff',
+	    rsComboMarksRange = '\\u0300-\\u036f',
+	    reComboHalfMarksRange = '\\ufe20-\\ufe2f',
+	    rsComboSymbolsRange = '\\u20d0-\\u20ff',
+	    rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange,
+	    rsVarRange = '\\ufe0e\\ufe0f';
+	
+	/** Used to compose unicode capture groups. */
+	var rsAstral = '[' + rsAstralRange + ']',
+	    rsCombo = '[' + rsComboRange + ']',
+	    rsFitz = '\\ud83c[\\udffb-\\udfff]',
+	    rsModifier = '(?:' + rsCombo + '|' + rsFitz + ')',
+	    rsNonAstral = '[^' + rsAstralRange + ']',
+	    rsRegional = '(?:\\ud83c[\\udde6-\\uddff]){2}',
+	    rsSurrPair = '[\\ud800-\\udbff][\\udc00-\\udfff]',
+	    rsZWJ = '\\u200d';
+	
+	/** Used to compose unicode regexes. */
+	var reOptMod = rsModifier + '?',
+	    rsOptVar = '[' + rsVarRange + ']?',
+	    rsOptJoin = '(?:' + rsZWJ + '(?:' + [rsNonAstral, rsRegional, rsSurrPair].join('|') + ')' + rsOptVar + reOptMod + ')*',
+	    rsSeq = rsOptVar + reOptMod + rsOptJoin,
+	    rsSymbol = '(?:' + [rsNonAstral + rsCombo + '?', rsCombo, rsRegional, rsSurrPair, rsAstral].join('|') + ')';
+	
+	/** Used to match [string symbols](https://mathiasbynens.be/notes/javascript-unicode). */
+	var reUnicode = RegExp(rsFitz + '(?=' + rsFitz + ')|' + rsSymbol + rsSeq, 'g');
+	
+	/**
+	 * Gets the size of a Unicode `string`.
+	 *
+	 * @private
+	 * @param {string} string The string inspect.
+	 * @returns {number} Returns the string size.
+	 */
+	function unicodeSize(string) {
+	    var result = reUnicode.lastIndex = 0;
+	    while (reUnicode.test(string)) {
+	        ++result;
+	    }
+	    return result;
+	}
+	
+	module.exports = unicodeSize;
+
+/***/ },
+/* 209 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	module.exports = __webpack_require__(138);
+
+/***/ },
+/* 210 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var baseHas = __webpack_require__(211),
+	    hasPath = __webpack_require__(185);
+	
+	/**
+	 * Checks if `path` is a direct property of `object`.
+	 *
+	 * @static
+	 * @since 0.1.0
+	 * @memberOf _
+	 * @category Object
+	 * @param {Object} object The object to query.
+	 * @param {Array|string} path The path to check.
+	 * @returns {boolean} Returns `true` if `path` exists, else `false`.
+	 * @example
+	 *
+	 * var object = { 'a': { 'b': 2 } };
+	 * var other = _.create({ 'a': _.create({ 'b': 2 }) });
+	 *
+	 * _.has(object, 'a');
+	 * // => true
+	 *
+	 * _.has(object, 'a.b');
+	 * // => true
+	 *
+	 * _.has(object, ['a', 'b']);
+	 * // => true
+	 *
+	 * _.has(other, 'a');
+	 * // => false
+	 */
+	function has(object, path) {
+	  return object != null && hasPath(object, path, baseHas);
+	}
+	
+	module.exports = has;
+
+/***/ },
+/* 211 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+	
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+	
+	/**
+	 * The base implementation of `_.has` without support for deep paths.
+	 *
+	 * @private
+	 * @param {Object} [object] The object to query.
+	 * @param {Array|string} key The key to check.
+	 * @returns {boolean} Returns `true` if `key` exists, else `false`.
+	 */
+	function baseHas(object, key) {
+	  return object != null && hasOwnProperty.call(object, key);
+	}
+	
+	module.exports = baseHas;
+
+/***/ },
+/* 212 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var arrayEvery = __webpack_require__(213),
+	    baseEvery = __webpack_require__(214),
+	    baseIteratee = __webpack_require__(166),
+	    isArray = __webpack_require__(24),
+	    isIterateeCall = __webpack_require__(215);
+	
+	/**
+	 * Checks if `predicate` returns truthy for **all** elements of `collection`.
+	 * Iteration is stopped once `predicate` returns falsey. The predicate is
+	 * invoked with three arguments: (value, index|key, collection).
+	 *
+	 * **Note:** This method returns `true` for
+	 * [empty collections](https://en.wikipedia.org/wiki/Empty_set) because
+	 * [everything is true](https://en.wikipedia.org/wiki/Vacuous_truth) of
+	 * elements of empty collections.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Collection
+	 * @param {Array|Object} collection The collection to iterate over.
+	 * @param {Function} [predicate=_.identity] The function invoked per iteration.
+	 * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+	 * @returns {boolean} Returns `true` if all elements pass the predicate check,
+	 *  else `false`.
+	 * @example
+	 *
+	 * _.every([true, 1, null, 'yes'], Boolean);
+	 * // => false
+	 *
+	 * var users = [
+	 *   { 'user': 'barney', 'age': 36, 'active': false },
+	 *   { 'user': 'fred',   'age': 40, 'active': false }
+	 * ];
+	 *
+	 * // The `_.matches` iteratee shorthand.
+	 * _.every(users, { 'user': 'barney', 'active': false });
+	 * // => false
+	 *
+	 * // The `_.matchesProperty` iteratee shorthand.
+	 * _.every(users, ['active', false]);
+	 * // => true
+	 *
+	 * // The `_.property` iteratee shorthand.
+	 * _.every(users, 'active');
+	 * // => false
+	 */
+	function every(collection, predicate, guard) {
+	  var func = isArray(collection) ? arrayEvery : baseEvery;
+	  if (guard && isIterateeCall(collection, predicate, guard)) {
+	    predicate = undefined;
+	  }
+	  return func(collection, baseIteratee(predicate, 3));
+	}
+	
+	module.exports = every;
+
+/***/ },
+/* 213 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	/**
+	 * A specialized version of `_.every` for arrays without support for
+	 * iteratee shorthands.
+	 *
+	 * @private
+	 * @param {Array} [array] The array to iterate over.
+	 * @param {Function} predicate The function invoked per iteration.
+	 * @returns {boolean} Returns `true` if all elements pass the predicate check,
+	 *  else `false`.
+	 */
+	function arrayEvery(array, predicate) {
+	  var index = -1,
+	      length = array == null ? 0 : array.length;
+	
+	  while (++index < length) {
+	    if (!predicate(array[index], index, array)) {
+	      return false;
+	    }
+	  }
+	  return true;
+	}
+	
+	module.exports = arrayEvery;
+
+/***/ },
 /* 214 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var baseEach = __webpack_require__(161);
+	
+	/**
+	 * The base implementation of `_.every` without support for iteratee shorthands.
+	 *
+	 * @private
+	 * @param {Array|Object} collection The collection to iterate over.
+	 * @param {Function} predicate The function invoked per iteration.
+	 * @returns {boolean} Returns `true` if all elements pass the predicate check,
+	 *  else `false`
+	 */
+	function baseEvery(collection, predicate) {
+	  var result = true;
+	  baseEach(collection, function (value, index, collection) {
+	    result = !!predicate(value, index, collection);
+	    return result;
+	  });
+	  return result;
+	}
+	
+	module.exports = baseEvery;
+
+/***/ },
+/* 215 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	var eq = __webpack_require__(57),
+	    isArrayLike = __webpack_require__(14),
+	    isIndex = __webpack_require__(41),
+	    isObject = __webpack_require__(7);
+	
+	/**
+	 * Checks if the given arguments are from an iteratee call.
+	 *
+	 * @private
+	 * @param {*} value The potential iteratee value argument.
+	 * @param {*} index The potential iteratee index or key argument.
+	 * @param {*} object The potential iteratee object argument.
+	 * @returns {boolean} Returns `true` if the arguments are from an iteratee call,
+	 *  else `false`.
+	 */
+	function isIterateeCall(value, index, object) {
+	  if (!isObject(object)) {
+	    return false;
+	  }
+	  var type = typeof index === 'undefined' ? 'undefined' : _typeof(index);
+	  if (type == 'number' ? isArrayLike(object) && isIndex(index, object.length) : type == 'string' && index in object) {
+	    return eq(object[index], value);
+	  }
+	  return false;
+	}
+	
+	module.exports = isIterateeCall;
+
+/***/ },
+/* 216 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var baseUniq = __webpack_require__(217);
+	
+	/**
+	 * Creates a duplicate-free version of an array, using
+	 * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+	 * for equality comparisons, in which only the first occurrence of each element
+	 * is kept. The order of result values is determined by the order they occur
+	 * in the array.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Array
+	 * @param {Array} array The array to inspect.
+	 * @returns {Array} Returns the new duplicate free array.
+	 * @example
+	 *
+	 * _.uniq([2, 1, 2]);
+	 * // => [2, 1]
+	 */
+	function uniq(array) {
+	  return array && array.length ? baseUniq(array) : [];
+	}
+	
+	module.exports = uniq;
+
+/***/ },
+/* 217 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var SetCache = __webpack_require__(172),
+	    arrayIncludes = __webpack_require__(218),
+	    arrayIncludesWith = __webpack_require__(219),
+	    cacheHas = __webpack_require__(176),
+	    createSet = __webpack_require__(220),
+	    setToArray = __webpack_require__(128);
+	
+	/** Used as the size to enable large array optimizations. */
+	var LARGE_ARRAY_SIZE = 200;
+	
+	/**
+	 * The base implementation of `_.uniqBy` without support for iteratee shorthands.
+	 *
+	 * @private
+	 * @param {Array} array The array to inspect.
+	 * @param {Function} [iteratee] The iteratee invoked per element.
+	 * @param {Function} [comparator] The comparator invoked per element.
+	 * @returns {Array} Returns the new duplicate free array.
+	 */
+	function baseUniq(array, iteratee, comparator) {
+	  var index = -1,
+	      includes = arrayIncludes,
+	      length = array.length,
+	      isCommon = true,
+	      result = [],
+	      seen = result;
+	
+	  if (comparator) {
+	    isCommon = false;
+	    includes = arrayIncludesWith;
+	  } else if (length >= LARGE_ARRAY_SIZE) {
+	    var set = iteratee ? null : createSet(array);
+	    if (set) {
+	      return setToArray(set);
+	    }
+	    isCommon = false;
+	    includes = cacheHas;
+	    seen = new SetCache();
+	  } else {
+	    seen = iteratee ? [] : result;
+	  }
+	  outer: while (++index < length) {
+	    var value = array[index],
+	        computed = iteratee ? iteratee(value) : value;
+	
+	    value = comparator || value !== 0 ? value : 0;
+	    if (isCommon && computed === computed) {
+	      var seenIndex = seen.length;
+	      while (seenIndex--) {
+	        if (seen[seenIndex] === computed) {
+	          continue outer;
+	        }
+	      }
+	      if (iteratee) {
+	        seen.push(computed);
+	      }
+	      result.push(value);
+	    } else if (!includes(seen, computed, comparator)) {
+	      if (seen !== result) {
+	        seen.push(computed);
+	      }
+	      result.push(value);
+	    }
+	  }
+	  return result;
+	}
+	
+	module.exports = baseUniq;
+
+/***/ },
+/* 218 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var baseIndexOf = __webpack_require__(10);
+	
+	/**
+	 * A specialized version of `_.includes` for arrays without support for
+	 * specifying an index to search from.
+	 *
+	 * @private
+	 * @param {Array} [array] The array to inspect.
+	 * @param {*} target The value to search for.
+	 * @returns {boolean} Returns `true` if `target` is found, else `false`.
+	 */
+	function arrayIncludes(array, value) {
+	  var length = array == null ? 0 : array.length;
+	  return !!length && baseIndexOf(array, value, 0) > -1;
+	}
+	
+	module.exports = arrayIncludes;
+
+/***/ },
+/* 219 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	/**
+	 * This function is like `arrayIncludes` except that it accepts a comparator.
+	 *
+	 * @private
+	 * @param {Array} [array] The array to inspect.
+	 * @param {*} target The value to search for.
+	 * @param {Function} comparator The comparator invoked per element.
+	 * @returns {boolean} Returns `true` if `target` is found, else `false`.
+	 */
+	function arrayIncludesWith(array, value, comparator) {
+	  var index = -1,
+	      length = array == null ? 0 : array.length;
+	
+	  while (++index < length) {
+	    if (comparator(value, array[index])) {
+	      return true;
+	    }
+	  }
+	  return false;
+	}
+	
+	module.exports = arrayIncludesWith;
+
+/***/ },
+/* 220 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Set = __webpack_require__(114),
+	    noop = __webpack_require__(221),
+	    setToArray = __webpack_require__(128);
+	
+	/** Used as references for various `Number` constants. */
+	var INFINITY = 1 / 0;
+	
+	/**
+	 * Creates a set object of `values`.
+	 *
+	 * @private
+	 * @param {Array} values The values to add to the set.
+	 * @returns {Object} Returns the new set.
+	 */
+	var createSet = !(Set && 1 / setToArray(new Set([, -0]))[1] == INFINITY) ? noop : function (values) {
+	  return new Set(values);
+	};
+	
+	module.exports = createSet;
+
+/***/ },
+/* 221 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	/**
+	 * This method returns `undefined`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 2.3.0
+	 * @category Util
+	 * @example
+	 *
+	 * _.times(2, _.noop);
+	 * // => [undefined, undefined]
+	 */
+	function noop() {
+	  // No operation performed.
+	}
+	
+	module.exports = noop;
+
+/***/ },
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

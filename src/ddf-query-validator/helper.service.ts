@@ -15,6 +15,8 @@ export const CONCEPT_TYPE_TIME = 'time';
 export const RESERVED_CONCEPT = 'concept';
 export const RESERVED_CONCEPT_TYPE = 'concept_type';
 export const RESERVED_DOMAIN = 'domain';
+export const RESERVED_UNIT = 'unit';
+export const RESERVED_DRILL_UP = 'drill_up';
 export const RESERVED_KEY = 'key';
 export const RESERVED_VALUE = 'value';
 

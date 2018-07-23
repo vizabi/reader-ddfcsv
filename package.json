@@ -10,6 +10,7 @@
     "postinstall": "npm run tsc",
     "pree2e": "npm i",
     "e2e": "nyc mocha",
+    "e2e:doc": "mocha --require ts-node/register -R markdown > API.SPECIFICATION.md --recursive test/*.spec.ts",
     "test": "npm run e2e",
     "test-travis": "npm run e2e && nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "changelog": "conventional-changelog -i CHANGELOG.md -s -p angular",
