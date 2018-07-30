@@ -1,43 +1,53 @@
-const webpack = require('webpack');
 const path = require('path');
+// const CleanWebpackPlugin = require('clean-webpack-plugin');
+const webpackMerge = require("webpack-merge");
 
-/* eslint-disable no-process-env */
-const PROD = JSON.parse(process.env.PROD_ENV || '0');
+const modeConfig = env => require(`./build-utils/webpack.${env}`)(env);
 const WEB = JSON.parse(process.env.WEB_ENV || '0');
 
-const config = {
-  entry: {'main-backend': './lib/index.js'},
-  target: 'node',
-  devtool: 'source-map',
-  output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'vizabi-ddfcsv-reader-node.js',
-    libraryTarget: 'commonjs2'
-  },
-  module: {
-    loaders: [
-      {
-        test: /\.js$/,
-        loaders: ['babel']
-      }
-    ]
-  },
-  resolve: {extensions: ['', '.js']},
-  profile: true,
-  plugins: PROD ? [
-    new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}}),
-    new webpack.IgnorePlugin(/vertx/)
-  ] : [
-    new webpack.IgnorePlugin(/vertx/)
-  ]
+module.exports = ({ mode, presets } = { mode: "production", presets: [] }) => {
+  const basicConfig = {
+    mode,
+    node: {
+      fs: 'empty'
+    },
+    devtool: 'source-map',
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          use: [ "source-map-loader" ],
+          enforce: "pre"
+        },
+        {
+          test: /\.ts?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/
+        }
+      ]
+    },
+    resolve: {
+      extensions: [ '.ts', '.js' ]
+    }
+    /*,
+    plugins: [
+        new CleanWebpackPlugin(['dist'])
+    ]*/
+  };
+
+  const additionalConfig = {};
+
+  if (WEB) {
+    // additionalConfig.devtool = 'inline-source-map';
+    additionalConfig.entry = './src/index-web.ts';
+    additionalConfig.target = 'web';
+    additionalConfig.output = {
+      path: path.join(__dirname, 'dist'),
+      filename: 'vizabi-ddfcsv-reader.js',
+      libraryTarget: 'var',
+      library: 'DDFCsvReader'
+    };
+  }
+
+  return webpackMerge(basicConfig, modeConfig(mode), additionalConfig);
 };
-
-if (WEB) {
-  config.entry['main-backend'] = './lib/index-web.js';
-  config.target = 'web';
-  config.output.filename = 'vizabi-ddfcsv-reader.js';
-  config.output.libraryTarget = 'var';
-  config.output.library = 'DDFCsvReader';
-}
-
-module.exports = config;

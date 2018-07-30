@@ -1,16 +1,7 @@
 .idea
 
-package-lock.json
-lib
-*js
-!dist/*js
-!webpack.config.js
-!deploy.js
-
 # Logs
-logs
-*.log
-npm-debug.log*
+*.log*
 
 # Runtime data
 pids
@@ -26,9 +17,6 @@ coverage.lcov
 
 # nyc test coverage
 .nyc_output
-
-# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
 
 # node-waf configuration
 .lock-wscript

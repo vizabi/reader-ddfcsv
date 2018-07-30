@@ -35,8 +35,8 @@ export interface IPluginOptions {
   datapackage: IDatapackage;
 }
 
-export interface IQueryOptimizationPlugin {
+export interface IResourceSelectionOptimizer {
   isMatched(): boolean;
 
-  getOptimalFilesSet(): Promise<string[]>;
+  getRecommendedFilesSet(): Promise<string[]>;
 }

@@ -17,7 +17,8 @@
     "space-before-function-paren": false,
     "triple-equals": false,
     "ordered-imports": false,
-    "max-line-length": false
+    "max-line-length": false,
+    "callable-types": false
   },
   "rulesDirectory": []
 }

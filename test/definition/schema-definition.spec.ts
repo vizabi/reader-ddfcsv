@@ -9,7 +9,7 @@ import {
   selectValueClauseContainsUnavailableItems2,
   tooManyQueryDefinitionErrors
 } from '../common';
-import { CONCEPTS, DATAPOINTS, ENTITIES } from '../../src/ddf-query-validator';
+import { CONCEPTS, DATAPOINTS, ENTITIES } from 'ddf-query-validator';
 
 const expect = chai.expect;
 

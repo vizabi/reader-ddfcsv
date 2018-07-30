@@ -14,14 +14,18 @@ import {
 } from '../common';
 import { getDDFCsvReaderObject } from '../../src/index';
 import {
+  CONCEPT_TYPE_ENTITY_DOMAIN,
+  CONCEPT_TYPE_ENTITY_SET,
+  isEntityDomainOrSet,
   RESERVED_CONCEPT,
   RESERVED_CONCEPT_TYPE,
   RESERVED_DOMAIN,
   RESERVED_DRILL_UP
-} from '../../src/ddf-query-validator';
-import map = require('lodash/map');
-import flatMap = require('lodash/flatMap');
-import isNil = require('lodash/isNil');
+} from 'ddf-query-validator';
+
+import * as map from 'lodash.map';
+import * as flatMap from 'lodash.flatmap';
+import * as isNil from 'lodash.isnil';
 
 const expect = chai.expect;
 
