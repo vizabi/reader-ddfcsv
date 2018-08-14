@@ -1,8 +1,8 @@
-import isNil = require('lodash/isNil');
-import isObject = require('lodash/isObject');
+import * as isNil from 'lodash.isnil';
+import * as isObject from 'lodash.isobject';
 import { ddfCsvReader } from './ddf-csv';
 import { IReader } from './interfaces';
-import { getDatasetPath } from './ddf-query-validator';
+import { getDatasetPath } from 'ddf-query-validator';
 
 export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
   return function(externalFileReader?: IReader, logger?: any) {

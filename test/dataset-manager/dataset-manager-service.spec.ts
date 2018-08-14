@@ -9,8 +9,8 @@ import {
 } from '../common';
 import { getDDFCsvReaderObject } from '../../src/index';
 import * as chai from 'chai';
-import cloneDeep = require('lodash/cloneDeep');
-import set = require('lodash/set');
+import * as cloneDeep from 'lodash.clonedeep';
+import * as set from 'lodash.set';
 
 const expect = chai.expect;
 

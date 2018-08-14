@@ -18,7 +18,7 @@ import {
   RESERVED_CONCEPT_TYPE,
   RESERVED_DOMAIN,
   RESERVED_DRILL_UP
-} from '../../src/ddf-query-validator';
+} from 'ddf-query-validator';
 
 const expect = chai.expect;
 

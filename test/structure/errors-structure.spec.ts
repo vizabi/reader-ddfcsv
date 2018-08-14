@@ -1,5 +1,5 @@
 import * as chai from 'chai';
-import cloneDeep = require('lodash/cloneDeep');
+import * as cloneDeep from 'lodash.clonedeep';
 import { getDDFCsvReaderObject } from '../../src/index';
 import {
   BASE_PATH,
@@ -25,7 +25,7 @@ import {
   joinWhereClauseHasUnknownOperator,
   joinKeyClauseMustBeString,
 } from '../common';
-import { DATAPOINTS, ENTITIES, CONCEPTS } from '../../src/ddf-query-validator';
+import { DATAPOINTS, ENTITIES, CONCEPTS } from 'ddf-query-validator';
 
 const expect = chai.expect;
 

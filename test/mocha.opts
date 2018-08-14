@@ -2,6 +2,6 @@
 --require source-map-support/register
 --full-trace
 --timeout 20000
---max-old-space-size=6144
+--max-old-space-size=8000
 --recursive
 test/**/*.spec.ts

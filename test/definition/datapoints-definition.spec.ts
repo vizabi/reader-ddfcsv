@@ -441,7 +441,7 @@ describe('Datapoints definition errors in query', () => {
         .catch(done);
     });
 
-    it('test where clause 1', function(done: Function): void {
+    it('when testing complex query 2', function(done: Function): void {
       const reader = getDDFCsvReaderObject();
       reader.init({ path: BASE_PATH, datasetsConfig: {
           [ BIG_PATH ]: { master: [ 'HEAD' ] },
@@ -518,6 +518,112 @@ describe('Datapoints definition errors in query', () => {
           expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
           expect(error.toString()).to.match(selectValueClauseContainsUnavailableItems);
         }, done));
+    });
+  });
+
+  describe('any plugin should not be selected', () => {
+    it('when request is not based on same key under where', done => {
+      const reader = getDDFCsvReaderObject();
+      reader.init({path: BASE_PATH});
+
+      reader.read(
+        {
+          from: 'datapoints',
+          dataset: GLOBALIS_PATH,
+          language: 'ru-RU',
+          select: {
+            key: [
+              'geo',
+              'time'
+            ],
+            value: [
+              'income_per_person_gdppercapita_ppp_inflation_adjusted',
+              'life_expectancy_years',
+              'population_total'
+            ]
+          },
+          where: {
+            $and: [
+              {
+                geo: '$geo'
+              }
+            ]
+          },
+          join: {
+            $geo: {
+              key: 'geo',
+              where: {
+                $and: [
+                  {
+                    un_state: true
+                  },
+                  {
+                    world_4region: {
+                      $in: [
+                        'asia'
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          order_by: [
+            'time'
+          ]
+        })
+        .then((data) => {
+          expect(data).to.be.not.null;
+          return done();
+        })
+        .catch(done);
+    });
+  });
+
+  describe('an appropriate plugin should be selected', () => {
+    it('when request is based on same entity set key under where', done => {
+      const reader = getDDFCsvReaderObject();
+      reader.init({path: BASE_PATH});
+
+      reader.read(
+        {
+          from: 'datapoints',
+          dataset: GLOBALIS_PATH,
+          select: {
+            key: [
+              'country',
+              'time'
+            ],
+            value: [
+              'income_per_person_gdppercapita_ppp_inflation_adjusted',
+              'life_expectancy_years',
+              'population_total'
+            ]
+          },
+          where: {
+            $and: [
+              {
+                country: '$country'
+              }
+            ]
+          },
+          join: {
+            $country: {
+              key: 'country',
+              where: {
+                country: {$in: ['afg']}
+              }
+            }
+          },
+          order_by: [
+            'time'
+          ]
+        })
+        .then((data) => {
+          expect(data).to.be.not.null;
+          return done();
+        })
+        .catch(done);
     });
   });
 });
