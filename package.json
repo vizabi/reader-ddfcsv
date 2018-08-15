@@ -54,6 +54,8 @@
     "instrument": true
   },
   "dependencies": {
+    "@types/core-js": "2.5.0",
+    "@types/node": "10.5.7",
     "ddf-query-validator": "1.0.2",
     "fetch-polyfill": "0.8.2",
     "lodash.clonedeep": "4.5.0",
@@ -83,10 +85,8 @@
   },
   "devDependencies": {
     "@types/chai": "4.1.4",
-    "@types/core-js": "2.5.0",
     "@types/lodash": "4.14.116",
     "@types/mocha": "5.2.5",
-    "@types/node": "10.5.7",
     "chai": "4.1.2",
     "clean-webpack-plugin": "0.1.19",
     "codecov": "3.0.4",
