@@ -8,9 +8,7 @@ const WEB = JSON.parse(process.env.WEB_ENV || '0');
 module.exports = ({ mode, presets } = { mode: "production", presets: [] }) => {
   const basicConfig = {
     mode,
-    node: {
-      fs: 'empty'
-    },
+    target: "node",
     devtool: 'source-map',
     module: {
       rules: [
