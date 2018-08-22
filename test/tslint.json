@@ -15,7 +15,8 @@
     "only-arrow-functions": false,
     "member-access": false,
     "no-unused-expression": false,
-    "ordered-imports": false
+    "ordered-imports": false,
+    "max-line-length": false
   },
   "rulesDirectory": []
 }

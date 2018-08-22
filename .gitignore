@@ -1,15 +1,7 @@
 .idea
 
-lib
-*js
-!dist/*js
-!webpack.config.js
-!deploy.js
-
 # Logs
-logs
-*.log
-npm-debug.log*
+*.log*
 
 # Runtime data
 pids
@@ -21,12 +13,10 @@ lib-cov
 
 # Coverage directory used by tools like istanbul
 coverage
+coverage.lcov
 
 # nyc test coverage
 .nyc_output
-
-# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
 
 # node-waf configuration
 .lock-wscript
@@ -43,3 +33,8 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# Exclude git submodules
+test/fixtures/**/*
+!test/fixtures/ds_broken_datapackage
+!test/fixtures/empty-translations

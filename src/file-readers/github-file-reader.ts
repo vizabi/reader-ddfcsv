@@ -1,7 +1,6 @@
 /* tslint:disable */
 
 // import * as https from 'https';
-import { IReader } from './reader';
 
 /*
 function readViaHttp(filePath: string, onFileRead: Function) {
@@ -19,6 +18,8 @@ function readViaHttp(filePath: string, onFileRead: Function) {
   });
 }
 */
+
+import { IReader } from '../interfaces';
 
 export class GithubFileReader implements IReader {
   public recordTransformer: Function;

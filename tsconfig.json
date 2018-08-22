@@ -1,17 +1,13 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "target": "es6",
+    "target": "es2017",
     "module": "commonjs",
     "noImplicitAny": false,
     "outDir": "./lib",
     "preserveConstEnums": true,
     "removeComments": true,
-    "types": [
-      "node",
-      "mocha",
-      "chai"
-    ],
+    "typeRoots": ["node_modules/@types"],
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -19,11 +15,12 @@
     "alwaysStrict": true,
     "sourceMap": true,
     "noEmitHelpers": true,
-    "importHelpers": false,
+    "importHelpers": true,
     "strictNullChecks": false,
     "baseUrl": ".",
     "lib": [
-      "es2017"
+      "es2017",
+      "dom"
     ]
   },
   "include": [
@@ -32,6 +29,7 @@
   ],
   "exclude": [
     "dist",
+    "lib",
     "node_modules",
     "**/*.spec.ts"
   ]

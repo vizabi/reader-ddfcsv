@@ -1,0 +1,28 @@
+[submodule "systema_globalis"]
+	path = test/fixtures/systema_globalis/master-HEAD
+	url = git@github.com:open-numbers/ddf--gapminder--systema_globalis.git
+	branch = master
+[submodule "ddf--gapminder--population.big"]
+	path = test/fixtures/ddf--gapminder--population.big/master-HEAD
+	url = git@github.com:buchslava/readers-test-ds-gm-population-big.git
+	branch = master
+[submodule "population_wpp"]
+	path = test/fixtures/population_wpp/master-HEAD
+	url = git@github.com:buchslava/readers-test-ds-gm-population.git
+	branch = master
+[submodule "static-assets"]
+	path = test/fixtures/static-assets/master-HEAD
+	url = git@github.com:buchslava/readers-test-ds-static-assets.git
+	branch = master
+[submodule "account_1--dataset_name_1--master--head"]
+	path = test/fixtures/VS-work/dataset_name_1/master-HEAD
+	url = git@github.com:VS-work/ddf--ws-testing.git
+	branch = master
+[submodule "account_1--dataset_name_1--master_twin--head"]
+	path = test/fixtures/VS-work/dataset_name_1/master-twin-HEAD
+	url = git@github.com:VS-work/ddf--ws-testing.git
+	branch = master
+[submodule "account_1--dataset_name_1--master_twin--c2db557"]
+	path = test/fixtures/VS-work/dataset_name_1/master-twin-c2db557
+	url = git@github.com:VS-work/ddf--ws-testing.git
+	branch = master
