@@ -1,3 +1,19 @@
+<a name="2.3.0"></a>
+# [2.3.0](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v2.2.1...v2.3.0) (2018-08-22)
+
+
+### Bug Fixes
+
+* **npm-ignore:** exclude from npm ingnoring tests for reusing in readers tests ([04f9757](https://github.com/vizabi/vizabi-ddfcsv-reader/commit/04f9757))
+* **package-json:** fix devDependencies versions ([1cb7b4e](https://github.com/vizabi/vizabi-ddfcsv-reader/commit/1cb7b4e))
+
+
+### Features
+
+* **e2e-tests:** create query validator ([#80](https://github.com/vizabi/vizabi-ddfcsv-reader/issues/80)) ([cfb01c3](https://github.com/vizabi/vizabi-ddfcsv-reader/commit/cfb01c3)), closes [#83](https://github.com/vizabi/vizabi-ddfcsv-reader/issues/83) [#84](https://github.com/vizabi/vizabi-ddfcsv-reader/issues/84)
+
+
+
 <a name="2.2.1"></a>
 ## [2.2.1](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v2.2.0...v2.2.1) (2018-05-29)
 
