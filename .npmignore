@@ -1,5 +1,8 @@
 !dist/
 .idea/
 test/
+!test/dataset-manager/dataset-manager-service.spec.ts
+!test/definition/concepts-definition.spec.ts
+!test/definition/entities-definition.spec.ts
 node_modules/
 webpack.config.js
