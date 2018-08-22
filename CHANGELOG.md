@@ -1,3 +1,13 @@
+<a name="2.3.1"></a>
+## [2.3.1](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v2.3.0...v2.3.1) (2018-08-22)
+
+
+### Bug Fixes
+
+* **git-modules:** fix git modules to publishing them to npm ([b8a57d7](https://github.com/vizabi/vizabi-ddfcsv-reader/commit/b8a57d7))
+
+
+
 <a name="2.3.0"></a>
 # [2.3.0](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v2.2.1...v2.3.0) (2018-08-22)
 
