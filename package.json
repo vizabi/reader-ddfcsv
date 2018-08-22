@@ -13,7 +13,6 @@
     "tsc": "tsc --project tsconfig.json",
     "submodules:init": "git submodule update --remote --init -f",
     "coverage:clean": "rm -rf coverage && rm -rf .nyc_output && rm -rf coverage.lcov",
-    "preinstall": "npm run submodules:init && npm run coverage:clean",
     "pree2e": "npm run submodules:init && npm run coverage:clean && npm run tslint && npm run tsc",
     "e2e": "nyc mocha",
     "pree2e:doc": "npm run pree2e",
