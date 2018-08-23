@@ -25,7 +25,9 @@
   },
   "include": [
     "src/index.ts",
-    "src/index-web.ts"
+    "src/index-web.ts",
+    "test/definition/test-cases/concepts.ts",
+    "test/definition/test-cases/entities.ts"
   ],
   "exclude": [
     "dist",
