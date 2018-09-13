@@ -3,7 +3,7 @@ import { getDDFCsvReaderObject } from '../../src/index';
 import {
   BASE_PATH,
   checkExpectations,
-  EMPTY_TRANSLATIONS_PATH,
+  EMPTY_TRANSLATIONS_PATH, EXISTED_BRANCH, EXISTED_COMMIT, EXISTED_DATASET, expectedMetadata,
   EXPECTS_EXACTLY_ONE_ERROR,
   EXPECTS_EXACTLY_TWO_ERRORS,
   getAmountOfErrors,
@@ -18,12 +18,18 @@ const expect = chai.expect;
 
 describe('Concepts structure errors in query', () => {
   describe('should never happen for happy flow', () => {
-    it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and 'ar-SA' language`, done => {
+    it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and 'ar-SA' language`, async () => {
+      const expectedDefaultMetadata = {
+        branch: EXISTED_BRANCH,
+        commit: EXISTED_COMMIT,
+        dataset: GLOBALIS_PATH
+      };
+
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: `${BASE_PATH}` });
 
-      reader.read({
+      const result = await reader.read({
         language: 'ar-SA',
         select: {
           key: [ 'concept' ],
@@ -38,14 +44,18 @@ describe('Concepts structure errors in query', () => {
           ]
         },
         order_by: [ 'concept', { description: 'asc' } ]
-      }).then(data => {
-        expect(data.length).to.equal(8);
-
-        done();
       });
-    });
 
-    it(`when requests \'${BASE_PATH + EMPTY_TRANSLATIONS_PATH}\' dataset without \'en\' language in datapackage.json`, done => {
+      expect(result.length).to.equal(8);
+          });
+
+    it(`when requests \'${BASE_PATH + EMPTY_TRANSLATIONS_PATH}\' dataset without \'en\' language in datapackage.json`, async () => {
+      const expectedDefaultMetadata = {
+        branch: EXISTED_BRANCH,
+        commit: EXISTED_COMMIT,
+        dataset: EMPTY_TRANSLATIONS_PATH
+      };
+
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: BASE_PATH, datasetsConfig: {
@@ -54,7 +64,7 @@ describe('Concepts structure errors in query', () => {
         }
       });
 
-      reader.read({
+      const result = await reader.read({
         from: 'concepts',
         language: 'en',
         select: {
@@ -63,12 +73,10 @@ describe('Concepts structure errors in query', () => {
         },
         where: {},
         dataset: EMPTY_TRANSLATIONS_PATH
-      }).then(data => {
-        expect(data.length).to.equal(595);
+      });
 
-        done();
-      }).catch(error => done(error));
-    });
+      expect(result.length).to.equal(595);
+          });
 
     it(`when requests only one column '${BASE_PATH + GLOBALIS_PATH}' dataset with no \'select.value\'`, done => {
       const reader = getDDFCsvReaderObject();
@@ -82,8 +90,8 @@ describe('Concepts structure errors in query', () => {
         from: 'concepts',
         where: {},
         order_by: [ 'concept' ]
-      }).then(data => {
-        expect(data.length).to.not.equal(8);
+      }).then(result => {
+        expect(result.length).to.equal(8);
 
         done();
       }).catch(err => {
@@ -106,8 +114,8 @@ describe('Concepts structure errors in query', () => {
         from: 'concepts',
         where: {},
         order_by: [ 'concept' ]
-      }).then(data => {
-        expect(data.length).to.not.equal(8);
+      }).then(result => {
+        expect(result.length).to.equal(8);
 
         done();
       }).catch(err => {

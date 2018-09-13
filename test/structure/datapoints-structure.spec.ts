@@ -3,7 +3,6 @@ import { getDDFCsvReaderObject } from '../../src/index';
 import {
   BASE_PATH,
   BIG_PATH,
-  checkExpectations, EMPTY_TRANSLATIONS_PATH,
   EXPECTS_EXACTLY_ONE_ERROR,
   EXPECTS_EXACTLY_TWO_ERRORS,
   getAmountOfErrors,
@@ -15,17 +14,39 @@ import {
   selectValueClauseMustHaveAtLeast1Item,
   STATIC_ASSETS
 } from '../common';
+import { DEFAULT_DATASET_BRANCH, DEFAULT_DATASET_COMMIT } from 'ddf-query-validator/lib/helper.service';
 
 const expect = chai.expect;
+const expectedGlobalisMetadata = {
+  commit: DEFAULT_DATASET_COMMIT,
+  branch: DEFAULT_DATASET_BRANCH,
+  dataset: GLOBALIS_PATH
+};
+const expectedBigMetadata = {
+  commit: DEFAULT_DATASET_COMMIT,
+  branch: DEFAULT_DATASET_BRANCH,
+  dataset: BIG_PATH
+};
+const expectedPopWppMetadata = {
+  commit: DEFAULT_DATASET_COMMIT,
+  branch: DEFAULT_DATASET_BRANCH,
+  dataset: POP_WPP_PATH
+};
+const expectedStaticMetadata = {
+  commit: DEFAULT_DATASET_COMMIT,
+  branch: DEFAULT_DATASET_BRANCH,
+  dataset: STATIC_ASSETS
+};
 
 describe('Datapoints structure errors in query', () => {
+
   describe('should never happen for happy flow', () => {
-    it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and exists valid condition in 'join' section`, done => {
+    it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and exists valid condition in 'join' section`, async () => {
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: BASE_PATH });
 
-      reader.read({
+      const result = await reader.read({
         select: {
           key: [ 'geo', 'time' ],
           value: [
@@ -62,24 +83,20 @@ describe('Datapoints structure errors in query', () => {
           }
         },
         order_by: [ 'time', 'geo' ]
-      })
-        .then(data => {
-          const countryAntData = data.filter(record => record.geo === 'ant');
+      });
 
-          expect(data.length).to.equal(1155);
-          expect(countryAntData).to.be.an('array').that.is.empty;
+      const countryAntData = result.filter(record => record.geo === 'ant');
 
-          done();
-        })
-        .catch(done);
+      expect(result.length).to.equal(1155);
+      expect(countryAntData).to.be.an('array').that.is.empty;
     });
 
-    it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and ordering by complex fields`, done => {
+    it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and ordering by complex fields`, async () => {
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: BASE_PATH });
 
-      reader.read({
+      const result = await reader.read({
         select: {
           key: [ 'geo', 'time' ],
           value: [
@@ -88,23 +105,21 @@ describe('Datapoints structure errors in query', () => {
         },
         from: 'datapoints',
         order_by: [ 'time', { geo: 'asc' }, { life_expectancy_years: -1 } ]
-      })
-        .then(data => {
-          expect(data.length).to.equal(52091);
+      });
 
-          done();
-        })
-        .catch(done);
+      expect(result.length).to.equal(52091);
     });
 
-    it(`when requests '${BASE_PATH + BIG_PATH}' dataset`, done => {
+    it(`when requests '${BASE_PATH + BIG_PATH}' dataset`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH, datasetsConfig: {
+      reader.init({
+        path: BASE_PATH, datasetsConfig: {
           [ BIG_PATH ]: { master: [ 'HEAD' ] },
           default: { dataset: BIG_PATH, branch: 'master', commit: 'HEAD' }
-        } });
-      reader.read({
+        }
+      });
+      const result = await reader.read({
         language: 'en',
         from: 'datapoints',
         dataset: BIG_PATH,
@@ -195,25 +210,22 @@ describe('Datapoints structure errors in query', () => {
         order_by: [
           'year'
         ]
-      })
-        .then(result => {
-          const expectedResult = require('../result-fixtures/in-clause-under-conjunction-1.json');
+      });
+      const expectedResult = require('../result-fixtures/in-clause-under-conjunction-1.json');
 
-          expect(result).to.deep.equal(expectedResult);
-
-          done();
-        })
-        .catch(done);
+      expect(result).to.deep.equal(expectedResult);
     });
 
-    it(`when requests '${BASE_PATH + POP_WPP_PATH}' dataset`, done => {
+    it(`when requests '${BASE_PATH + POP_WPP_PATH}' dataset`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH, datasetsConfig: {
+      reader.init({
+        path: BASE_PATH, datasetsConfig: {
           [ POP_WPP_PATH ]: { master: [ 'HEAD' ] },
           default: { dataset: POP_WPP_PATH, branch: 'master', commit: 'HEAD' }
-        } });
-      reader.read({
+        }
+      });
+      const result = await reader.read({
         language: 'en',
         from: 'datapoints',
         dataset: POP_WPP_PATH,
@@ -254,25 +266,22 @@ describe('Datapoints structure errors in query', () => {
           'gender',
           'age'
         ]
-      })
-        .then(result => {
-          const expectedResult = require('../result-fixtures/in-clause-under-conjunction-2.json');
+      });
+      const expectedResult = require('../result-fixtures/in-clause-under-conjunction-2.json');
 
-          expect(result).to.deep.equal(expectedResult);
-
-          done();
-        })
-        .catch(done);
+      expect(result).to.deep.equal(expectedResult);
     });
 
-    it(`when requests '${BASE_PATH + STATIC_ASSETS}' dataset`, (done: Function) => {
+    it(`when requests '${BASE_PATH + STATIC_ASSETS}' dataset`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH, datasetsConfig: {
+      reader.init({
+        path: BASE_PATH, datasetsConfig: {
           [ STATIC_ASSETS ]: { master: [ 'HEAD' ] },
           default: { dataset: STATIC_ASSETS, branch: 'master', commit: 'HEAD' }
-        } });
-      reader.read({
+        }
+      });
+      const result = await reader.read({
         language: 'en',
         from: 'datapoints',
         dataset: STATIC_ASSETS,
@@ -289,22 +298,18 @@ describe('Datapoints structure errors in query', () => {
           $time: { key: 'time', where: { time: '2015' } }
         },
         order_by: [ 'geo', 'time' ]
-      })
-        .then(result => {
-          const expectedResult = require('../result-fixtures/datapoints-assets.json');
+      });
+      const expectedResult = require('../result-fixtures/datapoints-assets.json');
 
-          expect(result).to.deep.equal(expectedResult);
-          done();
-        })
-        .catch(done);
+      expect(result).to.deep.equal(expectedResult);
     });
 
-    it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and 'ar-SA' language`, (done: Function) => {
+    it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and 'ar-SA' language`, async () => {
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: BASE_PATH });
 
-      reader.read({
+      const result = await reader.read({
           language: 'ar-SA',
           from: 'datapoints',
           animatable: 'time',
@@ -338,24 +343,20 @@ describe('Datapoints structure errors in query', () => {
             'time'
           ]
         }
-      )
-        .then(data => {
-          const countryAntData = data.filter(record => record.geo === 'ant');
+      );
 
-          expect(data.length).to.equal(42705);
-          expect(countryAntData).to.be.an('array').that.is.empty;
+      const countryAntData = result.filter(record => record.geo === 'ant');
 
-          done();
-        })
-        .catch(done);
+      expect(result.length).to.equal(42705);
+      expect(countryAntData).to.be.an('array').that.is.empty;
     });
 
-    it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and 'ru-RU' language`, (done: Function) => {
+    it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and 'ru-RU' language`, async () => {
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: BASE_PATH });
 
-      reader.read({
+      const result = await reader.read({
           language: 'ru-RU',
           from: 'datapoints',
           animatable: 'time',
@@ -389,99 +390,120 @@ describe('Datapoints structure errors in query', () => {
             'time'
           ]
         }
-      )
-        .then(data => {
-          const countryAntData = data.filter(record => record.geo === 'ant');
+      );
 
-          expect(data.length).to.equal(42705);
-          expect(countryAntData).to.be.an('array').that.is.empty;
+      const countryAntData = result.filter(record => record.geo === 'ant');
 
-          return done();
-        })
-        .catch(done);
+      expect(result.length).to.equal(42705);
+      expect(countryAntData).to.be.an('array').that.is.empty;
     });
   });
 
   describe('should be produced only for \'select.key\' section', () => {
-    it('when it is not array', function(done: Function): void {
+    it('when it is not array', async () => {
+      let actualErrors;
       const reader = getDDFCsvReaderObject();
       reader.init({ path: BASE_PATH });
 
-      reader.read({ from: 'datapoints', select: { key: 'fail', value: [ 'population_total' ] } })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-          expect(error.toString()).to.match(selectClauseMustHaveStructure);
-        }, done));
+      const query = { from: 'datapoints', select: { key: 'fail', value: [ 'population_total' ] } };
+
+      try {
+        await reader.read(query);
+        throw new Error(notExpectedError);
+      } catch (error) {
+        actualErrors = error;
+      } finally {
+        expect(getAmountOfErrors(actualErrors)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+        expect(actualErrors.toString()).to.match(selectClauseMustHaveStructure);
+      }
     });
 
-    it('when it has 0 item', function(done: Function): void {
+    it('when it has 0 item', async () => {
+      let actualErrors;
       const reader = getDDFCsvReaderObject();
       reader.init({ path: BASE_PATH });
 
-      reader.read({ from: 'datapoints', select: { key: [], value: [ 'population_total' ] } })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-          expect(error.toString()).to.match(selectKeyClauseMustHaveAtLeast2Items);
-        }, done));
+      const query = { from: 'datapoints', select: { key: [], value: [ 'population_total' ] } };
+      try {
+        await reader.read(query);
+        throw new Error(notExpectedError);
+      } catch (error) {
+        actualErrors = error;
+      } finally {
+        expect(getAmountOfErrors(actualErrors)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+        expect(actualErrors.toString()).to.match(selectKeyClauseMustHaveAtLeast2Items);
+      }
     });
 
-    it('when it has 1 item', function(done: Function): void {
+    it('when it has 1 item', async () => {
+      let actualErrors;
       const reader = getDDFCsvReaderObject();
       reader.init({ path: BASE_PATH });
 
-      reader.read({ from: 'datapoints', select: { key: [ 'geo' ], value: [ 'population_total' ] } })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-          expect(error.toString()).to.match(selectKeyClauseMustHaveAtLeast2Items);
-        }, done));
+      const query = { from: 'datapoints', select: { key: [ 'geo' ], value: [ 'population_total' ] } };
+      try {
+        await reader.read(query);
+        throw new Error(notExpectedError);
+      } catch (error) {
+        actualErrors = error;
+      } finally {
+        expect(getAmountOfErrors(actualErrors)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+        expect(actualErrors.toString()).to.match(selectKeyClauseMustHaveAtLeast2Items);
+      }
     });
   });
 
   describe('should be produced only for \'select.value\' section', () => {
-    it('when it is absent', function(done: Function): void {
+    it('when it is absent', async () => {
+      let actualErrors;
       const reader = getDDFCsvReaderObject();
       reader.init({ path: BASE_PATH });
 
-      reader.read({ from: 'datapoints', select: { key: [ 'geo', 'time' ] } })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_TWO_ERRORS);
-          expect(error.toString()).to.match(selectClauseMustHaveStructure);
-          expect(error.toString()).to.match(selectValueClauseMustHaveAtLeast1Item);
-        }, done));
+      const query = { from: 'datapoints', select: { key: [ 'geo', 'time' ] } };
+      try {
+        await reader.read(query);
+        throw new Error(notExpectedError);
+      } catch (error) {
+        actualErrors = error;
+      } finally {
+        expect(getAmountOfErrors(actualErrors)).to.equals(EXPECTS_EXACTLY_TWO_ERRORS);
+        expect(actualErrors.toString()).to.match(selectClauseMustHaveStructure);
+        expect(actualErrors.toString()).to.match(selectValueClauseMustHaveAtLeast1Item);
+      }
     });
 
-    it('when it is not array', function(done: Function): void {
+    it('when it is not array', async () => {
+      let actualErrors;
       const reader = getDDFCsvReaderObject();
       reader.init({ path: BASE_PATH });
 
-      reader.read({ from: 'datapoints', select: { key: [ 'geo', 'time' ], value: 'fail' } })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-          expect(error.toString()).to.match(selectClauseMustHaveStructure);
-        }, done));
+      const query = { from: 'datapoints', select: { key: [ 'geo', 'time' ], value: 'fail' } };
+      try {
+        await reader.read(query);
+        throw new Error(notExpectedError);
+      } catch (error) {
+        actualErrors = error;
+      } finally {
+        expect(getAmountOfErrors(actualErrors)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+        expect(actualErrors.toString()).to.match(selectClauseMustHaveStructure);
+      }
     });
 
-    it('when it is empty', function(done: Function): void {
+    it('when it is empty', async () => {
+      let actualErrors;
       const reader = getDDFCsvReaderObject();
       reader.init({ path: BASE_PATH });
 
-      reader.read({ from: 'datapoints', select: { key: [ 'geo', 'time' ], value: [] } })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-          expect(error.toString()).to.match(selectValueClauseMustHaveAtLeast1Item);
-        }, done));
+      const query = { from: 'datapoints', select: { key: [ 'geo', 'time' ], value: [] } };
+      try {
+        await reader.read(query);
+        throw new Error(notExpectedError);
+      } catch (error) {
+        actualErrors = error;
+      } finally {
+        expect(getAmountOfErrors(actualErrors)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
+        expect(actualErrors.toString()).to.match(selectValueClauseMustHaveAtLeast1Item);
+      }
     });
   });
 });

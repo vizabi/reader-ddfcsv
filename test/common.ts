@@ -48,6 +48,11 @@ export const joinWhereClauseHasUnknownOperator = new RegExp(`'join\.\\$test\.whe
 export const tooManyQueryDefinitionErrors = new RegExp(`Too many query definition errors \\[repo: systema_globalis\\]`);
 
 export const notExpectedError = 'This should never be called.';
+export const expectedMetadata = {
+  branch: null,
+  commit: null,
+  dataset: './test/fixtures/VS-work/dataset_name_1/master-HEAD'
+};
 export const expectedConcepts = [ {
   concept: 'additional_column',
   concept_type: 'string',

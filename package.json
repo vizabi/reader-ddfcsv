@@ -55,7 +55,8 @@
   "dependencies": {
     "@types/core-js": "2.5.0",
     "@types/node": "10.5.7",
-    "ddf-query-validator": "1.0.2",
+    "aws-sdk": "2.308.0",
+    "ddf-query-validator": "1.0.3",
     "fetch-polyfill": "0.8.2",
     "lodash.clonedeep": "4.5.0",
     "lodash.compact": "3.0.1",
