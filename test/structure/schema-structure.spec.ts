@@ -87,7 +87,7 @@ describe('Schemas structure errors in query', () => {
         from: 'datapoints.schema'
       })
         .then((data) => {
-          expect(data.length).to.equal(1064);
+          expect(data.length).to.equal(1076);
           return done();
         })
         .catch(done);
@@ -106,7 +106,7 @@ describe('Schemas structure errors in query', () => {
         from: '*.schema'
       })
         .then((data) => {
-          expect(data.length).to.equal(1197);
+          expect(data.length).to.equal(1209);
           return done();
         })
         .catch(done);
