@@ -2,12 +2,10 @@ import * as chai from 'chai';
 import { getDDFCsvReaderObject } from '../../src/index';
 import {
   BASE_PATH,
-  EXPECTS_EXACTLY_ONE_ERROR,
-  getAmountOfErrors,
+  expectPromiseRejection,
   GLOBALIS_PATH,
   joinClauseShouldnotBeInSchemaQueries,
   languageClauseShouldnotBeInSchemaQueries,
-  notExpectedError,
   selectKeyClauseMustHaveOnly2ItemsInSchemaQueries,
   selectValueClauseMustHaveCertainStructureInSchemaQueries
 } from '../common';
@@ -100,7 +98,7 @@ describe('Schemas structure errors in query', () => {
 
   describe('should be produced only for \'select.key\' section', () => {
     it('when it is not array', async () => {
-      let actualError;
+
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: BASE_PATH });
@@ -112,21 +110,16 @@ describe('Schemas structure errors in query', () => {
         },
         from: 'concepts.schema'
       };
-      try {
-        await reader.read(query);
 
-        throw new Error(notExpectedError);
-      } catch (error) {
-        actualError = error;
-      } finally {
-        // console.log(error.stack);
-        expect(getAmountOfErrors(actualError)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-        expect(actualError.toString()).to.match(selectKeyClauseMustHaveOnly2ItemsInSchemaQueries);
-      }
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ selectKeyClauseMustHaveOnly2ItemsInSchemaQueries ]
+      });
     });
 
     it('when it has 0 item', async () => {
-      let actualError;
+
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: BASE_PATH });
@@ -139,21 +132,15 @@ describe('Schemas structure errors in query', () => {
         from: 'concepts.schema'
       };
 
-      try {
-        await reader.read(query);
-
-        throw new Error(notExpectedError);
-      } catch (error) {
-        actualError = error;
-      } finally {
-        // console.log(error.stack);
-        expect(getAmountOfErrors(actualError)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-        expect(actualError.toString()).to.match(selectKeyClauseMustHaveOnly2ItemsInSchemaQueries);
-      }
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ selectKeyClauseMustHaveOnly2ItemsInSchemaQueries ]
+      });
     });
 
     it('when it has 1 item', async () => {
-      let actualError;
+
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: BASE_PATH });
@@ -165,23 +152,18 @@ describe('Schemas structure errors in query', () => {
         },
         from: 'concepts.schema'
       };
-      try {
-        await reader.read(query);
 
-        throw new Error(notExpectedError);
-      } catch (error) {
-        actualError = error;
-      } finally {
-        // console.log(error.stack);
-        expect(getAmountOfErrors(actualError)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-        expect(actualError.toString()).to.match(selectKeyClauseMustHaveOnly2ItemsInSchemaQueries);
-      }
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ selectKeyClauseMustHaveOnly2ItemsInSchemaQueries ]
+      });
     });
   });
 
   describe('should be produced only for \'select.value\' section', () => {
     it('when it is not array or empty', async () => {
-      let actualError;
+
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: BASE_PATH });
@@ -193,23 +175,18 @@ describe('Schemas structure errors in query', () => {
         },
         from: 'concepts.schema'
       };
-      try {
-        await reader.read(query);
 
-        throw new Error(notExpectedError);
-      } catch (error) {
-        actualError = error;
-      } finally {
-        // console.log(error.stack);
-        expect(getAmountOfErrors(actualError)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-        expect(actualError.toString()).to.match(selectValueClauseMustHaveCertainStructureInSchemaQueries);
-      }
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ selectValueClauseMustHaveCertainStructureInSchemaQueries ]
+      });
     });
   });
 
   describe('should be produced only for \'language\' section', () => {
     it('when it is present', async () => {
-      let actualError;
+
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: BASE_PATH });
@@ -222,23 +199,17 @@ describe('Schemas structure errors in query', () => {
         language: ''
       };
 
-      try {
-        await reader.read(query);
-
-        throw new Error(notExpectedError);
-      } catch (error) {
-        actualError = error;
-      } finally {
-        // console.log(error.stack);
-        expect(getAmountOfErrors(actualError)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-        expect(actualError.toString()).to.match(languageClauseShouldnotBeInSchemaQueries);
-      }
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ languageClauseShouldnotBeInSchemaQueries ]
+      });
     });
   });
 
   describe('should be produced only for \'join\' section', () => {
     it('when it is present', async () => {
-      let actualError;
+
       const reader = getDDFCsvReaderObject();
 
       reader.init({ path: BASE_PATH });
@@ -250,17 +221,12 @@ describe('Schemas structure errors in query', () => {
         from: 'concepts.schema',
         join: ''
       };
-      try {
-        await reader.read(query);
 
-        throw new Error(notExpectedError);
-      } catch (error) {
-        actualError = error;
-      } finally {
-        // console.log(error.stack);
-        expect(getAmountOfErrors(actualError)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-        expect(actualError.toString()).to.match(joinClauseShouldnotBeInSchemaQueries);
-      }
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ joinClauseShouldnotBeInSchemaQueries ]
+      });
     });
   });
 });

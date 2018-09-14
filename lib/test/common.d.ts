@@ -39,11 +39,11 @@ export declare const whereClauseHasUnknownOperator: RegExp;
 export declare const joinWhereClauseHasUnknownOperator: RegExp;
 export declare const tooManyQueryDefinitionErrors: RegExp;
 export declare const notExpectedError = "This should never be called.";
-export declare const expectedMetadata: {
-    branch: any;
-    commit: any;
-    dataset: string;
-};
+export declare const expectPromiseRejection: (options: {
+    promiseFunction: any;
+    args: any;
+    expectedErrors: RegExp[];
+}) => Promise<void>;
 export declare const expectedConcepts: {
     concept: string;
     concept_type: string;

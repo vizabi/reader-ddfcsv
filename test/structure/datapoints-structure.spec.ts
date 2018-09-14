@@ -3,40 +3,16 @@ import { getDDFCsvReaderObject } from '../../src/index';
 import {
   BASE_PATH,
   BIG_PATH,
-  EXPECTS_EXACTLY_ONE_ERROR,
-  EXPECTS_EXACTLY_TWO_ERRORS,
-  getAmountOfErrors,
+  expectPromiseRejection,
   GLOBALIS_PATH,
-  notExpectedError,
   POP_WPP_PATH,
   selectClauseMustHaveStructure,
   selectKeyClauseMustHaveAtLeast2Items,
   selectValueClauseMustHaveAtLeast1Item,
   STATIC_ASSETS
 } from '../common';
-import { DEFAULT_DATASET_BRANCH, DEFAULT_DATASET_COMMIT } from 'ddf-query-validator/lib/helper.service';
 
 const expect = chai.expect;
-const expectedGlobalisMetadata = {
-  commit: DEFAULT_DATASET_COMMIT,
-  branch: DEFAULT_DATASET_BRANCH,
-  dataset: GLOBALIS_PATH
-};
-const expectedBigMetadata = {
-  commit: DEFAULT_DATASET_COMMIT,
-  branch: DEFAULT_DATASET_BRANCH,
-  dataset: BIG_PATH
-};
-const expectedPopWppMetadata = {
-  commit: DEFAULT_DATASET_COMMIT,
-  branch: DEFAULT_DATASET_BRANCH,
-  dataset: POP_WPP_PATH
-};
-const expectedStaticMetadata = {
-  commit: DEFAULT_DATASET_COMMIT,
-  branch: DEFAULT_DATASET_BRANCH,
-  dataset: STATIC_ASSETS
-};
 
 describe('Datapoints structure errors in query', () => {
 
@@ -401,109 +377,79 @@ describe('Datapoints structure errors in query', () => {
 
   describe('should be produced only for \'select.key\' section', () => {
     it('when it is not array', async () => {
-      let actualErrors;
       const reader = getDDFCsvReaderObject();
       reader.init({ path: BASE_PATH });
 
       const query = { from: 'datapoints', select: { key: 'fail', value: [ 'population_total' ] } };
 
-      try {
-        await reader.read(query);
-        throw new Error(notExpectedError);
-      } catch (error) {
-        actualErrors = error;
-      } finally {
-        expect(getAmountOfErrors(actualErrors)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-        expect(actualErrors.toString()).to.match(selectClauseMustHaveStructure);
-      }
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ selectClauseMustHaveStructure ]
+      });
     });
 
     it('when it has 0 item', async () => {
-      let actualErrors;
       const reader = getDDFCsvReaderObject();
       reader.init({ path: BASE_PATH });
 
       const query = { from: 'datapoints', select: { key: [], value: [ 'population_total' ] } };
-      try {
-        await reader.read(query);
-        throw new Error(notExpectedError);
-      } catch (error) {
-        actualErrors = error;
-      } finally {
-        expect(getAmountOfErrors(actualErrors)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-        expect(actualErrors.toString()).to.match(selectKeyClauseMustHaveAtLeast2Items);
-      }
+
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ selectKeyClauseMustHaveAtLeast2Items ]
+      });
     });
 
     it('when it has 1 item', async () => {
-      let actualErrors;
       const reader = getDDFCsvReaderObject();
       reader.init({ path: BASE_PATH });
 
       const query = { from: 'datapoints', select: { key: [ 'geo' ], value: [ 'population_total' ] } };
-      try {
-        await reader.read(query);
-        throw new Error(notExpectedError);
-      } catch (error) {
-        actualErrors = error;
-      } finally {
-        expect(getAmountOfErrors(actualErrors)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-        expect(actualErrors.toString()).to.match(selectKeyClauseMustHaveAtLeast2Items);
-      }
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ selectKeyClauseMustHaveAtLeast2Items ]
+      });
     });
   });
 
   describe('should be produced only for \'select.value\' section', () => {
     it('when it is absent', async () => {
-      let actualErrors;
       const reader = getDDFCsvReaderObject();
       reader.init({ path: BASE_PATH });
 
       const query = { from: 'datapoints', select: { key: [ 'geo', 'time' ] } };
-      try {
-        await reader.read(query);
-        throw new Error(notExpectedError);
-      } catch (error) {
-        actualErrors = error;
-      } finally {
-        expect(getAmountOfErrors(actualErrors)).to.equals(EXPECTS_EXACTLY_TWO_ERRORS);
-        expect(actualErrors.toString()).to.match(selectClauseMustHaveStructure);
-        expect(actualErrors.toString()).to.match(selectValueClauseMustHaveAtLeast1Item);
-      }
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ selectClauseMustHaveStructure, selectValueClauseMustHaveAtLeast1Item ]
+      });
     });
 
     it('when it is not array', async () => {
-      let actualErrors;
       const reader = getDDFCsvReaderObject();
       reader.init({ path: BASE_PATH });
 
       const query = { from: 'datapoints', select: { key: [ 'geo', 'time' ], value: 'fail' } };
-      try {
-        await reader.read(query);
-        throw new Error(notExpectedError);
-      } catch (error) {
-        actualErrors = error;
-      } finally {
-        expect(getAmountOfErrors(actualErrors)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-        expect(actualErrors.toString()).to.match(selectClauseMustHaveStructure);
-      }
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ selectClauseMustHaveStructure ]
+      });
     });
 
     it('when it is empty', async () => {
-      let actualErrors;
       const reader = getDDFCsvReaderObject();
       reader.init({ path: BASE_PATH });
 
       const query = { from: 'datapoints', select: { key: [ 'geo', 'time' ], value: [] } };
-      try {
-        await reader.read(query);
-        throw new Error(notExpectedError);
-      } catch (error) {
-        actualErrors = error;
-      } finally {
-        expect(getAmountOfErrors(actualErrors)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-        expect(actualErrors.toString()).to.match(selectValueClauseMustHaveAtLeast1Item);
-      }
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ selectValueClauseMustHaveAtLeast1Item ]
+      });
     });
   });
 });

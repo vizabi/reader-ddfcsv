@@ -1,3 +1,7 @@
+import * as chai from 'chai';
+
+const expect = chai.expect;
+
 export const BASE_PATH = './test/fixtures/';
 export const GLOBALIS_PATH = 'systema_globalis';
 export const WS_TESTING_PATH = 'VS-work/dataset_name_1';
@@ -48,10 +52,26 @@ export const joinWhereClauseHasUnknownOperator = new RegExp(`'join\.\\$test\.whe
 export const tooManyQueryDefinitionErrors = new RegExp(`Too many query definition errors \\[repo: systema_globalis\\]`);
 
 export const notExpectedError = 'This should never be called.';
-export const expectedMetadata = {
-  branch: null,
-  commit: null,
-  dataset: './test/fixtures/VS-work/dataset_name_1/master-HEAD'
+export const expectPromiseRejection = async (options: { promiseFunction: any, args: any, expectedErrors: RegExp[] }) => {
+  let actualErrors;
+
+  const {
+    promiseFunction,
+    args,
+    expectedErrors
+  } = options;
+
+  try {
+    await promiseFunction(...args);
+    throw new Error(notExpectedError);
+  } catch (error) {
+    actualErrors = error.toString();
+  } finally {
+    expect(getAmountOfErrors(actualErrors)).to.equals(expectedErrors.length);
+    for (const expectedError of expectedErrors) {
+      expect(actualErrors).to.match(expectedError);
+    }
+  }
 };
 export const expectedConcepts = [ {
   concept: 'additional_column',
