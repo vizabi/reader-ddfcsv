@@ -8,3 +8,4 @@ test/
 .gitmodules
 node_modules/
 webpack.config.js
+test/fixtures
