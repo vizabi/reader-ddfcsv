@@ -1,4 +1,5 @@
 !dist/
+!lib/
 .idea/
 test/
 !test/dataset-manager/dataset-manager-service.spec.ts
