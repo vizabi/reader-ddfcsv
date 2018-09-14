@@ -29,7 +29,7 @@ export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
         this.reader = ddfCsvReader(this.logger);
       },
 
-      getAsset (asset) {
+      async getAsset (asset) {
         const isJsonAsset = asset.slice(-'.json'.length) === '.json';
         let assetPath = `${this._basePath}/${asset}`;
 
