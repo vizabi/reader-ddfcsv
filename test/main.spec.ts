@@ -1,7 +1,14 @@
 import * as chai from 'chai';
 import * as sinon from 'sinon';
 import { DdfCsvError, getDDFCsvReaderObject } from '../src/index';
-import { BASE_PATH, BROKEN_DATAPACKAGE_PATH, expectedConcepts, GLOBALIS_PATH, notExpectedError } from './common';
+import {
+  BASE_PATH,
+  BROKEN_DATAPACKAGE_PATH,
+  expectedConcepts,
+  GLOBALIS_PATH,
+  notExpectedError
+} from './common';
+import * as path from 'path';
 
 const expect = chai.expect;
 const sandbox = sinon.createSandbox();
@@ -61,26 +68,29 @@ describe('General errors in ddfcsv reader', () => {
           order_by: [ 'concept' ]
         });
       } catch (error) {
+        const expectedPath = path.resolve(__dirname, './fixtures/systema_globalis/master-HEAD/datapackage.json');
         expect(error.details).to.equal('file is not found');
-        expect(error.file).to.equal('./test/fixtures/systema_globalis/master-HEAD/datapackage.json');
+        expect(error.file).to.equal(expectedPath);
         expect(error.name).to.equal('DdfCsvError');
         expect(error).to.be.instanceOf(DdfCsvError);
-        expect(error.message).to.equal('File reading error [filepath: ./test/fixtures/systema_globalis/master-HEAD/datapackage.json]. file is not found.');
+        expect(error.message).to.equal(`File reading error [filepath: ${expectedPath}]. file is not found.`);
         return;
       }
 
       throw new Error(notExpectedError);
     });
 
-    it(`when 'File not found' happens (stubless version)`, done => {
+    it(`when 'File not found' happens (stubless version)`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: 'foo path/', datasetsConfig: {
+      reader.init({
+        path: 'foo path/', datasetsConfig: {
           [ GLOBALIS_PATH ]: { master: [ 'HEAD' ] },
           default: { dataset: GLOBALIS_PATH, branch: 'master', commit: 'HEAD' }
         }
       });
-      reader.read({
+
+      const query = {
         select: {
           key: [ 'concept' ],
           value: [
@@ -90,13 +100,17 @@ describe('General errors in ddfcsv reader', () => {
         from: 'concepts',
         where: {},
         order_by: [ 'concept' ]
-      }).catch((error: DdfCsvError) => {
-        expect(error.file).to.equal('foo path/systema_globalis/master-HEAD/datapackage.json');
-        expect(error.name).to.equal('DdfCsvError');
-        expect(error.message).to.equal('File reading error [filepath: foo path/systema_globalis/master-HEAD/datapackage.json]. No such file: foo path/systema_globalis/master-HEAD/datapackage.json.');
+      };
 
-        done();
-      });
+      try {
+        await reader.read(query);
+      } catch (error) {
+        const expectedPath = path.resolve(__dirname, '../foo path/systema_globalis/master-HEAD/datapackage.json');
+
+        expect(error.file).to.equal(expectedPath);
+        expect(error.name).to.equal('DdfCsvError');
+        expect(error.message).to.equal(`File reading error [filepath: ${expectedPath}]. No such file: ${expectedPath}.`);
+      }
     });
 
     it(`when 'JSON parsing error' happens`, done => {
@@ -121,9 +135,11 @@ describe('General errors in ddfcsv reader', () => {
         where: {},
         order_by: [ 'concept' ]
       }).catch((error: DdfCsvError) => {
-        expect(error.file).to.equal('./test/fixtures/ds_broken_datapackage/master-HEAD/datapackage.json');
+        const expectedPath = path.resolve(__dirname, './fixtures/ds_broken_datapackage/master-HEAD/datapackage.json');
+
+        expect(error.file).to.equal(expectedPath);
         expect(error.name).to.equal('DdfCsvError');
-        expect(error.message).to.equal('JSON parsing error [filepath: ./test/fixtures/ds_broken_datapackage/master-HEAD/datapackage.json]. Unexpected token ( in JSON at position 0.');
+        expect(error.message).to.equal(`JSON parsing error [filepath: ${expectedPath}]. Unexpected token ( in JSON at position 0.`);
         expect(error.details).to.equal('Unexpected token ( in JSON at position 0');
         done();
       });
