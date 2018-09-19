@@ -6,12 +6,8 @@ export interface IReader {
 
 export interface IBaseReaderOptions {
   basePath: string;
-  datasetsConfig?: object;
   conceptsLookup: Map<string, any>;
-  datapackagePath: string;
   datapackage?: object;
-  datasetPath: string;
-  dataset: string;
   fileReader: IReader;
   logger?: any;
 }

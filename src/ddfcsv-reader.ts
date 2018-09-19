@@ -2,7 +2,7 @@ import * as isNil from 'lodash.isnil';
 import * as isObject from 'lodash.isobject';
 import { ddfCsvReader } from './ddf-csv';
 import { IReader } from './interfaces';
-import { getDatasetPath } from 'ddf-query-validator';
+import { getRepositoryPath } from 'ddf-query-validator';
 
 export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
   return function(externalFileReader?: IReader, logger?: any) {
@@ -16,14 +16,10 @@ export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
         this.logger = logger;
         this.resultTransformer = readerInfo.resultTransformer;
 
-        this.datasetsConfig = readerInfo.datasetsConfig;
-        this.isLocalReader = isNil(this.datasetsConfig) ? true : false;
-        this.isServerReader = !this.isLocalReader;
         this.readerOptions = {
           basePath: this._basePath,
           fileReader: this.fileReader,
           logger: this.logger,
-          datasetsConfig: this.datasetsConfig
         };
 
         this.reader = ddfCsvReader(this.logger);
@@ -31,12 +27,7 @@ export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
 
       async getAsset (asset) {
         const isJsonAsset = asset.slice(-'.json'.length) === '.json';
-        let assetPath = `${this._basePath}/${asset}`;
-
-        // TODO: check validity of assets path in query validator
-        if (isObject(asset)) {
-          assetPath = getDatasetPath(this._basePath, asset);
-        }
+        const assetPath = `${this._basePath}/${asset}`;
 
         return new Promise((resolve, reject) => {
           this.fileReader.readText(assetPath, (err, data) => {
@@ -64,13 +55,9 @@ export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
         try {
           result = await this.reader.query(queryParam, {
             basePath: this._basePath,
-            datasetsConfig: this.datasetsConfig,
             fileReader: this.fileReader,
             logger: this.logger,
-            conceptsLookup: new Map<string, any>(),
-            datapackagePath: '',
-            datasetPath: '',
-            dataset: ''
+            conceptsLookup: new Map<string, any>()
           });
           result = parsers ? this._prettifyData(result, parsers) : result;
 

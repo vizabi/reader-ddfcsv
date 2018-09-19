@@ -1,4 +1,5 @@
 import * as chai from 'chai';
+import * as _ from 'lodash';
 
 const expect = chai.expect;
 
@@ -49,17 +50,27 @@ export const orderByClauseMustHaveCertainStructure = new RegExp(`'order_by' clau
 export const whereClauseHasUnknownOperator = new RegExp(`'where' clause has unknown operator\\(s\\) '\\$geo'\, replace it with allowed operators: `);
 export const joinWhereClauseHasUnknownOperator = new RegExp(`'join\.\\$test\.where' clause has unknown operator\\(s\\) '\\$geo'\, replace it with allowed operators: `);
 
-export const tooManyQueryDefinitionErrors = new RegExp(`Too many query definition errors \\[repo: systema_globalis\\]`);
-
+export const tooManyQueryDefinitionErrors = new RegExp(`Too many query definition errors \\[repo: .\\/test\\/fixtures\\/VS-work\\/dataset_name_1\\/master\\-HEAD\\]`);
 export const notExpectedError = 'This should never be called.';
-export const expectPromiseRejection = async (options: { promiseFunction: any, args: any, expectedErrors: RegExp[] }) => {
+
+export const expectPromiseRejection = async (options: { promiseFunction: any, args: any, expectedErrors: RegExp[], type?: string }) => {
   let actualErrors;
 
   const {
     promiseFunction,
     args,
-    expectedErrors
+    expectedErrors,
+    type = 'structure'
   } = options;
+
+  const expErrsStr = _.chain(expectedErrors)
+    .map((item) => item.toString())
+    .uniq()
+    .value();
+
+  if (expErrsStr.length < expectedErrors.length) {
+    throw new Error(`Only unique errors should be checked: ${expectedErrors}`);
+  }
 
   try {
     await promiseFunction(...args);
@@ -67,6 +78,11 @@ export const expectPromiseRejection = async (options: { promiseFunction: any, ar
   } catch (error) {
     actualErrors = error.toString();
   } finally {
+    if (type === 'definitions') {
+      expect(actualErrors).to.match(tooManyQueryDefinitionErrors);
+    }
+
+    expect(actualErrors).to.not.equal(notExpectedError);
     expect(getAmountOfErrors(actualErrors)).to.equals(expectedErrors.length);
     for (const expectedError of expectedErrors) {
       expect(actualErrors).to.match(expectedError);
