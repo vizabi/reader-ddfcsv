@@ -120,7 +120,7 @@ describe('Concepts definition errors in query', () => {
     });
   });
 
-  describe.only('should be produced only for \'select\' section', () => {
+  describe('should be produced only for \'select\' section', () => {
 
     it('when \'key\' property has item that is absent in dataset', async () => {
       const reader = getDDFCsvReaderObject();
