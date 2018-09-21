@@ -43,6 +43,7 @@ export declare const expectPromiseRejection: (options: {
     promiseFunction: any;
     args: any;
     expectedErrors: RegExp[];
+    type?: string;
 }) => Promise<void>;
 export declare const expectedConcepts: {
     concept: string;

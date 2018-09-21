@@ -5,6 +5,7 @@
   ],
   "jsRules": {},
   "rules": {
+    "no-unused-expression-chai": true,
     "ban-types": false,
     "quotemark": [true, "single"],
     "arrow-parens": false,
@@ -18,5 +19,7 @@
     "ordered-imports": false,
     "max-line-length": false
   },
-  "rulesDirectory": []
+  "rulesDirectory": [
+    "tslint-no-unused-expression-chai"
+  ]
 }

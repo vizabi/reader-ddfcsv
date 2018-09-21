@@ -3,16 +3,20 @@ import { getDDFCsvReaderObject } from '../../src/index';
 import {
   BASE_PATH,
   checkExpectations,
+  EMPTY_TRANSLATIONS_PATH, expectedConcepts, expectPromiseRejection,
   EXPECTS_EXACTLY_ONE_ERROR,
   getAmountOfErrors,
+  GLOBALIS_PATH,
   notExpectedError,
   selectKeyClauseContainsUnavailableItems,
   selectKeyClauseMustHaveOnly1Item,
   selectValueClauseContainsUnavailableItems1,
-  tooManyQueryDefinitionErrors
+  tooManyQueryDefinitionErrors, WS_TESTING_PATH
 } from '../common';
 import { RESERVED_CONCEPT, RESERVED_CONCEPT_TYPE, RESERVED_DOMAIN, RESERVED_DRILL_UP } from 'ddf-query-validator';
+import * as validator from 'ddf-query-validator';
 import { description, initData, testsDescriptors } from './test-cases/concepts';
+import * as path from 'path';
 
 const expect = chai.expect;
 
@@ -35,64 +39,145 @@ describe('Concepts definition errors in query', () => {
     }
   });
 
-  describe('should be produced only for \'select\' section', () => {
-
-    it('when \'key\' property has item that is absent in dataset', done => {
+  describe('should never happen for happy flow', () => {
+    it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and 'ar-SA' language`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: path.join(BASE_PATH, GLOBALIS_PATH, 'master-HEAD') });
 
-      reader.read({
+      const result = await reader.read({
+        language: 'ar-SA',
+        select: {
+          key: [ 'concept' ],
+          value: [
+            'concept_type', 'name', 'description'
+          ]
+        },
+        from: 'concepts',
+        where: {
+          $and: [
+            { concept_type: { $eq: 'entity_set' } }
+          ]
+        },
+        order_by: [ 'concept', { description: 'asc' } ]
+      });
+
+      expect(result.length).to.be.equal(8);
+    });
+
+    it(`when requests only one column '${BASE_PATH + GLOBALIS_PATH}' dataset with no \'select.value\'`, async () => {
+      const reader = getDDFCsvReaderObject();
+
+      reader.init({ path: path.join(BASE_PATH, GLOBALIS_PATH, 'master-HEAD') });
+
+      const result = await reader.read({
+        select: {
+          key: [ 'concept' ]
+        },
+        from: 'concepts',
+        where: {},
+        order_by: [ 'concept' ]
+      });
+
+      expect(result.length).to.be.equal(593);
+    });
+
+    it(`when requests only one column '${BASE_PATH + GLOBALIS_PATH}' dataset with empty \'select.value\'`, async () => {
+      const reader = getDDFCsvReaderObject();
+
+      reader.init({ path: path.join(BASE_PATH, GLOBALIS_PATH, 'master-HEAD') });
+
+      const result = await reader.read({
+        select: {
+          key: [ 'concept' ],
+          value: []
+        },
+        from: 'concepts',
+        where: {},
+        order_by: [ 'concept' ]
+      });
+
+      expect(result.length).to.be.equal(593);
+    });
+
+    it(`when requests \'${BASE_PATH + EMPTY_TRANSLATIONS_PATH}\' dataset without \'en\' language in datapackage.json`, async () => {
+      const reader = getDDFCsvReaderObject();
+
+      reader.init({ path: path.join(BASE_PATH, EMPTY_TRANSLATIONS_PATH, 'master-HEAD') });
+
+      const result = await reader.read({
+        from: 'concepts',
+        language: 'en',
+        select: {
+          key: [ 'concept' ],
+          value: [ 'concept_type', 'name' ]
+        },
+        where: {},
+        dataset: EMPTY_TRANSLATIONS_PATH
+      });
+
+      expect(result.length).to.equal(595);
+    });
+  });
+
+  describe.only('should be produced only for \'select\' section', () => {
+
+    it('when \'key\' property has item that is absent in dataset', async () => {
+      const reader = getDDFCsvReaderObject();
+
+      reader.init({ path: `${BASE_PATH}${WS_TESTING_PATH}/master-HEAD` });
+
+      const query = {
         select: {
           key: [ 'failed_concept' ],
           value: [ 'concept_type', 'name', 'description' ]
         },
         from: 'concepts'
-      })
-        .then(() => done(notExpectedError))
-        .catch(error => {
+      };
 
-          expect(error).to.match(tooManyQueryDefinitionErrors);
-          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-          expect(error.toString()).to.match(selectKeyClauseContainsUnavailableItems);
-
-          done();
-        });
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ selectKeyClauseContainsUnavailableItems ],
+        type: 'definitions'
+      });
     });
 
-    it('when \'key\' property has many items (structure error)', function(done: Function): void {
+    it('when \'key\' property has many items (structure error)', async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH });
 
-      reader.read({
+      reader.init({ path: `${BASE_PATH}${WS_TESTING_PATH}/master-HEAD` });
+
+      const query = {
         from: 'concepts', select: { key: [ 'concept', 'failed_concept' ] }
-      })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-          expect(error.toString()).to.match(selectKeyClauseMustHaveOnly1Item);
-        }, done));
+      };
+
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ selectKeyClauseMustHaveOnly1Item ],
+        type: 'definitions'
+      });
     });
 
-    it('when \'value\' property has items that is absent in dataset', function(done: Function): void {
+    it('when \'value\' property has items that is absent in dataset', async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: `${BASE_PATH}${WS_TESTING_PATH}/master-HEAD` });
 
-      reader.read({
+      const query = {
         from: 'concepts',
         select: {
           key: [ 'concept' ],
           value: [ 'domain', 'failed_concept', 'concept', 'name', 'population_total', 'failed_concept2' ]
         }
-      })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(error).to.match(tooManyQueryDefinitionErrors);
-          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-          expect(error.toString()).to.match(selectValueClauseContainsUnavailableItems1);
-        }, done));
+      };
+
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ selectValueClauseContainsUnavailableItems1 ],
+        type: 'definitions'
+      });
     });
 
   });

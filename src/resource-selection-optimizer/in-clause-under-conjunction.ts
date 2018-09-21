@@ -33,7 +33,7 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
 
   constructor(queryParam, options) {
     this.fileReader = options.fileReader;
-    this.datasetPath = options.datasetPath;
+    this.datasetPath = options.basePath;
     this.query = queryParam;
     this.datapackage = options.datapackage;
     this.conceptsLookup = options.conceptsLookup;
@@ -121,7 +121,7 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
   private collectEntities(): Promise<any> {
     const self = this;
     const actions = self.flow.entityFilesNames.map(file => new Promise((actResolve, actReject) => {
-      self.fileReader.readText(path.resolve(self.datasetPath, file), (err, text) => {
+      self.fileReader.readText(path.join(self.datasetPath, file), (err, text) => {
         if (err) {
           return actReject(err);
         }

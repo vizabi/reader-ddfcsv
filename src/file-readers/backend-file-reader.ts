@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import { IReader } from '../interfaces';
+import * as path from 'path';
 
 export class BackendFileReader implements IReader {
   public recordTransformer: Function;
@@ -13,7 +14,7 @@ export class BackendFileReader implements IReader {
       return onFileRead('No such file: ' + filePath);
     }
 
-    fs.readFile(filePath, 'utf-8', (err, content) => {
+    fs.readFile(path.resolve(filePath), 'utf-8', (err, content) => {
       if (err) {
         onFileRead(err);
         return;
