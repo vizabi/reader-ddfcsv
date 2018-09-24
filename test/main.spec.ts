@@ -50,7 +50,7 @@ describe('General errors in ddfcsv reader', () => {
     it(`when 'File not found' happens`, async function() {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
 
       sandbox.stub(reader.fileReader, 'readText').callsArgWithAsync(1, 'file is not found');
 
@@ -68,7 +68,7 @@ describe('General errors in ddfcsv reader', () => {
           order_by: [ 'concept' ]
         });
       } catch (error) {
-        const expectedPath = path.resolve(__dirname, './fixtures/systema_globalis/master-HEAD/datapackage.json');
+        const expectedPath = './test/fixtures/systema_globalis/master-HEAD/datapackage.json';
         expect(error.details).to.equal('file is not found');
         expect(error.file).to.equal(expectedPath);
         expect(error.name).to.equal('DdfCsvError');
@@ -84,10 +84,7 @@ describe('General errors in ddfcsv reader', () => {
       const reader = getDDFCsvReaderObject();
 
       reader.init({
-        path: 'foo path/', datasetsConfig: {
-          [ GLOBALIS_PATH ]: { master: [ 'HEAD' ] },
-          default: { dataset: GLOBALIS_PATH, branch: 'master', commit: 'HEAD' }
-        }
+        path: './test/foo path/' + GLOBALIS_PATH + '/master-HEAD'
       });
 
       const query = {
@@ -105,7 +102,7 @@ describe('General errors in ddfcsv reader', () => {
       try {
         await reader.read(query);
       } catch (error) {
-        const expectedPath = path.resolve(__dirname, '../foo path/systema_globalis/master-HEAD/datapackage.json');
+        const expectedPath = './test/foo path/systema_globalis/master-HEAD/datapackage.json';
 
         expect(error.file).to.equal(expectedPath);
         expect(error.name).to.equal('DdfCsvError');
@@ -117,11 +114,7 @@ describe('General errors in ddfcsv reader', () => {
       const reader = getDDFCsvReaderObject();
 
       reader.init({
-        path: BASE_PATH,
-        datasetsConfig: {
-          [ BROKEN_DATAPACKAGE_PATH ]: { master: [ 'HEAD' ] },
-          default: { dataset: BROKEN_DATAPACKAGE_PATH, branch: 'master', commit: 'HEAD' }
-        }
+        path: BASE_PATH + BROKEN_DATAPACKAGE_PATH + '/master-HEAD'
       });
       reader.read({
         select: {
@@ -135,7 +128,7 @@ describe('General errors in ddfcsv reader', () => {
         where: {},
         order_by: [ 'concept' ]
       }).catch((error: DdfCsvError) => {
-        const expectedPath = path.resolve(__dirname, './fixtures/ds_broken_datapackage/master-HEAD/datapackage.json');
+        const expectedPath = './test/fixtures/ds_broken_datapackage/master-HEAD/datapackage.json';
 
         expect(error.file).to.equal(expectedPath);
         expect(error.name).to.equal('DdfCsvError');

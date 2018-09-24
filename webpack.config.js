@@ -11,7 +11,8 @@ module.exports = () => ({
     output: {
         path: path.join(__dirname, 'dist'),
         filename: '[name].js',
-        libraryTarget: 'commonjs'
+        libraryTarget: 'var',
+        library: 'DDFCsvReader'
     },
     target: "web",
     devtool: 'source-map',
