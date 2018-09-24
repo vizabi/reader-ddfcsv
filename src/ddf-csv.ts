@@ -161,7 +161,7 @@ export function ddfCsvReader (logger?: any) {
       await validateQueryStructure(queryParam, baseOptions);
       baseOptions.datapackage = await loadDataPackage(baseOptions);
       await loadConcepts(queryParam, baseOptions);
-      // await validateQueryDefinitions(queryParam, baseOptions);
+      await validateQueryDefinitions(queryParam, baseOptions);
 
       if (isSchemaQuery(queryParam)) {
         data = await querySchema(queryParam, { datapackage: baseOptions.datapackage });

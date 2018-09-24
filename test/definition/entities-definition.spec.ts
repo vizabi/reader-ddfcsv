@@ -9,7 +9,7 @@ import {
   selectKeyClauseContainsUnavailableItems,
   selectKeyClauseMustHaveOnly1Item,
   selectValueClauseContainsUnavailableItems1,
-  tooManyQueryDefinitionErrors
+  tooManyQueryDefinitionErrors, WS_TESTING_PATH
 } from '../common';
 import { getDDFCsvReaderObject } from '../../src/index';
 import {
@@ -53,7 +53,7 @@ describe('Entities definition errors in query', () => {
     it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and 'ar-SA' language`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
 
       const result = await reader.read({
         language: 'ar-SA',
@@ -75,7 +75,7 @@ describe('Entities definition errors in query', () => {
     it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset without 'en' language in datapackage.json`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
 
       const result = await reader.read({
         from: 'entities',
@@ -93,7 +93,7 @@ describe('Entities definition errors in query', () => {
     it(`when requests only one column '${BASE_PATH + GLOBALIS_PATH}' dataset`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
 
       const result = await reader.read({
         language: 'ar-SA',
@@ -113,7 +113,7 @@ describe('Entities definition errors in query', () => {
 
     it('when requests entities with where clause', async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
 
       const result = await reader.read({
         where: { world_6region: '$world_6region' },
@@ -195,12 +195,12 @@ describe('Entities definition errors in query', () => {
     it('when \'key\' property has item that is absent in dataset', done => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: BASE_PATH + WS_TESTING_PATH + '/master-HEAD' });
 
       reader.read({
         select: {
           key: [ 'failed_concept' ],
-          value: [ 'world_4region', 'un_state' ]
+          value: [ 'company_scale', 'english_speaking' ]
         },
         from: 'entities'
       })
@@ -217,7 +217,7 @@ describe('Entities definition errors in query', () => {
 
     it('when \'key\' property has many items (structure error)', function(done: Function): void {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
 
       reader.read({
         from: 'entities', select: { key: [ 'geo', 'failed_concept' ] }
@@ -232,13 +232,13 @@ describe('Entities definition errors in query', () => {
 
     it('when \'value\' property has items that is absent in dataset', function(done: Function): void {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: BASE_PATH + WS_TESTING_PATH + '/master-HEAD' });
 
       reader.read({
         from: 'entities',
         select: {
-          key: [ 'geo' ],
-          value: [ 'failed_concept', 'world_4region', 'un_state', 'failed_concept2', 'population_total' ]
+          key: [ 'company' ],
+          value: [ 'failed_concept', 'english_speaking', 'company_scale', 'failed_concept2', 'lines_of_code' ]
         }
       })
         .then(() => done(notExpectedError))

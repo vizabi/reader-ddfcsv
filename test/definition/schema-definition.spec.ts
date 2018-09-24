@@ -7,7 +7,7 @@ import {
   notExpectedError,
   selectKeyClauseContainsUnavailableItems,
   selectValueClauseContainsUnavailableItems2,
-  tooManyQueryDefinitionErrors
+  tooManyQueryDefinitionErrors, WS_TESTING_PATH
 } from '../common';
 import { CONCEPTS, DATAPOINTS, ENTITIES } from 'ddf-query-validator';
 
@@ -18,7 +18,7 @@ describe('Schemas definition errors in query', () => {
     it(`when requests \'concepts.schema\' in \'${BASE_PATH + GLOBALIS_PATH}\' dataset with no \'select.value\'`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
 
       const query = {
         select: {
@@ -35,7 +35,7 @@ describe('Schemas definition errors in query', () => {
     it(`when requests \'concepts.schema\' in \'${BASE_PATH + GLOBALIS_PATH}\' dataset with empty \'select.value\'`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
 
       const query = {
         select: {
@@ -51,7 +51,7 @@ describe('Schemas definition errors in query', () => {
     it(`when requests \'entities.schema\' in \'${BASE_PATH + GLOBALIS_PATH}\' dataset with \'select.value\'`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
 
       const query = {
         select: {
@@ -67,7 +67,7 @@ describe('Schemas definition errors in query', () => {
     it(`when requests \'datapoints.schema\' in \'${BASE_PATH + GLOBALIS_PATH}\' dataset with \'select.value\'`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
 
       const query = {
         select: {
@@ -83,7 +83,7 @@ describe('Schemas definition errors in query', () => {
     it(`when requests \'*.schema\' in \'${BASE_PATH + GLOBALIS_PATH}\' dataset with \'select.value\'`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH });
+      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
 
       const query = {
         select: {
@@ -102,7 +102,7 @@ describe('Schemas definition errors in query', () => {
       it('when \'key\' property has item that is absent in dataset', done => {
         const reader = getDDFCsvReaderObject();
 
-        reader.init({ path: BASE_PATH });
+        reader.init({ path: BASE_PATH + WS_TESTING_PATH + '/master-HEAD' });
 
         reader.read({
           select: {
@@ -124,7 +124,7 @@ describe('Schemas definition errors in query', () => {
       it('when \'value\' property has item that is absent in dataset', done => {
         const reader = getDDFCsvReaderObject();
 
-        reader.init({ path: BASE_PATH });
+        reader.init({ path: BASE_PATH + WS_TESTING_PATH + '/master-HEAD' });
 
         reader.read({
           select: {

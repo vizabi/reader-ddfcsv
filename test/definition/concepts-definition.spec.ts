@@ -14,7 +14,6 @@ import {
   tooManyQueryDefinitionErrors, WS_TESTING_PATH
 } from '../common';
 import { RESERVED_CONCEPT, RESERVED_CONCEPT_TYPE, RESERVED_DOMAIN, RESERVED_DRILL_UP } from 'ddf-query-validator';
-import * as validator from 'ddf-query-validator';
 import { description, initData, testsDescriptors } from './test-cases/concepts';
 import * as path from 'path';
 
@@ -130,7 +129,7 @@ describe('Concepts definition errors in query', () => {
       const query = {
         select: {
           key: [ 'failed_concept' ],
-          value: [ 'concept_type', 'name', 'description' ]
+          value: [ 'concept_type', 'name', 'domain' ]
         },
         from: 'concepts'
       };
@@ -156,7 +155,7 @@ describe('Concepts definition errors in query', () => {
         promiseFunction: reader.read.bind(reader),
         args: [ query ],
         expectedErrors: [ selectKeyClauseMustHaveOnly1Item ],
-        type: 'definitions'
+        type: 'structure'
       });
     });
 
@@ -168,7 +167,7 @@ describe('Concepts definition errors in query', () => {
         from: 'concepts',
         select: {
           key: [ 'concept' ],
-          value: [ 'domain', 'failed_concept', 'concept', 'name', 'population_total', 'failed_concept2' ]
+          value: [ 'domain', 'failed_concept', 'company', 'name', 'lines_of_code', 'failed_concept2' ]
         }
       };
 
