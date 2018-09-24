@@ -1,18 +1,17 @@
 const path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = () => ({
     mode: 'production',
     entry: {
-        'vizabi-ddfcsv-reader': './src/index-web.ts'
+        'test-cases-concepts': './test/definition/test-cases/concepts.ts',
+        'test-cases-entities': './test/definition/test-cases/entities.ts'
     },
     output: {
         path: path.join(__dirname, 'dist'),
         filename: '[name].js',
-        libraryTarget: 'var',
-        library: 'DDFCsvReader'
+        libraryTarget: 'commonjs'
     },
-    target: "web",
+    target: "node",
     devtool: 'source-map',
     module: {
         rules: [
@@ -31,7 +30,5 @@ module.exports = () => ({
     resolve: {
         extensions: ['.ts', '.js']
     },
-    plugins: [
-        new CleanWebpackPlugin(['dist'])
-    ]
+    plugins: []
 });
