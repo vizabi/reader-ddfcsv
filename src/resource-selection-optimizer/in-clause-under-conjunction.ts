@@ -17,6 +17,7 @@ const Papa = require('papaparse');
 const WHERE_KEYWORD = 'where';
 const JOIN_KEYWORD = 'join';
 const KEY_IN = '$in';
+const KEY_NIN = '$nin';
 const KEY_AND = '$and';
 
 const getFirstConditionClause = clause => head(values(clause));
@@ -165,6 +166,17 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
   }
 
   private getFilesGroupsQueryClause(): InClauseUnderConjunction {
+    const getEntitiesExcept = (entityValuesToExclude: string[]): string[] => {
+      const result = [];
+
+      for (const entityKey of this.flow.entityValueToDomainHash.keys()) {
+        if (!includes(entityValuesToExclude, entityKey)) {
+          result.push(entityKey);
+        }
+      }
+
+      return result;
+    };
     const filesGroupsByClause = new Map();
 
     for (const clause of this.flow.processableClauses) {
@@ -173,7 +185,8 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
         datapoints: new Set(),
         concepts: new Set()
       };
-      const entityValuesFromClause = getFirstConditionClause(clause).$in;
+      const firstConditionClause = getFirstConditionClause(clause);
+      const entityValuesFromClause = firstConditionClause[KEY_IN] || getEntitiesExcept(firstConditionClause[KEY_NIN]);
 
       for (const entityValueFromClause of entityValuesFromClause) {
         filesGroupByClause.entities.add(this.flow.entityValueToFileHash.get(entityValueFromClause));
@@ -222,6 +235,10 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
       }
     }
 
+    if (!this.flow.filesGroupsByClause.get(appropriateClauseKey)) {
+      return [];
+    }
+
     return [
       ...Array.from(this.flow.filesGroupsByClause.get(appropriateClauseKey).concepts),
       ...Array.from(this.flow.filesGroupsByClause.get(appropriateClauseKey).entities),
@@ -241,7 +258,7 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
         // foo: { '$in': ['bar', 'baz'] } will NOT be processed
         const conditionKey = head(keys(clause[key]));
 
-        if (conditionKey === KEY_IN) {
+        if (conditionKey === KEY_IN || conditionKey === KEY_NIN) {
           result.push(clause);
         }
       }
