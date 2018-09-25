@@ -5,20 +5,18 @@ import { getDDFCsvReaderObject } from '../src/index';
 const expect = chai.expect;
 const sandbox = sinon.createSandbox();
 
-describe('HL', () => {
+describe('High load queries', () => {
   afterEach(() => {
     sandbox.restore();
   });
 
-  describe('optimization', () => {
-    xit(`---------------------`, async () => {
+  describe('on population dataset', () => {
+    it(`query with $nin clause should be processed correctly`, async () => {
       const reader = getDDFCsvReaderObject();
 
       reader.init({
         path: './test/fixtures/ddf--gapminder--population.big/master-HEAD'
       });
-
-      // console.time('foo');
 
       const result = await reader.read({
         language: 'en',
@@ -89,8 +87,7 @@ describe('HL', () => {
         ]
       });
 
-      // console.log(result.length);
-      // console.timeEnd('foo');
+      expect(result.length).to.be.equal(14300);
     });
   });
 });
