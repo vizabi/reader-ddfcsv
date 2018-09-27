@@ -14,11 +14,9 @@ describe('High load queries', () => {
     it(`query with $nin clause should be processed correctly`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({
-        path: './test/fixtures/ddf--gapminder--population.big/master-HEAD'
-      });
-
-      const result = await reader.read({
+      reader.init({});
+      const query = {
+        repositoryPath: './test/fixtures/ddf--gapminder--population.big/master-HEAD',
         language: 'en',
         from: 'datapoints',
         animatable: 'year',
@@ -85,7 +83,8 @@ describe('High load queries', () => {
         order_by: [
           'year'
         ]
-      });
+      };
+      const result = await reader.read(query);
 
       expect(result.length).to.be.equal(14300);
     });

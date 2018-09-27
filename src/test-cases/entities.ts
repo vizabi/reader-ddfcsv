@@ -22,7 +22,7 @@ const ALL_OPERATORS: string[] = [null, '.', '.is--'];
 const ALL_CONCEPTS: string[] = ['', ' ', RESERVED_CONCEPT, RESERVED_CONCEPT_TYPE, RESERVED_DOMAIN, RESERVED_DRILL_UP, 'company', 'english_speaking', 'company_scale', 'name', 'anno', 'lines_of_code', 'region', 'country', 'latitude', 'longitude', 'full_name_changed', 'project', 'domain', 'additional_column', 'meeting_style', 'popular_appeal', 'methodology'];
 const ALL_ENTITY_SETS_AND_DOMAINS: string[] = ['company', 'english_speaking', 'company_scale', 'region', 'project'];
 
-export const initData = {path: BASE_PATH + WS_TESTING_PATH + '/master-HEAD'};
+export const initData = {};
 export const testsDescriptors = ALL_ENTITY_SETS_AND_DOMAINS.reduce((acc, entitySetOrDomain: string) => {
   const BINARY_OPERATORS = [...flatMap(ALL_CONCEPTS, (parent: string) => map(ALL_CONCEPTS, (child) => [parent, child]))];
   const UNARY_OPERATORS = [...ALL_CONCEPTS];
@@ -36,8 +36,9 @@ export const testsDescriptors = ALL_ENTITY_SETS_AND_DOMAINS.reduce((acc, entityS
       return CONCEPTS_CLAUSE.map((clause: string) => ({
         itTitle: `should be fine for ${clause}`,
         query: {
-          from: 'entities',
+          repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
           dataset: WS_TESTING_PATH,
+          from: 'entities',
           select: {key: [entitySetOrDomain]},
           where: {
             [clause]: true

@@ -2,14 +2,12 @@ import * as chai from 'chai';
 import * as keys from 'lodash.keys';
 import {
   BASE_PATH,
-  checkExpectations,
-  EXPECTS_EXACTLY_ONE_ERROR,
-  getAmountOfErrors, GLOBALIS_PATH,
-  notExpectedError,
+  expectPromiseRejection,
+  GLOBALIS_PATH,
   selectKeyClauseContainsUnavailableItems,
   selectKeyClauseMustHaveOnly1Item,
   selectValueClauseContainsUnavailableItems1,
-  tooManyQueryDefinitionErrors, WS_TESTING_PATH
+  WS_TESTING_PATH
 } from '../common';
 import { getDDFCsvReaderObject } from '../../src/index';
 import {
@@ -21,7 +19,11 @@ import {
   RESERVED_DOMAIN,
   RESERVED_DRILL_UP
 } from 'ddf-query-validator';
+<<<<<<< HEAD
 import { testsDescriptors, initData } from '../../src/test-cases/entities';
+=======
+import { initData, testsDescriptors } from './test-cases/entities';
+>>>>>>> feat(load-file): add load file function to ddfcsv-reader
 
 const expect = chai.expect;
 
@@ -30,7 +32,7 @@ describe('Entities definition errors in query', () => {
 
   for (const description of descriptions) {
     describe(description, () => {
-      for (const testsDescriptor of testsDescriptors[description]) {
+      for (const testsDescriptor of testsDescriptors[ description ]) {
         it(testsDescriptor.itTitle, async () => {
           const reader = getDDFCsvReaderObject();
 
@@ -53,9 +55,10 @@ describe('Entities definition errors in query', () => {
     it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and 'ar-SA' language`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
+      reader.init({});
 
-      const result = await reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + GLOBALIS_PATH + '/master-HEAD',
         language: 'ar-SA',
         select: {
           key: [ 'country' ],
@@ -68,16 +71,18 @@ describe('Entities definition errors in query', () => {
           ]
         },
         order_by: [ 'country' ]
-      });
+      };
+      const result = await reader.read(query);
       expect(result.length).to.equal(4);
     });
 
     it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset without 'en' language in datapackage.json`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
+      reader.init({});
 
-      const result = await reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + GLOBALIS_PATH + '/master-HEAD',
         from: 'entities',
         language: 'test',
         select: {
@@ -85,7 +90,8 @@ describe('Entities definition errors in query', () => {
           value: [ 'world_4region', 'un_state' ]
         },
         order_by: [ 'country', { world_4region: -1 } ]
-      });
+      };
+      const result = await reader.read(query);
 
       expect(result.length).to.equal(273);
     });
@@ -93,9 +99,10 @@ describe('Entities definition errors in query', () => {
     it(`when requests only one column '${BASE_PATH + GLOBALIS_PATH}' dataset`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
+      reader.init({});
 
-      const result = await reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + GLOBALIS_PATH + '/master-HEAD',
         language: 'ar-SA',
         select: {
           key: [ 'country' ]
@@ -106,16 +113,18 @@ describe('Entities definition errors in query', () => {
             { country: { $in: [ 'usa', 'dza', 'abkh', 'afg' ] } }
           ]
         }
-      });
+      };
+      const result = await reader.read(query);
 
       expect(result.length).to.equal(4);
     });
 
     it('when requests entities with where clause', async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
+      reader.init({});
 
-      const result = await reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + GLOBALIS_PATH + '/master-HEAD',
         where: { world_6region: '$world_6region' },
         select: { key: [ 'country' ], value: [ 'world_6region', 'gapminder_list', 'god_id', 'landlocked' ] },
         from: 'entities',
@@ -127,7 +136,8 @@ describe('Entities definition errors in query', () => {
             }
           }
         }
-      });
+      };
+      const result = await reader.read(query);
 
       expect(result).to.be.deep.equal([
         {
@@ -192,62 +202,64 @@ describe('Entities definition errors in query', () => {
 
   describe('should be produced only for \'select\' section', () => {
 
-    it('when \'key\' property has item that is absent in dataset', done => {
+    it('when \'key\' property has item that is absent in dataset', async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH + WS_TESTING_PATH + '/master-HEAD' });
+      reader.init({});
 
-      reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
         select: {
           key: [ 'failed_concept' ],
           value: [ 'company_scale', 'english_speaking' ]
         },
         from: 'entities'
-      })
-        .then(() => done(notExpectedError))
-        .catch(error => {
+      };
 
-          expect(error).to.match(tooManyQueryDefinitionErrors);
-          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-          expect(error.toString()).to.match(selectKeyClauseContainsUnavailableItems);
-
-          done();
-        });
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ selectKeyClauseContainsUnavailableItems ],
+        type: 'definitions'
+      });
     });
 
-    it('when \'key\' property has many items (structure error)', function(done: Function): void {
+    it('when \'key\' property has many items (structure error)', async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
+      reader.init({});
 
-      reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + GLOBALIS_PATH + '/master-HEAD',
         from: 'entities', select: { key: [ 'geo', 'failed_concept' ] }
-      })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-          expect(error.toString()).to.match(selectKeyClauseMustHaveOnly1Item);
-        }, done));
+      };
+
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ selectKeyClauseMustHaveOnly1Item ],
+        type: 'structure'
+      });
     });
 
-    it('when \'value\' property has items that is absent in dataset', function(done: Function): void {
+    it('when \'value\' property has items that is absent in dataset', async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH + WS_TESTING_PATH + '/master-HEAD' });
+      reader.init({});
 
-      reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
         from: 'entities',
         select: {
           key: [ 'company' ],
           value: [ 'failed_concept', 'english_speaking', 'company_scale', 'failed_concept2', 'lines_of_code' ]
         }
-      })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(error).to.match(tooManyQueryDefinitionErrors);
-          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-          expect(error.toString()).to.match(selectValueClauseContainsUnavailableItems1);
-        }, done));
+      };
+
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ selectValueClauseContainsUnavailableItems1 ],
+        type: 'definitions'
+      });
     });
 
   });

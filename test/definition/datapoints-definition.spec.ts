@@ -3,14 +3,13 @@ import { getDDFCsvReaderObject } from '../../src/index';
 import {
   BASE_PATH,
   BIG_PATH,
-  checkExpectations, EMPTY_TRANSLATIONS_PATH,
-  EXPECTS_EXACTLY_ONE_ERROR,
-  getAmountOfErrors,
+  EMPTY_TRANSLATIONS_PATH,
+  expectPromiseRejection,
   GLOBALIS_PATH,
-  notExpectedError, POP_WPP_PATH,
+  POP_WPP_PATH,
   selectKeyClauseContainsUnavailableItems,
-  selectValueClauseContainsUnavailableItems, STATIC_ASSETS,
-  tooManyQueryDefinitionErrors,
+  selectValueClauseContainsUnavailableItems,
+  STATIC_ASSETS,
   WS_TESTING_PATH
 } from '../common';
 
@@ -21,10 +20,10 @@ describe('Datapoints definition errors in query', () => {
   describe('should never happen for happy flow', () => {
     it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and exists valid condition in 'join' section`, async () => {
       const reader = getDDFCsvReaderObject();
+      reader.init({});
 
-      reader.init({ path: INIT_READER_PATH });
-
-      const result = await reader.read({
+      const query = {
+        repositoryPath: INIT_READER_PATH,
         select: {
           key: [ 'geo', 'time' ],
           value: [
@@ -60,7 +59,8 @@ describe('Datapoints definition errors in query', () => {
           }
         },
         order_by: [ 'time', 'geo' ]
-      });
+      };
+      const result = await reader.read(query);
 
       const countryAntData = result.filter(record => record.geo === 'ant');
 
@@ -70,10 +70,10 @@ describe('Datapoints definition errors in query', () => {
 
     it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and ordering by complex fields`, async () => {
       const reader = getDDFCsvReaderObject();
+      reader.init({});
 
-      reader.init({ path: INIT_READER_PATH });
-
-      const result = await reader.read({
+      const query = {
+        repositoryPath: INIT_READER_PATH,
         select: {
           key: [ 'geo', 'time' ],
           value: [
@@ -82,18 +82,19 @@ describe('Datapoints definition errors in query', () => {
         },
         from: 'datapoints',
         order_by: [ 'time', { geo: 'asc' }, { life_expectancy_years: -1 } ]
-      });
+      };
+
+      const result = await reader.read(query);
 
       expect(result.length).to.equal(52091);
     });
 
     it(`when requests '${BASE_PATH + BIG_PATH}' dataset`, async () => {
       const reader = getDDFCsvReaderObject();
+      reader.init({});
 
-      reader.init({
-        path: BASE_PATH + BIG_PATH + '/master-HEAD'
-      });
-      const result = await reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + BIG_PATH + '/master-HEAD',
         language: 'en',
         from: 'datapoints',
         animatable: 'year',
@@ -183,7 +184,8 @@ describe('Datapoints definition errors in query', () => {
         order_by: [
           'year'
         ]
-      });
+      };
+      const result = await reader.read(query);
       const expectedResult = require('../result-fixtures/in-clause-under-conjunction-1.json');
 
       expect(result).to.deep.equal(expectedResult);
@@ -191,11 +193,10 @@ describe('Datapoints definition errors in query', () => {
 
     it(`when requests '${BASE_PATH + POP_WPP_PATH}' dataset`, async () => {
       const reader = getDDFCsvReaderObject();
+      reader.init({});
 
-      reader.init({
-        path: BASE_PATH + POP_WPP_PATH + '/master-HEAD'
-      });
-      const result = await reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + POP_WPP_PATH + '/master-HEAD',
         language: 'en',
         from: 'datapoints',
         animatable: 'year',
@@ -235,7 +236,8 @@ describe('Datapoints definition errors in query', () => {
           'gender',
           'age'
         ]
-      });
+      };
+      const result = await reader.read(query);
       const expectedResult = require('../result-fixtures/in-clause-under-conjunction-2.json');
 
       expect(result).to.deep.equal(expectedResult);
@@ -243,11 +245,10 @@ describe('Datapoints definition errors in query', () => {
 
     it(`when requests '${BASE_PATH + STATIC_ASSETS}' dataset`, async () => {
       const reader = getDDFCsvReaderObject();
+      reader.init({});
 
-      reader.init({
-        path: BASE_PATH + STATIC_ASSETS + '/master-HEAD'
-      });
-      const result = await reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + STATIC_ASSETS + '/master-HEAD',
         language: 'en',
         from: 'datapoints',
         animatable: 'time',
@@ -263,7 +264,8 @@ describe('Datapoints definition errors in query', () => {
           $time: { key: 'time', where: { time: '2015' } }
         },
         order_by: [ 'geo', 'time' ]
-      });
+      };
+      const result = await reader.read(query);
       const expectedResult = require('../result-fixtures/datapoints-assets.json');
 
       expect(result).to.deep.equal(expectedResult);
@@ -271,44 +273,44 @@ describe('Datapoints definition errors in query', () => {
 
     it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and 'ar-SA' language`, async () => {
       const reader = getDDFCsvReaderObject();
+      reader.init({});
 
-      reader.init({ path: INIT_READER_PATH });
-
-      const result = await reader.read({
-          language: 'ar-SA',
-          from: 'datapoints',
-          animatable: 'time',
-          select: {
-            key: [
-              'geo',
-              'time'
-            ],
-            value: [
-              'income_per_person_gdppercapita_ppp_inflation_adjusted',
-              'life_expectancy_years',
-              'population_total'
-            ]
-          },
-          where: {
-            $and: [
-              {
-                geo: '$geo'
-              }
-            ]
-          },
-          join: {
-            $geo: {
-              key: 'geo',
-              where: {
-                un_state: true
-              }
-            }
-          },
-          order_by: [
+      const query = {
+        repositoryPath: INIT_READER_PATH,
+        language: 'ar-SA',
+        from: 'datapoints',
+        animatable: 'time',
+        select: {
+          key: [
+            'geo',
             'time'
+          ],
+          value: [
+            'income_per_person_gdppercapita_ppp_inflation_adjusted',
+            'life_expectancy_years',
+            'population_total'
           ]
-        }
-      );
+        },
+        where: {
+          $and: [
+            {
+              geo: '$geo'
+            }
+          ]
+        },
+        join: {
+          $geo: {
+            key: 'geo',
+            where: {
+              un_state: true
+            }
+          }
+        },
+        order_by: [
+          'time'
+        ]
+      };
+      const result = await reader.read(query);
 
       const countryAntData = result.filter(record => record.geo === 'ant');
 
@@ -318,44 +320,44 @@ describe('Datapoints definition errors in query', () => {
 
     it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and 'ru-RU' language`, async () => {
       const reader = getDDFCsvReaderObject();
+      reader.init({});
 
-      reader.init({ path: INIT_READER_PATH });
-
-      const result = await reader.read({
-          language: 'ru-RU',
-          from: 'datapoints',
-          animatable: 'time',
-          select: {
-            key: [
-              'geo',
-              'time'
-            ],
-            value: [
-              'income_per_person_gdppercapita_ppp_inflation_adjusted',
-              'life_expectancy_years',
-              'population_total'
-            ]
-          },
-          where: {
-            $and: [
-              {
-                geo: '$geo'
-              }
-            ]
-          },
-          join: {
-            $geo: {
-              key: 'geo',
-              where: {
-                un_state: true
-              }
-            }
-          },
-          order_by: [
+      const query = {
+        repositoryPath: INIT_READER_PATH,
+        language: 'ru-RU',
+        from: 'datapoints',
+        animatable: 'time',
+        select: {
+          key: [
+            'geo',
             'time'
+          ],
+          value: [
+            'income_per_person_gdppercapita_ppp_inflation_adjusted',
+            'life_expectancy_years',
+            'population_total'
           ]
-        }
-      );
+        },
+        where: {
+          $and: [
+            {
+              geo: '$geo'
+            }
+          ]
+        },
+        join: {
+          $geo: {
+            key: 'geo',
+            where: {
+              un_state: true
+            }
+          }
+        },
+        order_by: [
+          'time'
+        ]
+      };
+      const result = await reader.read(query);
 
       const countryAntData = result.filter(record => record.geo === 'ant');
 
@@ -365,11 +367,12 @@ describe('Datapoints definition errors in query', () => {
   });
 
   describe('should never happen for happy flow in lenient mode', () => {
-    it('when testing the most complex query', function(done: Function): void {
+    it('when testing the most complex query', async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: INIT_READER_PATH });
+      reader.init({});
 
-      reader.read({
+      const query = {
+        repositoryPath: INIT_READER_PATH,
         from: 'datapoints',
         select: {
           key: [ 'geo', 'time' ], value: [ 'population_total', 'life_expectancy_years', 'gdp_per_capita_yearly_growth' ]
@@ -400,19 +403,17 @@ describe('Datapoints definition errors in query', () => {
           }
         },
         language: 'en'
-      })
-        .then((data) => {
-          expect(data).to.be.not.null;
-          return done();
-        })
-        .catch(done);
+      };
+      const data = await reader.read(query);
+      expect(data).to.be.not.null;
     });
 
-    it(`#0 when \'where\'[...]\'*.is--\' clause has absent concept in dataset ${BASE_PATH + GLOBALIS_PATH}`, function(done: Function): void {
+    it(`#0 when \'where\'[...]\'*.is--\' clause has absent concept in dataset ${BASE_PATH + GLOBALIS_PATH}`, async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: INIT_READER_PATH });
+      reader.init({});
 
-      reader.read({
+      const query = {
+        repositoryPath: INIT_READER_PATH,
         from: 'datapoints',
         select: {
           key: [ 'geo', 'time' ], value: [ 'population_total' ]
@@ -420,20 +421,17 @@ describe('Datapoints definition errors in query', () => {
         where: {
           'geo.is--countr': true
         }
-      })
-        .then((data) => {
-          expect(data).to.be.not.null;
-
-          return done();
-        })
-        .catch(done);
+      };
+      const data = await reader.read(query);
+      expect(data).to.be.not.null;
     });
 
-    it(`#1 when \'where\' clause has absent concept in dataset ${BASE_PATH + GLOBALIS_PATH}`, function(done: Function): void {
+    it(`#1 when \'where\' clause has absent concept in dataset ${BASE_PATH + GLOBALIS_PATH}`, async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: INIT_READER_PATH });
+      reader.init({});
 
-      reader.read({
+      const query = {
+        repositoryPath: INIT_READER_PATH,
         from: 'datapoints',
         select: {
           key: [ 'geo', 'time' ], value: [ 'population_total' ]
@@ -441,20 +439,17 @@ describe('Datapoints definition errors in query', () => {
         where: {
           'ge.is--country': true
         }
-      })
-        .then((data) => {
-          expect(data).to.be.not.null;
-
-          return done();
-        })
-        .catch(done);
+      };
+      const data = await reader.read(query);
+      expect(data).to.be.not.null;
     });
 
-    it(`#2 when \'where\' clause has concept with valid relative in dataset ${BASE_PATH + BIG_PATH}`, function(done: Function): void {
+    it(`#2 when \'where\' clause has concept with valid relative in dataset ${BASE_PATH + BIG_PATH}`, async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH + BIG_PATH + '/master-HEAD' });
+      reader.init({});
 
-      reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + BIG_PATH + '/master-HEAD',
         from: 'datapoints',
         select: {
           key: [ 'age', 'world_4region', 'year' ], value: [ 'population' ]
@@ -462,20 +457,17 @@ describe('Datapoints definition errors in query', () => {
         where: {
           'world_4region.country': true
         }
-      })
-        .then((data) => {
-          expect(data).to.be.not.null;
-
-          return done();
-        })
-        .catch(done);
+      };
+      const data = await reader.read(query);
+      expect(data).to.be.not.null;
     });
 
-    it(`#3 when \'where\' clause has concept with invalid relative in dataset ${BASE_PATH + BIG_PATH}`, function(done: Function): void {
+    it(`#3 when \'where\' clause has concept with invalid relative in dataset ${BASE_PATH + BIG_PATH}`, async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH + BIG_PATH + '/master-HEAD' });
+      reader.init({});
 
-      reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + BIG_PATH + '/master-HEAD',
         from: 'datapoints',
         select: {
           key: [ 'age', 'landlocked', 'year' ], value: [ 'population' ]
@@ -483,20 +475,17 @@ describe('Datapoints definition errors in query', () => {
         where: {
           'age.landlocked': 'coastline'
         }
-      })
-        .then((data) => {
-          expect(data).to.be.not.null;
-
-          return done();
-        })
-        .catch(done);
+      };
+      const data = await reader.read(query);
+      expect(data).to.be.not.null;
     });
 
-    it(`#4 when \'where\' clause has concept with relative from drill_down in dataset ${BASE_PATH + BIG_PATH}`, function(done: Function): void {
+    it(`#4 when \'where\' clause has concept with relative from drill_down in dataset ${BASE_PATH + BIG_PATH}`, async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH + BIG_PATH + '/master-HEAD' });
+      reader.init({});
 
-      reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + BIG_PATH + '/master-HEAD',
         from: 'datapoints',
         select: {
           key: [ 'age', 'country', 'year' ], value: [ 'population' ]
@@ -504,20 +493,17 @@ describe('Datapoints definition errors in query', () => {
         where: {
           'country.landlocked': 'coastline'
         }
-      })
-        .then((data) => {
-          expect(data).to.be.not.null;
-
-          return done();
-        })
-        .catch(done);
+      };
+      const data = await reader.read(query);
+      expect(data).to.be.not.null;
     });
 
-    it(`#5 when \'where\' clause has concepts not from \'select\' clause in dataset ${BASE_PATH + WS_TESTING_PATH}`, function(done: Function): void {
+    it(`#5 when \'where\' clause has concepts not from \'select\' clause in dataset ${BASE_PATH + WS_TESTING_PATH}`, async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH + WS_TESTING_PATH + '/master-HEAD' });
+      reader.init({});
 
-      reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
         from: 'datapoints',
         select: {
           key: [ 'company', 'anno' ], value: [ 'company_scale' ]
@@ -525,20 +511,17 @@ describe('Datapoints definition errors in query', () => {
         where: {
           lines_of_code: 31111
         }
-      })
-        .then((data) => {
-          expect(data).to.be.not.null;
-
-          return done();
-        })
-        .catch(done);
+      };
+      const data = await reader.read(query);
+      expect(data).to.be.not.null;
     });
 
-    it(`#6 when \'where\' clause has concepts not from \'select\' clause in dataset ${BASE_PATH + WS_TESTING_PATH}`, function(done: Function): void {
+    it(`#6 when \'where\' clause has concepts not from \'select\' clause in dataset ${BASE_PATH + WS_TESTING_PATH}`, async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH + WS_TESTING_PATH + '/master-HEAD' });
+      reader.init({});
 
-      reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
         from: 'datapoints',
         select: {
           key: [ 'company', 'anno' ], value: [ 'lines_of_code', 'company_scale' ]
@@ -546,20 +529,17 @@ describe('Datapoints definition errors in query', () => {
         where: {
           company: 'mcrsft'
         }
-      })
-        .then((data) => {
-          expect(data).to.be.not.null;
-
-          return done();
-        })
-        .catch(done);
+      };
+      const data = await reader.read(query);
+      expect(data).to.be.not.null;
     });
 
-    it(`#7 when \'where\' clause has concepts not from \'select\' clause in dataset ${BASE_PATH + WS_TESTING_PATH}`, function(done: Function): void {
+    it(`#7 when \'where\' clause has concepts not from \'select\' clause in dataset ${BASE_PATH + WS_TESTING_PATH}`, async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH + WS_TESTING_PATH + '/master-HEAD' });
+      reader.init({});
 
-      reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
         from: 'datapoints',
         select: {
           key: [ 'company_scale', 'anno' ], value: [ 'lines_of_code' ]
@@ -567,20 +547,17 @@ describe('Datapoints definition errors in query', () => {
         where: {
           company: 'mcrsft'
         }
-      })
-        .then((data) => {
-          expect(data).to.be.not.null;
-
-          return done();
-        })
-        .catch(done);
+      };
+      const data = await reader.read(query);
+      expect(data).to.be.not.null;
     });
 
-    it(`#8 when \'where\' clause has concepts not from \'select\' clause in dataset ${BASE_PATH + WS_TESTING_PATH}`, function(done: Function): void {
+    it(`#8 when \'where\' clause has concepts not from \'select\' clause in dataset ${BASE_PATH + WS_TESTING_PATH}`, async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH + WS_TESTING_PATH + '/master-HEAD' });
+      reader.init({});
 
-      reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
         from: 'datapoints',
         select: {
           key: [ 'company', 'anno' ], value: [ 'lines_of_code', 'company_scale' ]
@@ -588,20 +565,17 @@ describe('Datapoints definition errors in query', () => {
         where: {
           company_scale: 'small'
         }
-      })
-        .then((data) => {
-          expect(data).to.be.not.null;
-
-          return done();
-        })
-        .catch(done);
+      };
+      const data = await reader.read(query);
+      expect(data).to.be.not.null;
     });
 
-    it(`#9 when \'where\' clause has concepts not from \'select\' clause in dataset ${BASE_PATH + WS_TESTING_PATH}`, function(done: Function): void {
+    it(`#9 when \'where\' clause has concepts not from \'select\' clause in dataset ${BASE_PATH + WS_TESTING_PATH}`, async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH + WS_TESTING_PATH + '/master-HEAD' });
+      reader.init({});
 
-      reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
         from: 'datapoints',
         select: {
           key: [ 'company_scale', 'anno' ], value: [ 'lines_of_code' ]
@@ -609,20 +583,17 @@ describe('Datapoints definition errors in query', () => {
         where: {
           company_scale: 'small'
         }
-      })
-        .then((data) => {
-          expect(data).to.be.not.null;
-
-          return done();
-        })
-        .catch(done);
+      };
+      const data = await reader.read(query);
+      expect(data).to.be.not.null;
     });
 
-    it(`#10 when \'where\' clause has concepts not from \'select\' clause in dataset ${BASE_PATH + WS_TESTING_PATH}`, function(done: Function): void {
+    it(`#10 when \'where\' clause has concepts not from \'select\' clause in dataset ${BASE_PATH + WS_TESTING_PATH}`, async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH + WS_TESTING_PATH + '/master-HEAD' });
+      reader.init({});
 
-      reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
         from: 'datapoints',
         select: {
           key: [ 'company', 'anno' ], value: [ 'lines_of_code' ]
@@ -630,20 +601,17 @@ describe('Datapoints definition errors in query', () => {
         where: {
           company_scale: 'small'
         }
-      })
-        .then((data) => {
-          expect(data).to.be.not.null;
-
-          return done();
-        })
-        .catch(done);
+      };
+      const data = await reader.read(query);
+      expect(data).to.be.not.null;
     });
 
-    it(`#11 when \'where\' clause has concepts not from \'select\' clause in dataset ${BASE_PATH + BIG_PATH}`, function(done: Function): void {
+    it(`#11 when \'where\' clause has concepts not from \'select\' clause in dataset ${BASE_PATH + BIG_PATH}`, async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH + BIG_PATH + '/master-HEAD' });
+      reader.init({});
 
-      reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + BIG_PATH + '/master-HEAD',
         from: 'datapoints',
         select: {
           key: [ 'country', 'year' ], value: [ 'population' ]
@@ -651,20 +619,17 @@ describe('Datapoints definition errors in query', () => {
         where: {
           age: 10
         }
-      })
-        .then((data) => {
-          expect(data).to.be.not.null;
-
-          return done();
-        })
-        .catch(done);
+      };
+      const data = await reader.read(query);
+      expect(data).to.be.not.null;
     });
 
-    it(`#12 when \'where\' clause has concepts not from \'select\' clause in dataset ${BASE_PATH + WS_TESTING_PATH}`, function(done: Function): void {
+    it(`#12 when \'where\' clause has concepts not from \'select\' clause in dataset ${BASE_PATH + WS_TESTING_PATH}`, async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH + WS_TESTING_PATH + '/master-HEAD' });
+      reader.init({});
 
-      reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
         from: 'datapoints',
         select: {
           key: [ 'company', 'project' ], value: [ 'lines_of_code', 'company_scale', 'meeting_style' ]
@@ -672,22 +637,19 @@ describe('Datapoints definition errors in query', () => {
         where: {
           anno: 2016
         }
-      })
-        .then((data) => {
-          expect(data).to.be.not.null;
-
-          return done();
-        })
-        .catch(done);
+      };
+      const data = await reader.read(query);
+      expect(data).to.be.not.null;
     });
   });
 
   xdescribe('should never happen for happy flow in strict mode', () => {
-    it('when testing complex query', function(done: Function): void {
+    it('when testing complex query', async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH + EMPTY_TRANSLATIONS_PATH + '/master-HEAD' });
+      reader.init({});
 
-      reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + EMPTY_TRANSLATIONS_PATH + '/master-HEAD',
         from: 'datapoints',
         select: {
           key: [ 'geo', 'time' ], value: [ 'population_total', 'life_expectancy_years', 'gdp_per_capita_yearly_growth' ]
@@ -718,20 +680,17 @@ describe('Datapoints definition errors in query', () => {
           }
         },
         language: 'en'
-      })
-        .then((data) => {
-          expect(data).to.be.not.null;
-
-          done();
-        })
-        .catch(done);
+      };
+      const data = await reader.read(query);
+      expect(data).to.be.not.null;
     });
 
-    it('when testing complex query 2', function(done: Function): void {
+    it('when testing complex query 2', async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH + EMPTY_TRANSLATIONS_PATH + '/master-HEAD' });
+      reader.init({});
 
-      reader.read({
+      const query = {
+        repositoryPath: BASE_PATH + EMPTY_TRANSLATIONS_PATH + '/master-HEAD',
         from: 'datapoints',
         select: {
           key: [ 'geo', 'time' ], value: [ 'population_total', 'life_expectancy_years', 'gdp_per_capita_yearly_growth' ]
@@ -762,148 +721,146 @@ describe('Datapoints definition errors in query', () => {
           }
         },
         language: 'en'
-      })
-        .then((data) => {
-          expect(data).to.be.not.null;
-
-        })
-        .catch(done);
+      };
+      const data = await reader.read(query);
+      expect(data).to.be.not.null;
     });
   });
 
   describe('should be produced only for \'select\' section', () => {
-    it('when \'key\' property has item that is absent in dataset', function(done: Function): void {
+    it('when \'key\' property has item that is absent in dataset', async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH + WS_TESTING_PATH + '/master-HEAD' });
+      reader.init({});
 
-      reader.read({
-        from: 'datapoints', select: { key: [ 'failed_concept', 'anno' ], value: [ 'lines_of_code' ] }
-      })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(error).to.match(tooManyQueryDefinitionErrors);
-          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-          expect(error.toString()).to.match(selectKeyClauseContainsUnavailableItems);
-        }, done));
+      const query = {
+        repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
+        from: 'datapoints',
+        select: { key: [ 'failed_concept', 'anno' ], value: [ 'lines_of_code' ] }
+      };
+
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ selectKeyClauseContainsUnavailableItems ],
+        type: 'definitions'
+      });
     });
 
-    it('when \'value\' property has item that is absent in dataset', function(done: Function): void {
+    it('when \'value\' property has item that is absent in dataset', async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: BASE_PATH + WS_TESTING_PATH + '/master-HEAD' });
+      reader.init({});
 
-      reader.read({ from: 'datapoints', select: { key: [ 'company', 'anno' ], value: [ 'failed_measure' ] } })
-        .then(() => done(notExpectedError))
-        .catch(checkExpectations((error) => {
-          // console.log(error.stack);
-          expect(error).to.match(tooManyQueryDefinitionErrors);
-          expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-          expect(error.toString()).to.match(selectValueClauseContainsUnavailableItems);
-        }, done));
+      const query = {
+        repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
+        from: 'datapoints',
+        select: { key: [ 'company', 'anno' ], value: [ 'failed_measure' ] }
+      };
+
+      await expectPromiseRejection({
+        promiseFunction: reader.read.bind(reader),
+        args: [ query ],
+        expectedErrors: [ selectValueClauseContainsUnavailableItems ],
+        type: 'definitions'
+      });
     });
   });
 
   describe('any plugin should not be selected', () => {
-    it('when request is not based on same key under where', done => {
+    it('when request is not based on same key under where', async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({path: INIT_READER_PATH});
+      reader.init({});
 
-      reader.read(
-        {
-          from: 'datapoints',
-          language: 'ru-RU',
-          select: {
-            key: [
-              'geo',
-              'time'
-            ],
-            value: [
-              'income_per_person_gdppercapita_ppp_inflation_adjusted',
-              'life_expectancy_years',
-              'population_total'
-            ]
-          },
-          where: {
-            $and: [
-              {
-                geo: '$geo'
-              }
-            ]
-          },
-          join: {
-            $geo: {
-              key: 'geo',
-              where: {
-                $and: [
-                  {
-                    un_state: true
-                  },
-                  {
-                    world_4region: {
-                      $in: [
-                        'asia'
-                      ]
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          order_by: [
+      const query = {
+        repositoryPath: INIT_READER_PATH,
+        from: 'datapoints',
+        language: 'ru-RU',
+        select: {
+          key: [
+            'geo',
             'time'
+          ],
+          value: [
+            'income_per_person_gdppercapita_ppp_inflation_adjusted',
+            'life_expectancy_years',
+            'population_total'
           ]
-        })
-        .then((data) => {
-          expect(data).to.be.not.null;
-          return done();
-        })
-        .catch(done);
+        },
+        where: {
+          $and: [
+            {
+              geo: '$geo'
+            }
+          ]
+        },
+        join: {
+          $geo: {
+            key: 'geo',
+            where: {
+              $and: [
+                {
+                  un_state: true
+                },
+                {
+                  world_4region: {
+                    $in: [
+                      'asia'
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        order_by: [
+          'time'
+        ]
+      };
+      const data = await reader.read(query);
+      expect(data).to.be.not.null;
     });
   });
 
   describe('an appropriate plugin should be selected', () => {
-    it('when request is based on same entity set key under where', done => {
+    it('when request is based on same entity set key under where', async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({path: INIT_READER_PATH});
+      reader.init({});
 
-      reader.read(
-        {
-          from: 'datapoints',
-          select: {
-            key: [
-              'country',
-              'time'
-            ],
-            value: [
-              'income_per_person_gdppercapita_ppp_inflation_adjusted',
-              'life_expectancy_years',
-              'population_total'
-            ]
-          },
-          where: {
-            $and: [
-              {
-                country: '$country'
-              }
-            ]
-          },
-          join: {
-            $country: {
-              key: 'country',
-              where: {
-                country: {$in: ['afg']}
-              }
-            }
-          },
-          order_by: [
+      const query = {
+        repositoryPath: INIT_READER_PATH,
+        from: 'datapoints',
+        select: {
+          key: [
+            'country',
             'time'
+          ],
+          value: [
+            'income_per_person_gdppercapita_ppp_inflation_adjusted',
+            'life_expectancy_years',
+            'population_total'
           ]
-        })
-        .then((data) => {
-          expect(data).to.be.not.null;
-          return done();
-        })
-        .catch(done);
+        },
+        where: {
+          $and: [
+            {
+              country: '$country'
+            }
+          ]
+        },
+        join: {
+          $country: {
+            key: 'country',
+            where: {
+              country: { $in: [ 'afg' ] }
+            }
+          }
+        },
+        order_by: [
+          'time'
+        ]
+      };
+
+      const data = await reader.read(query);
+      expect(data).to.be.not.null;
     });
   });
 });
