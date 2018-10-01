@@ -77,7 +77,7 @@ describe('Schemas definition errors in query', () => {
         from: 'datapoints.schema'
       };
       const result = await reader.read(query);
-      expect(result.length).to.equal(1076);
+      expect(result.length).to.equal(1070);
     });
 
     it(`when requests \'*.schema\' in \'${BASE_PATH + GLOBALIS_PATH}\' dataset with \'select.value\'`, async () => {
@@ -93,7 +93,7 @@ describe('Schemas definition errors in query', () => {
         from: '*.schema'
       };
       const result = await reader.read(query);
-      expect(result.length).to.equal(1209);
+      expect(result.length).to.equal(1203);
     });
   });
 

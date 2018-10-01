@@ -78,7 +78,7 @@ describe('Concepts definition errors in query', () => {
         order_by: [ 'concept' ]
       });
 
-      expect(result.length).to.be.equal(593);
+      expect(result.length).to.be.equal(590);
     });
 
     it(`when requests only one column '${BASE_PATH + GLOBALIS_PATH}' dataset with empty \'select.value\'`, async () => {
@@ -96,7 +96,7 @@ describe('Concepts definition errors in query', () => {
         order_by: [ 'concept' ]
       });
 
-      expect(result.length).to.be.equal(593);
+      expect(result.length).to.be.equal(590);
     });
 
     it(`when requests \'${BASE_PATH + EMPTY_TRANSLATIONS_PATH}\' dataset without \'en\' language in datapackage.json`, async () => {
