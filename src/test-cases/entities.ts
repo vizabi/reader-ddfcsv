@@ -2,7 +2,7 @@ import {
   BASE_PATH,
   EMPTY_TRANSLATIONS_PATH,
   WS_TESTING_PATH
-} from '../../common';
+} from '../../test/common';
 import {
   CONCEPT_TYPE_ENTITY_DOMAIN,
   CONCEPT_TYPE_ENTITY_SET,

@@ -4,7 +4,7 @@ import {
   RESERVED_DOMAIN,
   RESERVED_DRILL_UP
 } from 'ddf-query-validator';
-import { BASE_PATH, WS_TESTING_PATH } from '../../common';
+import { BASE_PATH, WS_TESTING_PATH } from '../../test/common';
 import * as path from 'path';
 
 const ALL_CONCEPTS: string[] = [ '', ' ', RESERVED_CONCEPT, RESERVED_CONCEPT_TYPE, RESERVED_DOMAIN, RESERVED_DRILL_UP, 'company', 'english_speaking', 'company_scale', 'name', 'anno', 'lines_of_code', 'region', 'country', 'latitude', 'longitude', 'full_name_changed', 'project', 'additional_column', 'meeting_style', 'popular_appeal', 'methodology' ];
