@@ -14,7 +14,7 @@ import {
   tooManyQueryDefinitionErrors, WS_TESTING_PATH
 } from '../common';
 import { RESERVED_CONCEPT, RESERVED_CONCEPT_TYPE, RESERVED_DOMAIN, RESERVED_DRILL_UP } from 'ddf-query-validator';
-import { description, initData, testsDescriptors } from './test-cases/concepts';
+import { description, initData, testsDescriptors } from '../../src/test-cases/concepts';
 import * as path from 'path';
 
 const expect = chai.expect;

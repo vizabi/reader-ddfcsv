@@ -136,7 +136,7 @@ export function ddfCsvReader (logger?: any) {
 
         // then parse only those concepts
         return response.data.forEach(row => {
-          for (const [ concept, parseFn ] of parsingConcepts) {
+          for (const [ concept, parseFn ] of Array.from(parsingConcepts)) {
             row[ concept ] = parseFn(row[ concept ]);
           }
         });

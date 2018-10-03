@@ -4,7 +4,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = () => ({
     mode: 'production',
     entry: {
-        'vizabi-ddfcsv-reader': './src/index-web.ts'
+        'vizabi-ddfcsv-reader': './lib/index-web.js'
     },
     output: {
         path: path.join(__dirname, 'dist'),
@@ -18,18 +18,12 @@ module.exports = () => ({
         rules: [
             {
                 test: /\.js$/,
-                use: ["source-map-loader"],
-                enforce: "pre"
-            },
-            {
-                test: /\.ts?$/,
-                use: 'ts-loader',
-                exclude: /node_modules/
+                exclude: /node_modules\/(?![ddf\-query\-validator])/,
+                use: {
+                    loader: "babel-loader"
+                }
             }
         ]
-    },
-    resolve: {
-        extensions: ['.ts', '.js']
     },
     plugins: [
         new CleanWebpackPlugin(['dist'])

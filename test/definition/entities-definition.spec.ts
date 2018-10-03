@@ -21,7 +21,7 @@ import {
   RESERVED_DOMAIN,
   RESERVED_DRILL_UP
 } from 'ddf-query-validator';
-import { testsDescriptors, initData } from './test-cases/entities';
+import { testsDescriptors, initData } from '../../src/test-cases/entities';
 
 const expect = chai.expect;
 
