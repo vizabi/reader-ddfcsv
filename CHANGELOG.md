@@ -1,3 +1,13 @@
+<a name="2.3.8"></a>
+## [2.3.8](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v2.3.1...v2.3.8) (2018-10-03)
+
+
+### Features
+
+* **queries processing:** optimize high loaded queries with $nin clause ([cf3405e](https://github.com/vizabi/vizabi-ddfcsv-reader/commit/cf3405e)), closes [#95](https://github.com/vizabi/vizabi-ddfcsv-reader/issues/95)
+
+
+
 <a name="2.3.2"></a>
 ## [2.3.2](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v2.3.1...v2.3.2) (2018-09-14)
 
