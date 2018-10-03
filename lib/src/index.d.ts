@@ -5,5 +5,3 @@ export { DdfCsvError } from './ddfcsv-error';
 export declare const getDDFCsvReaderObject: Function;
 export declare const getGithubDDFCsvReaderObject: Function;
 export declare const getS3FileReaderObject: Function;
-export { default as conceptTestCases } from './test-cases/concepts';
-export { default as entitiesTestCases } from './test-cases/entities';

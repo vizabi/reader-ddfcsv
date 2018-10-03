@@ -1,3 +1,4 @@
+import 'mocha';
 import * as chai from 'chai';
 import * as keys from 'lodash.keys';
 import {
@@ -19,11 +20,7 @@ import {
   RESERVED_DOMAIN,
   RESERVED_DRILL_UP
 } from 'ddf-query-validator';
-<<<<<<< HEAD
 import { testsDescriptors, initData } from '../../src/test-cases/entities';
-=======
-import { initData, testsDescriptors } from './test-cases/entities';
->>>>>>> feat(load-file): add load file function to ddfcsv-reader
 
 const expect = chai.expect;
 

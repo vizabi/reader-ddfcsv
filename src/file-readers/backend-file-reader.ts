@@ -9,7 +9,7 @@ export class BackendFileReader implements IReader {
     this.recordTransformer = recordTransformer;
   }
 
-  readText(filePath, onFileRead) {
+  readText(filePath, onFileRead, options: object) {
     if (!fs.existsSync(filePath)) {
       return onFileRead('No such file: ' + filePath);
     }

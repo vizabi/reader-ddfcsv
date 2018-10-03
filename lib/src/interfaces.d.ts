@@ -1,7 +1,7 @@
 export interface IReader {
     recordTransformer: Function;
     setRecordTransformer(recordTransformer: Function): any;
-    readText(filePath: string, onFileRead: Function): any;
+    readText(filePath: string, onFileRead: Function, options?: object): any;
 }
 export interface IBaseReaderOptions {
     basePath: string;

@@ -11,7 +11,7 @@ export class FrontendFileReader implements IReader {
     this.recordTransformer = recordTransformer;
   }
 
-  readText(filePath, onFileRead) {
+  readText(filePath, onFileRead, options: object) {
     fetch(filePath)
       .then(response => response.text())
       .then(text => {

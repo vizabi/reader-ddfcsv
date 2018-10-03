@@ -25,7 +25,7 @@ export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
         this.reader = ddfCsvReader(this.logger);
       },
 
-      async getFile (filePath: string, isJsonFile: boolean): Promise<any> {
+      async getFile (filePath: string, isJsonFile: boolean, options: object): Promise<any> {
         return new Promise((resolve, reject) => {
           this.fileReader.readText(filePath, (err, data) => {
             if (err) {
@@ -41,7 +41,7 @@ export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
             } catch (jsonErr) {
               return reject(jsonErr);
             }
-          });
+          }, options);
         });
       },
 
