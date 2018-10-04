@@ -17,6 +17,3 @@ import { prepareDDFCsvReaderObject } from './ddfcsv-reader';
 export const getDDFCsvReaderObject: Function = prepareDDFCsvReaderObject(new BackendFileReader());
 export const getGithubDDFCsvReaderObject: Function = prepareDDFCsvReaderObject(new GithubFileReader());
 export const getS3FileReaderObject: Function = prepareDDFCsvReaderObject(new S3FileReader());
-
-export { default as conceptTestCases } from './test-cases/concepts';
-export { default as entitiesTestCases } from './test-cases/entities';
