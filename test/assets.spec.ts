@@ -15,11 +15,9 @@ describe('Assets functionality', () => {
       const expectedAssetsData = require('./assets-fixtures/world-50m.json');
       const reader = getDDFCsvReaderObject();
 
-      reader.init({
-        path: './test/assets-fixtures'
-      });
+      reader.init({});
 
-      const result = await reader.getAsset('world-50m.json');
+      const result = await reader.getAsset('./test/assets-fixtures/world-50m.json');
 
       expect(result).to.deep.equal(expectedAssetsData);
     });

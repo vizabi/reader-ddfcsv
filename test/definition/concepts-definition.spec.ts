@@ -2,16 +2,13 @@ import * as chai from 'chai';
 import { getDDFCsvReaderObject } from '../../src/index';
 import {
   BASE_PATH,
-  checkExpectations,
-  EMPTY_TRANSLATIONS_PATH, expectedConcepts, expectPromiseRejection,
-  EXPECTS_EXACTLY_ONE_ERROR,
-  getAmountOfErrors,
+  EMPTY_TRANSLATIONS_PATH,
+  expectPromiseRejection,
   GLOBALIS_PATH,
-  notExpectedError,
   selectKeyClauseContainsUnavailableItems,
   selectKeyClauseMustHaveOnly1Item,
   selectValueClauseContainsUnavailableItems1,
-  tooManyQueryDefinitionErrors, WS_TESTING_PATH
+  WS_TESTING_PATH
 } from '../common';
 import { RESERVED_CONCEPT, RESERVED_CONCEPT_TYPE, RESERVED_DOMAIN, RESERVED_DRILL_UP } from 'ddf-query-validator';
 import { description, initData, testsDescriptors } from '../../src/test-cases/concepts';
@@ -42,9 +39,10 @@ describe('Concepts definition errors in query', () => {
     it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and 'ar-SA' language`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: path.join(BASE_PATH, GLOBALIS_PATH, 'master-HEAD') });
+      reader.init({});
 
-      const result = await reader.read({
+      const query = {
+        repositoryPath: path.join(BASE_PATH, GLOBALIS_PATH, 'master-HEAD'),
         language: 'ar-SA',
         select: {
           key: [ 'concept' ],
@@ -59,7 +57,8 @@ describe('Concepts definition errors in query', () => {
           ]
         },
         order_by: [ 'concept', { description: 'asc' } ]
-      });
+      };
+      const result = await reader.read(query);
 
       expect(result.length).to.be.equal(8);
     });
@@ -67,16 +66,18 @@ describe('Concepts definition errors in query', () => {
     it(`when requests only one column '${BASE_PATH + GLOBALIS_PATH}' dataset with no \'select.value\'`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: path.join(BASE_PATH, GLOBALIS_PATH, 'master-HEAD') });
+      reader.init({});
 
-      const result = await reader.read({
+      const query = {
+        repositoryPath: path.join(BASE_PATH, GLOBALIS_PATH, 'master-HEAD'),
         select: {
           key: [ 'concept' ]
         },
         from: 'concepts',
         where: {},
         order_by: [ 'concept' ]
-      });
+      };
+      const result = await reader.read(query);
 
       expect(result.length).to.be.equal(590);
     });
@@ -84,9 +85,10 @@ describe('Concepts definition errors in query', () => {
     it(`when requests only one column '${BASE_PATH + GLOBALIS_PATH}' dataset with empty \'select.value\'`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: path.join(BASE_PATH, GLOBALIS_PATH, 'master-HEAD') });
+      reader.init({});
 
-      const result = await reader.read({
+      const query = {
+        repositoryPath: path.join(BASE_PATH, GLOBALIS_PATH, 'master-HEAD'),
         select: {
           key: [ 'concept' ],
           value: []
@@ -94,7 +96,8 @@ describe('Concepts definition errors in query', () => {
         from: 'concepts',
         where: {},
         order_by: [ 'concept' ]
-      });
+      };
+      const result = await reader.read(query);
 
       expect(result.length).to.be.equal(590);
     });
@@ -102,9 +105,10 @@ describe('Concepts definition errors in query', () => {
     it(`when requests \'${BASE_PATH + EMPTY_TRANSLATIONS_PATH}\' dataset without \'en\' language in datapackage.json`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: path.join(BASE_PATH, EMPTY_TRANSLATIONS_PATH, 'master-HEAD') });
+      reader.init({});
 
-      const result = await reader.read({
+      const query = {
+        repositoryPath: path.join(BASE_PATH, EMPTY_TRANSLATIONS_PATH, 'master-HEAD'),
         from: 'concepts',
         language: 'en',
         select: {
@@ -113,7 +117,8 @@ describe('Concepts definition errors in query', () => {
         },
         where: {},
         dataset: EMPTY_TRANSLATIONS_PATH
-      });
+      };
+      const result = await reader.read(query);
 
       expect(result.length).to.equal(595);
     });
@@ -127,6 +132,7 @@ describe('Concepts definition errors in query', () => {
       reader.init({ path: `${BASE_PATH}${WS_TESTING_PATH}/master-HEAD` });
 
       const query = {
+        repositoryPath: `${BASE_PATH}${WS_TESTING_PATH}/master-HEAD`,
         select: {
           key: [ 'failed_concept' ],
           value: [ 'concept_type', 'name', 'domain' ]
@@ -145,9 +151,10 @@ describe('Concepts definition errors in query', () => {
     it('when \'key\' property has many items (structure error)', async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: `${BASE_PATH}${WS_TESTING_PATH}/master-HEAD` });
+      reader.init({});
 
       const query = {
+        repositoryPath: `${BASE_PATH}${WS_TESTING_PATH}/master-HEAD`,
         from: 'concepts', select: { key: [ 'concept', 'failed_concept' ] }
       };
 
@@ -161,9 +168,10 @@ describe('Concepts definition errors in query', () => {
 
     it('when \'value\' property has items that is absent in dataset', async () => {
       const reader = getDDFCsvReaderObject();
-      reader.init({ path: `${BASE_PATH}${WS_TESTING_PATH}/master-HEAD` });
+      reader.init({});
 
       const query = {
+        repositoryPath: `${BASE_PATH}${WS_TESTING_PATH}/master-HEAD`,
         from: 'concepts',
         select: {
           key: [ 'concept' ],

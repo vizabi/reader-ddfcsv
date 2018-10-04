@@ -28,6 +28,6 @@ export class GithubFileReader implements IReader {
     this.recordTransformer = recordTransformer;
   }
 
-  readText(filePath, onFileRead) {
+  readText(filePath, onFileRead, options: object) {
   }
 }

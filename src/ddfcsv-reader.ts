@@ -25,28 +25,30 @@ export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
         this.reader = ddfCsvReader(this.logger);
       },
 
-      async getAsset (asset) {
-        const isJsonAsset = asset.slice(-'.json'.length) === '.json';
-        const assetPath = `${this._basePath}/${asset}`;
-
+      async getFile (filePath: string, isJsonFile: boolean, options: object): Promise<any> {
         return new Promise((resolve, reject) => {
-          this.fileReader.readText(assetPath, (err, data) => {
+          this.fileReader.readText(filePath, (err, data) => {
             if (err) {
-              reject(err);
-              return;
+              return reject(err);
             }
 
-            if (isJsonAsset) {
-              try {
-                resolve(JSON.parse(data));
-              } catch (jsonErr) {
-                reject(err);
+            try {
+              if (isJsonFile) {
+                return resolve(JSON.parse(data));
               }
-            } else {
-              resolve(data);
+
+              return resolve(data);
+            } catch (jsonErr) {
+              return reject(jsonErr);
             }
-          });
+          }, options);
         });
+      },
+
+      async getAsset (assetPath): Promise<any> {
+        const isJsonAsset = assetPath.slice(-'.json'.length) === '.json';
+
+        return await this.getFile(assetPath, isJsonAsset);
       },
 
       async read (queryParam, parsers) {
@@ -54,7 +56,7 @@ export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
 
         try {
           result = await this.reader.query(queryParam, {
-            basePath: this._basePath,
+            basePath: queryParam.repositoryPath,
             fileReader: this.fileReader,
             logger: this.logger,
             conceptsLookup: new Map<string, any>()

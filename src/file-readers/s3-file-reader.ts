@@ -18,12 +18,13 @@ export class S3FileReader implements IReader {
     this.recordTransformer = recordTransformer;
   }
 
-  readText(filePath, onFileRead) {
-    const params = {
+  readText(filePath, onFileRead, options: object = {}) {
+    const params = Object.assign({
       Key: filePath,
       Bucket: process.env.S3_BUCKET
-    };
-    s3.getObject(params, function (error: AWSError, data: S3.Types.GetObjectOutput) {
+    }, options);
+
+    s3.getObject(params, function(error: AWSError, data: S3.Types.GetObjectOutput) {
       if (error) {
         return onFileRead(`[${filePath}] ${JSON.stringify(params)}: ${error.stack}`);
       }

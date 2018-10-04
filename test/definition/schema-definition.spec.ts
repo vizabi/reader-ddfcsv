@@ -1,11 +1,11 @@
 import * as chai from 'chai';
 import { getDDFCsvReaderObject } from '../../src/index';
 import {
-  BASE_PATH,
+  BASE_PATH, expectPromiseRejection,
   EXPECTS_EXACTLY_ONE_ERROR,
   getAmountOfErrors, GLOBALIS_PATH,
   notExpectedError,
-  selectKeyClauseContainsUnavailableItems,
+  selectKeyClauseContainsUnavailableItems, selectValueClauseContainsUnavailableItems1,
   selectValueClauseContainsUnavailableItems2,
   tooManyQueryDefinitionErrors, WS_TESTING_PATH
 } from '../common';
@@ -18,9 +18,10 @@ describe('Schemas definition errors in query', () => {
     it(`when requests \'concepts.schema\' in \'${BASE_PATH + GLOBALIS_PATH}\' dataset with no \'select.value\'`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
+      reader.init({ });
 
       const query = {
+        repositoryPath: BASE_PATH + GLOBALIS_PATH + '/master-HEAD',
         select: {
           key: [ 'key', 'value' ]
         },
@@ -35,9 +36,10 @@ describe('Schemas definition errors in query', () => {
     it(`when requests \'concepts.schema\' in \'${BASE_PATH + GLOBALIS_PATH}\' dataset with empty \'select.value\'`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
+      reader.init({ });
 
       const query = {
+        repositoryPath: BASE_PATH + GLOBALIS_PATH + '/master-HEAD',
         select: {
           key: [ 'key', 'value' ],
           value: []
@@ -51,9 +53,10 @@ describe('Schemas definition errors in query', () => {
     it(`when requests \'entities.schema\' in \'${BASE_PATH + GLOBALIS_PATH}\' dataset with \'select.value\'`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
+      reader.init({ });
 
       const query = {
+        repositoryPath: BASE_PATH + GLOBALIS_PATH + '/master-HEAD',
         select: {
           key: [ 'key', 'value' ],
           value: [ 'value' ]
@@ -67,9 +70,10 @@ describe('Schemas definition errors in query', () => {
     it(`when requests \'datapoints.schema\' in \'${BASE_PATH + GLOBALIS_PATH}\' dataset with \'select.value\'`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
+      reader.init({ });
 
       const query = {
+        repositoryPath: BASE_PATH + GLOBALIS_PATH + '/master-HEAD',
         select: {
           key: [ 'key', 'value' ],
           value: [ 'value' ]
@@ -83,9 +87,10 @@ describe('Schemas definition errors in query', () => {
     it(`when requests \'*.schema\' in \'${BASE_PATH + GLOBALIS_PATH}\' dataset with \'select.value\'`, async () => {
       const reader = getDDFCsvReaderObject();
 
-      reader.init({ path: BASE_PATH + GLOBALIS_PATH + '/master-HEAD' });
+      reader.init({ });
 
       const query = {
+        repositoryPath: BASE_PATH + GLOBALIS_PATH + '/master-HEAD',
         select: {
           key: [ 'key', 'value' ],
           value: [ 'value' ]
@@ -99,49 +104,47 @@ describe('Schemas definition errors in query', () => {
 
   describe('should be produced only for \'select\' section', () => {
     [ DATAPOINTS, ENTITIES, CONCEPTS ].forEach((queryType: string) => {
-      it('when \'key\' property has item that is absent in dataset', done => {
+      it('when \'key\' property has item that is absent in dataset', async () => {
         const reader = getDDFCsvReaderObject();
 
-        reader.init({ path: BASE_PATH + WS_TESTING_PATH + '/master-HEAD' });
+        reader.init({ });
 
-        reader.read({
+        const query = {
+          repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
           select: {
             key: [ 'failed_concept', 'value' ]
           },
           from: `${queryType}.schema`
-        })
-          .then(() => done(notExpectedError))
-          .catch(error => {
+        };
 
-            expect(error).to.match(tooManyQueryDefinitionErrors);
-            expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-            expect(error.toString()).to.match(selectKeyClauseContainsUnavailableItems);
-
-            done();
-          });
+        await expectPromiseRejection({
+          promiseFunction: reader.read.bind(reader),
+          args: [ query ],
+          expectedErrors: [ selectKeyClauseContainsUnavailableItems ],
+          type: 'definitions'
+        });
       });
 
-      it('when \'value\' property has item that is absent in dataset', done => {
+      it('when \'value\' property has item that is absent in dataset', async () => {
         const reader = getDDFCsvReaderObject();
 
-        reader.init({ path: BASE_PATH + WS_TESTING_PATH + '/master-HEAD' });
+        reader.init({ });
 
-        reader.read({
+        const query = {
+          repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
           select: {
             key: [ 'key', 'value' ],
             value: [ 'failed_concept', 'key', 'failed_concept2', 'value', 'concept' ]
           },
           from: `${queryType}.schema`
-        })
-          .then(() => done(notExpectedError))
-          .catch(error => {
+        };
 
-            expect(error).to.match(tooManyQueryDefinitionErrors);
-            expect(getAmountOfErrors(error)).to.equals(EXPECTS_EXACTLY_ONE_ERROR);
-            expect(error.toString()).to.match(selectValueClauseContainsUnavailableItems2);
-
-            done();
-          });
+        await expectPromiseRejection({
+          promiseFunction: reader.read.bind(reader),
+          args: [ query ],
+          expectedErrors: [ selectValueClauseContainsUnavailableItems2 ],
+          type: 'definitions'
+        });
       });
     });
   });
