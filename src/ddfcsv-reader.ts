@@ -1,8 +1,8 @@
-import * as isNil from 'lodash.isnil';
-import * as isObject from 'lodash.isobject';
+import * as isEmpty from 'lodash.isempty';
 import { ddfCsvReader } from './ddf-csv';
 import { IReader } from './interfaces';
 import { getRepositoryPath } from 'ddf-query-validator';
+import { DdfCsvError } from './ddfcsv-error';
 
 export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
   return function(externalFileReader?: IReader, logger?: any) {
@@ -45,8 +45,13 @@ export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
         });
       },
 
-      async getAsset (assetPath): Promise<any> {
-        const isJsonAsset = assetPath.slice(-'.json'.length) === '.json';
+      async getAsset (filePath: string, repositoryPath: string = ''): Promise<any> {
+        if (isEmpty(repositoryPath) && isEmpty(this._basePath)) {
+          throw new DdfCsvError(`Neither initial 'path' nor 'repositoryPath' as a second param were found.`, `Happens in 'getAsset' function`, filePath);
+        }
+
+        const assetPath = `${repositoryPath || this._basePath}/${filePath}`;
+        const isJsonAsset = (assetPath).slice(-'.json'.length) === '.json';
 
         return await this.getFile(assetPath, isJsonAsset);
       },
@@ -55,8 +60,12 @@ export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
         let result;
 
         try {
+          if (isEmpty(queryParam.repositoryPath) && isEmpty(this._basePath)) {
+            throw new DdfCsvError(`Neither initial 'path' nor 'repositoryPath' in query were found.`, JSON.stringify(queryParam));
+          }
+
           result = await this.reader.query(queryParam, {
-            basePath: queryParam.repositoryPath,
+            basePath: queryParam.repositoryPath || this._basePath,
             fileReader: this.fileReader,
             logger: this.logger,
             conceptsLookup: new Map<string, any>()

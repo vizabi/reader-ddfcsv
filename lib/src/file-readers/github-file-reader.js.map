@@ -1,1 +1,0 @@
-{"version":3,"file":"github-file-reader.js","sourceRoot":"","sources":["../../../src/file-readers/github-file-reader.ts"],"names":[],"mappings":";;AAuBA,MAAa,gBAAgB;IAG3B,oBAAoB,CAAC,iBAAiB;QACpC,IAAI,CAAC,iBAAiB,GAAG,iBAAiB,CAAC;IAC7C,CAAC;IAED,QAAQ,CAAC,QAAQ,EAAE,UAAU,EAAE,OAAe;IAC9C,CAAC;CACF;AATD,4CASC"}
