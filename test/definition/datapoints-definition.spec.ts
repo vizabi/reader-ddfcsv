@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import { getDDFCsvReaderObject } from '../../src/index';
+import * as _ from 'lodash';
 import {
   BASE_PATH,
   BIG_PATH,
@@ -746,12 +747,13 @@ describe('Datapoints definition errors in query', () => {
       });
     });
 
-    it('when \'value\' property has item that is absent in dataset', async () => {
+    it('when debug mode and \'value\' property has item that is absent in dataset', async () => {
       const reader = getDDFCsvReaderObject();
       reader.init({});
 
       const query = {
         repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
+        debug: true,
         from: 'datapoints',
         select: { key: [ 'company', 'anno' ], value: [ 'failed_measure' ] }
       };
@@ -762,6 +764,20 @@ describe('Datapoints definition errors in query', () => {
         expectedErrors: [ selectValueClauseContainsUnavailableItems ],
         type: 'definitions'
       });
+    });
+
+    it('when \'value\' property has item that is absent in dataset', async () => {
+      const reader = getDDFCsvReaderObject();
+      reader.init({});
+
+      const query = {
+        repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
+        from: 'datapoints',
+        select: { key: [ 'company', 'anno' ], value: [ 'failed_measure' ] }
+      };
+
+      const result = await reader.read(query);
+      expect(result).to.be.deep.equal([]);
     });
   });
 
