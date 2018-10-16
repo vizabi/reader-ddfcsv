@@ -1,7 +1,6 @@
 import * as includes from 'lodash.includes';
 import * as cloneDeep from 'lodash.clonedeep';
 import * as isEmpty from 'lodash.isempty';
-import * as concat from 'lodash.concat';
 import { getAppropriatePlugin } from './resource-selection-optimizer';
 import { CSV_PARSING_ERROR, DDF_ERROR, DdfCsvError, FILE_READING_ERROR, JSON_PARSING_ERROR } from './ddfcsv-error';
 import { getFilePath, isSchemaQuery, validateQueryDefinitions, validateQueryStructure } from 'ddf-query-validator';
@@ -171,7 +170,7 @@ export function ddfCsvReader (logger?: any) {
           optimalFilesSet = [];
           const files = await appropriatePlugin.getRecommendedFilesSet();
           optimalFilesSet = files;
-          queryParam.optimalFilesSet = concat([], files, queryParam.optimalFilesSet);
+          queryParam.optimalFilesSet = [].concat(files, queryParam.optimalFilesSet);
         }
         data = await queryData(queryParam, baseOptions);
       }
