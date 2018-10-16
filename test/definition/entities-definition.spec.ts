@@ -238,13 +238,14 @@ describe('Entities definition errors in query', () => {
       });
     });
 
-    it('when \'value\' property has items that is absent in dataset', async () => {
+    it('when debug mode and  \'value\' property has items that is absent in dataset', async () => {
       const reader = getDDFCsvReaderObject();
       reader.init({});
 
       const query = {
         repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
         from: 'entities',
+        debug: true,
         select: {
           key: [ 'company' ],
           value: [ 'failed_concept', 'english_speaking', 'company_scale', 'failed_concept2', 'lines_of_code' ]
@@ -259,5 +260,21 @@ describe('Entities definition errors in query', () => {
       });
     });
 
+    it('when \'value\' property has items that is absent in dataset', async () => {
+      const reader = getDDFCsvReaderObject();
+      reader.init({});
+
+      const query = {
+        repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
+        from: 'entities',
+        select: {
+          key: [ 'company' ],
+          value: [ 'failed_concept', 'english_speaking', 'company_scale', 'failed_concept2', 'lines_of_code' ]
+        }
+      };
+
+      const result = await reader.read(query);
+      expect(result).to.be.deep.equal([]);
+    });
   });
 });

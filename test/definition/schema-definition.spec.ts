@@ -104,7 +104,7 @@ describe('Schemas definition errors in query', () => {
 
   describe('should be produced only for \'select\' section', () => {
     [ DATAPOINTS, ENTITIES, CONCEPTS ].forEach((queryType: string) => {
-      it('when \'key\' property has item that is absent in dataset', async () => {
+      it(`when \'from\' equals to ${queryType} and \'key\' property has item that is absent in dataset`, async () => {
         const reader = getDDFCsvReaderObject();
 
         reader.init({ });
@@ -125,13 +125,32 @@ describe('Schemas definition errors in query', () => {
         });
       });
 
-      it('when \'value\' property has item that is absent in dataset', async () => {
+      it(`when \'from\' equals to ${queryType} \'value\' property has item that is absent in dataset`, async () => {
         const reader = getDDFCsvReaderObject();
 
         reader.init({ });
 
         const query = {
           repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
+          select: {
+            key: [ 'key', 'value' ],
+            value: [ 'failed_concept', 'key', 'failed_concept2', 'value', 'concept' ]
+          },
+          from: `${queryType}.schema`
+        };
+
+        const result = await reader.read(query);
+        expect(result).to.be.not.empty;
+      });
+
+      it(`when debug mode and \'from\' equals to ${queryType} \'value\' property has item that is absent in dataset`, async () => {
+        const reader = getDDFCsvReaderObject();
+
+        reader.init({ });
+
+        const query = {
+          repositoryPath: BASE_PATH + WS_TESTING_PATH + '/master-HEAD',
+          debug: true,
           select: {
             key: [ 'key', 'value' ],
             value: [ 'failed_concept', 'key', 'failed_concept2', 'value', 'concept' ]

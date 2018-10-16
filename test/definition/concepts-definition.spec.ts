@@ -166,13 +166,14 @@ describe('Concepts definition errors in query', () => {
       });
     });
 
-    it('when \'value\' property has items that is absent in dataset', async () => {
+    it('when debug mode and \'value\' property has items that is absent in dataset', async () => {
       const reader = getDDFCsvReaderObject();
       reader.init({});
 
       const query = {
         repositoryPath: `${BASE_PATH}${WS_TESTING_PATH}/master-HEAD`,
         from: 'concepts',
+        debug: true,
         select: {
           key: [ 'concept' ],
           value: [ 'domain', 'failed_concept', 'company', 'name', 'lines_of_code', 'failed_concept2' ]
@@ -187,5 +188,21 @@ describe('Concepts definition errors in query', () => {
       });
     });
 
+    it('when \'value\' property has items that is absent in dataset', async () => {
+      const reader = getDDFCsvReaderObject();
+      reader.init({});
+
+      const query = {
+        repositoryPath: `${BASE_PATH}${WS_TESTING_PATH}/master-HEAD`,
+        from: 'concepts',
+        select: {
+          key: [ 'concept' ],
+          value: [ 'domain', 'failed_concept', 'company', 'name', 'lines_of_code', 'failed_concept2' ]
+        }
+      };
+
+      const result = await reader.read(query);
+      expect(result).to.be.not.empty;
+    });
   });
 });

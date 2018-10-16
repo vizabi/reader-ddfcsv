@@ -4,7 +4,7 @@
     "target": "es2017",
     "module": "commonjs",
     "noImplicitAny": false,
-    "outDir": "./lib",
+    "outDir": "./lib/src",
     "preserveConstEnums": true,
     "removeComments": true,
     "typeRoots": ["node_modules/@types"],
@@ -24,7 +24,8 @@
     ]
   },
   "include": [
-    "src/index.ts"
+    "src/index.ts",
+    "src/index-web.ts"
   ],
   "exclude": [
     "dist",
