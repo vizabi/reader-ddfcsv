@@ -4,7 +4,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = () => ({
     mode: 'production',
     entry: {
-        'vizabi-ddfcsv-reader': './lib/index-web.js'
+        'vizabi-ddfcsv-reader': './lib/src/index-web.js'
     },
     output: {
         path: path.join(__dirname, 'dist'),

@@ -24,7 +24,8 @@
     ]
   },
   "include": [
-    "src/index.ts"
+    "src/index.ts",
+    "src/index-web.ts"
   ],
   "exclude": [
     "dist",
