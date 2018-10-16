@@ -1,3 +1,15 @@
+<a name="2.4.1"></a>
+## [2.4.1](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v2.3.1...v2.4.1) (2018-10-16)
+
+
+### Features
+
+* **ddfcsv-reader:** add load file function ([65cd24c](https://github.com/vizabi/vizabi-ddfcsv-reader/commit/65cd24c))
+* **load-file:** add load file function to ddfcsv-reader ([804fa6a](https://github.com/vizabi/vizabi-ddfcsv-reader/commit/804fa6a))
+* **queries processing:** optimize high loaded queries with $nin clause ([cf3405e](https://github.com/vizabi/vizabi-ddfcsv-reader/commit/cf3405e)), closes [#95](https://github.com/vizabi/vizabi-ddfcsv-reader/issues/95)
+
+
+
 <a name="2.4.0"></a>
 # [2.4.0](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v2.3.1...v2.4.0) (2018-10-04)
 
