@@ -18,7 +18,7 @@ module.exports = () => ({
         rules: [
             {
                 test: /\.js$/,
-                exclude: /node_modules\/(?![ddf\-query\-validator])/,
+                exclude: /node_modules/,
                 use: {
                     loader: "babel-loader"
                 }
