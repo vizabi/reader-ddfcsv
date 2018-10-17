@@ -4,6 +4,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = () => ({
     mode: 'production',
     entry: {
+        'babel-polyfill': 'babel-polyfill',
         'vizabi-ddfcsv-reader': './lib/src/index-web.js'
     },
     output: {
@@ -18,9 +19,14 @@ module.exports = () => ({
         rules: [
             {
                 test: /\.js$/,
-                exclude: /node_modules/,
+                exclude: /node_modules\/(?![ddf\-query\-validator])/,
                 use: {
-                    loader: "babel-loader"
+                    loader: "babel-loader",
+                    options: {
+                        presets: ['es2015', 'stage-0'],
+                        plugins: [require('babel-plugin-transform-object-rest-spread')],
+                        babelrc: false
+                    }
                 }
             }
         ]
