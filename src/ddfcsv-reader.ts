@@ -88,6 +88,10 @@ export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
         return result;
       },
 
+      getVerbosityData() {
+        return this.reader.getVerbosityData();
+      },
+
       _prettifyData (data, parsers) {
         return data.map(record => {
           const keys = Object.keys(record);
