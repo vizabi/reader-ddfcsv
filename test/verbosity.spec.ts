@@ -1,11 +1,17 @@
 import * as chai from 'chai';
+import { LogManager, LogLevel, StorageLogger } from 'gapminder-log-manager';
 import { getDDFCsvReaderObject } from '../src/index';
 
 const expect = chai.expect;
 
 describe('verbosity feature', () => {
   it(`1`, async () => {
-    const reader = getDDFCsvReaderObject();
+    const logger = new LogManager('ddfcsv reader', LogLevel.ALL);
+    const storageLogger = new StorageLogger();
+
+    logger.addOutputTo(storageLogger);
+
+    const reader = getDDFCsvReaderObject(null, logger);
 
     reader.init({});
     const query = {
@@ -26,6 +32,6 @@ describe('verbosity feature', () => {
 
     expect(result.length).to.greaterThan(0);
 
-    console.log(JSON.stringify(reader.getVerbosityData(), null, 2));
+    console.log(JSON.stringify(storageLogger.getContent(), null, 2));
   });
 });

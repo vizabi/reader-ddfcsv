@@ -1,31 +1,31 @@
 import * as isEmpty from 'lodash.isempty';
+import { LogManager, LogLevel } from 'gapminder-log-manager';
 import { ddfCsvReader } from './ddf-csv';
 import { IReader } from './interfaces';
 import { getRepositoryPath } from 'ddf-query-validator';
 import { DdfCsvError } from './ddfcsv-error';
 
-export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
-  return function(externalFileReader?: IReader, logger?: any) {
+export function prepareDDFCsvReaderObject(defaultFileReader?: IReader) {
+  return function (externalFileReader?: IReader, logManager?: LogManager) {
     return {
-      init (readerInfo) {
+      init(readerInfo) {
         // TODO: check validity of base path
         this._basePath = readerInfo.path;
 
         this._lastModified = readerInfo._lastModified;
         this.fileReader = externalFileReader || defaultFileReader;
-        this.logger = logger;
+        this.logManager = logManager;
         this.resultTransformer = readerInfo.resultTransformer;
 
         this.readerOptions = {
           basePath: this._basePath,
-          fileReader: this.fileReader,
-          logger: this.logger,
+          fileReader: this.fileReader
         };
 
-        this.reader = ddfCsvReader(this.logger);
+        this.reader = ddfCsvReader(this.logManager);
       },
 
-      async getFile (filePath: string, isJsonFile: boolean, options: object): Promise<any> {
+      async getFile(filePath: string, isJsonFile: boolean, options: object): Promise<any> {
         return new Promise((resolve, reject) => {
           this.fileReader.readText(filePath, (err, data) => {
             if (err) {
@@ -45,7 +45,7 @@ export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
         });
       },
 
-      async getAsset (filePath: string, repositoryPath: string = ''): Promise<any> {
+      async getAsset(filePath: string, repositoryPath: string = ''): Promise<any> {
         if (isEmpty(repositoryPath) && isEmpty(this._basePath)) {
           throw new DdfCsvError(`Neither initial 'path' nor 'repositoryPath' as a second param were found.`, `Happens in 'getAsset' function`, filePath);
         }
@@ -56,7 +56,7 @@ export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
         return await this.getFile(assetPath, isJsonAsset);
       },
 
-      async read (queryParam, parsers) {
+      async read(queryParam, parsers) {
         let result;
 
         try {
@@ -76,11 +76,10 @@ export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
             result = this.resultTransformer(result);
           }
 
-          if (this.logger && this.logger.log) {
-            logger.log(JSON.stringify(queryParam), result.length);
-            logger.log(result);
+          if (this.logManager) {
+            logManager.log(`call read method`, LogLevel.REPLICATION, {queryParam, resultLength: result.length});
+            logManager.log(`call read method`, LogLevel.DEBUG, result);
           }
-
         } catch (error) {
           throw error;
         }
@@ -92,13 +91,13 @@ export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
         return this.reader.getVerbosityData();
       },
 
-      _prettifyData (data, parsers) {
+      _prettifyData(data, parsers) {
         return data.map(record => {
           const keys = Object.keys(record);
 
           keys.forEach(key => {
-            if (parsers[ key ]) {
-              record[ key ] = parsers[ key ](record[ key ]);
+            if (parsers[key]) {
+              record[key] = parsers[key](record[key]);
             }
           });
 

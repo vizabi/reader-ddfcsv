@@ -4,3 +4,4 @@
 --timeout 20000
 --max-old-space-size=8000
 --recursive
+--reporter dot

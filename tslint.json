@@ -19,7 +19,8 @@
     "triple-equals": false,
     "ordered-imports": false,
     "max-line-length": false,
-    "callable-types": false
+    "callable-types": false,
+    "no-bitwise": false
   },
   "rulesDirectory": [
     "tslint-no-unused-expression-chai"

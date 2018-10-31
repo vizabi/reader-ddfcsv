@@ -1,6 +1,7 @@
 import * as includes from 'lodash.includes';
 import * as cloneDeep from 'lodash.clonedeep';
 import * as isEmpty from 'lodash.isempty';
+import { LogManager, LogLevel } from 'gapminder-log-manager';
 import { getAppropriatePlugin } from './resource-selection-optimizer';
 import { CSV_PARSING_ERROR, DDF_ERROR, DdfCsvError, FILE_READING_ERROR, JSON_PARSING_ERROR } from './ddfcsv-error';
 import {
@@ -15,13 +16,7 @@ import { IBaseReaderOptions, IDatapackage } from './interfaces';
 
 const isValidNumeric = val => typeof val !== 'number' && !val ? false : true;
 
-interface IVerbosity {
-  time: string;
-  message: string;
-  data?;
-}
-
-export function ddfCsvReader(logger?: any) {
+export function ddfCsvReader(logManager?: LogManager) {
   const internalConcepts = [
     {concept: 'concept', concept_type: 'string', domain: null},
     {concept: 'concept_type', concept_type: 'string', domain: null}
@@ -48,27 +43,24 @@ export function ddfCsvReader(logger?: any) {
   const keyValueLookup = new Map<string, any>();
   const resourcesLookup = new Map();
 
-  let verbosityData: IVerbosity[] = [];
-  let verbosityMessages: string[] = [];
-  let optimalFilesSet = [];
   let isVerbosity = false;
+  let optimalFilesSet = [];
 
-  function addVerbosity(message: string, data?) {
-    if (isVerbosity) {
-      verbosityData.push({time: new Date().toISOString(), message, data});
-      verbosityMessages.push(message);
+  function log(message: string, data?) {
+    if (logManager) {
+      logManager.log(message, LogLevel.ALL, data);
     }
   }
 
   function loadDataPackage(baseOptions: IBaseReaderOptions): Promise<IDatapackage> {
     const datapackagePath = getFilePath(baseOptions.basePath);
 
-    addVerbosity('datapackage path', datapackagePath);
+    log('datapackage path', datapackagePath);
 
     return new Promise((resolve, reject) => {
       baseOptions.fileReader.readText(datapackagePath, (err, data) => {
         if (err) {
-          addVerbosity('error during reading datapackage file', err);
+          log('error during reading datapackage file', err);
           return reject(new DdfCsvError(FILE_READING_ERROR, err, datapackagePath));
         }
 
@@ -80,7 +72,7 @@ export function ddfCsvReader(logger?: any) {
           buildResourcesLookup(datapackage);
           buildKeyValueLookup(datapackage);
         } catch (parseErr) {
-          addVerbosity('error during parsing datapackage file to JSON', err);
+          log('error during parsing datapackage file to JSON', err);
           return reject(new DdfCsvError(JSON_PARSING_ERROR, parseErr.message, datapackagePath));
         }
 
@@ -102,7 +94,7 @@ export function ddfCsvReader(logger?: any) {
 
     // not using query() to circumvent the conceptPromise resolving
     try {
-      addVerbosity('trying to get concepts data', {conceptQuery});
+      log('trying to get concepts data', {conceptQuery});
 
       const concepts = await queryData(conceptQuery, options);
 
@@ -111,12 +103,12 @@ export function ddfCsvReader(logger?: any) {
       // according to their concept_type
       result = await reparseConcepts(options);
     } catch (error) {
-      addVerbosity('load concepts error', {error});
+      log('load concepts error', {error});
 
       throw error;
     }
 
-    addVerbosity('concepts data loaded');
+    log('concepts data loaded');
 
     return result;
   }
@@ -190,15 +182,13 @@ export function ddfCsvReader(logger?: any) {
 
     keyValueLookup.clear();
     resourcesLookup.clear();
-    verbosityData = [];
-    verbosityMessages = [];
 
     isVerbosity = !!queryParam.verbosity;
 
-    addVerbosity('got query');
+    log('got query');
 
     try {
-      addVerbosity(`query validator is starting$version ${require('ddf-query-validator/package.json').version}`);
+      log(`query validator is starting$version ${require('ddf-query-validator/package.json').version}`);
       await validateQueryStructure(queryParam, baseOptions);
 
       baseOptions.datapackage = await loadDataPackage(baseOptions);
@@ -212,33 +202,27 @@ export function ddfCsvReader(logger?: any) {
 
         if (appropriatePlugin) {
           // todo: provide plugin verbosity functionality
-          addVerbosity('appropriate plugin detected');
+          log('appropriate plugin detected');
 
           optimalFilesSet = [];
           const files = await appropriatePlugin.getRecommendedFilesSet();
           optimalFilesSet = files;
 
-          addVerbosity('optimalFilesSet detected', files);
+          log('optimalFilesSet detected', files);
 
           queryParam.optimalFilesSet = [].concat(files, queryParam.optimalFilesSet);
         }
         data = await queryData(queryParam, baseOptions);
       }
     } catch (error) {
-      addVerbosity('error during query passage', {queryParam, error});
+      log('error during query passage', {queryParam, error});
 
       throw error;
     }
 
-    addVerbosity('passed successfully', {queryParam});
+    log('passed successfully', {queryParam});
 
     return data;
-  }
-
-  function getVerbosityData() {
-    addVerbosity('summary steps', verbosityMessages);
-
-    return verbosityData;
   }
 
   function queryData(queryParam, options) {
@@ -279,7 +263,7 @@ export function ddfCsvReader(logger?: any) {
 
         orderData(queryResult, order_by);
 
-        addVerbosity('query data is ready', {queryParam});
+        log('query data is ready', {queryParam});
 
         return queryResult;
       });
@@ -370,7 +354,7 @@ export function ddfCsvReader(logger?: any) {
   }
 
   function querySchema(queryParam, {datapackage}) {
-    addVerbosity('starting querySchema');
+    log('starting querySchema');
 
     const getSchemaFromCollection = collectionPar => {
       return datapackage.ddfSchema[collectionPar].map(
@@ -381,11 +365,11 @@ export function ddfCsvReader(logger?: any) {
     const collection = queryParam.from.split('.')[0];
 
     if (datapackage.ddfSchema[collection]) {
-      addVerbosity('querySchema collection is', {collection});
+      log('querySchema collection is', {collection});
 
       return getSchemaFromCollection(collection);
     } else if (collection === '*') {
-      addVerbosity('querySchema collection is *');
+      log('querySchema collection is *');
 
       return Object.keys(datapackage.ddfSchema)
         .map(getSchemaFromCollection)
@@ -393,9 +377,9 @@ export function ddfCsvReader(logger?: any) {
     } else {
       const errMessage = `No valid collection (${collection}) for schema query`;
 
-      addVerbosity('querySchema collection error', {errMessage});
+      log('querySchema collection error', {errMessage});
 
-      throwError(new DdfCsvError(DDF_ERROR, errMessage));
+      throw new DdfCsvError(DDF_ERROR, errMessage);
     }
   }
 
@@ -444,7 +428,7 @@ export function ddfCsvReader(logger?: any) {
     if (options.conceptsLookup.get(join.key).concept_type === 'time') {
       // time, no query needed as time values are not explicit in the dataSource
       // assumption: there are no time-properties. E.g. data like <year>,population
-      addVerbosity('join by time', {joinID, join});
+      log('join by time', {joinID, join});
       return Promise.resolve({[joinID]: join.where});
     } else {
       const joinQuery = {
@@ -454,7 +438,7 @@ export function ddfCsvReader(logger?: any) {
       };
       const joinOptions = Object.assign({joinID}, cloneDeep(options));
 
-      addVerbosity('trying to create join filter', {joinQuery, joinOptions});
+      log('trying to create join filter', {joinQuery, joinOptions});
       // entity concept
       return query(joinQuery, joinOptions).then(result => ({
         [joinID]: {
@@ -554,7 +538,7 @@ export function ddfCsvReader(logger?: any) {
         };
         const entitySetFilterOptions = Object.assign({}, cloneDeep(options));
 
-        addVerbosity('trying to create entity set filter', {entitySetFilterQuery, entitySetFilterOptions});
+        log('trying to create entity set filter', {entitySetFilterQuery, entitySetFilterOptions});
 
         return query(entitySetFilterQuery, entitySetFilterOptions)
           .then(result => ({
@@ -578,7 +562,7 @@ export function ddfCsvReader(logger?: any) {
    * @return {Array}              Array of resource objects
    */
   function getResources(key, value?) {
-    addVerbosity('getting resources', {key, value});
+    log('getting resources', {key, value});
 
     // value not given, load all resources for key
     if (!value || value.length === 0) {
@@ -630,7 +614,7 @@ export function ddfCsvReader(logger?: any) {
   function loadResources(key, value, language, options) {
     const resources = getResources(key, value);
 
-    addVerbosity('trying to load resources', {key, value, language});
+    log('trying to load resources', {key, value, language});
 
     return Promise.all([...resources].map(
       resource => loadResource(resource, language, options)
@@ -707,21 +691,13 @@ export function ddfCsvReader(logger?: any) {
             const errStr =
               `JOIN Error: two resources have different data for "${concept}": ${sourceRowStr},${resultRowStr}`;
 
-            throwError(new DdfCsvError(DDF_ERROR, errStr));
+            throw new DdfCsvError(DDF_ERROR, errStr);
           } else {
             resultRow[concept] = sourceRow[concept];
           }
         }
         break;
     }
-  }
-
-  function throwError(error: DdfCsvError) {
-    const currentLogger = logger || console;
-
-    currentLogger.error(error.message);
-
-    throw error;
   }
 
   function createKeyString(key, row = false) {
@@ -738,7 +714,7 @@ export function ddfCsvReader(logger?: any) {
     const filePromises = [];
 
     if (typeof resource.data === 'undefined') {
-      addVerbosity('trying to load resource file', {path: resource.path});
+      log('trying to load resource file', {path: resource.path});
       resource.data = loadFile(resource.path, options);
     }
 
@@ -753,7 +729,7 @@ export function ddfCsvReader(logger?: any) {
 
         // error loading translation file is expected when specific file is not translated
         // more correct would be to only resolve file-not-found errors but current solution is sufficient
-        addVerbosity('trying to load resource translation file', {path: translationPath, options});
+        log('trying to load resource translation file', {path: translationPath, options});
         resource.translations[language] = loadFile(translationPath, options).catch(() => Promise.resolve({}));
       }
 
@@ -766,7 +742,7 @@ export function ddfCsvReader(logger?: any) {
       const primaryKey = resource.schema.primaryKey;
       const data = joinData(primaryKey, 'translation', ...filesData);
 
-      addVerbosity('resource loaded', {resource, primaryKey});
+      log('resource loaded', {resource, primaryKey});
 
       return {data, resource};
     });
@@ -784,16 +760,16 @@ export function ddfCsvReader(logger?: any) {
   function loadFile(filePath, options) {
     const fullFilePath = getFilePath(options.basePath, filePath);
 
-    addVerbosity('trying to load file', {fullFilePath});
+    log('trying to load file', {fullFilePath});
 
     return new Promise((resolve, reject) => {
       options.fileReader.readText(fullFilePath, (err, data) => {
         if (err) {
-          addVerbosity('file read error', {fullFilePath, err});
+          log('file read error', {fullFilePath, err});
           return reject(new DdfCsvError(FILE_READING_ERROR, err, fullFilePath));
         }
 
-        addVerbosity('trying to parse', {fullFilePath});
+        log('trying to parse', {fullFilePath});
 
         Papa.parse(data, {
           header: true,
@@ -812,11 +788,11 @@ export function ddfCsvReader(logger?: any) {
             return includes(['boolean', 'measure'], concept.concept_type);
           },
           complete: result => {
-            addVerbosity('parsing completed successfully (ie file loaded)', {fullFilePath});
+            log('parsing completed successfully (ie file loaded)', {fullFilePath});
             resolve(result);
           },
           error: error => {
-            addVerbosity('parsing error (ie file NOT loaded)', {fullFilePath, error});
+            log('parsing error (ie file NOT loaded)', {fullFilePath, error});
             reject(new DdfCsvError(CSV_PARSING_ERROR, error, filePath));
           }
         });
@@ -863,7 +839,6 @@ export function ddfCsvReader(logger?: any) {
   }
 
   return {
-    query,
-    getVerbosityData
+    query
   };
 }
