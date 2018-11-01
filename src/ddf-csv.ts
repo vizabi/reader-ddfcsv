@@ -180,9 +180,6 @@ export function ddfCsvReader(logManager?: LogManager) {
   async function query(queryParam, baseOptions) {
     let data;
 
-    keyValueLookup.clear();
-    resourcesLookup.clear();
-
     isVerbosity = !!queryParam.verbosity;
 
     log('got query');
@@ -818,9 +815,7 @@ export function ddfCsvReader(logManager?: LogManager) {
   }
 
   function buildKeyValueLookup(datapackagePar) {
-    if (keyValueLookup.size > 0) {
-      return keyValueLookup;
-    }
+    keyValueLookup.clear();
 
     for (const collection in datapackagePar.ddfSchema) {
       datapackagePar.ddfSchema[collection].map(kvPair => {
@@ -834,8 +829,6 @@ export function ddfCsvReader(logManager?: LogManager) {
         }
       });
     }
-
-    return keyValueLookup;
   }
 
   return {
