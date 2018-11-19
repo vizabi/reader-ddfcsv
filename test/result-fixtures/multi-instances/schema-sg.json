@@ -1,0 +1,8380 @@
+[
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "color"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "concept_type"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "tags"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "name_catalog"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "indicator_url"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "description"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "name_short"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "domain"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "scales"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "interpolation"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "drill_up"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "is--country"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "alternative_2"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "alt_5"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "alternative_1"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "main_religion_2008"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "un_state"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "arb4"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "arb5"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "iso3166_1_numeric"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "landlocked"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "god_id"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "arb3"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "longitude"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "g77_and_oecd_countries"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "alternative_3"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "iso3166_1_alpha2"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "arb6"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "income_groups"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "arb1"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "world_6region"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "arb2"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "gwid"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "upper_case_name"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "world_4region"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "gapminder_list"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "latitude"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "alternative_4_cdiac"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "iso3166_1_alpha3"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "iso3166_2"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "pandg"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "unicode_region_subtag"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "is--country"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "alternative_2"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "alt_5"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "alternative_1"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "main_religion_2008"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "un_state"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "arb4"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "arb5"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "iso3166_1_numeric"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "landlocked"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "god_id"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "arb3"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "longitude"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "g77_and_oecd_countries"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "alternative_3"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "iso3166_1_alpha2"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "arb6"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "income_groups"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "arb1"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "world_6region"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "arb2"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "gwid"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "upper_case_name"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "world_4region"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "gapminder_list"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "latitude"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "alternative_4_cdiac"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "iso3166_1_alpha3"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "iso3166_2"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "pandg"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "unicode_region_subtag"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "rank"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "is--g77_and_oecd_countries"
+  },
+  {
+    "key": [
+      "g77_and_oecd_countries"
+    ],
+    "value": "rank"
+  },
+  {
+    "key": [
+      "g77_and_oecd_countries"
+    ],
+    "value": "gwid"
+  },
+  {
+    "key": [
+      "g77_and_oecd_countries"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "g77_and_oecd_countries"
+    ],
+    "value": "is--g77_and_oecd_countries"
+  },
+  {
+    "key": [
+      "global"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "global"
+    ],
+    "value": "topojson"
+  },
+  {
+    "key": [
+      "global"
+    ],
+    "value": "longitude"
+  },
+  {
+    "key": [
+      "global"
+    ],
+    "value": "is--global"
+  },
+  {
+    "key": [
+      "global"
+    ],
+    "value": "latitude"
+  },
+  {
+    "key": [
+      "global"
+    ],
+    "value": "unicode_region_subtag"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "topojson"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "is--global"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "is--income_groups"
+  },
+  {
+    "key": [
+      "income_groups"
+    ],
+    "value": "gwid"
+  },
+  {
+    "key": [
+      "income_groups"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "income_groups"
+    ],
+    "value": "rank"
+  },
+  {
+    "key": [
+      "income_groups"
+    ],
+    "value": "is--income_groups"
+  },
+  {
+    "key": [
+      "landlocked"
+    ],
+    "value": "gwid"
+  },
+  {
+    "key": [
+      "landlocked"
+    ],
+    "value": "is--landlocked"
+  },
+  {
+    "key": [
+      "landlocked"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "landlocked"
+    ],
+    "value": "rank"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "is--landlocked"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "is--main_religion_2008"
+  },
+  {
+    "key": [
+      "main_religion_2008"
+    ],
+    "value": "gwid"
+  },
+  {
+    "key": [
+      "main_religion_2008"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "main_religion_2008"
+    ],
+    "value": "rank"
+  },
+  {
+    "key": [
+      "main_religion_2008"
+    ],
+    "value": "is--main_religion_2008"
+  },
+  {
+    "key": [
+      "world_4region"
+    ],
+    "value": "color"
+  },
+  {
+    "key": [
+      "world_4region"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "world_4region"
+    ],
+    "value": "longitude"
+  },
+  {
+    "key": [
+      "world_4region"
+    ],
+    "value": "name_short"
+  },
+  {
+    "key": [
+      "world_4region"
+    ],
+    "value": "name_long"
+  },
+  {
+    "key": [
+      "world_4region"
+    ],
+    "value": "description"
+  },
+  {
+    "key": [
+      "world_4region"
+    ],
+    "value": "shape_lores_svg"
+  },
+  {
+    "key": [
+      "world_4region"
+    ],
+    "value": "is--world_4region"
+  },
+  {
+    "key": [
+      "world_4region"
+    ],
+    "value": "rank"
+  },
+  {
+    "key": [
+      "world_4region"
+    ],
+    "value": "latitude"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "color"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "name_short"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "name_long"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "description"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "shape_lores_svg"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "is--world_4region"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "is--world_6region"
+  },
+  {
+    "key": [
+      "world_6region"
+    ],
+    "value": "color"
+  },
+  {
+    "key": [
+      "world_6region"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "world_6region"
+    ],
+    "value": "is--world_6region"
+  },
+  {
+    "key": [
+      "world_6region"
+    ],
+    "value": "longitude"
+  },
+  {
+    "key": [
+      "world_6region"
+    ],
+    "value": "name_short"
+  },
+  {
+    "key": [
+      "world_6region"
+    ],
+    "value": "name_long"
+  },
+  {
+    "key": [
+      "world_6region"
+    ],
+    "value": "description"
+  },
+  {
+    "key": [
+      "world_6region"
+    ],
+    "value": "shape_lores_svg"
+  },
+  {
+    "key": [
+      "world_6region"
+    ],
+    "value": "rank"
+  },
+  {
+    "key": [
+      "world_6region"
+    ],
+    "value": "latitude"
+  },
+  {
+    "key": [
+      "tag"
+    ],
+    "value": "parent"
+  },
+  {
+    "key": [
+      "tag"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "20120905_extreme_poverty_percent_people_below_125_a_day"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "20120905_extreme_poverty_percent_people_below_125_a_day"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "adults_with_hiv_percent_age_15_49"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "adults_with_hiv_percent_age_15_49"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "age_at_1st_marriage_women"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "age_at_1st_marriage_women"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "aged_15_24_employment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "aged_15_24_employment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "aged_15_24_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "aged_15_24_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "aged_15_64_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "aged_15_64_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "aged_15plus_employment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "aged_15plus_employment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "aged_15plus_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "aged_15plus_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "aged_15plus_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "aged_15plus_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "aged_25_54_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "aged_25_54_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "aged_25_54_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "aged_25_54_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "aged_55plus_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "aged_55plus_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "aged_65plus_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "aged_65plus_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "agricultural_land_percent_of_land_area"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "agricultural_land_percent_of_land_area"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "agricultural_water_withdrawal_percent_of_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "agricultural_water_withdrawal_percent_of_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "agriculture_percent_of_gdp"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "agriculture_percent_of_gdp"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "agriculture_workers_percent_of_labour_force"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "agriculture_workers_percent_of_labour_force"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "aid_given_2007_us"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "aid_given_2007_us"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "aid_given_per_person_2007_us"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "aid_given_per_person_2007_us"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "aid_given_percent_of_gni"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "aid_given_percent_of_gni"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "aid_received_per_person_current_us"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "aid_received_per_person_current_us"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "aid_received_percent_of_gni"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "aid_received_percent_of_gni"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "aid_received_total_us_inflation_adjusted"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "aid_received_total_us_inflation_adjusted"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "alcohol_consumption_per_adult_15plus_litres"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "alcohol_consumption_per_adult_15plus_litres"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "all_causes_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "all_causes_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "all_causes_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "all_causes_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "all_causes_deaths_in_newborn_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "all_causes_deaths_in_newborn_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "all_causes_deaths_in_newborn_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "all_causes_deaths_in_newborn_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "all_forms_of_tb_deaths_per_100000_estimated"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "all_forms_of_tb_deaths_per_100000_estimated"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "all_forms_of_tb_detection_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "all_forms_of_tb_detection_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "all_forms_of_tb_detection_rate_percent_dots_only"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "all_forms_of_tb_detection_rate_percent_dots_only"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "all_forms_of_tb_existing_cases_per_100000_estimated"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "all_forms_of_tb_existing_cases_per_100000_estimated"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "all_forms_of_tb_new_cases_per_100000_estimated"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "all_forms_of_tb_new_cases_per_100000_estimated"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "all_forms_of_tb_new_cases_per_100000_reported"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "all_forms_of_tb_new_cases_per_100000_reported"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "all_forms_of_tb_number_of_deaths_estimated"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "all_forms_of_tb_number_of_deaths_estimated"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "all_forms_of_tb_number_of_existing_cases_estimated"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "all_forms_of_tb_number_of_existing_cases_estimated"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "all_forms_of_tb_number_of_new_cases_estimated"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "all_forms_of_tb_number_of_new_cases_estimated"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "all_forms_of_tb_number_of_new_cases_reported"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "all_forms_of_tb_number_of_new_cases_reported"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "alternative_gdp_per_capita_ppp_pwt_7_1"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "alternative_gdp_per_capita_ppp_pwt_7_1"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "alternative_gdp_per_capita_ppp_pwt_8_0"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "alternative_gdp_per_capita_ppp_pwt_8_0"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "alternative_gdp_per_capita_ppp_wb"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "alternative_gdp_per_capita_ppp_wb"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "alternative_gdppercapita_ppp_inflation_adjusted_from_pwt"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "alternative_gdppercapita_ppp_inflation_adjusted_from_pwt"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "alternative_poverty_percent_below_nationally_defined_poverty"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "alternative_poverty_percent_below_nationally_defined_poverty"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "annual_hiv_deaths_number_all_ages"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "annual_hiv_deaths_number_all_ages"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "armed_forces_personnel_percent_of_labor_force"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "armed_forces_personnel_percent_of_labor_force"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "armed_forces_personnel_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "armed_forces_personnel_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "arms_exports_us_inflation_adjusted"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "arms_exports_us_inflation_adjusted"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "arms_imports_us_inflation_adjusted"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "arms_imports_us_inflation_adjusted"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "art_coverage_percent_cd4_l_350"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "art_coverage_percent_cd4_l_350"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "average_age_of_dollar_billionaires_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "average_age_of_dollar_billionaires_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "bad_teeth_per_child_12_yr"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "bad_teeth_per_child_12_yr"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "battle_deaths_per_100_000"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "battle_deaths_per_100_000"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "biomass_stock_in_forest_tons"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "biomass_stock_in_forest_tons"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "birth_asphyxia_deaths_in_newborn_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "birth_asphyxia_deaths_in_newborn_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "birth_asphyxia_deaths_in_newborn_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "birth_asphyxia_deaths_in_newborn_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "births_attended_by_skilled_health_staff_percent_of_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "births_attended_by_skilled_health_staff_percent_of_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "blood_pressure_sbp_men_mmhg"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "blood_pressure_sbp_men_mmhg"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "blood_pressure_sbp_women_mmhg"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "blood_pressure_sbp_women_mmhg"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "body_mass_index_bmi_men_kgperm2"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "body_mass_index_bmi_men_kgperm2"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "body_mass_index_bmi_women_kgperm2"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "body_mass_index_bmi_women_kgperm2"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "breast_cancer_deaths_per_100000_women"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "breast_cancer_deaths_per_100000_women"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "breast_cancer_new_cases_per_100000_women"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "breast_cancer_new_cases_per_100000_women"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "breast_cancer_number_of_female_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "breast_cancer_number_of_female_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "breast_cancer_number_of_new_female_cases"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "breast_cancer_number_of_new_female_cases"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "broadband_subscribers"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "broadband_subscribers"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "broadband_subscribers_per_100_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "broadband_subscribers_per_100_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "burns_deaths_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "burns_deaths_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "car_deaths_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "car_deaths_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "cars_trucks_and_buses_per_1000_persons"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "cars_trucks_and_buses_per_1000_persons"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "cell_phones_per_100_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "cell_phones_per_100_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "cell_phones_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "cell_phones_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "central_bank_discount_rate_annual_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "central_bank_discount_rate_annual_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "cervical_cancer_deaths_per_100000_women"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "cervical_cancer_deaths_per_100000_women"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "cervical_cancer_new_cases_per_100000_women"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "cervical_cancer_new_cases_per_100000_women"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "cervical_cancer_number_of_female_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "cervical_cancer_number_of_female_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "cervical_cancer_number_of_new_female_cases"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "cervical_cancer_number_of_new_female_cases"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "child_mortality_0_5_year_olds_dying_per_1000_born"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "child_mortality_0_5_year_olds_dying_per_1000_born"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "child_mortality_0_5_year_olds_more_years_version_7"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "child_mortality_0_5_year_olds_more_years_version_7"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "children_and_elderly_per_100_adults"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "children_and_elderly_per_100_adults"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "children_out_of_school_primary"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "children_out_of_school_primary"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "children_out_of_school_primary_female"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "children_out_of_school_primary_female"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "children_out_of_school_primary_male"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "children_out_of_school_primary_male"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "children_per_woman_temporary_update"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "children_per_woman_temporary_update"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "children_per_woman_total_fertility"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "children_per_woman_total_fertility"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "children_per_woman_total_fertility_with_projections"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "children_per_woman_total_fertility_with_projections"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "cholesterol_fat_in_blood_men_mmolperl"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "cholesterol_fat_in_blood_men_mmolperl"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "cholesterol_fat_in_blood_women_mmolperl"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "cholesterol_fat_in_blood_women_mmolperl"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "co2_emissions_tonnes_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "co2_emissions_tonnes_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "co2_intensity_of_economic_output_kg_co2_per_2011_ppp_of_gdp"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "co2_intensity_of_economic_output_kg_co2_per_2011_ppp_of_gdp"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "coal_consumption_per_cap"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "coal_consumption_per_cap"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "coal_consumption_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "coal_consumption_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "colonandrectum_cancer_deaths_per_100000_men"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "colonandrectum_cancer_deaths_per_100000_men"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "colonandrectum_cancer_deaths_per_100000_women"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "colonandrectum_cancer_deaths_per_100000_women"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "colonandrectum_cancer_new_cases_per_100000_men"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "colonandrectum_cancer_new_cases_per_100000_men"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "colonandrectum_cancer_new_cases_per_100000_women"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "colonandrectum_cancer_new_cases_per_100000_women"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "colonandrectum_cancer_number_of_female_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "colonandrectum_cancer_number_of_female_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "colonandrectum_cancer_number_of_male_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "colonandrectum_cancer_number_of_male_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "colonandrectum_cancer_number_of_new_female_cases"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "colonandrectum_cancer_number_of_new_female_cases"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "colonandrectum_cancer_number_of_new_male_cases"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "colonandrectum_cancer_number_of_new_male_cases"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "congenital_deaths_in_newborn_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "congenital_deaths_in_newborn_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "congenital_deaths_in_newborn_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "congenital_deaths_in_newborn_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "contraceptive_use_percent_of_women_ages_15_49"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "contraceptive_use_percent_of_women_ages_15_49"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "corruption_perception_index_cpi"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "corruption_perception_index_cpi"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "crude_birth_rate_births_per_1000_population"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "crude_birth_rate_births_per_1000_population"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "crude_death_rate_deaths_per_1000_population"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "crude_death_rate_deaths_per_1000_population"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "cumulative_co2_emissions_tonnes"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "cumulative_co2_emissions_tonnes"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "data_method_maternal_mortality"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "data_method_maternal_mortality"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "data_quality_children_per_woman"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "data_quality_children_per_woman"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "data_quality_income_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "data_quality_income_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "data_quality_life_expectancy"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "data_quality_life_expectancy"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "data_quality_population"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "data_quality_population"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "dead_kids_per_woman"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "dead_kids_per_woman"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "debt_servicing_costs_percent_of_exports_and_net_income_from_abroad"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "debt_servicing_costs_percent_of_exports_and_net_income_from_abroad"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "debt_to_foreigners_by_public_and_private_percent_of_gni"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "debt_to_foreigners_by_public_and_private_percent_of_gni"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "democracy_score_use_as_color"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "democracy_score_use_as_color"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "desalinated_water_produced_billion_cu_meters"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "desalinated_water_produced_billion_cu_meters"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "diarrhoeal_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "diarrhoeal_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "diarrhoeal_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "diarrhoeal_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "diarrhoeal_deaths_in_newborn_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "diarrhoeal_deaths_in_newborn_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "diarrhoeal_deaths_in_newborn_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "diarrhoeal_deaths_in_newborn_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "dollar_billionaires_per_million_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "dollar_billionaires_per_million_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "drought_affected_annual_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "drought_affected_annual_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "drought_deaths_annual_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "drought_deaths_annual_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "drownings_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "drownings_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "dtp3_immunized_percent_of_one_year_olds"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "dtp3_immunized_percent_of_one_year_olds"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "earthquake_affected_annual_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "earthquake_affected_annual_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "earthquake_deaths_annual_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "earthquake_deaths_annual_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "economic_growth_over_the_past_10_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "economic_growth_over_the_past_10_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "economical_infrastructure_aid_given_percent_of_aid"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "economical_infrastructure_aid_given_percent_of_aid"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "education_aid_given_percent_of_aid"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "education_aid_given_percent_of_aid"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "electricity_generation_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "electricity_generation_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "electricity_generation_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "electricity_generation_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "electricity_use_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "electricity_use_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "electricity_use_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "electricity_use_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "energy_from_solid_biofuels_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "energy_from_solid_biofuels_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "energy_production_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "energy_production_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "energy_production_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "energy_production_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "energy_supply_per_person_toe"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "energy_supply_per_person_toe"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "energy_use_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "energy_use_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "energy_use_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "energy_use_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "epidemic_affected_annual_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "epidemic_affected_annual_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "epidemic_deaths_annual_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "epidemic_deaths_annual_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "estimate_or_projection_of_under_five_mortality_rate_from_ihme"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "estimate_or_projection_of_under_five_mortality_rate_from_ihme"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "expenditure_per_student_primary_percent_of_gdp_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "expenditure_per_student_primary_percent_of_gdp_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "expenditure_per_student_secondary_percent_of_gdp_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "expenditure_per_student_secondary_percent_of_gdp_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "expenditure_per_student_tertiary_percent_of_gdp_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "expenditure_per_student_tertiary_percent_of_gdp_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "exports_percent_of_gdp"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "exports_percent_of_gdp"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "exports_unit_value_index_2000100"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "exports_unit_value_index_2000100"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "external_debt_total_us_not_inflation_adjusted"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "external_debt_total_us_not_inflation_adjusted"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "extreme_poverty_percent_people_below_190_a_day"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "extreme_poverty_percent_people_below_190_a_day"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "extreme_temperature_affected_annual_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "extreme_temperature_affected_annual_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "extreme_temperature_deaths_annual_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "extreme_temperature_deaths_annual_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "falls_deaths_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "falls_deaths_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "family_workers_percent_of_labour_force"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "family_workers_percent_of_labour_force"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "female_agriculture_workers_percent_of_female_labour_force"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "female_agriculture_workers_percent_of_female_labour_force"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "female_family_workers_percent_of_female_labour_force"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "female_family_workers_percent_of_female_labour_force"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "female_industry_workers_percent_of_female_labour_force"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "female_industry_workers_percent_of_female_labour_force"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "female_long_term_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "female_long_term_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "female_population_with_projections"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "female_population_with_projections"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "female_salaried_workers_percent_of_female_labour_force"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "female_salaried_workers_percent_of_female_labour_force"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "female_self_employed_percent_of_female_labour_force"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "female_self_employed_percent_of_female_labour_force"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "female_service_workers_percent_of_female_labour_force"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "female_service_workers_percent_of_female_labour_force"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "females_aged_15_24_employment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "females_aged_15_24_employment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "females_aged_15_24_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "females_aged_15_24_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "females_aged_15_64_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "females_aged_15_64_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "females_aged_15plus_employment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "females_aged_15plus_employment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "females_aged_15plus_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "females_aged_15plus_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "females_aged_15plus_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "females_aged_15plus_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "females_aged_25_54_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "females_aged_25_54_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "females_aged_25_54_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "females_aged_25_54_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "females_aged_55plus_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "females_aged_55plus_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "females_aged_65plus_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "females_aged_65plus_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "fixed_line_and_mobile_phone_subscribers_per_100_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "fixed_line_and_mobile_phone_subscribers_per_100_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "flood_affected_annual_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "flood_affected_annual_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "flood_deaths_annual_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "flood_deaths_annual_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "food_supply_kilocalories_per_person_and_day"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "food_supply_kilocalories_per_person_and_day"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "foreign_direct_investment_net_inflows_percent_of_gdp"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "foreign_direct_investment_net_inflows_percent_of_gdp"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "foreign_direct_investment_net_outflows_percent_of_gdp"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "foreign_direct_investment_net_outflows_percent_of_gdp"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "forest_area_sq_km"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "forest_area_sq_km"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "forest_coverage_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "forest_coverage_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "forest_land_total_area_ha"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "forest_land_total_area_ha"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "forest_products_removal_per_ha_dollar"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "forest_products_removal_per_ha_dollar"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "forest_products_removal_total_dollar"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "forest_products_removal_total_dollar"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "gapminder_gini"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "gapminder_gini"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "gdp_per_capita_yearly_growth"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "gdp_per_capita_yearly_growth"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "gdp_total_yearly_growth"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "gdp_total_yearly_growth"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "gdppercapita_growth_over_next_10_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "gdppercapita_growth_over_next_10_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "gdppercapita_growth_percent_per_year"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "gdppercapita_growth_percent_per_year"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "gdppercapita_us_inflation_adjusted"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "gdppercapita_us_inflation_adjusted"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "gdpperemployee_us_inflation_adjusted"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "gdpperemployee_us_inflation_adjusted"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "gdpperworking_hour_us_inflation_adjusted"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "gdpperworking_hour_us_inflation_adjusted"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "gnipercapita_atlasmethod_current_us"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "gnipercapita_atlasmethod_current_us"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "gnipercapita_constant_2010_us"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "gnipercapita_constant_2010_us"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "gnipercapita_ppp_current_international"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "gnipercapita_ppp_current_international"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "government_and_society_aid_given_percent_of_aid"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "government_and_society_aid_given_percent_of_aid"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "government_health_spending_of_total_gov_spending_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "government_health_spending_of_total_gov_spending_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "government_health_spending_per_person_international_dollar"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "government_health_spending_per_person_international_dollar"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "government_health_spending_per_person_us"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "government_health_spending_per_person_us"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "government_share_of_total_health_spending_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "government_share_of_total_health_spending_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "hdi_human_development_index"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "hdi_human_development_index"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "health_aid_given_percent_of_aid"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "health_aid_given_percent_of_aid"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "hepb3_immunized_percent_of_one_year_olds"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "hepb3_immunized_percent_of_one_year_olds"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "hib3_immunized_percent_of_one_year_olds"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "hib3_immunized_percent_of_one_year_olds"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "high_technology_exports_percent_of_manufactured_exports"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "high_technology_exports_percent_of_manufactured_exports"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "hiv_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "hiv_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "hiv_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "hiv_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "hourly_compensation_us"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "hourly_compensation_us"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "how_far_to_the_north"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "how_far_to_the_north"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "hydro_power_generation_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "hydro_power_generation_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "hydro_power_generation_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "hydro_power_generation_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "ifpri_underweight_children"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "ifpri_underweight_children"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "imports_percent_of_gdp"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "imports_percent_of_gdp"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "imports_unit_value_index_2000100"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "imports_unit_value_index_2000100"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "improved_sanitation_overall_access_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "improved_sanitation_overall_access_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "improved_sanitation_rural_access_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "improved_sanitation_rural_access_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "improved_sanitation_urban_access_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "improved_sanitation_urban_access_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "improved_water_source_overall_access_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "improved_water_source_overall_access_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "improved_water_source_rural_access_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "improved_water_source_rural_access_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "improved_water_source_urban_access_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "improved_water_source_urban_access_percent"
+  },
+  {
+    "key": [
+      "global",
+      "time"
+    ],
+    "value": "income_mountains"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "income_mountains"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "income_per_person_gdppercapita_ppp_inflation_adjusted"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "income_per_person_gdppercapita_ppp_inflation_adjusted"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "income_per_person_long_series"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "income_per_person_long_series"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "income_per_person_with_projections"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "income_per_person_with_projections"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "income_share_of_2nd_poorest_20percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "income_share_of_2nd_poorest_20percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "income_share_of_2nd_richest_20percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "income_share_of_2nd_richest_20percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "income_share_of_middle_20percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "income_share_of_middle_20percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "income_share_of_poorest_10percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "income_share_of_poorest_10percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "income_share_of_poorest_20percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "income_share_of_poorest_20percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "income_share_of_richest_10percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "income_share_of_richest_10percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "income_share_of_richest_20percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "income_share_of_richest_20percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "industrial_water_withdrawal_percent_of_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "industrial_water_withdrawal_percent_of_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "industry_percent_of_gdp"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "industry_percent_of_gdp"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "industry_workers_percent_of_labour_force"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "industry_workers_percent_of_labour_force"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "inequality_index_gini"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "inequality_index_gini"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "infant_mortality_rate_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "infant_mortality_rate_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "infectious_tb_detection_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "infectious_tb_detection_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "infectious_tb_detection_rate_percent_dots_only"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "infectious_tb_detection_rate_percent_dots_only"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "infectious_tb_new_cases_per_100000_estimated"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "infectious_tb_new_cases_per_100000_estimated"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "infectious_tb_new_cases_per_100000_reported"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "infectious_tb_new_cases_per_100000_reported"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "infectious_tb_number_of_new_cases_estimated"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "infectious_tb_number_of_new_cases_estimated"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "infectious_tb_number_of_new_cases_reported"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "infectious_tb_number_of_new_cases_reported"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "infectious_tb_treatment_dots_completed_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "infectious_tb_treatment_dots_completed_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "inflation_annual_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "inflation_annual_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "injury_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "injury_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "injury_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "injury_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "internal_renewable_water_cu_meters_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "internal_renewable_water_cu_meters_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "internet_users_per_100_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "internet_users_per_100_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "internet_users_total_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "internet_users_total_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "investments_percent_of_gdp"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "investments_percent_of_gdp"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "life_expectancy_at_birth_data_from_ihme"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "life_expectancy_at_birth_data_from_ihme"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "life_expectancy_at_birth_with_projections"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "life_expectancy_at_birth_with_projections"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "life_expectancy_female"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "life_expectancy_female"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "life_expectancy_male"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "life_expectancy_male"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "life_expectancy_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "life_expectancy_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "literacy_rate_adult_female_percent_of_females_ages_15_above"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "literacy_rate_adult_female_percent_of_females_ages_15_above"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "literacy_rate_adult_male_percent_of_males_ages_15_and_above"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "literacy_rate_adult_male_percent_of_males_ages_15_and_above"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "literacy_rate_adult_total_percent_of_people_ages_15_and_above"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "literacy_rate_adult_total_percent_of_people_ages_15_and_above"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "literacy_rate_youth_female_percent_of_females_ages_15_24"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "literacy_rate_youth_female_percent_of_females_ages_15_24"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "literacy_rate_youth_male_percent_of_males_ages_15_24"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "literacy_rate_youth_male_percent_of_males_ages_15_24"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "literacy_rate_youth_total_percent_of_people_ages_15_24"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "literacy_rate_youth_total_percent_of_people_ages_15_24"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "liver_cancer_deaths_per_100000_men"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "liver_cancer_deaths_per_100000_men"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "liver_cancer_deaths_per_100000_women"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "liver_cancer_deaths_per_100000_women"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "liver_cancer_new_cases_per_100000_men"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "liver_cancer_new_cases_per_100000_men"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "liver_cancer_new_cases_per_100000_women"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "liver_cancer_new_cases_per_100000_women"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "liver_cancer_number_of_female_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "liver_cancer_number_of_female_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "liver_cancer_number_of_male_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "liver_cancer_number_of_male_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "liver_cancer_number_of_new_female_cases"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "liver_cancer_number_of_new_female_cases"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "liver_cancer_number_of_new_male_cases"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "liver_cancer_number_of_new_male_cases"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "long_term_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "long_term_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "lung_cancer_deaths_per_100000_men"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "lung_cancer_deaths_per_100000_men"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "lung_cancer_deaths_per_100000_women"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "lung_cancer_deaths_per_100000_women"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "lung_cancer_new_cases_per_100000_men"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "lung_cancer_new_cases_per_100000_men"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "lung_cancer_new_cases_per_100000_women"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "lung_cancer_new_cases_per_100000_women"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "lung_cancer_number_of_female_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "lung_cancer_number_of_female_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "lung_cancer_number_of_male_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "lung_cancer_number_of_male_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "lung_cancer_number_of_new_female_cases"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "lung_cancer_number_of_new_female_cases"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "lung_cancer_number_of_new_male_cases"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "lung_cancer_number_of_new_male_cases"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "malaria_cases_per_100000_reported"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "malaria_cases_per_100000_reported"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "malaria_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "malaria_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "malaria_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "malaria_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "malaria_deaths_per_100000_reported"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "malaria_deaths_per_100000_reported"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "malaria_number_of_cases_reported"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "malaria_number_of_cases_reported"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "malaria_number_of_deaths_reported"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "malaria_number_of_deaths_reported"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "male_agriculture_workers_percent_of_male_labour_force"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "male_agriculture_workers_percent_of_male_labour_force"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "male_family_workers_percent_of_male_labour_force"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "male_family_workers_percent_of_male_labour_force"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "male_industry_workers_percent_of_male_labour_force"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "male_industry_workers_percent_of_male_labour_force"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "male_long_term_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "male_long_term_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "male_population_with_projections"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "male_population_with_projections"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "male_salaried_workers_percent_of_male_labour_force"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "male_salaried_workers_percent_of_male_labour_force"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "male_self_employed_percent_of_male_labour_force"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "male_self_employed_percent_of_male_labour_force"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "male_service_workers_percent_of_male_labour_force"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "male_service_workers_percent_of_male_labour_force"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "males_aged_15_24_employment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "males_aged_15_24_employment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "males_aged_15_24_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "males_aged_15_24_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "males_aged_15_64_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "males_aged_15_64_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "males_aged_15plus_employment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "males_aged_15plus_employment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "males_aged_15plus_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "males_aged_15plus_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "males_aged_15plus_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "males_aged_15plus_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "males_aged_25_54_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "males_aged_25_54_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "males_aged_25_54_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "males_aged_25_54_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "males_aged_55plus_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "males_aged_55plus_unemployment_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "males_aged_65plus_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "males_aged_65plus_labour_force_participation_rate_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "malnutrition_weight_for_age_percent_of_children_under_5"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "malnutrition_weight_for_age_percent_of_children_under_5"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "market_value_of_listed_companies_percent_of_gdp"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "market_value_of_listed_companies_percent_of_gdp"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "maternal_deaths_lifetime_risk_per_1000"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "maternal_deaths_lifetime_risk_per_1000"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "maternal_deaths_total_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "maternal_deaths_total_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "maternal_mortality_ratio_per_100000_live_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "maternal_mortality_ratio_per_100000_live_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "maternal_mortality_ratio_who"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "maternal_mortality_ratio_who"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "math_achievement_4th_grade"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "math_achievement_4th_grade"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "math_achievement_8th_grade"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "math_achievement_8th_grade"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "mcv_immunized_percent_of_one_year_olds"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "mcv_immunized_percent_of_one_year_olds"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "mean_years_in_school_men_15_to_24_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "mean_years_in_school_men_15_to_24_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "mean_years_in_school_men_25_to_34_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "mean_years_in_school_men_25_to_34_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "mean_years_in_school_men_25_years_and_older"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "mean_years_in_school_men_25_years_and_older"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "mean_years_in_school_men_35_to_44_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "mean_years_in_school_men_35_to_44_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "mean_years_in_school_men_45_to_54_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "mean_years_in_school_men_45_to_54_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "mean_years_in_school_men_55_to_64_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "mean_years_in_school_men_55_to_64_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "mean_years_in_school_men_65_plus_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "mean_years_in_school_men_65_plus_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "mean_years_in_school_women_15_to_24_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "mean_years_in_school_women_15_to_24_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "mean_years_in_school_women_25_to_34_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "mean_years_in_school_women_25_to_34_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "mean_years_in_school_women_25_years_and_older"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "mean_years_in_school_women_25_years_and_older"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "mean_years_in_school_women_35_to_44_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "mean_years_in_school_women_35_to_44_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "mean_years_in_school_women_45_to_54_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "mean_years_in_school_women_45_to_54_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "mean_years_in_school_women_55_to_64_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "mean_years_in_school_women_55_to_64_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "mean_years_in_school_women_65_plus_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "mean_years_in_school_women_65_plus_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "mean_years_in_school_women_of_reproductive_age_15_to_44"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "mean_years_in_school_women_of_reproductive_age_15_to_44"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "mean_years_in_school_women_percent_men_25_to_34_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "mean_years_in_school_women_percent_men_25_to_34_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "measles_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "measles_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "measles_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "measles_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "median_age_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "median_age_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "medical_doctors_per_1000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "medical_doctors_per_1000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "meningitis_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "meningitis_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "meningitis_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "meningitis_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "merchandise_trade_percent_of_gdp"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "merchandise_trade_percent_of_gdp"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "military_expenditure_percent_of_gdp"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "military_expenditure_percent_of_gdp"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "motorcycle_deaths_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "motorcycle_deaths_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "multisector_cross_cutting_aid_given_percent_of_aid"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "multisector_cross_cutting_aid_given_percent_of_aid"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "municipal_water_withdrawal_cu_meters_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "municipal_water_withdrawal_cu_meters_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "municipal_water_withdrawal_percent_of_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "municipal_water_withdrawal_percent_of_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "murder_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "murder_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "murder_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "murder_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "murdered_15_29_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "murdered_15_29_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "murdered_30_44_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "murdered_30_44_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "murdered_45_59_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "murdered_45_59_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "murdered_60plus_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "murdered_60plus_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "murdered_children_0_14_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "murdered_children_0_14_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "murdered_men_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "murdered_men_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "murdered_women_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "murdered_women_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "natural_gas_production_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "natural_gas_production_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "natural_gas_production_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "natural_gas_production_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "natural_gas_proved_reserves_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "natural_gas_proved_reserves_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "natural_gas_proven_reserves_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "natural_gas_proven_reserves_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "ncd_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "ncd_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "ncd_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "ncd_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "net_barter_terms_of_trade_2000_100"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "net_barter_terms_of_trade_2000_100"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "new_births_total_number_estimated"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "new_births_total_number_estimated"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "newborn_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "newborn_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "newborn_mortality_rate_per_1000"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "newborn_mortality_rate_per_1000"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "newly_hiv_infected_number_all_ages"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "newly_hiv_infected_number_all_ages"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "newly_hiv_infected_percent_age_15_49"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "newly_hiv_infected_percent_age_15_49"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "nuclear_power_generation_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "nuclear_power_generation_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "nuclear_power_generation_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "nuclear_power_generation_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "number_of_child_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "number_of_child_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "number_of_people_in_poverty"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "number_of_people_in_poverty"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "oil_consumption_per_cap"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "oil_consumption_per_cap"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "oil_consumption_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "oil_consumption_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "oil_production_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "oil_production_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "oil_production_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "oil_production_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "oil_proved_reserves_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "oil_proved_reserves_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "oil_proven_reserves_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "oil_proven_reserves_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "old_version_of_income_per_person_version_3"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "old_version_of_income_per_person_version_3"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "old_version_of_income_per_person_version_8"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "old_version_of_income_per_person_version_8"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "other_deaths_in_newborn_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "other_deaths_in_newborn_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "other_deaths_in_newborn_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "other_deaths_in_newborn_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "other_infections_deaths_in_children_1_59_months_per_1000_birt"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "other_infections_deaths_in_children_1_59_months_per_1000_birt"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "other_infections_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "other_infections_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "other_social_services_aid_given_percent_of_aid"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "other_social_services_aid_given_percent_of_aid"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "out_of_pocket_share_of_total_health_spending_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "out_of_pocket_share_of_total_health_spending_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "pab_immunized_percent_of_newborns"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "pab_immunized_percent_of_newborns"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "patent_applications_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "patent_applications_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "patents_granted_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "patents_granted_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "patents_in_force_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "patents_in_force_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "people_living_with_hiv_number_all_ages"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "people_living_with_hiv_number_all_ages"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "personal_computers_per_100_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "personal_computers_per_100_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "personal_computers_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "personal_computers_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "pertussis_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "pertussis_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "pertussis_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "pertussis_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "plane_crash_affected_annual_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "plane_crash_affected_annual_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "plane_crash_deaths_annual_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "plane_crash_deaths_annual_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "planted_forest_area_ha"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "planted_forest_area_ha"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "pneumonia_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "pneumonia_deaths_in_children_1_59_months_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "pneumonia_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "pneumonia_deaths_in_children_1_59_months_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "pneumonia_deaths_in_newborn_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "pneumonia_deaths_in_newborn_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "pneumonia_deaths_in_newborn_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "pneumonia_deaths_in_newborn_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "poisonings_deaths_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "poisonings_deaths_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_0_4_years_both_sexes_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_0_4_years_both_sexes_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_0_4_years_female_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_0_4_years_female_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_0_4_years_male_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_0_4_years_male_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_0_4_years_total_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_0_4_years_total_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_10_14_years_both_sexes_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_10_14_years_both_sexes_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_10_14_years_female_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_10_14_years_female_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_10_14_years_male_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_10_14_years_male_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_10_14_years_total_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_10_14_years_total_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_15_19_years_both_sexes_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_15_19_years_both_sexes_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_15_19_years_female_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_15_19_years_female_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_15_19_years_male_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_15_19_years_male_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_15_19_years_total_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_15_19_years_total_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_20_39_years_both_sexes_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_20_39_years_both_sexes_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_20_39_years_female_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_20_39_years_female_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_20_39_years_male_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_20_39_years_male_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_20_39_years_total_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_20_39_years_total_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_40_59_years_both_sexes_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_40_59_years_both_sexes_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_40_59_years_female_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_40_59_years_female_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_40_59_years_male_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_40_59_years_male_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_40_59_years_total_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_40_59_years_total_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_5_9_years_both_sexes_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_5_9_years_both_sexes_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_5_9_years_female_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_5_9_years_female_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_5_9_years_male_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_5_9_years_male_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_5_9_years_total_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_5_9_years_total_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_60plus_years_both_sexes_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_60plus_years_both_sexes_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_60plus_years_female_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_60plus_years_female_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_60plus_years_male_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_60plus_years_male_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_aged_60plus_years_total_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_aged_60plus_years_total_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_density_per_square_km"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_density_per_square_km"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_growth_annual_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_growth_annual_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_growth_annual_percent_with_projections"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_growth_annual_percent_with_projections"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_in_urban_agglomerations_m_1_million_percent_of_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_in_urban_agglomerations_m_1_million_percent_of_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_policies_aid_given_percent_of_aid"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_policies_aid_given_percent_of_aid"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "population_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "population_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "poverty_percent_people_below_310_a_day"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "poverty_percent_people_below_310_a_day"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "prematurity_deaths_in_newborn_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "prematurity_deaths_in_newborn_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "prematurity_deaths_in_newborn_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "prematurity_deaths_in_newborn_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "present_value_of_debt_percent_of_gni"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "present_value_of_debt_percent_of_gni"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "primary_completion_rate_total_percent_of_relevant_age_group"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "primary_completion_rate_total_percent_of_relevant_age_group"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "primary_forest_area_ha"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "primary_forest_area_ha"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "primary_school_completion_percent_of_boys"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "primary_school_completion_percent_of_boys"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "primary_school_completion_percent_of_girls"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "primary_school_completion_percent_of_girls"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "private_share_of_total_health_spending_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "private_share_of_total_health_spending_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "privately_owned_forest_land_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "privately_owned_forest_land_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "privately_owned_other_wooded_land_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "privately_owned_other_wooded_land_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "production_sector_aid_given_percent_of_aid"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "production_sector_aid_given_percent_of_aid"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "prostate_cancer_deaths_per_100000_men"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "prostate_cancer_deaths_per_100000_men"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "prostate_cancer_new_cases_per_100000_men"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "prostate_cancer_new_cases_per_100000_men"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "prostate_cancer_number_of_male_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "prostate_cancer_number_of_male_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "prostate_cancer_number_of_new_male_cases"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "prostate_cancer_number_of_new_male_cases"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "pump_price_for_gasoline_us_per_liter"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "pump_price_for_gasoline_us_per_liter"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "ratio_of_girls_to_boys_in_primary_and_secondary_education_perc"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "ratio_of_girls_to_boys_in_primary_and_secondary_education_perc"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "ratio_of_young_literate_females_to_males_percent_ages_15_24"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "ratio_of_young_literate_females_to_males_percent_ages_15_24"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "renewable_water_cu_meters_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "renewable_water_cu_meters_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "residential_electricity_use_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "residential_electricity_use_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "residential_electricity_use_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "residential_electricity_use_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "residential_energy_use_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "residential_energy_use_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "roads_paved_percent_of_total_roads"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "roads_paved_percent_of_total_roads"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "rural_poverty_percent_rural_people_below_national_rural"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "rural_poverty_percent_rural_people_below_national_rural"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "salaried_workers_percent_of_labour_force"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "salaried_workers_percent_of_labour_force"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "self_employed_percent_of_labour_force"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "self_employed_percent_of_labour_force"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "sepsis_deaths_in_newborn_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "sepsis_deaths_in_newborn_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "sepsis_deaths_in_newborn_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "sepsis_deaths_in_newborn_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "service_workers_percent_of_labour_force"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "service_workers_percent_of_labour_force"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "services_percent_of_gdp"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "services_percent_of_gdp"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "sex_ratio_0_14_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "sex_ratio_0_14_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "sex_ratio_15_24_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "sex_ratio_15_24_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "sex_ratio_15_49_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "sex_ratio_15_49_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "sex_ratio_above_50_years"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "sex_ratio_above_50_years"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "sex_ratio_all_age_groups"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "sex_ratio_all_age_groups"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "smoking_adults_percent_of_population_over_age_15"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "smoking_adults_percent_of_population_over_age_15"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "smoking_men_percent_of_men_over_age_15"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "smoking_men_percent_of_men_over_age_15"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "smoking_women_percent_of_women_over_age_15"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "smoking_women_percent_of_women_over_age_15"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "stillbirths_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "stillbirths_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "stomach_cancer_deaths_per_100000_men"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "stomach_cancer_deaths_per_100000_men"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "stomach_cancer_deaths_per_100000_women"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "stomach_cancer_deaths_per_100000_women"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "stomach_cancer_new_cases_per_100000_men"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "stomach_cancer_new_cases_per_100000_men"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "stomach_cancer_new_cases_per_100000_women"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "stomach_cancer_new_cases_per_100000_women"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "stomach_cancer_number_of_female_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "stomach_cancer_number_of_female_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "stomach_cancer_number_of_male_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "stomach_cancer_number_of_male_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "stomach_cancer_number_of_new_female_cases"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "stomach_cancer_number_of_new_female_cases"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "stomach_cancer_number_of_new_male_cases"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "stomach_cancer_number_of_new_male_cases"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "storm_affected_annual_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "storm_affected_annual_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "storm_deaths_annual_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "storm_deaths_annual_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "subsistence_incomes_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "subsistence_incomes_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "sugar_per_person_g_per_day"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "sugar_per_person_g_per_day"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "suicide_age_0_14_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "suicide_age_0_14_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "suicide_age_15_29_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "suicide_age_15_29_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "suicide_age_30_44_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "suicide_age_30_44_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "suicide_age_45_59_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "suicide_age_45_59_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "suicide_age_60plus_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "suicide_age_60plus_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "suicide_men_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "suicide_men_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "suicide_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "suicide_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "suicide_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "suicide_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "suicide_women_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "suicide_women_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "sulfur_emissions_per_person_kg"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "sulfur_emissions_per_person_kg"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "surface_area_sq_km"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "surface_area_sq_km"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "surviving_kids_per_woman"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "surviving_kids_per_woman"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "tax_revenue_percent_of_gdp"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "tax_revenue_percent_of_gdp"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "tb_programme_dots_population_coverage_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "tb_programme_dots_population_coverage_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "tb_with_hivplus_deaths_per_100000_estimated"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "tb_with_hivplus_deaths_per_100000_estimated"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "tb_with_hivplus_existing_cases_per_100000_estimated"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "tb_with_hivplus_existing_cases_per_100000_estimated"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "tb_with_hivplus_new_cases_per_100000_estimated"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "tb_with_hivplus_new_cases_per_100000_estimated"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "tb_with_hivplus_number_of_deaths_estimated"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "tb_with_hivplus_number_of_deaths_estimated"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "tb_with_hivplus_number_of_existing_cases_estimated"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "tb_with_hivplus_number_of_existing_cases_estimated"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "tb_with_hivplus_number_of_new_cases_estimated"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "tb_with_hivplus_number_of_new_cases_estimated"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "teen_fertility_rate_births_per_1000_women_ages_15_19"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "teen_fertility_rate_births_per_1000_women_ages_15_19"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "tetanus_deaths_in_newborn_per_1000_births"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "tetanus_deaths_in_newborn_per_1000_births"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "tetanus_deaths_in_newborn_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "tetanus_deaths_in_newborn_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "total_gdp_ppp_inflation_adjusted"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "total_gdp_ppp_inflation_adjusted"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "total_gdp_us_inflation_adjusted"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "total_gdp_us_inflation_adjusted"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "total_gni_ppp_current_international"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "total_gni_ppp_current_international"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "total_health_spending_per_person_international_dollar"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "total_health_spending_per_person_international_dollar"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "total_health_spending_per_person_us"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "total_health_spending_per_person_us"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "total_health_spending_percent_of_gdp"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "total_health_spending_percent_of_gdp"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "total_number_of_dollar_billionaires"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "total_number_of_dollar_billionaires"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "total_population_with_projections"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "total_population_with_projections"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "total_reserves_percent_of_debt_to_foreigners"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "total_reserves_percent_of_debt_to_foreigners"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "total_sulfur_emission_kilotonnes"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "total_sulfur_emission_kilotonnes"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "total_water_withdrawal_billion_cu_meters"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "total_water_withdrawal_billion_cu_meters"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "trade_balance_percent_of_gdp"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "trade_balance_percent_of_gdp"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "trade_balance_us_not_inflation_adjusted"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "trade_balance_us_not_inflation_adjusted"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "traffic_deaths_men_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "traffic_deaths_men_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "traffic_deaths_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "traffic_deaths_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "traffic_deaths_women_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "traffic_deaths_women_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "traffic_mortality_15_29_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "traffic_mortality_15_29_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "traffic_mortality_30_44_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "traffic_mortality_30_44_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "traffic_mortality_45_59_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "traffic_mortality_45_59_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "traffic_mortality_60plus_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "traffic_mortality_60plus_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "traffic_mortality_children_0_14_per_100000_people"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "traffic_mortality_children_0_14_per_100000_people"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "traffic_total_deaths"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "traffic_total_deaths"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "tsunami_affected_annual_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "tsunami_affected_annual_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "tsunami_deaths_annual_number"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "tsunami_deaths_annual_number"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "under_five_mortality_from_cme_per_1000_born"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "under_five_mortality_from_cme_per_1000_born"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "under_five_mortality_from_ihme_per_1000_born"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "under_five_mortality_from_ihme_per_1000_born"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "underweight_children"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "underweight_children"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "urban_population"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "urban_population"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "urban_population_growth_annual_percent"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "urban_population_growth_annual_percent"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "urban_population_percent_of_total"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "urban_population_percent_of_total"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "urban_poverty_percent_urban_people_below_national_urban"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "urban_poverty_percent_urban_people_below_national_urban"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "water_and_sanitation_aid_given_percent_of_aid"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "water_and_sanitation_aid_given_percent_of_aid"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "water_withdrawal_cu_meters_per_person"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "water_withdrawal_cu_meters_per_person"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "wood_removal_cubic_meters"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "wood_removal_cubic_meters"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "working_hours_per_week"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "working_hours_per_week"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "year_categorization_1820_2010"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "year_categorization_1820_2010"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "year_categorization_1950"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "year_categorization_1950"
+  },
+  {
+    "key": [
+      "country",
+      "time"
+    ],
+    "value": "yearly_co2_emissions_1000_tonnes"
+  },
+  {
+    "key": [
+      "geo",
+      "time"
+    ],
+    "value": "yearly_co2_emissions_1000_tonnes"
+  }
+]

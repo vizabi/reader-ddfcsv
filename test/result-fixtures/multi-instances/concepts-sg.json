@@ -1,0 +1,50 @@
+[
+  {
+    "concept": "country",
+    "concept_type": "entity_set",
+    "domain": "geo",
+    "name": "Country"
+  },
+  {
+    "concept": "g77_and_oecd_countries",
+    "concept_type": "entity_set",
+    "domain": "geo",
+    "name": "G77 and OECD countries"
+  },
+  {
+    "concept": "global",
+    "concept_type": "entity_set",
+    "domain": "geo",
+    "name": "World"
+  },
+  {
+    "concept": "income_groups",
+    "concept_type": "entity_set",
+    "domain": "geo",
+    "name": "Income groups"
+  },
+  {
+    "concept": "landlocked",
+    "concept_type": "entity_set",
+    "domain": "geo",
+    "name": "Landlocked"
+  },
+  {
+    "concept": "main_religion_2008",
+    "concept_type": "entity_set",
+    "domain": "geo",
+    "name": "Main religion 2008"
+  },
+  {
+    "concept": "world_4region",
+    "concept_type": "entity_set",
+    "domain": "geo",
+    "name": "World Regions"
+  },
+  {
+    "concept": "world_6region",
+    "concept_type": "entity_set",
+    "domain": "geo",
+    "name": "World Regions (6 colors)"
+  }
+]
