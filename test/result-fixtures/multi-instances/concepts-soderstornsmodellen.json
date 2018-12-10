@@ -1,0 +1,425 @@
+[
+  {
+    "concept": "color"
+  },
+  {
+    "concept": "scales"
+  },
+  {
+    "concept": "format"
+  },
+  {
+    "concept": "tag"
+  },
+  {
+    "concept": "parent"
+  },
+  {
+    "concept": "tags"
+  },
+  {
+    "concept": "geo"
+  },
+  {
+    "concept": "domain"
+  },
+  {
+    "concept": "name"
+  },
+  {
+    "concept": "year"
+  },
+  {
+    "concept": "basomrade"
+  },
+  {
+    "concept": "municipality"
+  },
+  {
+    "concept": "county"
+  },
+  {
+    "concept": "county_region"
+  },
+  {
+    "concept": "country"
+  },
+  {
+    "concept": "educational_level_pre_secondary_school_aged_25_64_male"
+  },
+  {
+    "concept": "educational_level_pre_secondary_school_aged_25_64_female"
+  },
+  {
+    "concept": "educational_level_pre_secondary_school_aged_25_64"
+  },
+  {
+    "concept": "educational_level_secondary_school_aged_25_64_male"
+  },
+  {
+    "concept": "educational_level_secondary_school_aged_25_64_female"
+  },
+  {
+    "concept": "educational_level_secondary_school_aged_25_64"
+  },
+  {
+    "concept": "educational_level_higher_education_max_3_years_aged_25_64_male"
+  },
+  {
+    "concept": "educational_level_higher_education_max_3_years_aged_25_64_female"
+  },
+  {
+    "concept": "educational_level_higher_education_max_3_years_aged_25_64"
+  },
+  {
+    "concept": "educational_level_higher_education_min_3_years_aged_25_64_male"
+  },
+  {
+    "concept": "educational_level_higher_education_min_3_years_aged_25_64_female"
+  },
+  {
+    "concept": "educational_level_higher_education_min_3_years_aged_25_64"
+  },
+  {
+    "concept": "missing_data_male"
+  },
+  {
+    "concept": "missing_data_female"
+  },
+  {
+    "concept": "missing_data"
+  },
+  {
+    "concept": "population_aged_25_64_male"
+  },
+  {
+    "concept": "population_aged_25_64_female"
+  },
+  {
+    "concept": "population_aged_25_64"
+  },
+  {
+    "concept": "employment_rate_20_64_male"
+  },
+  {
+    "concept": "employment_rate_20_64_female"
+  },
+  {
+    "concept": "employment_rate_20_64"
+  },
+  {
+    "concept": "post_secondary_education_min_3_years_aged_25_64_male"
+  },
+  {
+    "concept": "post_secondary_education_min_3_years_aged_25_64_female"
+  },
+  {
+    "concept": "post_secondary_education_min_3_years_aged_25_64"
+  },
+  {
+    "concept": "size"
+  },
+  {
+    "concept": "baskod2010"
+  },
+  {
+    "concept": "gender"
+  },
+  {
+    "concept": "map_id"
+  },
+  {
+    "concept": "rank"
+  },
+  {
+    "concept": "shape_lores_svg"
+  },
+  {
+    "concept": "employed_aged_20_64_male"
+  },
+  {
+    "concept": "employed_aged_20_64_female"
+  },
+  {
+    "concept": "employed_aged_20_64"
+  },
+  {
+    "concept": "unemployed_aged_20_64_male"
+  },
+  {
+    "concept": "unemployed_aged_20_64_female"
+  },
+  {
+    "concept": "unemployed_aged_20_64"
+  },
+  {
+    "concept": "population_aged_20_64_male"
+  },
+  {
+    "concept": "population_aged_20_64_female"
+  },
+  {
+    "concept": "population_aged_20_64"
+  },
+  {
+    "concept": "low_income_aged_gt_20_male"
+  },
+  {
+    "concept": "low_income_aged_gt_20_female"
+  },
+  {
+    "concept": "low_income_aged_gt_20"
+  },
+  {
+    "concept": "lower_middle_income_aged_gt_20_male"
+  },
+  {
+    "concept": "lower_middle_income_aged_gt_20_female"
+  },
+  {
+    "concept": "lower_middle_income_aged_gt_20"
+  },
+  {
+    "concept": "upper_middle_income_aged_gt_20_male"
+  },
+  {
+    "concept": "upper_middle_income_aged_gt_20_female"
+  },
+  {
+    "concept": "upper_middle_income_aged_gt_20"
+  },
+  {
+    "concept": "high_income_aged_gt_20_male"
+  },
+  {
+    "concept": "high_income_aged_gt_20_female"
+  },
+  {
+    "concept": "high_income_aged_gt_20"
+  },
+  {
+    "concept": "population_aged_gt_20_male"
+  },
+  {
+    "concept": "population_aged_gt_20_female"
+  },
+  {
+    "concept": "population_aged_gt_20"
+  },
+  {
+    "concept": "median_income_aged_gt_20_male"
+  },
+  {
+    "concept": "median_income_aged_gt_20_female"
+  },
+  {
+    "concept": "median_income_aged_gt_20"
+  },
+  {
+    "concept": "mean_income_aged_gt_20_male"
+  },
+  {
+    "concept": "mean_income_aged_gt_20_female"
+  },
+  {
+    "concept": "mean_income_aged_gt_20"
+  },
+  {
+    "concept": "sum_income_aged_gt_20_male"
+  },
+  {
+    "concept": "sum_income_aged_gt_20_female"
+  },
+  {
+    "concept": "sum_income_aged_gt_20"
+  },
+  {
+    "concept": "immigration_surplus_male"
+  },
+  {
+    "concept": "immigration_surplus_female"
+  },
+  {
+    "concept": "immigration_surplus"
+  },
+  {
+    "concept": "immigration_surplus_employed_aged_20_64_male"
+  },
+  {
+    "concept": "immigration_surplus_employed_aged_20_64_female"
+  },
+  {
+    "concept": "immigration_surplus_employed_aged_20_64"
+  },
+  {
+    "concept": "immigration_surplus_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "concept": "immigration_surplus_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "concept": "immigration_surplus_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "concept": "cumulative_immigration_surplus_male"
+  },
+  {
+    "concept": "cumulative_immigration_surplus_female"
+  },
+  {
+    "concept": "cumulative_immigration_surplus"
+  },
+  {
+    "concept": "cumulative_immigration_surplus_employed_aged_20_64_male"
+  },
+  {
+    "concept": "cumulative_immigration_surplus_employed_aged_20_64_female"
+  },
+  {
+    "concept": "cumulative_immigration_surplus_employed_aged_20_64"
+  },
+  {
+    "concept": "cumulative_immigration_surplus_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "concept": "cumulative_immigration_surplus_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "concept": "cumulative_immigration_surplus_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "concept": "immigration_male"
+  },
+  {
+    "concept": "immigration_female"
+  },
+  {
+    "concept": "immigration"
+  },
+  {
+    "concept": "emigration_male"
+  },
+  {
+    "concept": "emigration_female"
+  },
+  {
+    "concept": "emigration"
+  },
+  {
+    "concept": "population_20xx_12_31_male"
+  },
+  {
+    "concept": "population_20xx_12_31_female"
+  },
+  {
+    "concept": "population_20xx_12_31"
+  },
+  {
+    "concept": "share_immigration_male"
+  },
+  {
+    "concept": "share_immigration_female"
+  },
+  {
+    "concept": "share_immigration"
+  },
+  {
+    "concept": "share_emigration_male"
+  },
+  {
+    "concept": "share_emigration_female"
+  },
+  {
+    "concept": "share_emigration"
+  },
+  {
+    "concept": "immigration_employed_aged_20_64_male"
+  },
+  {
+    "concept": "immigration_employed_aged_20_64_female"
+  },
+  {
+    "concept": "immigration_employed_aged_20_64"
+  },
+  {
+    "concept": "emigration_employed_aged_20_64_male"
+  },
+  {
+    "concept": "emigration_employed_aged_20_64_female"
+  },
+  {
+    "concept": "emigration_employed_aged_20_64"
+  },
+  {
+    "concept": "population_20xx_12_31_employed_aged_20_64_male"
+  },
+  {
+    "concept": "population_20xx_12_31_employed_aged_20_64_female"
+  },
+  {
+    "concept": "population_20xx_12_31_employed_aged_20_64"
+  },
+  {
+    "concept": "share_immigration_employed_aged_20_64_male"
+  },
+  {
+    "concept": "share_immigration_employed_aged_20_64_female"
+  },
+  {
+    "concept": "share_immigration_employed_aged_20_64"
+  },
+  {
+    "concept": "share_emigration_employed_aged_20_64_male"
+  },
+  {
+    "concept": "share_emigration_employed_aged_20_64_female"
+  },
+  {
+    "concept": "share_emigration_employed_aged_20_64"
+  },
+  {
+    "concept": "immigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "concept": "immigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "concept": "immigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "concept": "emigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "concept": "emigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "concept": "emigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "concept": "population_25xx_12_31_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "concept": "population_25xx_12_31_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "concept": "population_25xx_12_31_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "concept": "share_immigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "concept": "share_immigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "concept": "share_immigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "concept": "share_emigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "concept": "share_emigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "concept": "share_emigration_min_3_years_of_higher_education_aged_25_64"
+  }
+]

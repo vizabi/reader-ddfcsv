@@ -1,0 +1,4346 @@
+[
+  {
+    "basomrade": "2150720_pungpinan",
+    "name": "Pungpinan"
+  },
+  {
+    "basomrade": "4111110_norra_runby",
+    "name": "Norra Runby"
+  },
+  {
+    "basomrade": "4111130_runby_lovsta",
+    "name": "Runby Lövsta"
+  },
+  {
+    "basomrade": "4111140_prastgardsmarken",
+    "name": "Prästgårdsmarken"
+  },
+  {
+    "basomrade": "4111900_eds_glesbygd",
+    "name": "Eds glesbygd"
+  },
+  {
+    "basomrade": "4122100_lowenstromska_sjukhuset",
+    "name": "Löwenströmska Sjukhuset"
+  },
+  {
+    "basomrade": "4122210_norra_vilunda",
+    "name": "Norra Vilunda"
+  },
+  {
+    "basomrade": "4122230_apoteksskogen",
+    "name": "Apoteksskogen"
+  },
+  {
+    "basomrade": "4122240_vasbyskogen",
+    "name": "Väsbyskogen"
+  },
+  {
+    "basomrade": "4122310_korpkulla",
+    "name": "Korpkulla"
+  },
+  {
+    "basomrade": "4122340_vilunda",
+    "name": "Vilunda"
+  },
+  {
+    "basomrade": "4122420_norra_smedby",
+    "name": "Norra Smedby"
+  },
+  {
+    "basomrade": "4122430_sodra_smedby",
+    "name": "Södra Smedby"
+  },
+  {
+    "basomrade": "4122520_skalby",
+    "name": "Skälby"
+  },
+  {
+    "basomrade": "4122530_carlslund",
+    "name": "Carlslund"
+  },
+  {
+    "basomrade": "4122540_brunnby",
+    "name": "Brunnby"
+  },
+  {
+    "basomrade": "4122600_vastra_odenslunda",
+    "name": "Västra Odenslunda"
+  },
+  {
+    "basomrade": "4133110_sanda",
+    "name": "Sanda"
+  },
+  {
+    "basomrade": "4133120_ostra_odenslunda",
+    "name": "Östra Odenslunda"
+  },
+  {
+    "basomrade": "4133200_frestaby",
+    "name": "Frestaby"
+  },
+  {
+    "basomrade": "4133310_vastra_bollstanas",
+    "name": "Västra Bollstanäs"
+  },
+  {
+    "basomrade": "4133330_ostra_bollstanas",
+    "name": "Östra Bollstanäs"
+  },
+  {
+    "basomrade": "4133350_sodra_bollstanas",
+    "name": "Södra Bollstanäs"
+  },
+  {
+    "basomrade": "4133910_fresta_norra_glesbygd",
+    "name": "Fresta norra glesbygd"
+  },
+  {
+    "basomrade": "4133920_fresta_sodra_glesbygd",
+    "name": "Fresta södra glesbygd"
+  },
+  {
+    "basomrade": "4210110_centrala_vallentuna",
+    "name": "Centrala Vallentuna"
+  },
+  {
+    "basomrade": "4210210_norra_vallentuna_tatort",
+    "name": "Norra Vallentuna tätort"
+  },
+  {
+    "basomrade": "4210220_nv_a_vallentuna_tatort",
+    "name": "NV:a Vallentuna tätort"
+  },
+  {
+    "basomrade": "4210320_ostra_ormsta",
+    "name": "Östra Ormsta"
+  },
+  {
+    "basomrade": "4210330_vastra_ormsta",
+    "name": "Västra Ormsta"
+  },
+  {
+    "basomrade": "4210340_aby_bostadsomrade",
+    "name": "Åby bostadsområde"
+  },
+  {
+    "basomrade": "4210410_vastra_ballsta",
+    "name": "Västra Bällsta"
+  },
+  {
+    "basomrade": "4210420_kragstalund",
+    "name": "Kragstalund"
+  },
+  {
+    "basomrade": "4210430_ballstaberg",
+    "name": "Bällstaberg"
+  },
+  {
+    "basomrade": "4210440_karlberg_rickeby_okvista",
+    "name": "Karlberg Rickeby & Okvista"
+  },
+  {
+    "basomrade": "4210510_vallentuna_glesbygd_v",
+    "name": "Vallentuna glesbygd V"
+  },
+  {
+    "basomrade": "4210530_vallentuna_glesbygd_no",
+    "name": "Vallentuna glesbygd NO"
+  },
+  {
+    "basomrade": "4210540_ostra_vallentuna_tatort_vallentuna_glesbygd_so",
+    "name": "Östra Vallentuna tätort & Vallentuna glesbygd SO"
+  },
+  {
+    "basomrade": "4220000_markims_forsamling",
+    "name": "Markims församling"
+  },
+  {
+    "basomrade": "4230100_lindholmen",
+    "name": "Lindholmen"
+  },
+  {
+    "basomrade": "4230500_sodra_lindholmen_orkesta_glesbygd",
+    "name": "Södra Lindholmen & Orkesta glesbygd"
+  },
+  {
+    "basomrade": "4240000_frosunda_forsamling",
+    "name": "Frösunda församling"
+  },
+  {
+    "basomrade": "4250100_karsta",
+    "name": "Kårsta"
+  },
+  {
+    "basomrade": "4250200_ekskogen",
+    "name": "Ekskogen"
+  },
+  {
+    "basomrade": "4250500_karsta_glesbygd",
+    "name": "Kårsta glesbygd"
+  },
+  {
+    "basomrade": "4260500_vada_glesbygd",
+    "name": "Vada glesbygd"
+  },
+  {
+    "basomrade": "4270100_karby",
+    "name": "Karby"
+  },
+  {
+    "basomrade": "4270200_brottby",
+    "name": "Brottby"
+  },
+  {
+    "basomrade": "4270501_ovr_osseby_garns_glesbygd",
+    "name": "Övr Össeby-Garns glesbygd"
+  },
+  {
+    "basomrade": "4270502_algeby_garns_ekskogen",
+    "name": "Älgeby/Garns-Ekskogen"
+  },
+  {
+    "basomrade": "4280000_angarns_forsamling",
+    "name": "Angarns församling"
+  },
+  {
+    "basomrade": "4440110_ljustero",
+    "name": "Ljusterö"
+  },
+  {
+    "basomrade": "4440120_ingmarso_mfl_oar",
+    "name": "Ingmarsö mfl öar"
+  },
+  {
+    "basomrade": "4440200_roslags_kulla_fd_forsaml",
+    "name": "Roslags-Kulla fd församl"
+  },
+  {
+    "basomrade": "4450110_ekbacken",
+    "name": "Ekbacken"
+  },
+  {
+    "basomrade": "4450120_runo_gard",
+    "name": "Runö gård"
+  },
+  {
+    "basomrade": "4450130_akersberga",
+    "name": "Åkersberga"
+  },
+  {
+    "basomrade": "4450140_kullen",
+    "name": "Kullen"
+  },
+  {
+    "basomrade": "4450150_ostra_sora",
+    "name": "Östra Söra"
+  },
+  {
+    "basomrade": "4450160_vastra_sora",
+    "name": "Västra Söra"
+  },
+  {
+    "basomrade": "4450170_neptunus",
+    "name": "Neptunus"
+  },
+  {
+    "basomrade": "4450180_kungsangen",
+    "name": "Kungsängen"
+  },
+  {
+    "basomrade": "4450190_tunagard_osterskar",
+    "name": "Tunagård Österskär"
+  },
+  {
+    "basomrade": "4450210_akerstorp",
+    "name": "Åkerstorp"
+  },
+  {
+    "basomrade": "4450220_smedby",
+    "name": "Smedby"
+  },
+  {
+    "basomrade": "4450230_hacksta",
+    "name": "Hacksta"
+  },
+  {
+    "basomrade": "4450240_skansta",
+    "name": "Skånsta"
+  },
+  {
+    "basomrade": "4450250_singo",
+    "name": "Singö"
+  },
+  {
+    "basomrade": "4450260_asatra",
+    "name": "Åsätra"
+  },
+  {
+    "basomrade": "4450310_margretelund",
+    "name": "Margretelund"
+  },
+  {
+    "basomrade": "4450320_trasatra",
+    "name": "Träsätra"
+  },
+  {
+    "basomrade": "4450330_flaxenvik",
+    "name": "Flaxenvik"
+  },
+  {
+    "basomrade": "4450340_skargardsstad",
+    "name": "Skärgårdsstad"
+  },
+  {
+    "basomrade": "4451231_sodra_runo_sodra_runotaljo_sodra_runo_nas",
+    "name": "Södra Runö & Södra RunöTäljö & Södra Runö Näs"
+  },
+  {
+    "basomrade": "4451240_norra_runo",
+    "name": "Norra Runö"
+  },
+  {
+    "basomrade": "4451250_svinninge",
+    "name": "Svinninge"
+  },
+  {
+    "basomrade": "4451410_rydbo",
+    "name": "Rydbo"
+  },
+  {
+    "basomrade": "4451420_svartgarn",
+    "name": "Svartgarn"
+  },
+  {
+    "basomrade": "4451430_ostra_ryds_glesbygd",
+    "name": "Östra Ryds glesbygd"
+  },
+  {
+    "basomrade": "5610200_mortnas",
+    "name": "Mörtnäs"
+  },
+  {
+    "basomrade": "5610500_gustavsbergs_glesbygd_gustavsbergs_glesbygd_v",
+    "name": "Gustavsbergs glesbygd & Gustavsbergs glesbygd V"
+  },
+  {
+    "basomrade": "5611110_munkmora",
+    "name": "Munkmora"
+  },
+  {
+    "basomrade": "5611120_lugnet_flerbostadshus",
+    "name": "Lugnet flerbostadshus"
+  },
+  {
+    "basomrade": "5611130_lugnet_smahus",
+    "name": "Lugnet småhus"
+  },
+  {
+    "basomrade": "5611140_hojdhagen",
+    "name": "Höjdhagen"
+  },
+  {
+    "basomrade": "5611150_sodra_gustavsberg_hasthagen",
+    "name": "Södra Gustavsberg & Hästhagen"
+  },
+  {
+    "basomrade": "5611160_osby_grind",
+    "name": "Ösby Grind"
+  },
+  {
+    "basomrade": "5611170_osbydalen",
+    "name": "Ösbydalen"
+  },
+  {
+    "basomrade": "5611190_holmviksskogen",
+    "name": "Holmviksskogen"
+  },
+  {
+    "basomrade": "5620100_brunn",
+    "name": "Brunn"
+  },
+  {
+    "basomrade": "5620510_norra_ingaro_sodra_farstalandet",
+    "name": "Norra Ingarö & Södra Farstalandet"
+  },
+  {
+    "basomrade": "5620520_sydvastra_ingaro",
+    "name": "Sydvästra Ingarö"
+  },
+  {
+    "basomrade": "5620530_langvik_klacknaset_skalsmara",
+    "name": "Långvik-Klacknäset & Skälsmara"
+  },
+  {
+    "basomrade": "5630110_hemmesta",
+    "name": "Hemmesta"
+  },
+  {
+    "basomrade": "5630120_fruvik",
+    "name": "Fruvik"
+  },
+  {
+    "basomrade": "5630130_hemmestahojden",
+    "name": "Hemmestahöjden"
+  },
+  {
+    "basomrade": "5630200_angsvik",
+    "name": "Ängsvik"
+  },
+  {
+    "basomrade": "5630300_skepsdalsstrom",
+    "name": "Skepsdalsström"
+  },
+  {
+    "basomrade": "5630400_kopparmora",
+    "name": "Kopparmora"
+  },
+  {
+    "basomrade": "5630510_norra_varmdo_torsby_evlinge_saltaro_skarmaro",
+    "name": "Norra Värmdö & Torsby & Evlinge & Saltarö-Skärmarö"
+  },
+  {
+    "basomrade": "5630520_sodra_varmdolandet_stromma_bullando_alvsala_fagerdala_fagelbrolandet",
+    "name": "Södra Värmdölandet & Strömma & Bullandö/Älvsala/Fagerdala & Fågelbrolandet"
+  },
+  {
+    "basomrade": "5630600_varmdo_norra_skargard",
+    "name": "Värmdö norra skärgård"
+  },
+  {
+    "basomrade": "5640100_djurhamn",
+    "name": "Djurhamn"
+  },
+  {
+    "basomrade": "5640200_stavsnas",
+    "name": "Stavsnäs"
+  },
+  {
+    "basomrade": "5640510_stavsnas_glesbygd",
+    "name": "Stavsnäs glesbygd"
+  },
+  {
+    "basomrade": "5640520_djuro_glesbygd",
+    "name": "Djurö glesbygd"
+  },
+  {
+    "basomrade": "5640600_djuro_skargard",
+    "name": "Djurö skärgård"
+  },
+  {
+    "basomrade": "5650000_moja_forsamling",
+    "name": "Möja församling"
+  },
+  {
+    "basomrade": "5660000_namdo_forsamling",
+    "name": "Nämdö församling"
+  },
+  {
+    "basomrade": "3311110_staket",
+    "name": "Stäket"
+  },
+  {
+    "basomrade": "3312220_vastra_kallhall",
+    "name": "Västra Kallhäll"
+  },
+  {
+    "basomrade": "3312230_skogstorp",
+    "name": "Skogstorp"
+  },
+  {
+    "basomrade": "3312240_norra_kallhall",
+    "name": "Norra Kallhäll"
+  },
+  {
+    "basomrade": "3312250_bonas",
+    "name": "Bonäs"
+  },
+  {
+    "basomrade": "3312260_termosvagen",
+    "name": "Termosvägen"
+  },
+  {
+    "basomrade": "3312270_ladersatra",
+    "name": "Lädersätra"
+  },
+  {
+    "basomrade": "3312300_molnsattra",
+    "name": "Molnsättra"
+  },
+  {
+    "basomrade": "3324100_olovslund",
+    "name": "Olovslund"
+  },
+  {
+    "basomrade": "3324200_berghem",
+    "name": "Berghem"
+  },
+  {
+    "basomrade": "3324310_sodra_nibble",
+    "name": "Södra Nibble"
+  },
+  {
+    "basomrade": "3324320_norra_nibble",
+    "name": "Norra Nibble"
+  },
+  {
+    "basomrade": "3324410_tallbohov",
+    "name": "Tallbohov"
+  },
+  {
+    "basomrade": "3324420_hammaren",
+    "name": "Hammaren"
+  },
+  {
+    "basomrade": "3324430_jakobsbergs_centrum",
+    "name": "Jakobsbergs centrum"
+  },
+  {
+    "basomrade": "3324500_vibblaby",
+    "name": "Vibblaby"
+  },
+  {
+    "basomrade": "3335100_norra_viksjo",
+    "name": "Norra Viksjö"
+  },
+  {
+    "basomrade": "3335210_ostra_viksjo",
+    "name": "Östra Viksjö"
+  },
+  {
+    "basomrade": "3335220_viksjo_centrum",
+    "name": "Viksjö centrum"
+  },
+  {
+    "basomrade": "3335310_ostra_lund",
+    "name": "Östra Lund"
+  },
+  {
+    "basomrade": "3335320_vastra_lund",
+    "name": "Västra Lund"
+  },
+  {
+    "basomrade": "3335410_ostra_sandvik",
+    "name": "Östra Sandvik"
+  },
+  {
+    "basomrade": "3335420_sandvik",
+    "name": "Sandvik"
+  },
+  {
+    "basomrade": "3335600_fjallen",
+    "name": "Fjällen"
+  },
+  {
+    "basomrade": "3346110_skalby",
+    "name": "Skälby"
+  },
+  {
+    "basomrade": "3346120_ormbacka",
+    "name": "Ormbacka"
+  },
+  {
+    "basomrade": "3346200_skalby_gard",
+    "name": "Skälby gård"
+  },
+  {
+    "basomrade": "3347300_jarfalla_kyrka",
+    "name": "Järfälla kyrka"
+  },
+  {
+    "basomrade": "3347400_barkrby",
+    "name": "Barkrby"
+  },
+  {
+    "basomrade": "3347500_barsbro",
+    "name": "Barsbro"
+  },
+  {
+    "basomrade": "3210100_drottningholm",
+    "name": "Drottningholm"
+  },
+  {
+    "basomrade": "3210500_lovo_glesbygd",
+    "name": "Lovö glesbygd"
+  },
+  {
+    "basomrade": "3220101_tappstrom_narlunda",
+    "name": "Tappström/Närlunda"
+  },
+  {
+    "basomrade": "3220102_ostra_narlunda",
+    "name": "Östra Närlunda"
+  },
+  {
+    "basomrade": "3220103_ekero_centrum",
+    "name": "Ekerö centrum"
+  },
+  {
+    "basomrade": "3220211_alvnas",
+    "name": "Älvnäs"
+  },
+  {
+    "basomrade": "3220212_brunna",
+    "name": "Brunna"
+  },
+  {
+    "basomrade": "3220230_knalleborg",
+    "name": "Knalleborg"
+  },
+  {
+    "basomrade": "3220261_ostra_trakvista",
+    "name": "Östra Träkvista"
+  },
+  {
+    "basomrade": "3220262_gallsta_o",
+    "name": "Gällsta Ö"
+  },
+  {
+    "basomrade": "3220270_sandudden",
+    "name": "Sandudden"
+  },
+  {
+    "basomrade": "3220500_ekero_glesbygd",
+    "name": "Ekerö glesbygd"
+  },
+  {
+    "basomrade": "3230000_munso_forsamling",
+    "name": "Munsö församling"
+  },
+  {
+    "basomrade": "3240000_adelso_forsamling",
+    "name": "Adelsö församling"
+  },
+  {
+    "basomrade": "3250100_farentuna_fd_forsamling",
+    "name": "Färentuna fd församling"
+  },
+  {
+    "basomrade": "3250201_hilleshogs_fd_forsamling",
+    "name": "Hilleshögs fd församling"
+  },
+  {
+    "basomrade": "3250202_ricksattra",
+    "name": "Ricksättra"
+  },
+  {
+    "basomrade": "3250310_stenhamra",
+    "name": "Stenhamra"
+  },
+  {
+    "basomrade": "3250320_sanga_glesbygd",
+    "name": "Sånga glesbygd"
+  },
+  {
+    "basomrade": "3250400_ska_fd_forsamling",
+    "name": "Skå fd församling"
+  },
+  {
+    "basomrade": "5310420_skogsang_milsten",
+    "name": "Skogsäng Milsten"
+  },
+  {
+    "basomrade": "5310810_fullersta_gard",
+    "name": "Fullersta Gård"
+  },
+  {
+    "basomrade": "5310830_fridhem",
+    "name": "Fridhem"
+  },
+  {
+    "basomrade": "5310840_kallbrink_vistaberg",
+    "name": "Källbrink Vistaberg"
+  },
+  {
+    "basomrade": "5310850_vardkasen",
+    "name": "Vårdkasen"
+  },
+  {
+    "basomrade": "5310910_sjodalen_huddinge_c",
+    "name": "Sjödalen-Huddinge C"
+  },
+  {
+    "basomrade": "5310941_solgard",
+    "name": "Solgård"
+  },
+  {
+    "basomrade": "5310942_sorskogen",
+    "name": "Sörskogen"
+  },
+  {
+    "basomrade": "5310950_horningsns_balingsnas",
+    "name": "Hörningsns Balingsnäs"
+  },
+  {
+    "basomrade": "5311010_stuvsta_kvarnberget",
+    "name": "Stuvsta Kvarnberget"
+  },
+  {
+    "basomrade": "5311030_segersminne",
+    "name": "Segersminne"
+  },
+  {
+    "basomrade": "5311041_stensangen_hogmora",
+    "name": "Stensängen Högmora"
+  },
+  {
+    "basomrade": "5311042_kynas",
+    "name": "Kynäs"
+  },
+  {
+    "basomrade": "5311110_glado_kvarn",
+    "name": "Gladö kvarn"
+  },
+  {
+    "basomrade": "5311120_adran",
+    "name": "Ådran"
+  },
+  {
+    "basomrade": "5320110_trangsunds_centrum",
+    "name": "Trångsunds centrum"
+  },
+  {
+    "basomrade": "5320120_trangsunds_smahus",
+    "name": "Trångsunds småhus"
+  },
+  {
+    "basomrade": "5320310_vastra_skogas",
+    "name": "Västra Skogås"
+  },
+  {
+    "basomrade": "5320320_ostra_skogas",
+    "name": "Östra Skogås"
+  },
+  {
+    "basomrade": "5320410_lanna_drevviken",
+    "name": "Länna Drevviken"
+  },
+  {
+    "basomrade": "5320510_trangsunds_glesbygd",
+    "name": "Trångsunds glesbygd"
+  },
+  {
+    "basomrade": "5320520_vidja",
+    "name": "Vidja"
+  },
+  {
+    "basomrade": "5330110_varby_gard",
+    "name": "Vårby Gård"
+  },
+  {
+    "basomrade": "5330200_masmo",
+    "name": "Masmo"
+  },
+  {
+    "basomrade": "5330331_smista_juringe",
+    "name": "Smista Juringe"
+  },
+  {
+    "basomrade": "5330332_jakobslund",
+    "name": "Jakobslund"
+  },
+  {
+    "basomrade": "5330340_krakvik",
+    "name": "Kråkvik"
+  },
+  {
+    "basomrade": "5330410_utsalje",
+    "name": "Utsälje"
+  },
+  {
+    "basomrade": "5330430_snattringe_gard",
+    "name": "Snättringe gård"
+  },
+  {
+    "basomrade": "5340500_glomsta",
+    "name": "Glömsta"
+  },
+  {
+    "basomrade": "5340630_kasta",
+    "name": "Kåsta"
+  },
+  {
+    "basomrade": "5340640_grantorp",
+    "name": "Grantorp"
+  },
+  {
+    "basomrade": "5340710_visattra",
+    "name": "Visättra"
+  },
+  {
+    "basomrade": "5110110_albyslatten",
+    "name": "Albyslätten"
+  },
+  {
+    "basomrade": "5110120_albyberget",
+    "name": "Albyberget"
+  },
+  {
+    "basomrade": "5110150_rotemannen",
+    "name": "Rotemannen"
+  },
+  {
+    "basomrade": "5110160_alby_gard",
+    "name": "Alby gård"
+  },
+  {
+    "basomrade": "5110240_aspberget",
+    "name": "Aspberget"
+  },
+  {
+    "basomrade": "5110260_ostra_eriksberg",
+    "name": "Östra Eriksberg"
+  },
+  {
+    "basomrade": "5110270_vastra_eriksberg",
+    "name": "Västra Eriksberg"
+  },
+  {
+    "basomrade": "5110280_tre_kallor",
+    "name": "Tre Källor"
+  },
+  {
+    "basomrade": "5110290_sturehov",
+    "name": "Sturehov"
+  },
+  {
+    "basomrade": "5110311_krogarvagen_vardshusvagen",
+    "name": "Krögarvägen-Värdshusvägen"
+  },
+  {
+    "basomrade": "5110312_forvagen",
+    "name": "Forvägen"
+  },
+  {
+    "basomrade": "5110320_fittja_gard",
+    "name": "Fittja gård"
+  },
+  {
+    "basomrade": "5110410_sodra_hallunda",
+    "name": "Södra Hallunda"
+  },
+  {
+    "basomrade": "5110420_slagsta",
+    "name": "Slagsta"
+  },
+  {
+    "basomrade": "5110430_brunna",
+    "name": "Brunna"
+  },
+  {
+    "basomrade": "5110450_sodra_norsborg",
+    "name": "Södra Norsborg"
+  },
+  {
+    "basomrade": "5110460_tornbergsfaltet",
+    "name": "Tornbergsfältet"
+  },
+  {
+    "basomrade": "5110480_nordostra_norsborg",
+    "name": "Nordöstra Norsborg"
+  },
+  {
+    "basomrade": "5110490_nordvastra_norsborg",
+    "name": "Nordvästra Norsborg"
+  },
+  {
+    "basomrade": "5120730_tumba_centrum",
+    "name": "Tumba centrum"
+  },
+  {
+    "basomrade": "5120750_segersjo",
+    "name": "Segersjö"
+  },
+  {
+    "basomrade": "5120780_tumba_villastad",
+    "name": "Tumba villastad"
+  },
+  {
+    "basomrade": "5120790_skacklinge",
+    "name": "Skäcklinge"
+  },
+  {
+    "basomrade": "5120810_storvreten",
+    "name": "Storvreten"
+  },
+  {
+    "basomrade": "5120820_blockvagen",
+    "name": "Blockvägen"
+  },
+  {
+    "basomrade": "5120830_grytstigen",
+    "name": "Grytstigen"
+  },
+  {
+    "basomrade": "5120840_vedstigen",
+    "name": "Vedstigen"
+  },
+  {
+    "basomrade": "5120910_tumba_bruk",
+    "name": "Tumba bruk"
+  },
+  {
+    "basomrade": "5120920_tumba_glesbygd",
+    "name": "Tumba glesbygd"
+  },
+  {
+    "basomrade": "5120930_kommunalhuset",
+    "name": "Kommunalhuset"
+  },
+  {
+    "basomrade": "5120940_tuna",
+    "name": "Tuna"
+  },
+  {
+    "basomrade": "5120950_nackdala",
+    "name": "Nackdala"
+  },
+  {
+    "basomrade": "5120970_loviseberg",
+    "name": "Loviseberg"
+  },
+  {
+    "basomrade": "5130810_uttran",
+    "name": "Uttran"
+  },
+  {
+    "basomrade": "5130820_varsta",
+    "name": "Vårsta"
+  },
+  {
+    "basomrade": "5130830_grodinge_glesbygd",
+    "name": "Grödinge glesbygd"
+  },
+  {
+    "basomrade": "5140110_tullinge_villastad",
+    "name": "Tullinge villastad"
+  },
+  {
+    "basomrade": "5140620_tullingeberg",
+    "name": "Tullingeberg"
+  },
+  {
+    "basomrade": "5140641_tullinge_parkhem",
+    "name": "Tullinge parkhem"
+  },
+  {
+    "basomrade": "5140642_lanthem_n",
+    "name": "Lanthem N"
+  },
+  {
+    "basomrade": "5140650_tullinge_centrum",
+    "name": "Tullinge centrum"
+  },
+  {
+    "basomrade": "5140660_banslatt",
+    "name": "Banslätt"
+  },
+  {
+    "basomrade": "5140690_tullinge_glesbygd_riksten",
+    "name": "Tullinge glesbygd & Riksten"
+  },
+  {
+    "basomrade": "5140711_tullinge_skog",
+    "name": "Tullinge skog"
+  },
+  {
+    "basomrade": "5140712_lanthem_s",
+    "name": "Lanthem S"
+  },
+  {
+    "basomrade": "5711010_soderby_garde",
+    "name": "Söderby Gärde"
+  },
+  {
+    "basomrade": "5711020_soderby_park",
+    "name": "Söderby Park"
+  },
+  {
+    "basomrade": "5711110_skyttorp",
+    "name": "Skyttorp"
+  },
+  {
+    "basomrade": "5711120_skogsang",
+    "name": "Skogsäng"
+  },
+  {
+    "basomrade": "5711130_soderby",
+    "name": "Söderby"
+  },
+  {
+    "basomrade": "5711200_salems_centrum",
+    "name": "Salems centrum"
+  },
+  {
+    "basomrade": "5712110_norra_ronninge",
+    "name": "Norra Rönninge"
+  },
+  {
+    "basomrade": "5712210_uttringe",
+    "name": "Uttringe"
+  },
+  {
+    "basomrade": "5712220_ostra_ronninge",
+    "name": "Östra Rönninge"
+  },
+  {
+    "basomrade": "5712300_ronninge_centrum",
+    "name": "Rönninge Centrum"
+  },
+  {
+    "basomrade": "5713000_salems_glesbygd",
+    "name": "Salems glesbygd"
+  },
+  {
+    "basomrade": "5211120_gudo",
+    "name": "Gudö"
+  },
+  {
+    "basomrade": "5211131_sodra_vendelso",
+    "name": "Södra Vendelsö"
+  },
+  {
+    "basomrade": "5211132_sagen",
+    "name": "Sågen"
+  },
+  {
+    "basomrade": "5211140_norra_vendelso",
+    "name": "Norra Vendelsö"
+  },
+  {
+    "basomrade": "5211150_dalen",
+    "name": "Dalen"
+  },
+  {
+    "basomrade": "5211210_vendelsomalm",
+    "name": "Vendelsömalm"
+  },
+  {
+    "basomrade": "5211220_eriksberg",
+    "name": "Eriksberg"
+  },
+  {
+    "basomrade": "5211230_ramsdalen",
+    "name": "Ramsdalen"
+  },
+  {
+    "basomrade": "5211320_brandbergens_industriomr",
+    "name": "Brandbergens industriomr"
+  },
+  {
+    "basomrade": "5211330_brandbergen_flerbost_hus",
+    "name": "Brandbergen flerbost-hus"
+  },
+  {
+    "basomrade": "5211340_brandbergen_smahus",
+    "name": "Brandbergen småhus"
+  },
+  {
+    "basomrade": "5211430_kolartorp",
+    "name": "Kolartorp"
+  },
+  {
+    "basomrade": "5211440_vega_vega_soderhagen",
+    "name": "Vega & Vega Söderhagen"
+  },
+  {
+    "basomrade": "5211450_kvarntorp_kvarntorp_v_gamla_nynasvagen",
+    "name": "Kvarntorp & Kvarntorp V & Gamla Nynäsvägen"
+  },
+  {
+    "basomrade": "5211511_haninge_centrum",
+    "name": "Haninge centrum"
+  },
+  {
+    "basomrade": "5211512_vastra_handen",
+    "name": "Västra Handen"
+  },
+  {
+    "basomrade": "5211520_norra_handen",
+    "name": "Norra Handen"
+  },
+  {
+    "basomrade": "5211540_valla",
+    "name": "Valla"
+  },
+  {
+    "basomrade": "5211550_sodra_handen",
+    "name": "Södra Handen"
+  },
+  {
+    "basomrade": "5211610_jordbro_flerbostadshus",
+    "name": "Jordbro flerbostadshus"
+  },
+  {
+    "basomrade": "5211620_jordbro_smahus",
+    "name": "Jordbro småhus"
+  },
+  {
+    "basomrade": "5211710_norrby",
+    "name": "Norrby"
+  },
+  {
+    "basomrade": "5211800_norra_soderby",
+    "name": "Norra Söderby"
+  },
+  {
+    "basomrade": "5211920_galo_sandemar",
+    "name": "Gålö Sandemar"
+  },
+  {
+    "basomrade": "5211930_tyresta",
+    "name": "Tyresta"
+  },
+  {
+    "basomrade": "5211940_osterhaninge_kyrka",
+    "name": "Österhaninge kyrka"
+  },
+  {
+    "basomrade": "5211950_arsta_havsbad_o",
+    "name": "Årsta Havsbad Ö"
+  },
+  {
+    "basomrade": "5222100_dalaro",
+    "name": "Dalarö"
+  },
+  {
+    "basomrade": "5222500_smadalaro",
+    "name": "Smådalarö"
+  },
+  {
+    "basomrade": "5233000_uto",
+    "name": "Utö"
+  },
+  {
+    "basomrade": "5240000_orno_forsamling",
+    "name": "Ornö församling"
+  },
+  {
+    "basomrade": "5255110_aby",
+    "name": "Åby"
+  },
+  {
+    "basomrade": "5255121_jagartorp",
+    "name": "Jägartorp"
+  },
+  {
+    "basomrade": "5255130_vasterhaninge_kyrka",
+    "name": "Västerhaninge kyrka"
+  },
+  {
+    "basomrade": "5255140_ribby",
+    "name": "Ribby"
+  },
+  {
+    "basomrade": "5255150_nedersta_nodesta",
+    "name": "Nedersta & Nödesta"
+  },
+  {
+    "basomrade": "5255210_norra_tungelsta",
+    "name": "Norra Tungelsta"
+  },
+  {
+    "basomrade": "5255220_sodra_tungelsta",
+    "name": "Södra Tungelsta"
+  },
+  {
+    "basomrade": "5255910_vasterhaninge_glesbygd_n",
+    "name": "Västerhaninge glesbygd N"
+  },
+  {
+    "basomrade": "5255920_vasterhaninge_glesbygd_s",
+    "name": "Västerhaninge glesbygd S"
+  },
+  {
+    "basomrade": "5255930_arsta_havsbad_v_berga",
+    "name": "Årsta havsbad V - Berga"
+  },
+  {
+    "basomrade": "5260000_musko_forsamling",
+    "name": "Muskö församling"
+  },
+  {
+    "basomrade": "5511000_vastra_trollbacken",
+    "name": "Västra Trollbäcken"
+  },
+  {
+    "basomrade": "5511120_centrala_trollbacken",
+    "name": "Centrala Trollbäcken"
+  },
+  {
+    "basomrade": "5511130_sodergarden",
+    "name": "Södergården"
+  },
+  {
+    "basomrade": "5511140_skalsatra",
+    "name": "Skälsätra"
+  },
+  {
+    "basomrade": "5511150_norra_hanviken",
+    "name": "Norra Hanviken"
+  },
+  {
+    "basomrade": "5511160_sodra_hanviken",
+    "name": "Södra Hanviken"
+  },
+  {
+    "basomrade": "5512010_norra_lindalen",
+    "name": "Norra Lindalen"
+  },
+  {
+    "basomrade": "5513010_tyreso_centrum",
+    "name": "Tyresö Centrum"
+  },
+  {
+    "basomrade": "5513020_simvagen",
+    "name": "Simvägen"
+  },
+  {
+    "basomrade": "5513110_granitvagen",
+    "name": "Granitvägen"
+  },
+  {
+    "basomrade": "5513120_pluggvagen",
+    "name": "Pluggvägen"
+  },
+  {
+    "basomrade": "5513140_mellanbergsvagen",
+    "name": "Mellanbergsvägen"
+  },
+  {
+    "basomrade": "5513150_granangsringen",
+    "name": "Granängsringen"
+  },
+  {
+    "basomrade": "5513160_vastra_farmarstigen",
+    "name": "Västra Farmarstigen"
+  },
+  {
+    "basomrade": "5513170_ostra_farmarstigen",
+    "name": "Östra Farmarstigen"
+  },
+  {
+    "basomrade": "5513210_ostra_bollmora",
+    "name": "Östra Bollmora"
+  },
+  {
+    "basomrade": "5513220_bondevagen",
+    "name": "Bondevägen"
+  },
+  {
+    "basomrade": "5513310_norra_bollmora",
+    "name": "Norra Bollmora"
+  },
+  {
+    "basomrade": "5513330_vastra_fardala",
+    "name": "Västra Fårdala"
+  },
+  {
+    "basomrade": "5513410_fardala",
+    "name": "Fårdala"
+  },
+  {
+    "basomrade": "5514000_krusboda",
+    "name": "Krusboda"
+  },
+  {
+    "basomrade": "5515010_oringe",
+    "name": "Öringe"
+  },
+  {
+    "basomrade": "5515120_strand_norr_tyreso_strand_centrum_strand_syd_gimmersta",
+    "name": "Strand Norr & Tyresö Strand, Centrum & Strand Syd, Gimmersta"
+  },
+  {
+    "basomrade": "5515210_vissvass_raksta_solberga_bergholm",
+    "name": "Vissvass & Raksta, Solberga, Bergholm"
+  },
+  {
+    "basomrade": "5515220_inre_brevik_yttre_brevik",
+    "name": "Inre Brevik & Yttre Brevik"
+  },
+  {
+    "basomrade": "4010130_gamla_bro_tatort",
+    "name": "Gamla Bro tätort"
+  },
+  {
+    "basomrade": "4010140_bro_centrum",
+    "name": "Bro centrum"
+  },
+  {
+    "basomrade": "4010500_kockbacka_bro_glesbygd_ostra_bro_sodra_bro",
+    "name": "Kockbacka & Bro glesbygd & Östra Bro & Södra Bro"
+  },
+  {
+    "basomrade": "4020000_lassa_forsamling",
+    "name": "Låssa församling"
+  },
+  {
+    "basomrade": "4050100_habo_tibble_kyrkby",
+    "name": "Håbo-Tibble kyrkby"
+  },
+  {
+    "basomrade": "4050200_mariedal_nashagen",
+    "name": "Mariedal-Näshagen"
+  },
+  {
+    "basomrade": "4050500_habo_tibble_glesbygd",
+    "name": "Håbo-Tibble glesbygd"
+  },
+  {
+    "basomrade": "4060000_hatuna_forsamling",
+    "name": "Håtuna församling"
+  },
+  {
+    "basomrade": "4070110_sodra_kungsangen",
+    "name": "Södra Kungsängen"
+  },
+  {
+    "basomrade": "4070120_norra_kungsangen",
+    "name": "Norra Kungsängen"
+  },
+  {
+    "basomrade": "4070130_tibblehojden",
+    "name": "Tibblehöjden"
+  },
+  {
+    "basomrade": "4070150_tibbleangen",
+    "name": "Tibbleängen"
+  },
+  {
+    "basomrade": "4070160_sylta",
+    "name": "Sylta"
+  },
+  {
+    "basomrade": "4070170_kungsangens_glesbygd_rankhus",
+    "name": "Kungsängens glesbygd & Rankhus"
+  },
+  {
+    "basomrade": "4070210_brunna_tatort",
+    "name": "Brunna tätort"
+  },
+  {
+    "basomrade": "6410100_nykvarn",
+    "name": "Nykvarn"
+  },
+  {
+    "basomrade": "6410500_turinge_glesbygd",
+    "name": "Turinge glesbygd"
+  },
+  {
+    "basomrade": "6420000_taxinge_forsamling",
+    "name": "Taxinge församling"
+  },
+  {
+    "basomrade": "3910110_vastra_nasbypark",
+    "name": "Västra Näsbypark"
+  },
+  {
+    "basomrade": "3910120_ornstigen",
+    "name": "Örnstigen"
+  },
+  {
+    "basomrade": "3910130_nasbyparks_centrum",
+    "name": "Näsbyparks centrum"
+  },
+  {
+    "basomrade": "3910140_nasby_slott",
+    "name": "Näsby slott"
+  },
+  {
+    "basomrade": "3910170_ostra_nasbypark",
+    "name": "Östra Näsbypark"
+  },
+  {
+    "basomrade": "3910190_lahall",
+    "name": "Lahäll"
+  },
+  {
+    "basomrade": "3910210_nasbydal",
+    "name": "Näsbydal"
+  },
+  {
+    "basomrade": "3910220_grindtorp",
+    "name": "Grindtorp"
+  },
+  {
+    "basomrade": "3910240_taby_centrum",
+    "name": "Täby centrum"
+  },
+  {
+    "basomrade": "3910270_marknadsvagen",
+    "name": "Marknadsvägen"
+  },
+  {
+    "basomrade": "3910280_akerbyvagen",
+    "name": "Åkerbyvägen"
+  },
+  {
+    "basomrade": "3910310_sodra_viggbyholm",
+    "name": "Södra Viggbyholm"
+  },
+  {
+    "basomrade": "3910320_viggbygardet",
+    "name": "Viggbygärdet"
+  },
+  {
+    "basomrade": "3910330_mellersta_viggbyholm",
+    "name": "Mellersta Viggbyholm"
+  },
+  {
+    "basomrade": "3910350_norra_viggbyholm",
+    "name": "Norra Viggbyholm"
+  },
+  {
+    "basomrade": "3910370_norra_hagernas",
+    "name": "Norra Hägernäs"
+  },
+  {
+    "basomrade": "3910380_sodra_hagernas",
+    "name": "Södra Hägernäs"
+  },
+  {
+    "basomrade": "3910480_norra_landsbygden",
+    "name": "Norra landsbygden"
+  },
+  {
+    "basomrade": "3910730_ella",
+    "name": "Ella"
+  },
+  {
+    "basomrade": "3910770_vastra_ensta",
+    "name": "Västra Ensta"
+  },
+  {
+    "basomrade": "3910780_ostra_ensta",
+    "name": "Östra Ensta"
+  },
+  {
+    "basomrade": "3910790_kullagrand",
+    "name": "Kullagränd"
+  },
+  {
+    "basomrade": "3910810_norra_ellagard",
+    "name": "Norra Ellagård"
+  },
+  {
+    "basomrade": "3910820_sodra_ellagard",
+    "name": "Södra Ellagård"
+  },
+  {
+    "basomrade": "3910830_ava",
+    "name": "Åva"
+  },
+  {
+    "basomrade": "3910840_vastra_ellagard",
+    "name": "Västra Ellagård"
+  },
+  {
+    "basomrade": "3910910_skarpang",
+    "name": "Skarpäng"
+  },
+  {
+    "basomrade": "3910920_gripsvall",
+    "name": "Gripsvall"
+  },
+  {
+    "basomrade": "3911010_ostra_roslags_nasby",
+    "name": "Östra Roslags-Näsby"
+  },
+  {
+    "basomrade": "3911020_vastra_roslags_nasby",
+    "name": "Västra Roslags-Näsby"
+  },
+  {
+    "basomrade": "3911510_lansen",
+    "name": "Lansen"
+  },
+  {
+    "basomrade": "3911520_sodra_gribbylund",
+    "name": "Södra Gribbylund"
+  },
+  {
+    "basomrade": "3911530_gribbylunds_centrum",
+    "name": "Gribbylunds centrum"
+  },
+  {
+    "basomrade": "3911540_norra_gribbylund",
+    "name": "Norra Gribbylund"
+  },
+  {
+    "basomrade": "3911550_sveavagen",
+    "name": "Sveavägen"
+  },
+  {
+    "basomrade": "3911610_ostra_vallabrink",
+    "name": "Östra Vallabrink"
+  },
+  {
+    "basomrade": "3911620_vastra_vallabrink",
+    "name": "Västra Vallabrink"
+  },
+  {
+    "basomrade": "3911660_visinge",
+    "name": "Visinge"
+  },
+  {
+    "basomrade": "3911670_vallatorp",
+    "name": "Vallatorp"
+  },
+  {
+    "basomrade": "3911680_erikslund",
+    "name": "Erikslund"
+  },
+  {
+    "basomrade": "3911740_s_a_midgards_industriomr",
+    "name": "S:a Midgårds industriomr"
+  },
+  {
+    "basomrade": "3911750_taby_kyrka",
+    "name": "Täby kyrka"
+  },
+  {
+    "basomrade": "3911760_midgard",
+    "name": "Midgård"
+  },
+  {
+    "basomrade": "3911780_ostra_taby_kyrkby",
+    "name": "Östra Täby Kyrkby"
+  },
+  {
+    "basomrade": "3911790_runborg",
+    "name": "Runborg"
+  },
+  {
+    "basomrade": "3110110_ostra_enebyberg",
+    "name": "Östra Enebyberg"
+  },
+  {
+    "basomrade": "3110120_vastra_enebyberg",
+    "name": "Västra Enebyberg"
+  },
+  {
+    "basomrade": "3110260_satra",
+    "name": "Sätra"
+  },
+  {
+    "basomrade": "3110270_nora",
+    "name": "Nora"
+  },
+  {
+    "basomrade": "3110280_klingsta",
+    "name": "Klingsta"
+  },
+  {
+    "basomrade": "3110330_morbyskogen",
+    "name": "Mörbyskogen"
+  },
+  {
+    "basomrade": "3110340_kevinge",
+    "name": "Kevinge"
+  },
+  {
+    "basomrade": "3110350_morby_centrum",
+    "name": "Mörby Centrum"
+  },
+  {
+    "basomrade": "3110370_morbylund",
+    "name": "Mörbylund"
+  },
+  {
+    "basomrade": "3110430_norra_djursholm",
+    "name": "Norra Djursholm"
+  },
+  {
+    "basomrade": "3110440_sodra_djursholm",
+    "name": "Södra Djursholm"
+  },
+  {
+    "basomrade": "3110450_osby",
+    "name": "Ösby"
+  },
+  {
+    "basomrade": "3110460_ekeby",
+    "name": "Ekeby"
+  },
+  {
+    "basomrade": "3110510_norra_stocksund",
+    "name": "Norra Stocksund"
+  },
+  {
+    "basomrade": "3110530_inverness",
+    "name": "Inverness"
+  },
+  {
+    "basomrade": "3110540_sodra_stocksund",
+    "name": "Södra Stocksund"
+  },
+  {
+    "basomrade": "3110610_klockargarden",
+    "name": "Klockargården"
+  },
+  {
+    "basomrade": "3110620_berga",
+    "name": "Berga"
+  },
+  {
+    "basomrade": "3610120_gillberga",
+    "name": "Gillberga"
+  },
+  {
+    "basomrade": "3610140_rotsunda",
+    "name": "Rotsunda"
+  },
+  {
+    "basomrade": "3610170_rotebro_centrum",
+    "name": "Rotebro centrum"
+  },
+  {
+    "basomrade": "3610180_rotsunda_gard",
+    "name": "Rotsunda gård"
+  },
+  {
+    "basomrade": "3610210_vastra_viby",
+    "name": "Västra Viby"
+  },
+  {
+    "basomrade": "3610230_ostra_viby",
+    "name": "Östra Viby"
+  },
+  {
+    "basomrade": "3610310_vastra_norrviken",
+    "name": "Västra Norrviken"
+  },
+  {
+    "basomrade": "3610330_ostra_norrviken",
+    "name": "Östra Norrviken"
+  },
+  {
+    "basomrade": "3610400_vaxmora",
+    "name": "Vaxmora"
+  },
+  {
+    "basomrade": "3610510_klasro",
+    "name": "Klasro"
+  },
+  {
+    "basomrade": "3610530_haggviks_centrum",
+    "name": "Häggviks centrum"
+  },
+  {
+    "basomrade": "3610540_skalby",
+    "name": "Skälby"
+  },
+  {
+    "basomrade": "3610610_edsbergs_centrum",
+    "name": "Edsbergs centrum"
+  },
+  {
+    "basomrade": "3610650_ovriga_edsberg",
+    "name": "Övriga Edsberg"
+  },
+  {
+    "basomrade": "3610660_landsnora",
+    "name": "Landsnora"
+  },
+  {
+    "basomrade": "3610670_vasjoomradet",
+    "name": "Väsjöområdet"
+  },
+  {
+    "basomrade": "3610680_kvarnskogen",
+    "name": "Kvarnskogen"
+  },
+  {
+    "basomrade": "3610730_turebergs_industriomr",
+    "name": "Turebergs industriomr"
+  },
+  {
+    "basomrade": "3610750_fagelsangen",
+    "name": "Fågelsången"
+  },
+  {
+    "basomrade": "3610760_tojnan",
+    "name": "Töjnan"
+  },
+  {
+    "basomrade": "3610770_nytorp",
+    "name": "Nytorp"
+  },
+  {
+    "basomrade": "3610780_skansen",
+    "name": "Skansen"
+  },
+  {
+    "basomrade": "3610810_falkberget",
+    "name": "Falkberget"
+  },
+  {
+    "basomrade": "3610830_sjoberg",
+    "name": "Sjöberg"
+  },
+  {
+    "basomrade": "3610920_ostra_helenelund",
+    "name": "Östra Helenelund"
+  },
+  {
+    "basomrade": "3610931_tegelhagen",
+    "name": "Tegelhagen"
+  },
+  {
+    "basomrade": "3610940_helenelunds_centrum",
+    "name": "Helenelunds centrum"
+  },
+  {
+    "basomrade": "3610951_vastra_helenelund",
+    "name": "Västra Helenelund"
+  },
+  {
+    "basomrade": "3612710_bagarby",
+    "name": "Bagarby"
+  },
+  {
+    "basomrade": "1010120_skeppsbron",
+    "name": "Skeppsbron"
+  },
+  {
+    "basomrade": "1010130_munkbron",
+    "name": "Munkbron"
+  },
+  {
+    "basomrade": "1010140_stortorget",
+    "name": "Stortorget"
+  },
+  {
+    "basomrade": "1010201_centralstationen_n",
+    "name": "Centralstationen N"
+  },
+  {
+    "basomrade": "1010220_klara_kyrka",
+    "name": "Klara Kyrka"
+  },
+  {
+    "basomrade": "1010230_centralposten",
+    "name": "Centralposten"
+  },
+  {
+    "basomrade": "1010240_oscarsteatern",
+    "name": "Oscarsteatern"
+  },
+  {
+    "basomrade": "1010250_brunkeberg",
+    "name": "Brunkeberg"
+  },
+  {
+    "basomrade": "1010290_oxtorget",
+    "name": "Oxtorget"
+  },
+  {
+    "basomrade": "1010310_norrlandsgatan",
+    "name": "Norrlandsgatan"
+  },
+  {
+    "basomrade": "1110111_brunnsgatan_n",
+    "name": "Brunnsgatan N"
+  },
+  {
+    "basomrade": "1110112_brunnsgatan_s",
+    "name": "Brunnsgatan S"
+  },
+  {
+    "basomrade": "1110120_johannes_kyrka",
+    "name": "Johannes Kyrka"
+  },
+  {
+    "basomrade": "1110210_wenner_gren_center",
+    "name": "Wenner Gren Center"
+  },
+  {
+    "basomrade": "1110220_vanadislunden",
+    "name": "Vanadislunden"
+  },
+  {
+    "basomrade": "1110230_surbrunnsomradet",
+    "name": "Surbrunnsområdet"
+  },
+  {
+    "basomrade": "1110240_norra_real",
+    "name": "Norra Real"
+  },
+  {
+    "basomrade": "1110250_elverket",
+    "name": "Elverket"
+  },
+  {
+    "basomrade": "1120110_tegnerlunden",
+    "name": "Tegnerlunden"
+  },
+  {
+    "basomrade": "1120120_tandlakarhogskolan",
+    "name": "Tandläkarhögskolan"
+  },
+  {
+    "basomrade": "1120131_norra_bantorget_o",
+    "name": "Norra Bantorget Ö"
+  },
+  {
+    "basomrade": "1120140_adolf_fredriks_kyrka",
+    "name": "Adolf Fredriks Kyrka"
+  },
+  {
+    "basomrade": "1120150_skandiahuset",
+    "name": "Skandiahuset"
+  },
+  {
+    "basomrade": "1120210_kungssten",
+    "name": "Kungssten"
+  },
+  {
+    "basomrade": "1120220_saltmatargatan",
+    "name": "Saltmätargatan"
+  },
+  {
+    "basomrade": "1120230_sjokatten",
+    "name": "Sjökatten"
+  },
+  {
+    "basomrade": "1130110_atlasomradet",
+    "name": "Atlasområdet"
+  },
+  {
+    "basomrade": "1130120_gustav_vasa_kyrka",
+    "name": "Gustav Vasa Kyrka"
+  },
+  {
+    "basomrade": "1130130_observatoriegatan",
+    "name": "Observatoriegatan"
+  },
+  {
+    "basomrade": "1130140_sabbatsberg",
+    "name": "Sabbatsberg"
+  },
+  {
+    "basomrade": "1130150_polstjarnan",
+    "name": "Polstjärnan"
+  },
+  {
+    "basomrade": "1130170_betlehemskyrkan",
+    "name": "Betlehemskyrkan"
+  },
+  {
+    "basomrade": "1140110_norrtull",
+    "name": "Norrtull"
+  },
+  {
+    "basomrade": "1140120_tre_liljor",
+    "name": "Tre Liljor"
+  },
+  {
+    "basomrade": "1140130_matteuskyrka",
+    "name": "Matteuskyrka"
+  },
+  {
+    "basomrade": "1140140_halsingehojden",
+    "name": "Hälsingehöjden"
+  },
+  {
+    "basomrade": "1140150_centralgaraget",
+    "name": "Centralgaraget"
+  },
+  {
+    "basomrade": "1140210_norra_station_1_norra_station_2",
+    "name": "Norra Station 1 & Norra Station 2"
+  },
+  {
+    "basomrade": "1140220_birkagarden",
+    "name": "Birkagården"
+  },
+  {
+    "basomrade": "1140230_rorstrand",
+    "name": "Rörstrand"
+  },
+  {
+    "basomrade": "1140240_rodaberget",
+    "name": "Rödaberget"
+  },
+  {
+    "basomrade": "1140250_s_t_eriksplan",
+    "name": "S:t Eriksplan"
+  },
+  {
+    "basomrade": "1210110_roslagstull",
+    "name": "Roslagstull"
+  },
+  {
+    "basomrade": "1210120_larkstaden",
+    "name": "Lärkstaden"
+  },
+  {
+    "basomrade": "1210131_danderydsplan_v",
+    "name": "Danderydsplan V"
+  },
+  {
+    "basomrade": "1210132_danderydsplan_o",
+    "name": "Danderydsplan Ö"
+  },
+  {
+    "basomrade": "1210140_eriksberg",
+    "name": "Eriksberg"
+  },
+  {
+    "basomrade": "1210151_stureplan_o",
+    "name": "Stureplan Ö"
+  },
+  {
+    "basomrade": "1210161_humlegarden_o",
+    "name": "Humlegården Ö"
+  },
+  {
+    "basomrade": "1210171_stureparken_o",
+    "name": "Stureparken Ö"
+  },
+  {
+    "basomrade": "1210172_stureparken_v",
+    "name": "Stureparken V"
+  },
+  {
+    "basomrade": "1210210_roslagstulls_sjukhus",
+    "name": "Roslagstulls sjukhus"
+  },
+  {
+    "basomrade": "1210220_ostra_station",
+    "name": "Östra Station"
+  },
+  {
+    "basomrade": "1210320_ekhagen",
+    "name": "Ekhagen"
+  },
+  {
+    "basomrade": "1210330_frescati",
+    "name": "Frescati"
+  },
+  {
+    "basomrade": "1210410_centrala_hjorthagen",
+    "name": "Centrala Hjorthagen"
+  },
+  {
+    "basomrade": "1220110_ostermalmshallen",
+    "name": "Östermalmshallen"
+  },
+  {
+    "basomrade": "1220120_dramatiska_teatern",
+    "name": "Dramatiska teatern"
+  },
+  {
+    "basomrade": "1220130_ostermalmstorg",
+    "name": "Östermalmstorg"
+  },
+  {
+    "basomrade": "1220140_skvalberget",
+    "name": "Skvalberget"
+  },
+  {
+    "basomrade": "1220150_tyskbagaromradet",
+    "name": "Tyskbagarområdet"
+  },
+  {
+    "basomrade": "1220160_hedvig_eleonora_kyrka",
+    "name": "Hedvig Eleonora Kyrka"
+  },
+  {
+    "basomrade": "1220170_kronkvarnen",
+    "name": "Kronkvarnen"
+  },
+  {
+    "basomrade": "1230110_karlaplan",
+    "name": "Karlaplan"
+  },
+  {
+    "basomrade": "1230120_historiska_musuet",
+    "name": "Historiska MusÚet"
+  },
+  {
+    "basomrade": "1230130_strandvagen",
+    "name": "Strandvägen"
+  },
+  {
+    "basomrade": "1230140_oscarskyrkan",
+    "name": "Oscarskyrkan"
+  },
+  {
+    "basomrade": "1230161_gustav_adolfskyrkan_v",
+    "name": "Gustav Adolfskyrkan V"
+  },
+  {
+    "basomrade": "1230162_gustav_adolfskyrkan_o",
+    "name": "Gustav Adolfskyrkan Ö"
+  },
+  {
+    "basomrade": "1230210_djurgardsstaden",
+    "name": "Djurgårdsstaden"
+  },
+  {
+    "basomrade": "1230220_sodra_djurgarden",
+    "name": "Södra Djurgården"
+  },
+  {
+    "basomrade": "1230300_hastgardet",
+    "name": "Hästgardet"
+  },
+  {
+    "basomrade": "1230310_olaus_petri_kyrka",
+    "name": "Olaus Petri Kyrka"
+  },
+  {
+    "basomrade": "1230320_tessinparken",
+    "name": "Tessinparken"
+  },
+  {
+    "basomrade": "1230330_smedsbacken",
+    "name": "Smedsbacken"
+  },
+  {
+    "basomrade": "1230350_kampementsbacken",
+    "name": "Kampementsbacken"
+  },
+  {
+    "basomrade": "1230360_oregrundsgatan",
+    "name": "Öregrundsgatan"
+  },
+  {
+    "basomrade": "1230390_ladugardsgardet",
+    "name": "Ladugårdsgärdet"
+  },
+  {
+    "basomrade": "1310100_stadshuset",
+    "name": "Stadshuset"
+  },
+  {
+    "basomrade": "1310110_eira",
+    "name": "Eira"
+  },
+  {
+    "basomrade": "1310120_kungsklippan",
+    "name": "Kungsklippan"
+  },
+  {
+    "basomrade": "1310130_kungsbroplan",
+    "name": "Kungsbroplan"
+  },
+  {
+    "basomrade": "1310140_tekniska_namndhuset",
+    "name": "Tekniska Nämndhuset"
+  },
+  {
+    "basomrade": "1310150_landstingshuset",
+    "name": "Landstingshuset"
+  },
+  {
+    "basomrade": "1310160_pontonjarparken",
+    "name": "Pontonjärparken"
+  },
+  {
+    "basomrade": "1310170_s_t_eriks_sjukhus",
+    "name": "S:t Eriks Sjukhus"
+  },
+  {
+    "basomrade": "1310180_wargentinsgatan",
+    "name": "Wargentinsgatan"
+  },
+  {
+    "basomrade": "1310190_kronoberg",
+    "name": "Kronoberg"
+  },
+  {
+    "basomrade": "1320110_karlsvik",
+    "name": "Karlsvik"
+  },
+  {
+    "basomrade": "1320120_hemmet",
+    "name": "Hemmet"
+  },
+  {
+    "basomrade": "1320130_fridhemsplan",
+    "name": "Fridhemsplan"
+  },
+  {
+    "basomrade": "1320140_s_t_eriksgatan",
+    "name": "S:t Eriksgatan"
+  },
+  {
+    "basomrade": "1320150_alstromergatan",
+    "name": "Alströmergatan"
+  },
+  {
+    "basomrade": "1320210_ralambshov",
+    "name": "Rålambshov"
+  },
+  {
+    "basomrade": "1320220_svedbergsplan",
+    "name": "Svedbergsplan"
+  },
+  {
+    "basomrade": "1320240_mariebergsparken",
+    "name": "Mariebergsparken"
+  },
+  {
+    "basomrade": "1320310_ostra_stadshagen",
+    "name": "Östra Stadshagen"
+  },
+  {
+    "basomrade": "1320410_vastra_kristineberg",
+    "name": "Västra Kristineberg"
+  },
+  {
+    "basomrade": "1320420_thorildsplan",
+    "name": "Thorildsplan"
+  },
+  {
+    "basomrade": "1320500_fredhall",
+    "name": "Fredhäll"
+  },
+  {
+    "basomrade": "1330100_lilla_essingen",
+    "name": "Lilla Essingen"
+  },
+  {
+    "basomrade": "1330200_stora_essingen",
+    "name": "Stora Essingen"
+  },
+  {
+    "basomrade": "1410110_mariaberget",
+    "name": "Mariaberget"
+  },
+  {
+    "basomrade": "1410120_maria_kyrka",
+    "name": "Maria Kyrka"
+  },
+  {
+    "basomrade": "1410130_swedenborgsgatan",
+    "name": "Swedenborgsgatan"
+  },
+  {
+    "basomrade": "1410140_gullfjardsplan",
+    "name": "Gullfjärdsplan"
+  },
+  {
+    "basomrade": "1410150_bergsgruvan",
+    "name": "Bergsgruvan"
+  },
+  {
+    "basomrade": "1410210_sodra_station_vast",
+    "name": "Södra Station Väst"
+  },
+  {
+    "basomrade": "1410220_sodra_station_ost",
+    "name": "Södra Station Öst"
+  },
+  {
+    "basomrade": "1420110_hogalidskyrkan",
+    "name": "Högalidskyrkan"
+  },
+  {
+    "basomrade": "1420120_skinnarviksringen",
+    "name": "Skinnarviksringen"
+  },
+  {
+    "basomrade": "1420130_ludvigsberg",
+    "name": "Ludvigsberg"
+  },
+  {
+    "basomrade": "1420140_bergsund",
+    "name": "Bergsund"
+  },
+  {
+    "basomrade": "1420210_hornstull",
+    "name": "Hornstull"
+  },
+  {
+    "basomrade": "1420220_bysistappan",
+    "name": "Bysistäppan"
+  },
+  {
+    "basomrade": "1420230_sodra_namndhuset",
+    "name": "Södra Nämndhuset"
+  },
+  {
+    "basomrade": "1420240_zinkensdamm",
+    "name": "Zinkensdamm"
+  },
+  {
+    "basomrade": "1420310_sodersjukhuset",
+    "name": "Södersjukhuset"
+  },
+  {
+    "basomrade": "1420320_tanto",
+    "name": "Tanto"
+  },
+  {
+    "basomrade": "1420330_skoldgatan_syd",
+    "name": "Sköldgatan Syd"
+  },
+  {
+    "basomrade": "1420360_skoldgatan_nord",
+    "name": "Sköldgatan Nord"
+  },
+  {
+    "basomrade": "1420410_langholmen",
+    "name": "Långholmen"
+  },
+  {
+    "basomrade": "1420420_reimersholme",
+    "name": "Reimersholme"
+  },
+  {
+    "basomrade": "1430120_vastra_aso",
+    "name": "Västra Åsö"
+  },
+  {
+    "basomrade": "1430130_blekingetappan",
+    "name": "Blekingetäppan"
+  },
+  {
+    "basomrade": "1430140_helgalunden",
+    "name": "Helgalunden"
+  },
+  {
+    "basomrade": "1430150_eriksdal",
+    "name": "Eriksdal"
+  },
+  {
+    "basomrade": "1430160_asotorget",
+    "name": "Åsötorget"
+  },
+  {
+    "basomrade": "1430180_rosenlund",
+    "name": "Rosenlund"
+  },
+  {
+    "basomrade": "1430210_mosebacke",
+    "name": "Mosebacke"
+  },
+  {
+    "basomrade": "1430220_ostra_aso",
+    "name": "Östra Åsö"
+  },
+  {
+    "basomrade": "1430230_katarina_kyrka",
+    "name": "Katarina Kyrka"
+  },
+  {
+    "basomrade": "1430240_bjurholmsplan",
+    "name": "Bjurholmsplan"
+  },
+  {
+    "basomrade": "1430250_nytorget",
+    "name": "Nytorget"
+  },
+  {
+    "basomrade": "1440110_ersta",
+    "name": "Ersta"
+  },
+  {
+    "basomrade": "1440120_sofia_kyrka",
+    "name": "Sofia Kyrka"
+  },
+  {
+    "basomrade": "1440210_tullgarden",
+    "name": "Tullgården"
+  },
+  {
+    "basomrade": "1440220_vita_bergen",
+    "name": "Vita Bergen"
+  },
+  {
+    "basomrade": "1440230_blecktornet",
+    "name": "Blecktornet"
+  },
+  {
+    "basomrade": "1440240_vintertullen",
+    "name": "Vintertullen"
+  },
+  {
+    "basomrade": "1440250_barnangen",
+    "name": "Barnängen"
+  },
+  {
+    "basomrade": "1440260_mjardgrand",
+    "name": "Mjärdgränd"
+  },
+  {
+    "basomrade": "1440311_danviken_n",
+    "name": "Danviken N"
+  },
+  {
+    "basomrade": "1440312_danviken_s",
+    "name": "Danviken S"
+  },
+  {
+    "basomrade": "2110120_sankt_sigfrid",
+    "name": "Sankt Sigfrid"
+  },
+  {
+    "basomrade": "2110130_ornsberg_nord_ost",
+    "name": "Örnsberg Nord-Öst"
+  },
+  {
+    "basomrade": "2110140_vinterviken",
+    "name": "Vinterviken"
+  },
+  {
+    "basomrade": "2110150_ornsberg_syd_ost",
+    "name": "Örnsberg Syd-Öst"
+  },
+  {
+    "basomrade": "2110220_ostra_grondal",
+    "name": "Östra Gröndal"
+  },
+  {
+    "basomrade": "2110230_ekensberg",
+    "name": "Ekensberg"
+  },
+  {
+    "basomrade": "2110310_axelsbergs_torg",
+    "name": "Axelsbergs Torg"
+  },
+  {
+    "basomrade": "2110320_klubbacken",
+    "name": "Klubbacken"
+  },
+  {
+    "basomrade": "2110330_axelsberg_syd_ost",
+    "name": "Axelsberg Syd-Öst"
+  },
+  {
+    "basomrade": "2110340_stensborg",
+    "name": "Stensborg"
+  },
+  {
+    "basomrade": "2110350_sankt_mickelsgatan",
+    "name": "Sankt Mickelsgatan"
+  },
+  {
+    "basomrade": "2110370_ornsberg_syd_vast",
+    "name": "Örnsberg Syd-Väst"
+  },
+  {
+    "basomrade": "2110380_hagerstenshamnen",
+    "name": "Hägerstenshamnen"
+  },
+  {
+    "basomrade": "2110390_axelsberg_nord",
+    "name": "Axelsberg Nord"
+  },
+  {
+    "basomrade": "2110520_norra_hagerstensasen",
+    "name": "Norra Hägerstensåsen"
+  },
+  {
+    "basomrade": "2110530_sodra_hagerstensasen",
+    "name": "Södra Hägerstensåsen"
+  },
+  {
+    "basomrade": "2110620_nybohov",
+    "name": "Nybohov"
+  },
+  {
+    "basomrade": "2110650_liljeholmsberget",
+    "name": "Liljeholmsberget"
+  },
+  {
+    "basomrade": "2110660_lovholmen",
+    "name": "Lövholmen"
+  },
+  {
+    "basomrade": "2110681_nyboda_o",
+    "name": "Nyboda Ö"
+  },
+  {
+    "basomrade": "2110720_svandammen",
+    "name": "Svandammen"
+  },
+  {
+    "basomrade": "2110730_fastlagsvagen",
+    "name": "Fastlagsvägen"
+  },
+  {
+    "basomrade": "2110740_telefonplan",
+    "name": "Telefonplan"
+  },
+  {
+    "basomrade": "2110810_norra_malarhojden",
+    "name": "Norra Mälarhöjden"
+  },
+  {
+    "basomrade": "2110820_gulddragaren",
+    "name": "Gulddragaren"
+  },
+  {
+    "basomrade": "2110920_karusellvagen",
+    "name": "Karusellvägen"
+  },
+  {
+    "basomrade": "2110930_korpmossen",
+    "name": "Korpmossen"
+  },
+  {
+    "basomrade": "2110940_hokmossen",
+    "name": "Hökmossen"
+  },
+  {
+    "basomrade": "2120100_fruangen",
+    "name": "Fruängen"
+  },
+  {
+    "basomrade": "2120201_herrangen_v",
+    "name": "Herrängen V"
+  },
+  {
+    "basomrade": "2120202_herrangen_o",
+    "name": "Herrängen Ö"
+  },
+  {
+    "basomrade": "2120300_liseberg",
+    "name": "Liseberg"
+  },
+  {
+    "basomrade": "2120401_langbro_v",
+    "name": "Långbro V"
+  },
+  {
+    "basomrade": "2120402_langbro_o",
+    "name": "Långbro Ö"
+  },
+  {
+    "basomrade": "2120500_langsjo",
+    "name": "Långsjö"
+  },
+  {
+    "basomrade": "2120620_norra_solberga",
+    "name": "Norra Solberga"
+  },
+  {
+    "basomrade": "2120630_vastra_solberga",
+    "name": "Västra Solberga"
+  },
+  {
+    "basomrade": "2120660_sodra_solberga",
+    "name": "Södra Solberga"
+  },
+  {
+    "basomrade": "2120700_vastertorp",
+    "name": "Västertorp"
+  },
+  {
+    "basomrade": "2120820_vastra_alvsjo",
+    "name": "Västra Älvsjö"
+  },
+  {
+    "basomrade": "2120900_orby_slott",
+    "name": "Örby Slott"
+  },
+  {
+    "basomrade": "2121020_ostbergahojden_ostbergavagen",
+    "name": "Östbergahöjden & Östbergavägen"
+  },
+  {
+    "basomrade": "2130100_bandhagen",
+    "name": "Bandhagen"
+  },
+  {
+    "basomrade": "2130210_hogdalens_centrum",
+    "name": "Högdalens Centrum"
+  },
+  {
+    "basomrade": "2130220_ostra_hogdalen",
+    "name": "Östra Högdalen"
+  },
+  {
+    "basomrade": "2130230_vastra_hogdalen",
+    "name": "Västra Högdalen"
+  },
+  {
+    "basomrade": "2130240_skebokvarnsvagen",
+    "name": "Skebokvarnsvägen"
+  },
+  {
+    "basomrade": "2130320_ragsveds_torg",
+    "name": "Rågsveds Torg"
+  },
+  {
+    "basomrade": "2130330_bjursatra",
+    "name": "Bjursätra"
+  },
+  {
+    "basomrade": "2130340_snosatra",
+    "name": "Snösätra"
+  },
+  {
+    "basomrade": "2130420_backaskiftsvagen",
+    "name": "Bäckaskiftsvägen"
+  },
+  {
+    "basomrade": "2130430_ostra_stureby",
+    "name": "Östra Stureby"
+  },
+  {
+    "basomrade": "2130440_vastra_stureby",
+    "name": "Västra Stureby"
+  },
+  {
+    "basomrade": "2130501_orby_n",
+    "name": "Örby N"
+  },
+  {
+    "basomrade": "2130502_orby_s",
+    "name": "Örby S"
+  },
+  {
+    "basomrade": "2130620_hagsatra_torg",
+    "name": "Hagsätra Torg"
+  },
+  {
+    "basomrade": "2130630_ormkarr",
+    "name": "Ormkärr"
+  },
+  {
+    "basomrade": "2140120_ostra_enskedefaltet",
+    "name": "Östra Enskedefältet"
+  },
+  {
+    "basomrade": "2140210_vastra_enskede_gard",
+    "name": "Västra Enskede Gård"
+  },
+  {
+    "basomrade": "2140220_tradskolan",
+    "name": "Trädskolan"
+  },
+  {
+    "basomrade": "2140320_enskede_kyrka",
+    "name": "Enskede Kyrka"
+  },
+  {
+    "basomrade": "2140330_svampvagen",
+    "name": "Svampvägen"
+  },
+  {
+    "basomrade": "2140340_sandsborg",
+    "name": "Sandsborg"
+  },
+  {
+    "basomrade": "2140350_dalen",
+    "name": "Dalen"
+  },
+  {
+    "basomrade": "2140620_gullmarsplan",
+    "name": "Gullmarsplan"
+  },
+  {
+    "basomrade": "2140630_skarmarbrink",
+    "name": "Skärmarbrink"
+  },
+  {
+    "basomrade": "2140820_skanskvarn",
+    "name": "Skanskvarn"
+  },
+  {
+    "basomrade": "2140830_arsta_centrum",
+    "name": "Årsta Centrum"
+  },
+  {
+    "basomrade": "2140840_arsta_gard",
+    "name": "Årsta Gård"
+  },
+  {
+    "basomrade": "2140850_valla_garde",
+    "name": "Valla Gärde"
+  },
+  {
+    "basomrade": "2150100_bjorkhagen",
+    "name": "Björkhagen"
+  },
+  {
+    "basomrade": "2150200_enskededalen",
+    "name": "Enskededalen"
+  },
+  {
+    "basomrade": "2150400_hammarbyhojden",
+    "name": "Hammarbyhöjden"
+  },
+  {
+    "basomrade": "2150500_karrtorp",
+    "name": "Kärrtorp"
+  },
+  {
+    "basomrade": "4111120_sodra_runby",
+    "name": "Södra Runby"
+  },
+  {
+    "basomrade": "2150731_skarpnacksfaltet_o",
+    "name": "Skarpnäcksfältet Ö"
+  },
+  {
+    "basomrade": "2150732_skarpnacksfaltet_v",
+    "name": "Skarpnäcksfältet V"
+  },
+  {
+    "basomrade": "2150740_skarpa_by",
+    "name": "Skarpa By"
+  },
+  {
+    "basomrade": "2150820_lagaplan",
+    "name": "Lagaplan"
+  },
+  {
+    "basomrade": "2150830_sodra_bagarmossen",
+    "name": "Södra Bagarmossen"
+  },
+  {
+    "basomrade": "2150840_norra_bagarmossen",
+    "name": "Norra Bagarmossen"
+  },
+  {
+    "basomrade": "2160120_havsornstorget",
+    "name": "Havsörnstorget"
+  },
+  {
+    "basomrade": "2160130_fagersjovagen",
+    "name": "Fagersjövägen"
+  },
+  {
+    "basomrade": "2160220_sodra_farsta",
+    "name": "Södra Farsta"
+  },
+  {
+    "basomrade": "2160230_vastra_farsta",
+    "name": "Västra Farsta"
+  },
+  {
+    "basomrade": "2160240_ostra_farsta",
+    "name": "Östra Farsta"
+  },
+  {
+    "basomrade": "2160260_norra_farsta",
+    "name": "Norra Farsta"
+  },
+  {
+    "basomrade": "2160320_ullerudsbacken",
+    "name": "Ullerudsbacken"
+  },
+  {
+    "basomrade": "2160330_farsta_gard",
+    "name": "Farsta Gård"
+  },
+  {
+    "basomrade": "2160520_gubbangstorget",
+    "name": "Gubbängstorget"
+  },
+  {
+    "basomrade": "2160530_gubbangens_gard",
+    "name": "Gubbängens Gård"
+  },
+  {
+    "basomrade": "2160620_vastra_hokarangen",
+    "name": "Västra Hökarängen"
+  },
+  {
+    "basomrade": "2160630_sondagsvagen",
+    "name": "Söndagsvägen"
+  },
+  {
+    "basomrade": "2160640_lingvagen",
+    "name": "Lingvägen"
+  },
+  {
+    "basomrade": "2160720_vastra_larsboda",
+    "name": "Västra Larsboda"
+  },
+  {
+    "basomrade": "2160760_ostra_larsboda",
+    "name": "Östra Larsboda"
+  },
+  {
+    "basomrade": "2160820_bagarfruvagen",
+    "name": "Bagarfruvägen"
+  },
+  {
+    "basomrade": "2160830_vastra_skondal",
+    "name": "Västra Sköndal"
+  },
+  {
+    "basomrade": "2160840_norra_skondal",
+    "name": "Norra Sköndal"
+  },
+  {
+    "basomrade": "2160850_stora_skondal",
+    "name": "Stora Sköndal"
+  },
+  {
+    "basomrade": "2160920_sodra_svedmyra",
+    "name": "Södra Svedmyra"
+  },
+  {
+    "basomrade": "2160930_norra_svedmyra",
+    "name": "Norra Svedmyra"
+  },
+  {
+    "basomrade": "2161020_norra_tallkrogen",
+    "name": "Norra Tallkrogen"
+  },
+  {
+    "basomrade": "2161030_sodra_tallkrogen",
+    "name": "Södra Tallkrogen"
+  },
+  {
+    "basomrade": "2170120_bredangs_alle",
+    "name": "Bredängs Allé"
+  },
+  {
+    "basomrade": "2170130_yttre_bredang",
+    "name": "Yttre Bredäng"
+  },
+  {
+    "basomrade": "2170220_satra_torg",
+    "name": "Sätra Torg"
+  },
+  {
+    "basomrade": "2170230_norra_satra",
+    "name": "Norra Sätra"
+  },
+  {
+    "basomrade": "2170310_skarholmens_centrum",
+    "name": "Skärholmens Centrum"
+  },
+  {
+    "basomrade": "2170321_skarholmens_gard",
+    "name": "Skärholmens Gård"
+  },
+  {
+    "basomrade": "2170322_mellersta_skarholmen",
+    "name": "Mellersta Skärholmen"
+  },
+  {
+    "basomrade": "2170330_sodra_skarholmen",
+    "name": "Södra Skärholmen"
+  },
+  {
+    "basomrade": "2170420_ostra_varberg",
+    "name": "Östra Vårberg"
+  },
+  {
+    "basomrade": "2170430_vastra_varberg",
+    "name": "Västra Vårberg"
+  },
+  {
+    "basomrade": "2210120_norra_abrahamsberg",
+    "name": "Norra Abrahamsberg"
+  },
+  {
+    "basomrade": "2210130_sodra_abrahamsberg",
+    "name": "Södra Abrahamsberg"
+  },
+  {
+    "basomrade": "2210200_beckomberga",
+    "name": "Beckomberga"
+  },
+  {
+    "basomrade": "2210300_blackeberg",
+    "name": "Blackeberg"
+  },
+  {
+    "basomrade": "2210400_bromma_kyrka",
+    "name": "Bromma Kyrka"
+  },
+  {
+    "basomrade": "2210500_ballsta",
+    "name": "Bällsta"
+  },
+  {
+    "basomrade": "2210600_eneby",
+    "name": "Eneby"
+  },
+  {
+    "basomrade": "2210700_mariehall",
+    "name": "Mariehäll"
+  },
+  {
+    "basomrade": "2210830_runstensplan",
+    "name": "Runstensplan"
+  },
+  {
+    "basomrade": "2210840_angbylunden",
+    "name": "Ängbylunden"
+  },
+  {
+    "basomrade": "2210850_attehagen",
+    "name": "Ättehagen"
+  },
+  {
+    "basomrade": "2210860_akeshovsbadet",
+    "name": "Åkeshovsbadet"
+  },
+  {
+    "basomrade": "2210920_sodra_riksby",
+    "name": "Södra Riksby"
+  },
+  {
+    "basomrade": "2211121_farjestadsvagen_v",
+    "name": "Färjestadsvägen V"
+  },
+  {
+    "basomrade": "2211130_angbyhojden",
+    "name": "Ängbyhöjden"
+  },
+  {
+    "basomrade": "2211220_johannesfred",
+    "name": "Johannesfred"
+  },
+  {
+    "basomrade": "2211300_akeshov",
+    "name": "Åkeshov"
+  },
+  {
+    "basomrade": "2211420_ostra_akeslund",
+    "name": "Östra Åkeslund"
+  },
+  {
+    "basomrade": "2211460_vastra_akeslund",
+    "name": "Västra Åkeslund"
+  },
+  {
+    "basomrade": "2220100_alvik",
+    "name": "Alvik"
+  },
+  {
+    "basomrade": "2220200_hoglandet",
+    "name": "Höglandet"
+  },
+  {
+    "basomrade": "2220300_nockeby",
+    "name": "Nockeby"
+  },
+  {
+    "basomrade": "2220400_nockebyhov",
+    "name": "Nockebyhov"
+  },
+  {
+    "basomrade": "2220500_olovslund",
+    "name": "Olovslund"
+  },
+  {
+    "basomrade": "2220600_smedslatten",
+    "name": "Smedslätten"
+  },
+  {
+    "basomrade": "2220700_stora_mossen",
+    "name": "Stora Mossen"
+  },
+  {
+    "basomrade": "2220820_sodra_traneberg",
+    "name": "Södra Traneberg"
+  },
+  {
+    "basomrade": "2220830_norra_traneberg",
+    "name": "Norra Traneberg"
+  },
+  {
+    "basomrade": "2220840_minneberg",
+    "name": "Minneberg"
+  },
+  {
+    "basomrade": "2220900_ulvsunda",
+    "name": "Ulvsunda"
+  },
+  {
+    "basomrade": "2221000_alsten",
+    "name": "Ålsten"
+  },
+  {
+    "basomrade": "2221100_appelviken",
+    "name": "Äppelviken"
+  },
+  {
+    "basomrade": "2230100_grimsta",
+    "name": "Grimsta"
+  },
+  {
+    "basomrade": "2230200_kalvesta",
+    "name": "Kälvesta"
+  },
+  {
+    "basomrade": "2230300_nalsta",
+    "name": "Nälsta"
+  },
+  {
+    "basomrade": "2230420_vastra_racksta",
+    "name": "Västra Råcksta"
+  },
+  {
+    "basomrade": "2230430_ostra_racksta",
+    "name": "Östra Råcksta"
+  },
+  {
+    "basomrade": "2230440_racksta_sjukhus",
+    "name": "Råcksta sjukhus"
+  },
+  {
+    "basomrade": "2230520_norra_vinsta",
+    "name": "Norra Vinsta"
+  },
+  {
+    "basomrade": "2230560_sodra_vinsta",
+    "name": "Södra Vinsta"
+  },
+  {
+    "basomrade": "2230610_vallingby_centrum",
+    "name": "Vällingby Centrum"
+  },
+  {
+    "basomrade": "2230620_sodra_vallingby",
+    "name": "Södra Vällingby"
+  },
+  {
+    "basomrade": "2230630_norra_vallingby",
+    "name": "Norra Vällingby"
+  },
+  {
+    "basomrade": "2240121_sodra_bromsten_n",
+    "name": "Södra Bromsten N"
+  },
+  {
+    "basomrade": "2240122_sodra_bromsten_s",
+    "name": "Södra Bromsten S"
+  },
+  {
+    "basomrade": "2240130_norra_bromsten",
+    "name": "Norra Bromsten"
+  },
+  {
+    "basomrade": "2240200_flysta",
+    "name": "Flysta"
+  },
+  {
+    "basomrade": "2240520_norra_rinkeby_kvarnby_norra_rinkeby_askeby",
+    "name": "Norra Rinkeby, Kvarnby & Norra Rinkeby, Askeby"
+  },
+  {
+    "basomrade": "2240530_sodra_rinkeby_knutby_sodra_rinkeby_bredby",
+    "name": "Södra Rinkeby, Knutby & Södra Rinkeby, Bredby"
+  },
+  {
+    "basomrade": "2240621_solhojden",
+    "name": "Solhöjden"
+  },
+  {
+    "basomrade": "2240622_spanga_torg",
+    "name": "Spånga Torg"
+  },
+  {
+    "basomrade": "2240631_solhems_villastad_vast",
+    "name": "Solhems Villastad Väst"
+  },
+  {
+    "basomrade": "2240632_spanga_gymnasium",
+    "name": "Spånga Gymnasium"
+  },
+  {
+    "basomrade": "2240640_solhems_villastad_nord",
+    "name": "Solhems Villastad Nord"
+  },
+  {
+    "basomrade": "2240650_logvagen_erland",
+    "name": "Logvägen (Erland)"
+  },
+  {
+    "basomrade": "2240700_sundby",
+    "name": "Sundby"
+  },
+  {
+    "basomrade": "2240820_norra_tensta_spanga_kyrkvag_norra_tensta_tensta_alle",
+    "name": "Norra Tensta, Spånga Kyrkväg & Norra Tensta,Tensta Allé"
+  },
+  {
+    "basomrade": "2240830_sodra_tensta_spanga_kyrka_sodra_tensta_tensta_kyrka",
+    "name": "Södra Tensta,Spånga Kyrka & Södra Tensta,Tensta Kyrka"
+  },
+  {
+    "basomrade": "2240840_hjulsta",
+    "name": "Hjulsta"
+  },
+  {
+    "basomrade": "2250120_hasselby_torg",
+    "name": "Hässelby Torg"
+  },
+  {
+    "basomrade": "2250130_vastra_hasselby_gard",
+    "name": "Västra Hässelby Gård"
+  },
+  {
+    "basomrade": "2250140_sodra_hasselby_gard",
+    "name": "Södra Hässelby Gård"
+  },
+  {
+    "basomrade": "2250200_hasselby_strand",
+    "name": "Hässelby Strand"
+  },
+  {
+    "basomrade": "2250310_backlura",
+    "name": "Backlura"
+  },
+  {
+    "basomrade": "2250320_trollboda",
+    "name": "Trollboda"
+  },
+  {
+    "basomrade": "2250332_hasselby_villastrand",
+    "name": "Hässelby Villastrand"
+  },
+  {
+    "basomrade": "2250340_hasselby_kyrka",
+    "name": "Hässelby Kyrka"
+  },
+  {
+    "basomrade": "2250350_akermyntan",
+    "name": "Åkermyntan"
+  },
+  {
+    "basomrade": "2250370_radisvagen",
+    "name": "Rädisvägen"
+  },
+  {
+    "basomrade": "2250380_smedshagen",
+    "name": "Smedshagen"
+  },
+  {
+    "basomrade": "2260120_centrala_akalla",
+    "name": "Centrala Akalla"
+  },
+  {
+    "basomrade": "2260130_sodra_akalla",
+    "name": "Södra Akalla"
+  },
+  {
+    "basomrade": "2260220_norra_husby",
+    "name": "Norra Husby"
+  },
+  {
+    "basomrade": "2260230_sodra_husby",
+    "name": "Södra Husby"
+  },
+  {
+    "basomrade": "2260310_kista_centrum",
+    "name": "Kista Centrum"
+  },
+  {
+    "basomrade": "2260320_ovre_kista",
+    "name": "Övre Kista"
+  },
+  {
+    "basomrade": "2260330_nedre_kista",
+    "name": "Nedre Kista"
+  },
+  {
+    "basomrade": "6310110_ostra_centrum",
+    "name": "Östra centrum"
+  },
+  {
+    "basomrade": "6310120_vastra_centrum",
+    "name": "Västra centrum"
+  },
+  {
+    "basomrade": "6310130_kvarnberga",
+    "name": "Kvarnberga"
+  },
+  {
+    "basomrade": "6310170_vardsholmen",
+    "name": "Värdsholmen"
+  },
+  {
+    "basomrade": "6310320_blombacka",
+    "name": "Blombacka"
+  },
+  {
+    "basomrade": "6310330_mariekalla",
+    "name": "Mariekälla"
+  },
+  {
+    "basomrade": "6310340_saltskog",
+    "name": "Saltskog"
+  },
+  {
+    "basomrade": "6310351_sodra_vastergard",
+    "name": "Södra Västergård"
+  },
+  {
+    "basomrade": "6310352_norra_vastergard",
+    "name": "Norra Västergård"
+  },
+  {
+    "basomrade": "6310353_vastra_vastergard",
+    "name": "Västra Västergård"
+  },
+  {
+    "basomrade": "6310360_barstafaltet",
+    "name": "Bårstafältet"
+  },
+  {
+    "basomrade": "6310370_barstabergen",
+    "name": "Bårstabergen"
+  },
+  {
+    "basomrade": "6310422_stationsomradet_sodra",
+    "name": "Stationsområdet Södra"
+  },
+  {
+    "basomrade": "6320510_vastra_grusasen",
+    "name": "Västra Grusåsen"
+  },
+  {
+    "basomrade": "6320520_ostra_grusasen",
+    "name": "Östra Grusåsen"
+  },
+  {
+    "basomrade": "6320541_sodra_brunnsang",
+    "name": "Södra Brunnsäng"
+  },
+  {
+    "basomrade": "6320542_norra_brunnsang",
+    "name": "Norra Brunnsäng"
+  },
+  {
+    "basomrade": "6320550_ragnhildsborg",
+    "name": "Ragnhildsborg"
+  },
+  {
+    "basomrade": "6320611_kusens_backe",
+    "name": "Kusens backe"
+  },
+  {
+    "basomrade": "6320612_sjukhuset",
+    "name": "Sjukhuset"
+  },
+  {
+    "basomrade": "6320621_ostra_rosenlund",
+    "name": "Östra Rosenlund"
+  },
+  {
+    "basomrade": "6320622_rosenborg",
+    "name": "Rosenborg"
+  },
+  {
+    "basomrade": "6320940_viksberg",
+    "name": "Viksberg"
+  },
+  {
+    "basomrade": "6321710_igelsta",
+    "name": "Igelsta"
+  },
+  {
+    "basomrade": "6321720_ostertalje",
+    "name": "Östertälje"
+  },
+  {
+    "basomrade": "6321740_fornhojden",
+    "name": "Fornhöjden"
+  },
+  {
+    "basomrade": "6330210_karlhov",
+    "name": "Karlhov"
+  },
+  {
+    "basomrade": "6330220_sodra_ronna",
+    "name": "Södra Ronna"
+  },
+  {
+    "basomrade": "6330230_norra_ronna",
+    "name": "Norra Ronna"
+  },
+  {
+    "basomrade": "6330240_vastra_ronna",
+    "name": "Västra Ronna"
+  },
+  {
+    "basomrade": "6330250_lina_hage",
+    "name": "Lina Hage"
+  },
+  {
+    "basomrade": "6330260_lina",
+    "name": "Lina"
+  },
+  {
+    "basomrade": "6330380_norra_geneta",
+    "name": "Norra Geneta"
+  },
+  {
+    "basomrade": "6330391_vastra_geneta",
+    "name": "Västra Geneta"
+  },
+  {
+    "basomrade": "6330392_ostra_geneta",
+    "name": "Östra Geneta"
+  },
+  {
+    "basomrade": "6341410_pershagen",
+    "name": "Pershagen"
+  },
+  {
+    "basomrade": "6341430_tveta_glesbygd",
+    "name": "Tveta glesbygd"
+  },
+  {
+    "basomrade": "6341451_hovsjo",
+    "name": "Hovsjö"
+  },
+  {
+    "basomrade": "6351200_enhorna_glesbygd",
+    "name": "Enhörna glesbygd"
+  },
+  {
+    "basomrade": "6351210_ekeby",
+    "name": "Ekeby"
+  },
+  {
+    "basomrade": "6381100_molnbo",
+    "name": "Mölnbo"
+  },
+  {
+    "basomrade": "6381500_vardinge_glesbygd",
+    "name": "Vårdinge glesbygd"
+  },
+  {
+    "basomrade": "6382100_jarna",
+    "name": "Järna"
+  },
+  {
+    "basomrade": "6382500_overjarna_glesbygd",
+    "name": "Överjärna glesbygd"
+  },
+  {
+    "basomrade": "6383000_ytterjarna_forsamling",
+    "name": "Ytterjärna församling"
+  },
+  {
+    "basomrade": "6391100_holo",
+    "name": "Hölö"
+  },
+  {
+    "basomrade": "6391500_holo_glesbygd",
+    "name": "Hölö glesbygd"
+  },
+  {
+    "basomrade": "6392000_morko_forsamling",
+    "name": "Mörkö församling"
+  },
+  {
+    "basomrade": "5411010_henriksdal",
+    "name": "Henriksdal"
+  },
+  {
+    "basomrade": "5411020_finnberget",
+    "name": "Finnberget"
+  },
+  {
+    "basomrade": "5411030_kvarnholmen",
+    "name": "Kvarnholmen"
+  },
+  {
+    "basomrade": "5411040_danviken",
+    "name": "Danviken"
+  },
+  {
+    "basomrade": "5411100_alphyddan",
+    "name": "Alphyddan"
+  },
+  {
+    "basomrade": "5411110_finntorp",
+    "name": "Finntorp"
+  },
+  {
+    "basomrade": "5411130_ekudden",
+    "name": "Ekudden"
+  },
+  {
+    "basomrade": "5411140_jarla_industriomr",
+    "name": "Järla industriomr"
+  },
+  {
+    "basomrade": "5411200_sickla_industriomr",
+    "name": "Sickla industriomr"
+  },
+  {
+    "basomrade": "5411210_tallbacken",
+    "name": "Tallbacken"
+  },
+  {
+    "basomrade": "5411220_nysatra",
+    "name": "Nysätra"
+  },
+  {
+    "basomrade": "5411320_jarlaberg",
+    "name": "Jarlaberg"
+  },
+  {
+    "basomrade": "5411330_vikdalen",
+    "name": "Vikdalen"
+  },
+  {
+    "basomrade": "5411340_nacka_strand",
+    "name": "Nacka Strand"
+  },
+  {
+    "basomrade": "5411410_nacka_centrum",
+    "name": "Nacka Centrum"
+  },
+  {
+    "basomrade": "5411500_storangen",
+    "name": "Storängen"
+  },
+  {
+    "basomrade": "5411600_duvnas_utskog",
+    "name": "Duvnäs utskog"
+  },
+  {
+    "basomrade": "5411610_skuru",
+    "name": "Skuru"
+  },
+  {
+    "basomrade": "5411700_skogalund",
+    "name": "Skogalund"
+  },
+  {
+    "basomrade": "5411710_vastra_ektorp",
+    "name": "Västra Ektorp"
+  },
+  {
+    "basomrade": "5411720_ostra_ektorp",
+    "name": "Östra Ektorp"
+  },
+  {
+    "basomrade": "5411740_saltangen",
+    "name": "Saltängen"
+  },
+  {
+    "basomrade": "5411800_duvnas",
+    "name": "Duvnäs"
+  },
+  {
+    "basomrade": "5411900_hasthagen",
+    "name": "Hästhagen"
+  },
+  {
+    "basomrade": "5413001_fisksatra_sm",
+    "name": "Fisksätra sm"
+  },
+  {
+    "basomrade": "5413002_fisksatra_fh",
+    "name": "Fisksätra fh"
+  },
+  {
+    "basomrade": "5414001_erstavik",
+    "name": "Erstavik"
+  },
+  {
+    "basomrade": "5414100_kolarangen",
+    "name": "Kolarängen"
+  },
+  {
+    "basomrade": "5414200_alta_gard",
+    "name": "Älta gård"
+  },
+  {
+    "basomrade": "5414300_stenso",
+    "name": "Stensö"
+  },
+  {
+    "basomrade": "5414310_hedvigslund",
+    "name": "Hedvigslund"
+  },
+  {
+    "basomrade": "5423100_igelboda",
+    "name": "Igelboda"
+  },
+  {
+    "basomrade": "5423201_solsidan_norr",
+    "name": "Solsidan norr"
+  },
+  {
+    "basomrade": "5423202_saltsjobaden_centrum",
+    "name": "Saltsjöbaden centrum"
+  },
+  {
+    "basomrade": "5423230_tattby",
+    "name": "Tattby"
+  },
+  {
+    "basomrade": "5423300_neglingeon",
+    "name": "Neglingeön"
+  },
+  {
+    "basomrade": "5423400_solsidan",
+    "name": "Solsidan"
+  },
+  {
+    "basomrade": "5423500_algo",
+    "name": "Älgö"
+  },
+  {
+    "basomrade": "5432000_norra_bjorknas",
+    "name": "Norra Björknäs"
+  },
+  {
+    "basomrade": "5432020_sodra_bjorknas",
+    "name": "Södra Björknäs"
+  },
+  {
+    "basomrade": "5432030_klinten",
+    "name": "Klinten"
+  },
+  {
+    "basomrade": "5432100_eknas",
+    "name": "Eknäs"
+  },
+  {
+    "basomrade": "5432200_vastra_kummelnas",
+    "name": "Västra Kummelnäs"
+  },
+  {
+    "basomrade": "5432220_ostra_kummelnas",
+    "name": "Östra Kummelnäs"
+  },
+  {
+    "basomrade": "5432300_kil",
+    "name": "Kil"
+  },
+  {
+    "basomrade": "5432400_krokhojden",
+    "name": "Krokhöjden"
+  },
+  {
+    "basomrade": "5432410_orminge",
+    "name": "Orminge"
+  },
+  {
+    "basomrade": "5432500_mensattra",
+    "name": "Mensättra"
+  },
+  {
+    "basomrade": "5432600_kallvagen",
+    "name": "Källvägen"
+  },
+  {
+    "basomrade": "5432610_eriksvik",
+    "name": "Eriksvik"
+  },
+  {
+    "basomrade": "5432700_norra_lannersta",
+    "name": "Norra Lännersta"
+  },
+  {
+    "basomrade": "5432710_sodra_lannersta",
+    "name": "Södra Lännersta"
+  },
+  {
+    "basomrade": "5432810_boo_gard",
+    "name": "Boo gård"
+  },
+  {
+    "basomrade": "5432900_gustavsvik",
+    "name": "Gustavsvik"
+  },
+  {
+    "basomrade": "3810100_lilla_alby",
+    "name": "Lilla Alby"
+  },
+  {
+    "basomrade": "3810110_sundbybergs_industriomrade",
+    "name": "Sundbybergs industriområde"
+  },
+  {
+    "basomrade": "3810220_rasten",
+    "name": "Råsten"
+  },
+  {
+    "basomrade": "3810230_sundbybergs_centrum",
+    "name": "Sundbybergs Centrum"
+  },
+  {
+    "basomrade": "3810240_starrbacksgatan",
+    "name": "Starrbäcksgatan"
+  },
+  {
+    "basomrade": "3810300_storskogen",
+    "name": "Storskogen"
+  },
+  {
+    "basomrade": "3810310_lotsjo",
+    "name": "Lötsjö"
+  },
+  {
+    "basomrade": "3810320_tule",
+    "name": "Tule"
+  },
+  {
+    "basomrade": "3810400_duvbo",
+    "name": "Duvbo"
+  },
+  {
+    "basomrade": "3810410_hasthagen",
+    "name": "Hästhagen"
+  },
+  {
+    "basomrade": "3810500_or",
+    "name": "Ör"
+  },
+  {
+    "basomrade": "3810610_hallonbergen",
+    "name": "Hallonbergen"
+  },
+  {
+    "basomrade": "3810720_rissne_norra_arbetsomrade",
+    "name": "Rissne norra arbetsområde"
+  },
+  {
+    "basomrade": "3810740_norra_rissne",
+    "name": "Norra Rissne"
+  },
+  {
+    "basomrade": "3810750_sodra_rissne",
+    "name": "Södra Rissne"
+  },
+  {
+    "basomrade": "3810810_ursviks_smahusomrade",
+    "name": "Ursviks småhusområde"
+  },
+  {
+    "basomrade": "3710120_vastra_ritorp",
+    "name": "Västra Ritorp"
+  },
+  {
+    "basomrade": "3710130_ostra_ritorp",
+    "name": "Östra Ritorp"
+  },
+  {
+    "basomrade": "3710141_sodra_frosunda_norra_frosunda",
+    "name": "Södra Frösunda & Norra Frösunda"
+  },
+  {
+    "basomrade": "3710143_ballongberget",
+    "name": "Ballongberget"
+  },
+  {
+    "basomrade": "3710160_bagartorp",
+    "name": "Bagartorp"
+  },
+  {
+    "basomrade": "3710170_rastahem",
+    "name": "Råstahem"
+  },
+  {
+    "basomrade": "3710180_agnesberg",
+    "name": "Agnesberg"
+  },
+  {
+    "basomrade": "3710200_ulriksdal",
+    "name": "Ulriksdal"
+  },
+  {
+    "basomrade": "3710310_norra_bergshamra",
+    "name": "Norra Bergshamra"
+  },
+  {
+    "basomrade": "3710320_bergshamra_torg",
+    "name": "Bergshamra torg"
+  },
+  {
+    "basomrade": "3710330_stocksundstorp",
+    "name": "Stocksundstorp"
+  },
+  {
+    "basomrade": "3710340_ostra_bergshamra",
+    "name": "Östra Bergshamra"
+  },
+  {
+    "basomrade": "3710350_sodra_bergshamra",
+    "name": "Södra Bergshamra"
+  },
+  {
+    "basomrade": "3710360_kungshamra",
+    "name": "Kungshamra"
+  },
+  {
+    "basomrade": "3710420_karolinska_sjukhuset_nya_karolinska_solna_kyrkby",
+    "name": "Karolinska sjukhuset & Nya Karolinska & Solna Kyrkby"
+  },
+  {
+    "basomrade": "3710430_karolinska_institutet",
+    "name": "Karolinska institutet"
+  },
+  {
+    "basomrade": "3710520_jungfrudansen",
+    "name": "Jungfrudansen"
+  },
+  {
+    "basomrade": "3710530_sodra_huvusta",
+    "name": "Södra Huvusta"
+  },
+  {
+    "basomrade": "3710540_vastra_skogen",
+    "name": "Västra skogen"
+  },
+  {
+    "basomrade": "3710550_gamla_huvusta",
+    "name": "Gamla Huvusta"
+  },
+  {
+    "basomrade": "3710570_huvudstafaltet",
+    "name": "Huvudstafältet"
+  },
+  {
+    "basomrade": "3710580_pampas_marina_ingenting",
+    "name": "Pampas marina & Ingenting"
+  },
+  {
+    "basomrade": "3720610_solna_station_stora_frosunda_brahelund",
+    "name": "Solna station & Stora Frösunda & Brahelund"
+  },
+  {
+    "basomrade": "3720620_blakulla",
+    "name": "Blåkulla"
+  },
+  {
+    "basomrade": "3720630_rudviken_vastra_hagalund",
+    "name": "Rudviken & Västra Hagalund"
+  },
+  {
+    "basomrade": "3720710_rasunda_kyrka_sodra_rasunda",
+    "name": "Råsunda kyrka & Södra Råsunda"
+  },
+  {
+    "basomrade": "3720730_skogskronet",
+    "name": "Skogskrönet"
+  },
+  {
+    "basomrade": "3720740_rasundaskolan_rasundastadion",
+    "name": "Råsundaskolan & Råsundastadion"
+  },
+  {
+    "basomrade": "3720750_charlottenburg",
+    "name": "Charlottenburg"
+  },
+  {
+    "basomrade": "3720760_sodra_vasalund",
+    "name": "Södra Vasalund"
+  },
+  {
+    "basomrade": "3720770_norra_vasalund",
+    "name": "Norra Vasalund"
+  },
+  {
+    "basomrade": "3720780_ekensberg",
+    "name": "Ekensberg"
+  },
+  {
+    "basomrade": "3720790_hallen",
+    "name": "Hallen"
+  },
+  {
+    "basomrade": "3720910_skytteholm",
+    "name": "Skytteholm"
+  },
+  {
+    "basomrade": "3720920_albygard",
+    "name": "Albygård"
+  },
+  {
+    "basomrade": "3720930_solna_centrum",
+    "name": "Solna Centrum"
+  },
+  {
+    "basomrade": "3720940_hanneberg",
+    "name": "Hanneberg"
+  },
+  {
+    "basomrade": "3720950_albydal",
+    "name": "Albydal"
+  },
+  {
+    "basomrade": "3411110_norra_sticklinge",
+    "name": "Norra Sticklinge"
+  },
+  {
+    "basomrade": "3411120_sodra_sticklinge",
+    "name": "Södra Sticklinge"
+  },
+  {
+    "basomrade": "3411200_islinge",
+    "name": "Islinge"
+  },
+  {
+    "basomrade": "3411310_vastra_naset",
+    "name": "Västra Näset"
+  },
+  {
+    "basomrade": "3411320_ostra_naset",
+    "name": "Östra Näset"
+  },
+  {
+    "basomrade": "3411400_bo_garde",
+    "name": "Bo Gärde"
+  },
+  {
+    "basomrade": "3411510_bo",
+    "name": "Bo"
+  },
+  {
+    "basomrade": "3411520_bjornbo",
+    "name": "Björnbo"
+  },
+  {
+    "basomrade": "3411610_boson",
+    "name": "Bosön"
+  },
+  {
+    "basomrade": "3411620_rudboda",
+    "name": "Rudboda"
+  },
+  {
+    "basomrade": "3412100_elfvik",
+    "name": "Elfvik"
+  },
+  {
+    "basomrade": "3413110_torsviksplatan",
+    "name": "Torsviksplatån"
+  },
+  {
+    "basomrade": "3413120_lidingo_centrum",
+    "name": "Lidingö centrum"
+  },
+  {
+    "basomrade": "3413130_stureplatan",
+    "name": "Stureplatån"
+  },
+  {
+    "basomrade": "3413140_herserud",
+    "name": "Herserud"
+  },
+  {
+    "basomrade": "3413150_torsviks_torg",
+    "name": "Torsviks Torg"
+  },
+  {
+    "basomrade": "3413210_bredablick",
+    "name": "Bredablick"
+  },
+  {
+    "basomrade": "3413220_norra_hersby",
+    "name": "Norra Hersby"
+  },
+  {
+    "basomrade": "3413230_sodra_hersby",
+    "name": "Södra Hersby"
+  },
+  {
+    "basomrade": "3413240_hersbyholm",
+    "name": "Hersbyholm"
+  },
+  {
+    "basomrade": "3413300_stockby",
+    "name": "Stockby"
+  },
+  {
+    "basomrade": "3413410_baggeby",
+    "name": "Baggeby"
+  },
+  {
+    "basomrade": "3413420_bodal",
+    "name": "Bodal"
+  },
+  {
+    "basomrade": "3413500_larsberg",
+    "name": "Larsberg"
+  },
+  {
+    "basomrade": "3413600_mosstorp",
+    "name": "Mosstorp"
+  },
+  {
+    "basomrade": "3413710_centrala_gangsatra",
+    "name": "Centrala Gångsätra"
+  },
+  {
+    "basomrade": "3413720_norra_gangsatra",
+    "name": "Norra Gångsätra"
+  },
+  {
+    "basomrade": "3413810_bergsatra",
+    "name": "Bergsätra"
+  },
+  {
+    "basomrade": "3413820_centrala_skrsatra",
+    "name": "Centrala Skrsätra"
+  },
+  {
+    "basomrade": "3413830_kottla_molna_kappsta",
+    "name": "Kottla Mölna Kappsta"
+  },
+  {
+    "basomrade": "3414210_centrala_kappala",
+    "name": "Centrala Käppala"
+  },
+  {
+    "basomrade": "3414240_killinge",
+    "name": "Killinge"
+  },
+  {
+    "basomrade": "3414250_ostra_kappala",
+    "name": "Östra Käppala"
+  },
+  {
+    "basomrade": "3414310_brevik",
+    "name": "Brevik"
+  },
+  {
+    "basomrade": "3414320_hogberga",
+    "name": "Högberga"
+  },
+  {
+    "basomrade": "4311441_bogesund",
+    "name": "Bogesund"
+  },
+  {
+    "basomrade": "4311442_storholmen",
+    "name": "Storholmen"
+  },
+  {
+    "basomrade": "4311443_kullon",
+    "name": "Kullön"
+  },
+  {
+    "basomrade": "4311460_karlsudd",
+    "name": "Karlsudd"
+  },
+  {
+    "basomrade": "4311610_ostra_vaxon",
+    "name": "Östra Vaxön"
+  },
+  {
+    "basomrade": "4311620_vastra_vaxon",
+    "name": "Västra Vaxön"
+  },
+  {
+    "basomrade": "4311650_engarn_storang",
+    "name": "Engarn Storäng"
+  },
+  {
+    "basomrade": "4311661_ytterby_overby",
+    "name": "Ytterby Överby"
+  },
+  {
+    "basomrade": "4311730_tynningo",
+    "name": "Tynningö"
+  },
+  {
+    "basomrade": "4311810_rindo_centrum",
+    "name": "Rindö centrum"
+  },
+  {
+    "basomrade": "4311820_rindo",
+    "name": "Rindö"
+  },
+  {
+    "basomrade": "4311830_skarpo",
+    "name": "Skarpö"
+  },
+  {
+    "basomrade": "6110310_norrtalje_centrum",
+    "name": "Norrtälje centrum"
+  },
+  {
+    "basomrade": "6110320_fagelsangen",
+    "name": "Fågelsången"
+  },
+  {
+    "basomrade": "6110330_vastra_rodenstaden",
+    "name": "västra Rodenstaden"
+  },
+  {
+    "basomrade": "6110340_ostra_rodenstaden",
+    "name": "Östra Rodenstaden"
+  },
+  {
+    "basomrade": "6110350_norgegardet",
+    "name": "Norgegärdet"
+  },
+  {
+    "basomrade": "6110360_roslagsstaden",
+    "name": "Roslagsstaden"
+  },
+  {
+    "basomrade": "6110410_grossgardet",
+    "name": "Grossgärdet"
+  },
+  {
+    "basomrade": "6110430_sodra_bergen",
+    "name": "Södra Bergen"
+  },
+  {
+    "basomrade": "6110440_vastra_kvisthamra",
+    "name": "västra Kvisthamra"
+  },
+  {
+    "basomrade": "6110450_kvisthamra",
+    "name": "Kvisthamra"
+  },
+  {
+    "basomrade": "6121000_malsta_forsamling",
+    "name": "Malsta församling"
+  },
+  {
+    "basomrade": "6122000_loharads_forsamling",
+    "name": "Lohärads församling"
+  },
+  {
+    "basomrade": "6123100_svanberga",
+    "name": "Svanberga"
+  },
+  {
+    "basomrade": "6123210_farsna",
+    "name": "Färsna"
+  },
+  {
+    "basomrade": "6123220_sodra_estuna",
+    "name": "Södra Estuna"
+  },
+  {
+    "basomrade": "6123500_estuna_glesbygd",
+    "name": "Estuna glesbygd"
+  },
+  {
+    "basomrade": "6125000_roslags_bro",
+    "name": "Roslags-Bro"
+  },
+  {
+    "basomrade": "6126500_vato_fastland",
+    "name": "Vätö fastland"
+  },
+  {
+    "basomrade": "6126600_vato",
+    "name": "Vätö"
+  },
+  {
+    "basomrade": "6131100_sodersvik",
+    "name": "Södersvik"
+  },
+  {
+    "basomrade": "6131501_radmansolandet",
+    "name": "Rådmansölandet"
+  },
+  {
+    "basomrade": "6131502_graddo",
+    "name": "Gräddö"
+  },
+  {
+    "basomrade": "6132120_osthamra",
+    "name": "Östhamra"
+  },
+  {
+    "basomrade": "6132200_frotuna",
+    "name": "Frötuna"
+  },
+  {
+    "basomrade": "6132501_frotuna_o_glesbygd",
+    "name": "Frötuna Ö glesbygd"
+  },
+  {
+    "basomrade": "6132502_spillersboda",
+    "name": "Spillersboda"
+  },
+  {
+    "basomrade": "6133100_furusund",
+    "name": "Furusund"
+  },
+  {
+    "basomrade": "6133200_kopmanholm",
+    "name": "Köpmanholm"
+  },
+  {
+    "basomrade": "6133600_yxlan",
+    "name": "Yxlan"
+  },
+  {
+    "basomrade": "6133700_blido",
+    "name": "Blidö"
+  },
+  {
+    "basomrade": "6134100_bergshamra",
+    "name": "Bergshamra"
+  },
+  {
+    "basomrade": "6134510_lanna_fastland",
+    "name": "Länna fastland"
+  },
+  {
+    "basomrade": "6134520_svartno",
+    "name": "Svartnö"
+  },
+  {
+    "basomrade": "6135000_riala_forsamling",
+    "name": "Riala församling"
+  },
+  {
+    "basomrade": "6141110_sodra_rimbo",
+    "name": "Södra Rimbo"
+  },
+  {
+    "basomrade": "6141120_hasta",
+    "name": "Håsta"
+  },
+  {
+    "basomrade": "6141130_vastertorp",
+    "name": "Västertorp"
+  },
+  {
+    "basomrade": "6141500_rimbo_glesbygd",
+    "name": "Rimbo glesbygd"
+  },
+  {
+    "basomrade": "6142100_ranas",
+    "name": "Rånäs"
+  },
+  {
+    "basomrade": "6142500_fasterna_glesbygd",
+    "name": "Fasterna glesbygd"
+  },
+  {
+    "basomrade": "6143100_edsbro",
+    "name": "Edsbro"
+  },
+  {
+    "basomrade": "6143500_edsbro_glesbygd",
+    "name": "Edsbro glesbygd"
+  },
+  {
+    "basomrade": "6144000_skederids_forsamling",
+    "name": "Skederids församling"
+  },
+  {
+    "basomrade": "6145000_husby_sjuhundra",
+    "name": "Husby-Sjuhundra"
+  },
+  {
+    "basomrade": "6146000_ro_forsamling",
+    "name": "Rö församling"
+  },
+  {
+    "basomrade": "6147000_nartuna_forsamling",
+    "name": "Närtuna församling"
+  },
+  {
+    "basomrade": "6148000_gottrora_forsamling",
+    "name": "Gottröra församling"
+  },
+  {
+    "basomrade": "6151100_ostra_hallstavik",
+    "name": "Östra Hallstavik"
+  },
+  {
+    "basomrade": "6151200_herrang",
+    "name": "Herräng"
+  },
+  {
+    "basomrade": "6151500_havero_glesbygd",
+    "name": "Häverö glesbygd"
+  },
+  {
+    "basomrade": "6152100_vastra_hallstavik",
+    "name": "Västra Hallstavik"
+  },
+  {
+    "basomrade": "6152500_edebo_glesbygd",
+    "name": "Edebo glesbygd"
+  },
+  {
+    "basomrade": "6154100_skebobruk",
+    "name": "Skebobruk"
+  },
+  {
+    "basomrade": "6154500_ununge_glesbygd",
+    "name": "Ununge glesbygd"
+  },
+  {
+    "basomrade": "6161000_singo_forsamling",
+    "name": "Singö församling"
+  },
+  {
+    "basomrade": "6162100_almsta",
+    "name": "Älmsta"
+  },
+  {
+    "basomrade": "6162200_grisslehamn",
+    "name": "Grisslehamn"
+  },
+  {
+    "basomrade": "6162510_vaddo_fastland",
+    "name": "Väddö fastland"
+  },
+  {
+    "basomrade": "6162520_vaddo",
+    "name": "Väddö"
+  },
+  {
+    "basomrade": "6163500_bjorko",
+    "name": "Björkö"
+  },
+  {
+    "basomrade": "6164100_soderby_karl",
+    "name": "Söderby-Karl"
+  },
+  {
+    "basomrade": "6164500_soderby_karls_glesbygd",
+    "name": "Söderby-Karls glesbygd"
+  },
+  {
+    "basomrade": "3510110_gamla_marsta",
+    "name": "Gamla Märsta"
+  },
+  {
+    "basomrade": "3510120_marsta_kyrka",
+    "name": "Märsta Kyrka"
+  },
+  {
+    "basomrade": "3510130_tingvalla",
+    "name": "Tingvalla"
+  },
+  {
+    "basomrade": "3510140_ekillatorp",
+    "name": "Ekillatorp"
+  },
+  {
+    "basomrade": "3510150_sodra_ekilla",
+    "name": "Södra Ekilla"
+  },
+  {
+    "basomrade": "3510160_marsta_centrum",
+    "name": "Märsta Centrum"
+  },
+  {
+    "basomrade": "3510210_ostra_norrbacka",
+    "name": "Östra Norrbacka"
+  },
+  {
+    "basomrade": "3510220_vastra_norrbacka",
+    "name": "Västra Norrbacka"
+  },
+  {
+    "basomrade": "3510260_norra_ekilla",
+    "name": "Norra Ekilla"
+  },
+  {
+    "basomrade": "3510270_ostra_arenberga",
+    "name": "Östra Arenberga"
+  },
+  {
+    "basomrade": "3510280_satuna",
+    "name": "Sätuna"
+  },
+  {
+    "basomrade": "3510450_marsta_vastra_glesbygd_marsta_maby",
+    "name": "Märsta västra glesbygd & Märsta Måby"
+  },
+  {
+    "basomrade": "3522020_ostra_sigtuna",
+    "name": "Östra Sigtuna"
+  },
+  {
+    "basomrade": "3522030_gamla_sigtuna",
+    "name": "Gamla Sigtuna"
+  },
+  {
+    "basomrade": "3522040_brannbo",
+    "name": "Brännbo"
+  },
+  {
+    "basomrade": "3522050_prastangen_och_hallsbo",
+    "name": "Prästängen och Hällsbo"
+  },
+  {
+    "basomrade": "3522060_sjudargarden",
+    "name": "Sjudargården"
+  },
+  {
+    "basomrade": "3532010_munkholmen",
+    "name": "Munkholmen"
+  },
+  {
+    "basomrade": "3534030_sankt_olofs_glesbygd_pilsbo",
+    "name": "Sankt Olofs glesbygd & Pilsbo"
+  },
+  {
+    "basomrade": "3541000_sankt_pers_forsamling",
+    "name": "Sankt Pers församling"
+  },
+  {
+    "basomrade": "3542000_haga_forsamling",
+    "name": "Haga församling"
+  },
+  {
+    "basomrade": "3551110_norra_valsta",
+    "name": "Norra Valsta"
+  },
+  {
+    "basomrade": "3551120_valsta_centrum",
+    "name": "Valsta centrum"
+  },
+  {
+    "basomrade": "3551130_sodra_valsta",
+    "name": "Södra Valsta"
+  },
+  {
+    "basomrade": "3551140_ostra_steninge",
+    "name": "Östra Steninge"
+  },
+  {
+    "basomrade": "3551150_steninge_gard",
+    "name": "Steninge gård"
+  },
+  {
+    "basomrade": "3560210_rosersbergs_bostadsomr",
+    "name": "Rosersbergs bostadsomr"
+  },
+  {
+    "basomrade": "3560500_rosersbergs_nya_arbetsomr_arlanda_stad_ost_norrsunda_glesbygd_brista_varmeverk",
+    "name": "Rosersbergs nya arbetsomr & Arlanda Stad Öst & Norrsunda glesbygd & Brista Värmeverk"
+  },
+  {
+    "basomrade": "3560610_sodra_skanela",
+    "name": "Södra Skånela"
+  },
+  {
+    "basomrade": "3580100_skepptuna_fd_forsamling",
+    "name": "Skepptuna fd församling"
+  },
+  {
+    "basomrade": "3580210_ostra_lunda",
+    "name": "Östra Lunda"
+  },
+  {
+    "basomrade": "3580300_vidbo_fd_forsamling",
+    "name": "Vidbo fd församling"
+  },
+  {
+    "basomrade": "6210240_nicksta",
+    "name": "Nicksta"
+  },
+  {
+    "basomrade": "6210270_kallsmo",
+    "name": "Källsmo"
+  },
+  {
+    "basomrade": "6210350_vastra_nynashamn_c",
+    "name": "Västra Nynäshamn C"
+  },
+  {
+    "basomrade": "6210360_ostra_nynashamn_c",
+    "name": "Östra Nynäshamn C"
+  },
+  {
+    "basomrade": "6210410_nynashamn_sv_esto",
+    "name": "Nynäshamn SV (Estö)"
+  },
+  {
+    "basomrade": "6210440_sandhamn_mm",
+    "name": "Sandhamn mm"
+  },
+  {
+    "basomrade": "6210490_trehorningen_mm",
+    "name": "Trehörningen mm"
+  },
+  {
+    "basomrade": "6210520_vaktberget",
+    "name": "Vaktberget"
+  },
+  {
+    "basomrade": "6210570_rappsta_hacktorp",
+    "name": "Rappsta-Hacktorp"
+  },
+  {
+    "basomrade": "6210640_hamnvik",
+    "name": "Hamnvik"
+  },
+  {
+    "basomrade": "6220100_sorunda",
+    "name": "Sorunda"
+  },
+  {
+    "basomrade": "6220200_stora_vika",
+    "name": "Stora Vika"
+  },
+  {
+    "basomrade": "6220300_grodby",
+    "name": "Grödby"
+  },
+  {
+    "basomrade": "6220510_liso",
+    "name": "Lisö"
+  },
+  {
+    "basomrade": "6220520_sorunda_vastra_glesbygd",
+    "name": "Sorunda västra glesbygd"
+  },
+  {
+    "basomrade": "6220530_sorunda_ostra_glesbygd",
+    "name": "Sorunda östra glesbygd"
+  },
+  {
+    "basomrade": "6230000_toro_forsamling",
+    "name": "Torö församling"
+  },
+  {
+    "basomrade": "6240100_osmo",
+    "name": "Ösmo"
+  },
+  {
+    "basomrade": "6240510_jarflotta",
+    "name": "Järflotta"
+  },
+  {
+    "basomrade": "6240530_osmo_ostra_glesbygd",
+    "name": "Ösmo östra glesbygd"
+  },
+  {
+    "basomrade": "6240540_osmo_vastra_glesbygd",
+    "name": "Ösmo västra glesbygd"
+  },
+  {
+    "basomrade": "6240550_osmo_norra_glesbygd",
+    "name": "Ösmo norra glesbygd"
+  },
+  {
+    "basomrade": "3720720_filmstaden",
+    "name": "Filmstaden"
+  },
+  {
+    "basomrade": "3710110_jarvafaltet_jarvastaden_norra_jarvastaden_sodra_jarvastaden_ostra",
+    "name": "Järvafältet & Järvastaden norra & Järvastaden södra & Järvastaden östra"
+  },
+  {
+    "basomrade": "3810821_kymlinge_brotorp_stora_ursvik_norra",
+    "name": "Kymlinge & Brotorp & Stora Ursvik Norra"
+  },
+  {
+    "basomrade": "4010120_skallsta_vastra_raby_garde",
+    "name": "Skällsta & Västra Råby Gärde"
+  },
+  {
+    "basomrade": "1120132_norra_bantorget_v",
+    "name": "Norra Bantorget V"
+  },
+  {
+    "basomrade": "1320330_lindhagensplan",
+    "name": "Lindhagensplan"
+  },
+  {
+    "basomrade": "3710150_bangarden_nationalarenan",
+    "name": "Bangården & Nationalarenan"
+  }
+]

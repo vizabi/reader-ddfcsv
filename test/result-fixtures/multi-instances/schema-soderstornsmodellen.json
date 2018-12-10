@@ -1,0 +1,4099 @@
+[
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "educational_level_higher_education_max_3_years_aged_25_64"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "educational_level_higher_education_max_3_years_aged_25_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "educational_level_higher_education_max_3_years_aged_25_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "educational_level_higher_education_max_3_years_aged_25_64_female"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "educational_level_higher_education_max_3_years_aged_25_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "educational_level_higher_education_max_3_years_aged_25_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "educational_level_higher_education_max_3_years_aged_25_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "educational_level_higher_education_max_3_years_aged_25_64_male"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "educational_level_higher_education_max_3_years_aged_25_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "educational_level_higher_education_max_3_years_aged_25_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "educational_level_higher_education_max_3_years_aged_25_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "educational_level_higher_education_min_3_years_aged_25_64"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "educational_level_higher_education_min_3_years_aged_25_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "educational_level_higher_education_min_3_years_aged_25_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "educational_level_higher_education_max_3_years_aged_25_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "educational_level_higher_education_min_3_years_aged_25_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "educational_level_higher_education_min_3_years_aged_25_64_female"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "educational_level_higher_education_min_3_years_aged_25_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "educational_level_higher_education_min_3_years_aged_25_64_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "cumulative_immigration_surplus_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "educational_level_higher_education_min_3_years_aged_25_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "educational_level_higher_education_min_3_years_aged_25_64_male"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "educational_level_higher_education_min_3_years_aged_25_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "educational_level_higher_education_min_3_years_aged_25_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "educational_level_pre_secondary_school_aged_25_64"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "educational_level_pre_secondary_school_aged_25_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "educational_level_pre_secondary_school_aged_25_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "educational_level_higher_education_min_3_years_aged_25_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "educational_level_pre_secondary_school_aged_25_64_female"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "educational_level_pre_secondary_school_aged_25_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "educational_level_pre_secondary_school_aged_25_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "educational_level_pre_secondary_school_aged_25_64_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "educational_level_higher_education_max_3_years_aged_25_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "educational_level_pre_secondary_school_aged_25_64_male"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "educational_level_pre_secondary_school_aged_25_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "educational_level_pre_secondary_school_aged_25_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "educational_level_pre_secondary_school_aged_25_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "educational_level_pre_secondary_school_aged_25_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "educational_level_secondary_school_aged_25_64"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "educational_level_secondary_school_aged_25_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "educational_level_secondary_school_aged_25_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "educational_level_secondary_school_aged_25_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "educational_level_higher_education_max_3_years_aged_25_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "educational_level_secondary_school_aged_25_64_female"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "educational_level_secondary_school_aged_25_64_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "educational_level_higher_education_max_3_years_aged_25_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "educational_level_higher_education_min_3_years_aged_25_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "educational_level_secondary_school_aged_25_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "educational_level_secondary_school_aged_25_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "educational_level_secondary_school_aged_25_64_male"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "educational_level_secondary_school_aged_25_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "educational_level_higher_education_min_3_years_aged_25_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "educational_level_secondary_school_aged_25_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "educational_level_higher_education_min_3_years_aged_25_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "educational_level_pre_secondary_school_aged_25_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "emigration"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "emigration"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "educational_level_secondary_school_aged_25_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "emigration"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "emigration_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "emigration_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "educational_level_pre_secondary_school_aged_25_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "emigration_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "emigration_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "emigration_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "emigration_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "emigration_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "emigration_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "educational_level_pre_secondary_school_aged_25_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "emigration_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "emigration_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "educational_level_secondary_school_aged_25_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "emigration_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "emigration_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "emigration_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "emigration_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "emigration_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "emigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "emigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "educational_level_secondary_school_aged_25_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "emigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "emigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "emigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "emigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "educational_level_secondary_school_aged_25_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "emigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "emigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "emigration"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "emigration_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "emigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "employed_aged_20_64"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "employed_aged_20_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "employed_aged_20_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "emigration_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "employed_aged_20_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "emigration_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "emigration_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "employment_rate_20_64"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "employment_rate_20_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "emigration_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "employment_rate_20_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "emigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "employment_rate_20_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "employment_rate_20_64_female"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "employment_rate_20_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "employment_rate_20_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "employment_rate_20_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "employment_rate_20_64_male"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "employment_rate_20_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "emigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "employment_rate_20_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "employment_rate_20_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "high_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "high_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "high_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "emigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "high_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "high_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "high_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "high_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "high_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "employed_aged_20_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "high_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "high_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "high_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "high_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "immigration"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "immigration"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "immigration"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "immigration_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "immigration_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "employment_rate_20_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "employment_rate_20_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "immigration_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "immigration_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "immigration_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "employment_rate_20_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "immigration_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "immigration_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "immigration_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "immigration_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "immigration_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "immigration_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "immigration_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "high_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "immigration_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "immigration_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "immigration_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "high_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "immigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "immigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "immigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "high_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "immigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "immigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "immigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "gender",
+      "geo",
+      "year"
+    ],
+    "value": "employment_rate_20_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "gender",
+      "year"
+    ],
+    "value": "employment_rate_20_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "immigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "immigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "immigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "immigration"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "immigration_surplus"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "immigration_surplus"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "immigration_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "immigration_surplus"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "immigration_surplus_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "immigration_surplus_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "immigration_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "immigration_surplus_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "immigration_surplus_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "immigration_surplus_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "immigration_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "immigration_surplus_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "immigration_surplus_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "immigration_surplus_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "immigration_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "immigration_surplus_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "immigration_surplus_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "immigration_surplus_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "immigration_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "immigration_surplus_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "immigration_surplus_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "immigration_surplus_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "immigration_surplus_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "immigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "immigration_surplus_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "immigration_surplus_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "immigration_surplus_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "immigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "immigration_surplus_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "immigration_surplus_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "immigration_surplus_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "immigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "immigration_surplus_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "immigration_surplus_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "immigration_surplus_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "immigration_surplus"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "low_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "low_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "low_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "low_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "immigration_surplus_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "low_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "low_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "low_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "immigration_surplus_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "low_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "low_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "low_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "immigration_surplus_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "low_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "low_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "immigration_surplus_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "lower_middle_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "lower_middle_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "lower_middle_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "lower_middle_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "immigration_surplus_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "lower_middle_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "lower_middle_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "lower_middle_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "lower_middle_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "lower_middle_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "lower_middle_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "immigration_surplus_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "lower_middle_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "lower_middle_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "mean_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "mean_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "immigration_surplus_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "mean_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "mean_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "low_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "mean_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "mean_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "mean_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "mean_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "immigration_surplus_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "mean_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "mean_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "mean_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "mean_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "lower_middle_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "median_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "median_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "median_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "low_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "median_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "low_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "median_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "median_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "median_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "median_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "lower_middle_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "median_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "median_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "median_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "lower_middle_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "median_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "missing_data"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "missing_data"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "missing_data"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "mean_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "missing_data"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "missing_data_female"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "missing_data_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "missing_data_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "missing_data_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "mean_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "missing_data_male"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "missing_data_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "missing_data_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "missing_data_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "mean_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "population_20xx_12_31"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "population_20xx_12_31"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "population_20xx_12_31"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "median_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "population_20xx_12_31_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "population_20xx_12_31_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "population_20xx_12_31_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "median_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "population_20xx_12_31_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "population_20xx_12_31_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "population_20xx_12_31_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "median_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "population_20xx_12_31_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "population_20xx_12_31_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "population_20xx_12_31_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "missing_data"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "population_20xx_12_31_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "population_20xx_12_31_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "population_20xx_12_31_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "missing_data_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "population_20xx_12_31_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "population_20xx_12_31_male"
+  },
+  {
+    "key": [
+      "gender",
+      "geo",
+      "year"
+    ],
+    "value": "mean_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "basomrade",
+      "gender",
+      "year"
+    ],
+    "value": "mean_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "population_20xx_12_31_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "population_25xx_12_31_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "population_25xx_12_31_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "missing_data_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "population_25xx_12_31_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "population_25xx_12_31_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "population_25xx_12_31_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "population_25xx_12_31_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "population_20xx_12_31"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "population_25xx_12_31_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "population_25xx_12_31_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "population_25xx_12_31_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "population_20xx_12_31_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "population_aged_20_64"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "population_aged_20_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "population_aged_20_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "population_aged_20_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "population_20xx_12_31_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "population_aged_20_64_female"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "population_aged_20_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "population_aged_20_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "population_aged_20_64_female"
+  },
+  {
+    "key": [
+      "gender",
+      "geo",
+      "year"
+    ],
+    "value": "median_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "basomrade",
+      "gender",
+      "year"
+    ],
+    "value": "median_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "population_aged_20_64_male"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "population_aged_20_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "population_aged_20_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "population_aged_20_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "population_20xx_12_31_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "population_aged_25_64"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "population_aged_25_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "population_aged_25_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "population_aged_25_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "population_20xx_12_31_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "population_aged_25_64_female"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "population_aged_25_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "population_aged_25_64_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "population_aged_20_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "population_aged_25_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "population_aged_25_64_male"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "population_aged_25_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "population_20xx_12_31_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "population_aged_25_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "population_aged_25_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "population_aged_gt_20"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "population_aged_gt_20"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "population_25xx_12_31_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "population_aged_gt_20"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "population_aged_20_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "population_aged_gt_20"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "population_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "population_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "population_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "population_25xx_12_31_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "population_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "population_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "population_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "population_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "population_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "population_25xx_12_31_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "post_secondary_education_min_3_years_aged_25_64"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "post_secondary_education_min_3_years_aged_25_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "post_secondary_education_min_3_years_aged_25_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "population_aged_20_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "post_secondary_education_min_3_years_aged_25_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "post_secondary_education_min_3_years_aged_25_64_female"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "post_secondary_education_min_3_years_aged_25_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "post_secondary_education_min_3_years_aged_25_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "post_secondary_education_min_3_years_aged_25_64_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "population_aged_25_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "post_secondary_education_min_3_years_aged_25_64_male"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "post_secondary_education_min_3_years_aged_25_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "post_secondary_education_min_3_years_aged_25_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "post_secondary_education_min_3_years_aged_25_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "population_aged_25_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "share_emigration"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "share_emigration"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "share_emigration"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "population_aged_25_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "share_emigration_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "share_emigration_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "share_emigration_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "population_aged_gt_20"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "share_emigration_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "share_emigration_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "share_emigration_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "population_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "share_emigration_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "share_emigration_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "population_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "share_emigration_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "share_emigration_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "share_emigration_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "post_secondary_education_min_3_years_aged_25_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "share_emigration_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "share_emigration_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "share_emigration_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "post_secondary_education_min_3_years_aged_25_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "share_emigration_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "share_emigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "share_emigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "post_secondary_education_min_3_years_aged_25_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "share_emigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "share_emigration"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "share_emigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "share_emigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "share_emigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "share_emigration_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "share_emigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "share_emigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "share_emigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "share_emigration_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "share_immigration"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "share_immigration"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "share_immigration"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "share_emigration_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "share_immigration_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "share_immigration_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "share_emigration_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "share_immigration_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "share_immigration_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "share_immigration_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "share_emigration_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "share_immigration_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "share_immigration_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "share_immigration_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "gender",
+      "geo",
+      "year"
+    ],
+    "value": "post_secondary_education_min_3_years_aged_25_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "gender",
+      "year"
+    ],
+    "value": "post_secondary_education_min_3_years_aged_25_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "share_emigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "share_immigration_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "share_immigration_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "share_immigration_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "share_immigration_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "share_immigration_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "share_immigration_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "share_immigration_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "share_emigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "share_immigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "share_immigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "share_immigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "share_emigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "share_immigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "share_immigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "share_immigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "share_immigration"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "share_immigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "share_immigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "share_immigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "share_immigration_employed_aged_20_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "sum_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "sum_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "sum_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "share_immigration_employed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "sum_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "sum_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "sum_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "sum_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "share_immigration_employed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "share_immigration_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "sum_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "sum_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "sum_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "sum_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "share_immigration_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "unemployed_aged_20_64"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "unemployed_aged_20_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "sum_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "gender",
+      "geo",
+      "year"
+    ],
+    "value": "share_emigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "basomrade",
+      "gender",
+      "year"
+    ],
+    "value": "share_emigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "unemployed_aged_20_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "unemployed_aged_20_64"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "unemployed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "unemployed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "unemployed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "share_immigration_min_3_years_of_higher_education_aged_25_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "unemployed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "unemployed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "unemployed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "unemployed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "unemployed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "upper_middle_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "upper_middle_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "upper_middle_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "share_immigration_min_3_years_of_higher_education_aged_25_64_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "upper_middle_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "upper_middle_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "upper_middle_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "upper_middle_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "upper_middle_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "share_immigration_min_3_years_of_higher_education_aged_25_64_male"
+  },
+  {
+    "key": [
+      "geo",
+      "year"
+    ],
+    "value": "upper_middle_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "country",
+      "year"
+    ],
+    "value": "upper_middle_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "county",
+      "year"
+    ],
+    "value": "upper_middle_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "unemployed_aged_20_64"
+  },
+  {
+    "key": [
+      "municipality",
+      "year"
+    ],
+    "value": "upper_middle_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "unemployed_aged_20_64_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "sum_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "unemployed_aged_20_64_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "upper_middle_income_aged_gt_20"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "sum_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "sum_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "upper_middle_income_aged_gt_20_female"
+  },
+  {
+    "key": [
+      "basomrade",
+      "year"
+    ],
+    "value": "upper_middle_income_aged_gt_20_male"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "is--country"
+  },
+  {
+    "key": [
+      "country"
+    ],
+    "value": "is--country"
+  },
+  {
+    "key": [
+      "county"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "country"
+  },
+  {
+    "key": [
+      "county"
+    ],
+    "value": "country"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "is--county"
+  },
+  {
+    "key": [
+      "county"
+    ],
+    "value": "is--county"
+  },
+  {
+    "key": [
+      "county_region"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "county"
+  },
+  {
+    "key": [
+      "county_region"
+    ],
+    "value": "county"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "is--county_region"
+  },
+  {
+    "key": [
+      "county_region"
+    ],
+    "value": "is--county_region"
+  },
+  {
+    "key": [
+      "gender"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "municipality"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "municipality"
+    ],
+    "value": "county"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "is--municipality"
+  },
+  {
+    "key": [
+      "municipality"
+    ],
+    "value": "is--municipality"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "map_id"
+  },
+  {
+    "key": [
+      "municipality"
+    ],
+    "value": "map_id"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "rank"
+  },
+  {
+    "key": [
+      "municipality"
+    ],
+    "value": "rank"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "shape_lores_svg"
+  },
+  {
+    "key": [
+      "municipality"
+    ],
+    "value": "shape_lores_svg"
+  },
+  {
+    "key": [
+      "tag"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "tag"
+    ],
+    "value": "parent"
+  },
+  {
+    "key": [
+      "basomrade"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "municipality"
+  },
+  {
+    "key": [
+      "basomrade"
+    ],
+    "value": "municipality"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "is--basomrade"
+  },
+  {
+    "key": [
+      "basomrade"
+    ],
+    "value": "is--basomrade"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "size"
+  },
+  {
+    "key": [
+      "basomrade"
+    ],
+    "value": "size"
+  },
+  {
+    "key": [
+      "geo"
+    ],
+    "value": "baskod2010"
+  },
+  {
+    "key": [
+      "basomrade"
+    ],
+    "value": "baskod2010"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "name"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "concept_type"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "domain"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "tags"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "scales"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "format"
+  },
+  {
+    "key": [
+      "concept"
+    ],
+    "value": "color"
+  }
+]

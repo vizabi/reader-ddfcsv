@@ -1,0 +1,1248 @@
+[
+  {
+    "basomrade": "5110110_albyslatten",
+    "year": "2000",
+    "mean_income_aged_gt_20": 113487.03,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1094508778483377,
+    "population_aged_gt_20": 3388
+  },
+  {
+    "basomrade": "5110120_albyberget",
+    "year": "2000",
+    "mean_income_aged_gt_20": 126559.84,
+    "post_secondary_education_min_3_years_aged_25_64": 0.14218289085545724,
+    "population_aged_gt_20": 2161
+  },
+  {
+    "basomrade": "5110150_rotemannen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 126175.27,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11627906976744186,
+    "population_aged_gt_20": 508
+  },
+  {
+    "basomrade": "5110160_alby_gard",
+    "year": "2000",
+    "mean_income_aged_gt_20": 211823.58,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11594202898550725,
+    "population_aged_gt_20": 1762
+  },
+  {
+    "basomrade": "5110240_aspberget",
+    "year": "2000",
+    "mean_income_aged_gt_20": 232894.06,
+    "post_secondary_education_min_3_years_aged_25_64": 0.09398496240601503,
+    "population_aged_gt_20": 305
+  },
+  {
+    "basomrade": "5110260_ostra_eriksberg",
+    "year": "2000",
+    "mean_income_aged_gt_20": 154512.29,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1,
+    "population_aged_gt_20": 860
+  },
+  {
+    "basomrade": "5110270_vastra_eriksberg",
+    "year": "2000",
+    "mean_income_aged_gt_20": 187402.28,
+    "post_secondary_education_min_3_years_aged_25_64": 0.09975669099756691,
+    "population_aged_gt_20": 559
+  },
+  {
+    "basomrade": "5110280_tre_kallor",
+    "year": "2000",
+    "mean_income_aged_gt_20": 158353.52,
+    "post_secondary_education_min_3_years_aged_25_64": 0.0935483870967742,
+    "population_aged_gt_20": 452
+  },
+  {
+    "basomrade": "5110290_sturehov",
+    "year": "2000",
+    "mean_income_aged_gt_20": 225795.48,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1320754716981132,
+    "population_aged_gt_20": 263
+  },
+  {
+    "basomrade": "5110311_krogarvagen_vardshusvagen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 106643.63,
+    "post_secondary_education_min_3_years_aged_25_64": 0.07972544878563886,
+    "population_aged_gt_20": 2498
+  },
+  {
+    "basomrade": "5110312_forvagen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 85105.04,
+    "post_secondary_education_min_3_years_aged_25_64": 0.0841813135985199,
+    "population_aged_gt_20": 1389
+  },
+  {
+    "basomrade": "5110320_fittja_gard",
+    "year": "2000",
+    "mean_income_aged_gt_20": 154628.78,
+    "post_secondary_education_min_3_years_aged_25_64": 0.09969788519637462,
+    "population_aged_gt_20": 888
+  },
+  {
+    "basomrade": "5110410_sodra_hallunda",
+    "year": "2000",
+    "mean_income_aged_gt_20": 155592.3,
+    "post_secondary_education_min_3_years_aged_25_64": 0.0671046457062412,
+    "population_aged_gt_20": 3014
+  },
+  {
+    "basomrade": "5110420_slagsta",
+    "year": "2000",
+    "mean_income_aged_gt_20": 213375.75,
+    "post_secondary_education_min_3_years_aged_25_64": 0.10175695461200586,
+    "population_aged_gt_20": 1731
+  },
+  {
+    "basomrade": "5110430_brunna",
+    "year": "2000",
+    "mean_income_aged_gt_20": 172251.74,
+    "post_secondary_education_min_3_years_aged_25_64": 0.047516198704103674,
+    "population_aged_gt_20": 564
+  },
+  {
+    "basomrade": "5110450_sodra_norsborg",
+    "year": "2000",
+    "mean_income_aged_gt_20": 108285.05,
+    "post_secondary_education_min_3_years_aged_25_64": 0.07253313696612666,
+    "population_aged_gt_20": 3596
+  },
+  {
+    "basomrade": "5110460_tornbergsfaltet",
+    "year": "2000",
+    "mean_income_aged_gt_20": 149732.39,
+    "post_secondary_education_min_3_years_aged_25_64": 0.09868421052631579,
+    "population_aged_gt_20": 591
+  },
+  {
+    "basomrade": "5110480_nordostra_norsborg",
+    "year": "2000",
+    "mean_income_aged_gt_20": 203144.32,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11439114391143912,
+    "population_aged_gt_20": 352
+  },
+  {
+    "basomrade": "5110490_nordvastra_norsborg",
+    "year": "2000",
+    "mean_income_aged_gt_20": 204182.73,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11262135922330097,
+    "population_aged_gt_20": 656
+  },
+  {
+    "basomrade": "5120730_tumba_centrum",
+    "year": "2000",
+    "mean_income_aged_gt_20": 171987.39,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11464968152866242,
+    "population_aged_gt_20": 816
+  },
+  {
+    "basomrade": "5120750_segersjo",
+    "year": "2000",
+    "mean_income_aged_gt_20": 182047.1,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11287758346581876,
+    "population_aged_gt_20": 989
+  },
+  {
+    "basomrade": "5120780_tumba_villastad",
+    "year": "2000",
+    "mean_income_aged_gt_20": 219931.65,
+    "post_secondary_education_min_3_years_aged_25_64": 0.161231884057971,
+    "population_aged_gt_20": 1479
+  },
+  {
+    "basomrade": "5120790_skacklinge",
+    "year": "2000",
+    "mean_income_aged_gt_20": 225051.28,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11076091850517784,
+    "population_aged_gt_20": 2580
+  },
+  {
+    "basomrade": "5120810_storvreten",
+    "year": "2000",
+    "mean_income_aged_gt_20": 152553.25,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1110277569392348,
+    "population_aged_gt_20": 3382
+  },
+  {
+    "basomrade": "5120820_blockvagen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 217878.77,
+    "post_secondary_education_min_3_years_aged_25_64": 0.16037735849056603,
+    "population_aged_gt_20": 145
+  },
+  {
+    "basomrade": "5120830_grytstigen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 233786.99,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1111111111111111,
+    "population_aged_gt_20": 391
+  },
+  {
+    "basomrade": "5120840_vedstigen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 221577.8,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1188118811881188,
+    "population_aged_gt_20": 131
+  },
+  {
+    "basomrade": "5120910_tumba_bruk",
+    "year": "2000",
+    "mean_income_aged_gt_20": 238594.01,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1333955223880597,
+    "population_aged_gt_20": 1257
+  },
+  {
+    "basomrade": "5120920_tumba_glesbygd",
+    "year": "2000",
+    "mean_income_aged_gt_20": 184846.68,
+    "post_secondary_education_min_3_years_aged_25_64": 0.08695652173913043,
+    "population_aged_gt_20": 146
+  },
+  {
+    "basomrade": "5120930_kommunalhuset",
+    "year": "2000",
+    "mean_income_aged_gt_20": 193185.52,
+    "post_secondary_education_min_3_years_aged_25_64": 0.13526570048309178,
+    "population_aged_gt_20": 540
+  },
+  {
+    "basomrade": "5120940_tuna",
+    "year": "2000",
+    "mean_income_aged_gt_20": 161783.35,
+    "post_secondary_education_min_3_years_aged_25_64": 0.08205689277899343,
+    "population_aged_gt_20": 1338
+  },
+  {
+    "basomrade": "5120950_nackdala",
+    "year": "2000",
+    "mean_income_aged_gt_20": 218780.43,
+    "post_secondary_education_min_3_years_aged_25_64": 0.2,
+    "population_aged_gt_20": 495
+  },
+  {
+    "basomrade": "5120970_loviseberg",
+    "year": "2000",
+    "mean_income_aged_gt_20": 206559.77,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11347517730496454,
+    "population_aged_gt_20": 170
+  },
+  {
+    "basomrade": "5130810_uttran",
+    "year": "2000",
+    "mean_income_aged_gt_20": 272117.26,
+    "post_secondary_education_min_3_years_aged_25_64": 0.23479318734793186,
+    "population_aged_gt_20": 978
+  },
+  {
+    "basomrade": "5130820_varsta",
+    "year": "2000",
+    "mean_income_aged_gt_20": 222700.88,
+    "post_secondary_education_min_3_years_aged_25_64": 0.10089503661513426,
+    "population_aged_gt_20": 1602
+  },
+  {
+    "basomrade": "5130830_grodinge_glesbygd",
+    "year": "2000",
+    "mean_income_aged_gt_20": 210774.93,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1132286995515695,
+    "population_aged_gt_20": 1085
+  },
+  {
+    "basomrade": "5140110_tullinge_villastad",
+    "year": "2000",
+    "mean_income_aged_gt_20": 221936.02,
+    "post_secondary_education_min_3_years_aged_25_64": 0.13793103448275862,
+    "population_aged_gt_20": 724
+  },
+  {
+    "basomrade": "5140620_tullingeberg",
+    "year": "2000",
+    "mean_income_aged_gt_20": 200356.67,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1518324607329843,
+    "population_aged_gt_20": 1098
+  },
+  {
+    "basomrade": "5140641_tullinge_parkhem",
+    "year": "2000",
+    "mean_income_aged_gt_20": 251125.1,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1751412429378531,
+    "population_aged_gt_20": 1829
+  },
+  {
+    "basomrade": "5140642_lanthem_n",
+    "year": "2000",
+    "mean_income_aged_gt_20": 263862.73,
+    "post_secondary_education_min_3_years_aged_25_64": 0.29850746268656714,
+    "population_aged_gt_20": 623
+  },
+  {
+    "basomrade": "5140650_tullinge_centrum",
+    "year": "2000",
+    "mean_income_aged_gt_20": 209116.95,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1746987951807229,
+    "population_aged_gt_20": 2058
+  },
+  {
+    "basomrade": "5140660_banslatt",
+    "year": "2000",
+    "mean_income_aged_gt_20": 220899.45,
+    "post_secondary_education_min_3_years_aged_25_64": 0.16666666666666666,
+    "population_aged_gt_20": 1328
+  },
+  {
+    "basomrade": "5140690_tullinge_glesbygd_riksten",
+    "year": "2000",
+    "mean_income_aged_gt_20": 194246.53,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11538461538461539,
+    "population_aged_gt_20": 37
+  },
+  {
+    "basomrade": "5140711_tullinge_skog",
+    "year": "2000",
+    "mean_income_aged_gt_20": 251023.81,
+    "post_secondary_education_min_3_years_aged_25_64": 0.21899441340782122,
+    "population_aged_gt_20": 1087
+  },
+  {
+    "basomrade": "5140712_lanthem_s",
+    "year": "2000",
+    "mean_income_aged_gt_20": 245292.72,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1935483870967742,
+    "population_aged_gt_20": 599
+  },
+  {
+    "basomrade": "5211120_gudo",
+    "year": "2000",
+    "mean_income_aged_gt_20": 253598.39,
+    "post_secondary_education_min_3_years_aged_25_64": 0.15542328042328044,
+    "population_aged_gt_20": 1730
+  },
+  {
+    "basomrade": "5211131_sodra_vendelso",
+    "year": "2000",
+    "mean_income_aged_gt_20": 233682.15,
+    "post_secondary_education_min_3_years_aged_25_64": 0.15060728744939272,
+    "population_aged_gt_20": 1594
+  },
+  {
+    "basomrade": "5211132_sagen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 163141.91,
+    "post_secondary_education_min_3_years_aged_25_64": 0.08243727598566308,
+    "population_aged_gt_20": 771
+  },
+  {
+    "basomrade": "5211140_norra_vendelso",
+    "year": "2000",
+    "mean_income_aged_gt_20": 258111.16,
+    "post_secondary_education_min_3_years_aged_25_64": 0.20210526315789473,
+    "population_aged_gt_20": 571
+  },
+  {
+    "basomrade": "5211150_dalen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 227881.46,
+    "post_secondary_education_min_3_years_aged_25_64": 0.16607773851590105,
+    "population_aged_gt_20": 327
+  },
+  {
+    "basomrade": "5211210_vendelsomalm",
+    "year": "2000",
+    "mean_income_aged_gt_20": 236251.55,
+    "post_secondary_education_min_3_years_aged_25_64": 0.12222887956860395,
+    "population_aged_gt_20": 2185
+  },
+  {
+    "basomrade": "5211220_eriksberg",
+    "year": "2000",
+    "mean_income_aged_gt_20": 199890.2,
+    "post_secondary_education_min_3_years_aged_25_64": 0.09381898454746136,
+    "population_aged_gt_20": 1229
+  },
+  {
+    "basomrade": "5211230_ramsdalen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 252294.63,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1598393574297189,
+    "population_aged_gt_20": 1467
+  },
+  {
+    "basomrade": "5211320_brandbergens_industriomr",
+    "year": "2000",
+    "mean_income_aged_gt_20": 173456.22,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11444141689373297,
+    "population_aged_gt_20": 470
+  },
+  {
+    "basomrade": "5211330_brandbergen_flerbost_hus",
+    "year": "2000",
+    "mean_income_aged_gt_20": 159937.65,
+    "post_secondary_education_min_3_years_aged_25_64": 0.09446726262382218,
+    "population_aged_gt_20": 5701
+  },
+  {
+    "basomrade": "5211340_brandbergen_smahus",
+    "year": "2000",
+    "mean_income_aged_gt_20": 237423.6,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11328125,
+    "population_aged_gt_20": 1573
+  },
+  {
+    "basomrade": "5211430_kolartorp",
+    "year": "2000",
+    "mean_income_aged_gt_20": 207347.66,
+    "post_secondary_education_min_3_years_aged_25_64": 0.08888888888888889,
+    "population_aged_gt_20": 319
+  },
+  {
+    "basomrade": "5211440_vega_vega_soderhagen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 229511.28,
+    "post_secondary_education_min_3_years_aged_25_64": 0.09071274298056156,
+    "population_aged_gt_20": 1060
+  },
+  {
+    "basomrade": "5211450_kvarntorp_kvarntorp_v_gamla_nynasvagen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 208319.98,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1038961038961039,
+    "population_aged_gt_20": 380
+  },
+  {
+    "basomrade": "5211511_haninge_centrum",
+    "year": "2000",
+    "mean_income_aged_gt_20": 161254.92,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11757269279393173,
+    "population_aged_gt_20": 1393
+  },
+  {
+    "basomrade": "5211512_vastra_handen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 175543.19,
+    "post_secondary_education_min_3_years_aged_25_64": 0.06934306569343066,
+    "population_aged_gt_20": 3074
+  },
+  {
+    "basomrade": "5211520_norra_handen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 236624.42,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11134020618556702,
+    "population_aged_gt_20": 567
+  },
+  {
+    "basomrade": "5211540_valla",
+    "year": "2000",
+    "mean_income_aged_gt_20": 189176.72,
+    "post_secondary_education_min_3_years_aged_25_64": 0.09579341940857976,
+    "population_aged_gt_20": 3024
+  },
+  {
+    "basomrade": "5211550_sodra_handen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 197549.29,
+    "post_secondary_education_min_3_years_aged_25_64": 0.22188449848024316,
+    "population_aged_gt_20": 418
+  },
+  {
+    "basomrade": "5211610_jordbro_flerbostadshus",
+    "year": "2000",
+    "mean_income_aged_gt_20": 140105.92,
+    "post_secondary_education_min_3_years_aged_25_64": 0.08534165012758718,
+    "population_aged_gt_20": 4554
+  },
+  {
+    "basomrade": "5211620_jordbro_smahus",
+    "year": "2000",
+    "mean_income_aged_gt_20": 239329.41,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11823759063022866,
+    "population_aged_gt_20": 2139
+  },
+  {
+    "basomrade": "5211710_norrby",
+    "year": "2000",
+    "mean_income_aged_gt_20": 183472.5,
+    "post_secondary_education_min_3_years_aged_25_64": 0.07303370786516854,
+    "population_aged_gt_20": 215
+  },
+  {
+    "basomrade": "5211800_norra_soderby",
+    "year": "2000",
+    "mean_income_aged_gt_20": 225260.57,
+    "post_secondary_education_min_3_years_aged_25_64": 0.09837467921300257,
+    "population_aged_gt_20": 1363
+  },
+  {
+    "basomrade": "5211920_galo_sandemar",
+    "year": "2000",
+    "mean_income_aged_gt_20": 194809.81,
+    "post_secondary_education_min_3_years_aged_25_64": 0.048484848484848485,
+    "population_aged_gt_20": 211
+  },
+  {
+    "basomrade": "5211930_tyresta",
+    "year": "2000",
+    "mean_income_aged_gt_20": 190086.56,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1095890410958904,
+    "population_aged_gt_20": 88
+  },
+  {
+    "basomrade": "5211940_osterhaninge_kyrka",
+    "year": "2000",
+    "mean_income_aged_gt_20": 217176.59,
+    "post_secondary_education_min_3_years_aged_25_64": 0.099601593625498,
+    "population_aged_gt_20": 303
+  },
+  {
+    "basomrade": "5211950_arsta_havsbad_o",
+    "year": "2000",
+    "mean_income_aged_gt_20": 218179.57,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1487603305785124,
+    "population_aged_gt_20": 145
+  },
+  {
+    "basomrade": "5222100_dalaro",
+    "year": "2000",
+    "mean_income_aged_gt_20": 242939.06,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1796759941089838,
+    "population_aged_gt_20": 892
+  },
+  {
+    "basomrade": "5222500_smadalaro",
+    "year": "2000",
+    "mean_income_aged_gt_20": 228361.22,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11842105263157894,
+    "population_aged_gt_20": 288
+  },
+  {
+    "basomrade": "5233000_uto",
+    "year": "2000",
+    "mean_income_aged_gt_20": 177865.28,
+    "post_secondary_education_min_3_years_aged_25_64": 0.08955223880597014,
+    "population_aged_gt_20": 163
+  },
+  {
+    "basomrade": "5240000_orno_forsamling",
+    "year": "2000",
+    "mean_income_aged_gt_20": 185713.54,
+    "post_secondary_education_min_3_years_aged_25_64": 0.09154929577464789,
+    "population_aged_gt_20": 197
+  },
+  {
+    "basomrade": "5255110_aby",
+    "year": "2000",
+    "mean_income_aged_gt_20": 169143.15,
+    "post_secondary_education_min_3_years_aged_25_64": 0.07721046077210461,
+    "population_aged_gt_20": 3333
+  },
+  {
+    "basomrade": "5255121_jagartorp",
+    "year": "2000",
+    "mean_income_aged_gt_20": 243592.22,
+    "post_secondary_education_min_3_years_aged_25_64": 0.19349845201238391,
+    "population_aged_gt_20": 841
+  },
+  {
+    "basomrade": "5255130_vasterhaninge_kyrka",
+    "year": "2000",
+    "mean_income_aged_gt_20": 180700.46,
+    "post_secondary_education_min_3_years_aged_25_64": 0.16025641025641027,
+    "population_aged_gt_20": 243
+  },
+  {
+    "basomrade": "5255140_ribby",
+    "year": "2000",
+    "mean_income_aged_gt_20": 199913.87,
+    "post_secondary_education_min_3_years_aged_25_64": 0.10455192034139403,
+    "population_aged_gt_20": 1909
+  },
+  {
+    "basomrade": "5255150_nedersta_nodesta",
+    "year": "2000",
+    "mean_income_aged_gt_20": 243192.79,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1712538226299694,
+    "population_aged_gt_20": 1202
+  },
+  {
+    "basomrade": "5255210_norra_tungelsta",
+    "year": "2000",
+    "mean_income_aged_gt_20": 210237.87,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1046242774566474,
+    "population_aged_gt_20": 2172
+  },
+  {
+    "basomrade": "5255220_sodra_tungelsta",
+    "year": "2000",
+    "mean_income_aged_gt_20": 210670.28,
+    "post_secondary_education_min_3_years_aged_25_64": 0.08374384236453201,
+    "population_aged_gt_20": 775
+  },
+  {
+    "basomrade": "5255910_vasterhaninge_glesbygd_n",
+    "year": "2000",
+    "mean_income_aged_gt_20": 191690.27,
+    "post_secondary_education_min_3_years_aged_25_64": 0.0625,
+    "population_aged_gt_20": 501
+  },
+  {
+    "basomrade": "5255920_vasterhaninge_glesbygd_s",
+    "year": "2000",
+    "mean_income_aged_gt_20": 218702.31,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1021377672209026,
+    "population_aged_gt_20": 506
+  },
+  {
+    "basomrade": "5255930_arsta_havsbad_v_berga",
+    "year": "2000",
+    "mean_income_aged_gt_20": 219211.14,
+    "post_secondary_education_min_3_years_aged_25_64": 0.08333333333333333,
+    "population_aged_gt_20": 133
+  },
+  {
+    "basomrade": "5260000_musko_forsamling",
+    "year": "2000",
+    "mean_income_aged_gt_20": 186774.84,
+    "post_secondary_education_min_3_years_aged_25_64": 0.10096153846153846,
+    "population_aged_gt_20": 546
+  },
+  {
+    "basomrade": "5310420_skogsang_milsten",
+    "year": "2000",
+    "mean_income_aged_gt_20": 254229.02,
+    "post_secondary_education_min_3_years_aged_25_64": 0.24227234753550542,
+    "population_aged_gt_20": 3032
+  },
+  {
+    "basomrade": "5310810_fullersta_gard",
+    "year": "2000",
+    "mean_income_aged_gt_20": 208238.45,
+    "post_secondary_education_min_3_years_aged_25_64": 0.21934758155230596,
+    "population_aged_gt_20": 1345
+  },
+  {
+    "basomrade": "5310830_fridhem",
+    "year": "2000",
+    "mean_income_aged_gt_20": 257258.1,
+    "post_secondary_education_min_3_years_aged_25_64": 0.22354497354497355,
+    "population_aged_gt_20": 1977
+  },
+  {
+    "basomrade": "5310840_kallbrink_vistaberg",
+    "year": "2000",
+    "mean_income_aged_gt_20": 260025.65,
+    "post_secondary_education_min_3_years_aged_25_64": 0.2287467134092901,
+    "population_aged_gt_20": 1410
+  },
+  {
+    "basomrade": "5310850_vardkasen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 217654.23,
+    "post_secondary_education_min_3_years_aged_25_64": 0.12,
+    "population_aged_gt_20": 423
+  },
+  {
+    "basomrade": "5310910_sjodalen_huddinge_c",
+    "year": "2000",
+    "mean_income_aged_gt_20": 180518.16,
+    "post_secondary_education_min_3_years_aged_25_64": 0.14337060702875398,
+    "population_aged_gt_20": 3958
+  },
+  {
+    "basomrade": "5310941_solgard",
+    "year": "2000",
+    "mean_income_aged_gt_20": 247675.33,
+    "post_secondary_education_min_3_years_aged_25_64": 0.19408502772643252,
+    "population_aged_gt_20": 1318
+  },
+  {
+    "basomrade": "5310942_sorskogen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 265495.01,
+    "post_secondary_education_min_3_years_aged_25_64": 0.22773722627737225,
+    "population_aged_gt_20": 858
+  },
+  {
+    "basomrade": "5310950_horningsns_balingsnas",
+    "year": "2000",
+    "mean_income_aged_gt_20": 251677.88,
+    "post_secondary_education_min_3_years_aged_25_64": 0.18627450980392157,
+    "population_aged_gt_20": 1865
+  },
+  {
+    "basomrade": "5311010_stuvsta_kvarnberget",
+    "year": "2000",
+    "mean_income_aged_gt_20": 172732.01,
+    "post_secondary_education_min_3_years_aged_25_64": 0.12455516014234876,
+    "population_aged_gt_20": 980
+  },
+  {
+    "basomrade": "5311030_segersminne",
+    "year": "2000",
+    "mean_income_aged_gt_20": 239856.78,
+    "post_secondary_education_min_3_years_aged_25_64": 0.22552574329224076,
+    "population_aged_gt_20": 1887
+  },
+  {
+    "basomrade": "5311041_stensangen_hogmora",
+    "year": "2000",
+    "mean_income_aged_gt_20": 249811.75,
+    "post_secondary_education_min_3_years_aged_25_64": 0.16224747474747475,
+    "population_aged_gt_20": 1827
+  },
+  {
+    "basomrade": "5311042_kynas",
+    "year": "2000",
+    "mean_income_aged_gt_20": 246028.45,
+    "post_secondary_education_min_3_years_aged_25_64": 0.2021978021978022,
+    "population_aged_gt_20": 2414
+  },
+  {
+    "basomrade": "5311110_glado_kvarn",
+    "year": "2000",
+    "mean_income_aged_gt_20": 207179.32,
+    "post_secondary_education_min_3_years_aged_25_64": 0.06319702602230483,
+    "population_aged_gt_20": 324
+  },
+  {
+    "basomrade": "5311120_adran",
+    "year": "2000",
+    "mean_income_aged_gt_20": 190327.08,
+    "post_secondary_education_min_3_years_aged_25_64": 0.06451612903225806,
+    "population_aged_gt_20": 344
+  },
+  {
+    "basomrade": "5320110_trangsunds_centrum",
+    "year": "2000",
+    "mean_income_aged_gt_20": 186753.12,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11832691249312052,
+    "population_aged_gt_20": 2569
+  },
+  {
+    "basomrade": "5320120_trangsunds_smahus",
+    "year": "2000",
+    "mean_income_aged_gt_20": 270797.52,
+    "post_secondary_education_min_3_years_aged_25_64": 0.21793831168831168,
+    "population_aged_gt_20": 2881
+  },
+  {
+    "basomrade": "5320310_vastra_skogas",
+    "year": "2000",
+    "mean_income_aged_gt_20": 163418.81,
+    "post_secondary_education_min_3_years_aged_25_64": 0.09334126040428062,
+    "population_aged_gt_20": 4501
+  },
+  {
+    "basomrade": "5320320_ostra_skogas",
+    "year": "2000",
+    "mean_income_aged_gt_20": 221965.68,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1316300129366106,
+    "population_aged_gt_20": 3612
+  },
+  {
+    "basomrade": "5320410_lanna_drevviken",
+    "year": "2000",
+    "mean_income_aged_gt_20": 234965,
+    "post_secondary_education_min_3_years_aged_25_64": 0.13197026022304834,
+    "population_aged_gt_20": 606
+  },
+  {
+    "basomrade": "5320510_trangsunds_glesbygd",
+    "year": "2000",
+    "mean_income_aged_gt_20": 223359.14,
+    "post_secondary_education_min_3_years_aged_25_64": 0.14566929133858267,
+    "population_aged_gt_20": 305
+  },
+  {
+    "basomrade": "5320520_vidja",
+    "year": "2000",
+    "mean_income_aged_gt_20": 210486.17,
+    "post_secondary_education_min_3_years_aged_25_64": 0.06775067750677506,
+    "population_aged_gt_20": 424
+  },
+  {
+    "basomrade": "5330110_varby_gard",
+    "year": "2000",
+    "mean_income_aged_gt_20": 139838.53,
+    "post_secondary_education_min_3_years_aged_25_64": 0.10888252148997135,
+    "population_aged_gt_20": 4818
+  },
+  {
+    "basomrade": "5330200_masmo",
+    "year": "2000",
+    "mean_income_aged_gt_20": 179550.53,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11931394481730052,
+    "population_aged_gt_20": 1782
+  },
+  {
+    "basomrade": "5330331_smista_juringe",
+    "year": "2000",
+    "mean_income_aged_gt_20": 255122.43,
+    "post_secondary_education_min_3_years_aged_25_64": 0.18296703296703296,
+    "population_aged_gt_20": 2248
+  },
+  {
+    "basomrade": "5330332_jakobslund",
+    "year": "2000",
+    "mean_income_aged_gt_20": 262895.67,
+    "post_secondary_education_min_3_years_aged_25_64": 0.23132313231323132,
+    "population_aged_gt_20": 1490
+  },
+  {
+    "basomrade": "5330340_krakvik",
+    "year": "2000",
+    "mean_income_aged_gt_20": 247221.39,
+    "post_secondary_education_min_3_years_aged_25_64": 0.18695652173913044,
+    "population_aged_gt_20": 1267
+  },
+  {
+    "basomrade": "5330410_utsalje",
+    "year": "2000",
+    "mean_income_aged_gt_20": 262138.36,
+    "post_secondary_education_min_3_years_aged_25_64": 0.19493807215939687,
+    "population_aged_gt_20": 2283
+  },
+  {
+    "basomrade": "5330430_snattringe_gard",
+    "year": "2000",
+    "mean_income_aged_gt_20": 289366.09,
+    "post_secondary_education_min_3_years_aged_25_64": 0.22105263157894736,
+    "population_aged_gt_20": 350
+  },
+  {
+    "basomrade": "5340500_glomsta",
+    "year": "2000",
+    "mean_income_aged_gt_20": 205825.88,
+    "post_secondary_education_min_3_years_aged_25_64": 0.08797127468581688,
+    "population_aged_gt_20": 652
+  },
+  {
+    "basomrade": "5340630_kasta",
+    "year": "2000",
+    "mean_income_aged_gt_20": 215789.4,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1574279379157428,
+    "population_aged_gt_20": 539
+  },
+  {
+    "basomrade": "5340640_grantorp",
+    "year": "2000",
+    "mean_income_aged_gt_20": 121179.52,
+    "post_secondary_education_min_3_years_aged_25_64": 0.17048853439680958,
+    "population_aged_gt_20": 4018
+  },
+  {
+    "basomrade": "5340710_visattra",
+    "year": "2000",
+    "mean_income_aged_gt_20": 171654.38,
+    "post_secondary_education_min_3_years_aged_25_64": 0.16377392078326658,
+    "population_aged_gt_20": 2839
+  },
+  {
+    "basomrade": "5511000_vastra_trollbacken",
+    "year": "2000",
+    "mean_income_aged_gt_20": 266360.34,
+    "post_secondary_education_min_3_years_aged_25_64": 0.22965487856838518,
+    "population_aged_gt_20": 3081
+  },
+  {
+    "basomrade": "5511120_centrala_trollbacken",
+    "year": "2000",
+    "mean_income_aged_gt_20": 253776.58,
+    "post_secondary_education_min_3_years_aged_25_64": 0.17073170731707318,
+    "population_aged_gt_20": 1048
+  },
+  {
+    "basomrade": "5511130_sodergarden",
+    "year": "2000",
+    "mean_income_aged_gt_20": 251696.03,
+    "post_secondary_education_min_3_years_aged_25_64": 0.19162303664921465,
+    "population_aged_gt_20": 1208
+  },
+  {
+    "basomrade": "5511140_skalsatra",
+    "year": "2000",
+    "mean_income_aged_gt_20": 245308.53,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1443661971830986,
+    "population_aged_gt_20": 948
+  },
+  {
+    "basomrade": "5511150_norra_hanviken",
+    "year": "2000",
+    "mean_income_aged_gt_20": 258955.1,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1895734597156398,
+    "population_aged_gt_20": 1387
+  },
+  {
+    "basomrade": "5511160_sodra_hanviken",
+    "year": "2000",
+    "mean_income_aged_gt_20": 266781.34,
+    "post_secondary_education_min_3_years_aged_25_64": 0.19313304721030042,
+    "population_aged_gt_20": 629
+  },
+  {
+    "basomrade": "5512010_norra_lindalen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 236442.54,
+    "post_secondary_education_min_3_years_aged_25_64": 0.16071428571428573,
+    "population_aged_gt_20": 1051
+  },
+  {
+    "basomrade": "5513010_tyreso_centrum",
+    "year": "2000",
+    "mean_income_aged_gt_20": 177561.44,
+    "post_secondary_education_min_3_years_aged_25_64": 0.09343434343434344,
+    "population_aged_gt_20": 742
+  },
+  {
+    "basomrade": "5513020_simvagen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 174737.11,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11244979919678715,
+    "population_aged_gt_20": 404
+  },
+  {
+    "basomrade": "5513110_granitvagen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 187810.64,
+    "post_secondary_education_min_3_years_aged_25_64": 0.08564814814814815,
+    "population_aged_gt_20": 1038
+  },
+  {
+    "basomrade": "5513120_pluggvagen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 177441,
+    "post_secondary_education_min_3_years_aged_25_64": 0.10755813953488372,
+    "population_aged_gt_20": 430
+  },
+  {
+    "basomrade": "5513140_mellanbergsvagen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 151333.08,
+    "post_secondary_education_min_3_years_aged_25_64": 0.09693372898120672,
+    "population_aged_gt_20": 1273
+  },
+  {
+    "basomrade": "5513150_granangsringen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 162224.45,
+    "post_secondary_education_min_3_years_aged_25_64": 0.10651974288337925,
+    "population_aged_gt_20": 1475
+  },
+  {
+    "basomrade": "5513160_vastra_farmarstigen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 219799.45,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11864406779661017,
+    "population_aged_gt_20": 412
+  },
+  {
+    "basomrade": "5513170_ostra_farmarstigen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 195241.34,
+    "post_secondary_education_min_3_years_aged_25_64": 0.08203530633437175,
+    "population_aged_gt_20": 1140
+  },
+  {
+    "basomrade": "5513210_ostra_bollmora",
+    "year": "2000",
+    "mean_income_aged_gt_20": 186223.26,
+    "post_secondary_education_min_3_years_aged_25_64": 0.10698365527488855,
+    "population_aged_gt_20": 939
+  },
+  {
+    "basomrade": "5513220_bondevagen",
+    "year": "2000",
+    "mean_income_aged_gt_20": 262438.94,
+    "post_secondary_education_min_3_years_aged_25_64": 0.20652173913043478,
+    "population_aged_gt_20": 404
+  },
+  {
+    "basomrade": "5513310_norra_bollmora",
+    "year": "2000",
+    "mean_income_aged_gt_20": 181025.98,
+    "post_secondary_education_min_3_years_aged_25_64": 0.0861344537815126,
+    "population_aged_gt_20": 1455
+  },
+  {
+    "basomrade": "5513330_vastra_fardala",
+    "year": "2000",
+    "mean_income_aged_gt_20": 237066.46,
+    "post_secondary_education_min_3_years_aged_25_64": 0.21315192743764172,
+    "population_aged_gt_20": 677
+  },
+  {
+    "basomrade": "5513410_fardala",
+    "year": "2000",
+    "mean_income_aged_gt_20": 282858.12,
+    "post_secondary_education_min_3_years_aged_25_64": 0.28664495114006516,
+    "population_aged_gt_20": 453
+  },
+  {
+    "basomrade": "5514000_krusboda",
+    "year": "2000",
+    "mean_income_aged_gt_20": 246732.64,
+    "post_secondary_education_min_3_years_aged_25_64": 0.17546233649075327,
+    "population_aged_gt_20": 2623
+  },
+  {
+    "basomrade": "5515010_oringe",
+    "year": "2000",
+    "mean_income_aged_gt_20": 251660.4,
+    "post_secondary_education_min_3_years_aged_25_64": 0.152153987167736,
+    "population_aged_gt_20": 1259
+  },
+  {
+    "basomrade": "5515120_strand_norr_tyreso_strand_centrum_strand_syd_gimmersta",
+    "year": "2000",
+    "mean_income_aged_gt_20": 245859.86,
+    "post_secondary_education_min_3_years_aged_25_64": 0.18377088305489261,
+    "population_aged_gt_20": 1880
+  },
+  {
+    "basomrade": "5515210_vissvass_raksta_solberga_bergholm",
+    "year": "2000",
+    "mean_income_aged_gt_20": 212047.57,
+    "post_secondary_education_min_3_years_aged_25_64": 0.10023866348448687,
+    "population_aged_gt_20": 508
+  },
+  {
+    "basomrade": "5515220_inre_brevik_yttre_brevik",
+    "year": "2000",
+    "mean_income_aged_gt_20": 235557.51,
+    "post_secondary_education_min_3_years_aged_25_64": 0.13957759412304868,
+    "population_aged_gt_20": 1276
+  },
+  {
+    "basomrade": "5711010_soderby_garde",
+    "year": "2000",
+    "mean_income_aged_gt_20": 181728.04,
+    "post_secondary_education_min_3_years_aged_25_64": 0.09771309771309772,
+    "population_aged_gt_20": 571
+  },
+  {
+    "basomrade": "5711020_soderby_park",
+    "year": "2000",
+    "mean_income_aged_gt_20": 148518.29,
+    "post_secondary_education_min_3_years_aged_25_64": 0.14150943396226415,
+    "population_aged_gt_20": 178
+  },
+  {
+    "basomrade": "5711110_skyttorp",
+    "year": "2000",
+    "mean_income_aged_gt_20": 216869.66,
+    "post_secondary_education_min_3_years_aged_25_64": 0.08751902587519025,
+    "population_aged_gt_20": 1565
+  },
+  {
+    "basomrade": "5711120_skogsang",
+    "year": "2000",
+    "mean_income_aged_gt_20": 238377.59,
+    "post_secondary_education_min_3_years_aged_25_64": 0.15682478218780252,
+    "population_aged_gt_20": 1195
+  },
+  {
+    "basomrade": "5711130_soderby",
+    "year": "2000",
+    "mean_income_aged_gt_20": 241941.94,
+    "post_secondary_education_min_3_years_aged_25_64": 0.16373626373626374,
+    "population_aged_gt_20": 1080
+  },
+  {
+    "basomrade": "5711200_salems_centrum",
+    "year": "2000",
+    "mean_income_aged_gt_20": 165752.08,
+    "post_secondary_education_min_3_years_aged_25_64": 0.08866995073891626,
+    "population_aged_gt_20": 1877
+  },
+  {
+    "basomrade": "5712110_norra_ronninge",
+    "year": "2000",
+    "mean_income_aged_gt_20": 293365.71,
+    "post_secondary_education_min_3_years_aged_25_64": 0.28961175236096537,
+    "population_aged_gt_20": 1148
+  },
+  {
+    "basomrade": "5712210_uttringe",
+    "year": "2000",
+    "mean_income_aged_gt_20": 280370.33,
+    "post_secondary_education_min_3_years_aged_25_64": 0.3181818181818182,
+    "population_aged_gt_20": 663
+  },
+  {
+    "basomrade": "5712220_ostra_ronninge",
+    "year": "2000",
+    "mean_income_aged_gt_20": 283481.76,
+    "post_secondary_education_min_3_years_aged_25_64": 0.2849557522123894,
+    "population_aged_gt_20": 700
+  },
+  {
+    "basomrade": "5712300_ronninge_centrum",
+    "year": "2000",
+    "mean_income_aged_gt_20": 221986.13,
+    "post_secondary_education_min_3_years_aged_25_64": 0.2297734627831715,
+    "population_aged_gt_20": 463
+  },
+  {
+    "basomrade": "5713000_salems_glesbygd",
+    "year": "2000",
+    "mean_income_aged_gt_20": 170776.25,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1368421052631579,
+    "population_aged_gt_20": 114
+  },
+  {
+    "basomrade": "6210240_nicksta",
+    "year": "2000",
+    "mean_income_aged_gt_20": 149337.13,
+    "post_secondary_education_min_3_years_aged_25_64": 0.102803738317757,
+    "population_aged_gt_20": 1136
+  },
+  {
+    "basomrade": "6210270_kallsmo",
+    "year": "2000",
+    "mean_income_aged_gt_20": 246822.87,
+    "post_secondary_education_min_3_years_aged_25_64": 0.18796992481203006,
+    "population_aged_gt_20": 167
+  },
+  {
+    "basomrade": "6210350_vastra_nynashamn_c",
+    "year": "2000",
+    "mean_income_aged_gt_20": 187223.54,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1070627802690583,
+    "population_aged_gt_20": 2705
+  },
+  {
+    "basomrade": "6210360_ostra_nynashamn_c",
+    "year": "2000",
+    "mean_income_aged_gt_20": 179395.01,
+    "post_secondary_education_min_3_years_aged_25_64": 0.11212121212121212,
+    "population_aged_gt_20": 1783
+  },
+  {
+    "basomrade": "6210410_nynashamn_sv_esto",
+    "year": "2000",
+    "mean_income_aged_gt_20": 212292.64,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1711590296495957,
+    "population_aged_gt_20": 1093
+  },
+  {
+    "basomrade": "6210440_sandhamn_mm",
+    "year": "2000",
+    "mean_income_aged_gt_20": 224144.16,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1592442645074224,
+    "population_aged_gt_20": 885
+  },
+  {
+    "basomrade": "6210490_trehorningen_mm",
+    "year": "2000",
+    "mean_income_aged_gt_20": 232496.86,
+    "post_secondary_education_min_3_years_aged_25_64": 0.19887429643527205,
+    "population_aged_gt_20": 691
+  },
+  {
+    "basomrade": "6210520_vaktberget",
+    "year": "2000",
+    "mean_income_aged_gt_20": 179674.1,
+    "post_secondary_education_min_3_years_aged_25_64": 0.05583756345177665,
+    "population_aged_gt_20": 708
+  },
+  {
+    "basomrade": "6210570_rappsta_hacktorp",
+    "year": "2000",
+    "mean_income_aged_gt_20": 232227.38,
+    "post_secondary_education_min_3_years_aged_25_64": 0.1018867924528302,
+    "population_aged_gt_20": 638
+  },
+  {
+    "basomrade": "6210640_hamnvik",
+    "year": "2000",
+    "mean_income_aged_gt_20": 252711.14,
+    "post_secondary_education_min_3_years_aged_25_64": 0.08411214953271028,
+    "population_aged_gt_20": 110
+  },
+  {
+    "basomrade": "6220100_sorunda",
+    "year": "2000",
+    "mean_income_aged_gt_20": 201602.04,
+    "post_secondary_education_min_3_years_aged_25_64": 0.09180790960451977,
+    "population_aged_gt_20": 868
+  },
+  {
+    "basomrade": "6220200_stora_vika",
+    "year": "2000",
+    "mean_income_aged_gt_20": 177856.4,
+    "post_secondary_education_min_3_years_aged_25_64": 0.023391812865497075,
+    "population_aged_gt_20": 459
+  },
+  {
+    "basomrade": "6220300_grodby",
+    "year": "2000",
+    "mean_income_aged_gt_20": 221954.85,
+    "post_secondary_education_min_3_years_aged_25_64": 0.13989637305699482,
+    "population_aged_gt_20": 229
+  },
+  {
+    "basomrade": "6220510_liso",
+    "year": "2000",
+    "mean_income_aged_gt_20": 186158.79,
+    "post_secondary_education_min_3_years_aged_25_64": 0.12946428571428573,
+    "population_aged_gt_20": 271
+  },
+  {
+    "basomrade": "6220520_sorunda_vastra_glesbygd",
+    "year": "2000",
+    "mean_income_aged_gt_20": 195602.12,
+    "post_secondary_education_min_3_years_aged_25_64": 0.09027777777777778,
+    "population_aged_gt_20": 1106
+  },
+  {
+    "basomrade": "6220530_sorunda_ostra_glesbygd",
+    "year": "2000",
+    "mean_income_aged_gt_20": 201489.66,
+    "post_secondary_education_min_3_years_aged_25_64": 0.0922242314647378,
+    "population_aged_gt_20": 682
+  },
+  {
+    "basomrade": "6230000_toro_forsamling",
+    "year": "2000",
+    "mean_income_aged_gt_20": 207095.47,
+    "post_secondary_education_min_3_years_aged_25_64": 0.12195121951219512,
+    "population_aged_gt_20": 498
+  },
+  {
+    "basomrade": "6240100_osmo",
+    "year": "2000",
+    "mean_income_aged_gt_20": 193495.31,
+    "post_secondary_education_min_3_years_aged_25_64": 0.08317025440313111,
+    "population_aged_gt_20": 2540
+  },
+  {
+    "basomrade": "6240510_jarflotta",
+    "year": "2000",
+    "mean_income_aged_gt_20": 186401.1,
+    "post_secondary_education_min_3_years_aged_25_64": 0.07692307692307693,
+    "population_aged_gt_20": 156
+  },
+  {
+    "basomrade": "6240530_osmo_ostra_glesbygd",
+    "year": "2000",
+    "mean_income_aged_gt_20": 185084.1,
+    "post_secondary_education_min_3_years_aged_25_64": 0.10784313725490197,
+    "population_aged_gt_20": 133
+  },
+  {
+    "basomrade": "6240540_osmo_vastra_glesbygd",
+    "year": "2000",
+    "mean_income_aged_gt_20": 192337.68,
+    "post_secondary_education_min_3_years_aged_25_64": 0.07203389830508475,
+    "population_aged_gt_20": 317
+  },
+  {
+    "basomrade": "6240550_osmo_norra_glesbygd",
+    "year": "2000",
+    "mean_income_aged_gt_20": 198536.25,
+    "post_secondary_education_min_3_years_aged_25_64": 0.058823529411764705,
+    "population_aged_gt_20": 515
+  }
+]

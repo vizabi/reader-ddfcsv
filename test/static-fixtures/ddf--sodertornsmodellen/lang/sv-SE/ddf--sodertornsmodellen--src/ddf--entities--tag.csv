@@ -1,0 +1,14 @@
+tag,name
+geography,Geografi
+education,Utbildning
+education_by_levels,efter utbildningsnivå
+employment,Arbete
+population_by_4income_groups,efter 4 inkomstgrupper
+income_by_gender,efter kön
+income,Inkomst
+migration_by_gender,efter kön
+migration,Flytt
+migration_by_employment_by_gender,efter kön
+migration_by_employment,Flytt - arbete
+migration_by_education_by_gender,efter kön
+migration_by_education,Flytt - utbildning
