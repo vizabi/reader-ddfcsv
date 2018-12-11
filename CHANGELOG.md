@@ -1,3 +1,14 @@
+<a name="2.5.0"></a>
+# [2.5.0](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v2.4.3...v2.5.0) (2018-12-11)
+
+
+### Features
+
+* **read from GCP:** implement the ability to read files from GCP ([#111](https://github.com/vizabi/vizabi-ddfcsv-reader/issues/111)) ([0c13735](https://github.com/vizabi/vizabi-ddfcsv-reader/commit/0c13735)), closes [#110](https://github.com/vizabi/vizabi-ddfcsv-reader/issues/110)
+* **tests:** tests for multi-instance mode ([#109](https://github.com/vizabi/vizabi-ddfcsv-reader/issues/109)) ([9aa475c](https://github.com/vizabi/vizabi-ddfcsv-reader/commit/9aa475c)), closes [#108](https://github.com/vizabi/vizabi-ddfcsv-reader/issues/108)
+
+
+
 <a name="2.4.3"></a>
 ## [2.4.3](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v2.4.2...v2.4.3) (2018-10-17)
 
