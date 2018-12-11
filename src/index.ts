@@ -10,6 +10,10 @@ import { S3FileReader } from './file-readers/s3-file-reader';
 
 export { S3FileReader } from './file-readers/s3-file-reader';
 
+import { GcpFileReader } from './file-readers/gcp-file-reader';
+
+export { GcpFileReader } from './file-readers/gcp-file-reader';
+
 export { DdfCsvError } from './ddfcsv-error';
 
 import { prepareDDFCsvReaderObject } from './ddfcsv-reader';
@@ -17,3 +21,4 @@ import { prepareDDFCsvReaderObject } from './ddfcsv-reader';
 export const getDDFCsvReaderObject: Function = prepareDDFCsvReaderObject(new BackendFileReader());
 export const getGithubDDFCsvReaderObject: Function = prepareDDFCsvReaderObject(new GithubFileReader());
 export const getS3FileReaderObject: Function = prepareDDFCsvReaderObject(new S3FileReader());
+export const getGcpFileReaderObject: Function = prepareDDFCsvReaderObject(new GcpFileReader());
