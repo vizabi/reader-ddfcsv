@@ -9,7 +9,7 @@ import * as startsWith from 'lodash.startswith';
 import * as includes from 'lodash.includes';
 import * as compact from 'lodash.compact';
 import { DdfCsvError } from '../ddfcsv-error';
-import { IDatapackage, IResourceSelectionOptimizer, IReader } from '../interfaces';
+import { IDatapackage, IResourceSelectionOptimizer, IReader, IBaseReaderOptions } from '../interfaces';
 import { QueryFeature, featureDetectors, IQuery } from 'ddf-query-validator';
 
 const Papa = require('papaparse');
@@ -32,7 +32,7 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
   private datapackage: IDatapackage;
   private conceptsLookup;
 
-  constructor(queryParam, options) {
+  constructor(queryParam, private options: IBaseReaderOptions) {
     this.fileReader = options.fileReader;
     this.datasetPath = options.basePath;
     this.query = queryParam;
@@ -50,7 +50,11 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
   }
 
   async getRecommendedFilesSet(): Promise<string[]> {
+    const { debug, error, warning } = this.options.diagnostic.prepareDiagnosticFor('getRecommendedFilesSet');
+
     if (this.isMatched()) {
+      debug('plugin matched');
+
       let result;
       try {
         this.fillResourceToFileHash();
@@ -61,11 +65,17 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
         this.getFilesGroupsQueryClause();
         result = this.getOptimalFilesGroup();
       } catch (err) {
+        error('wrong data processing', err);
         return [];
       }
+
+      debug('recommended files found', result);
+
       return result;
     } else {
-      throw new DdfCsvError(`Plugin "InClauseUnderConjunction" is not matched!`, 'InClauseUnderConjunction plugin');
+      const message = `Plugin "InClauseUnderConjunction" is not matched!`;
+      warning(message);
+      throw new DdfCsvError(message, 'InClauseUnderConjunction plugin');
     }
   }
 
