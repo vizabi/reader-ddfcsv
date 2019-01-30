@@ -1,6 +1,6 @@
 import * as isEmpty from 'lodash.isempty';
 import { ddfCsvReader } from './ddf-csv';
-import { IReader } from './interfaces';
+import { IResourceRead } from './interfaces';
 import { getRepositoryPath } from 'ddf-query-validator';
 import { DdfCsvError } from './ddfcsv-error';
 import { createDiagnosticManagerOn, EndpointDiagnosticManager, getLevelByLabel } from 'cross-project-diagnostics';
@@ -9,15 +9,15 @@ import { DiagnosticManager, Level } from 'cross-project-diagnostics/lib';
 const myName = '';
 const myVersion = '';
 
-export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
-  return function(externalFileReader?: IReader, logger?: any) {
+export function prepareDDFCsvReaderObject (defaultResourceReader?: IResourceRead) {
+  return function(externalResourceReader?: IResourceRead, logger?: any) {
     return {
       init (readerInfo) {
         // TODO: check validity of base path
         this._basePath = readerInfo.path;
 
         this._lastModified = readerInfo._lastModified;
-        this.fileReader = externalFileReader || defaultFileReader;
+        this.fileReader = externalResourceReader || defaultResourceReader;
         this.logger = logger;
         this.resultTransformer = readerInfo.resultTransformer;
 

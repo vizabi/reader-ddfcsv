@@ -9,7 +9,7 @@ import * as startsWith from 'lodash.startswith';
 import * as includes from 'lodash.includes';
 import * as compact from 'lodash.compact';
 import { DdfCsvError } from '../ddfcsv-error';
-import { IDatapackage, IResourceSelectionOptimizer, IReader, IBaseReaderOptions } from '../interfaces';
+import { IDatapackage, IResourceSelectionOptimizer, IResourceRead, IBaseReaderOptions } from '../interfaces';
 import { QueryFeature, featureDetectors, IQuery } from 'ddf-query-validator';
 
 const Papa = require('papaparse');
@@ -26,7 +26,7 @@ const isOneKeyBased = obj => keys(obj).length === 1;
 
 export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
   private flow: any = {};
-  private fileReader: IReader;
+  private fileReader: IResourceRead;
   private datasetPath: string;
   private query: IQuery;
   private datapackage: IDatapackage;

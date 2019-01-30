@@ -1,8 +1,8 @@
 import * as fs from 'fs';
-import { IReader } from '../interfaces';
+import { IResourceRead } from '../interfaces';
 import * as path from 'path';
 
-export class BackendFileReader implements IReader {
+export class BackendFileReader implements IResourceRead {
   public recordTransformer: Function;
 
   setRecordTransformer(recordTransformer) {

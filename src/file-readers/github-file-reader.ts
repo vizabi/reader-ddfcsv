@@ -19,9 +19,9 @@ function readViaHttp(filePath: string, onFileRead: Function) {
 }
 */
 
-import { IReader } from '../interfaces';
+import { IResourceRead } from '../interfaces';
 
-export class GithubFileReader implements IReader {
+export class GithubFileReader implements IResourceRead {
   public recordTransformer: Function;
 
   setRecordTransformer(recordTransformer) {

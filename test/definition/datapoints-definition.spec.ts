@@ -65,7 +65,7 @@ describe('Datapoints definition errors in query', () => {
 
       const countryAntData = result.filter(record => record.geo === 'ant');
 
-      expect(result.length).to.equal(1155);
+      expect(result.length).to.equal(983);
       expect(countryAntData).to.be.an('array').that.is.empty;
     });
 
@@ -87,7 +87,7 @@ describe('Datapoints definition errors in query', () => {
 
       const result = await reader.read(query);
 
-      expect(result.length).to.equal(52091);
+      expect(result.length).to.equal(62794);
     });
 
     it(`when requests '${BASE_PATH + BIG_PATH}' dataset`, async () => {
@@ -315,7 +315,7 @@ describe('Datapoints definition errors in query', () => {
 
       const countryAntData = result.filter(record => record.geo === 'ant');
 
-      expect(result.length).to.equal(42705);
+      expect(result.length).to.equal(58695);
       expect(countryAntData).to.be.an('array').that.is.empty;
     });
 
@@ -362,7 +362,7 @@ describe('Datapoints definition errors in query', () => {
 
       const countryAntData = result.filter(record => record.geo === 'ant');
 
-      expect(result.length).to.equal(42705);
+      expect(result.length).to.equal(58695);
       expect(countryAntData).to.be.an('array').that.is.empty;
     });
   });
