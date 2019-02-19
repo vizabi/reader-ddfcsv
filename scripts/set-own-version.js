@@ -7,7 +7,7 @@ try {
         process.exit(1);
     }
 
-    const fileName = path.resolve('..', 'lib', 'src', 'ddfcsv-reader.js');
+    const fileName = path.resolve('..', process.env.TARGET_DIR, 'src', 'ddfcsv-reader.js');
     const content = fs.readFileSync(fileName, 'utf-8');
     const oldVersionContent = /const myVersion = '';/;
     const newVersionContent = `const myVersion = '${process.env.npm_package_version}';`;
