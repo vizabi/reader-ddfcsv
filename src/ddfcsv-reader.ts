@@ -1,18 +1,23 @@
 import * as isEmpty from 'lodash.isempty';
 import { ddfCsvReader } from './ddf-csv';
-import { IReader } from './interfaces';
+import { IResourceRead } from './interfaces';
 import { getRepositoryPath } from 'ddf-query-validator';
 import { DdfCsvError } from './ddfcsv-error';
+import { createDiagnosticManagerOn, EndpointDiagnosticManager, getLevelByLabel } from 'cross-project-diagnostics';
+import { DiagnosticManager, Level } from 'cross-project-diagnostics/lib';
 
-export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
-  return function(externalFileReader?: IReader, logger?: any) {
+const myName = '';
+const myVersion = '';
+
+export function prepareDDFCsvReaderObject (defaultResourceReader?: IResourceRead) {
+  return function(externalResourceReader?: IResourceRead, logger?: any) {
     return {
       init (readerInfo) {
         // TODO: check validity of base path
         this._basePath = readerInfo.path;
 
         this._lastModified = readerInfo._lastModified;
-        this.fileReader = externalFileReader || defaultFileReader;
+        this.fileReader = externalResourceReader || defaultResourceReader;
         this.logger = logger;
         this.resultTransformer = readerInfo.resultTransformer;
 
@@ -56,19 +61,30 @@ export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
         return await this.getFile(assetPath, isJsonAsset);
       },
 
-      async read (queryParam, parsers) {
+      async read (queryParam, parsers, parentDiagnostic?: DiagnosticManager) {
+        const diagnostic = parentDiagnostic ?
+          createDiagnosticManagerOn(myName, myVersion).basedOn(parentDiagnostic) :
+          createDiagnosticManagerOn(myName, myVersion).forRequest('').withSeverityLevel(Level.OFF);
+        const { debug, error, fatal } = diagnostic.prepareDiagnosticFor('read');
+
         let result;
+
+        debug('start reading', queryParam);
 
         try {
           if (isEmpty(queryParam.repositoryPath) && isEmpty(this._basePath)) {
-            throw new DdfCsvError(`Neither initial 'path' nor 'repositoryPath' in query were found.`, JSON.stringify(queryParam));
+            const message = `Neither initial 'path' nor 'repositoryPath' in query were found.`;
+            const err = new DdfCsvError(message, JSON.stringify(queryParam));
+            error(message, err);
+            throw err;
           }
 
           result = await this.reader.query(queryParam, {
             basePath: queryParam.repositoryPath || this._basePath,
             fileReader: this.fileReader,
             logger: this.logger,
-            conceptsLookup: new Map<string, any>()
+            conceptsLookup: new Map<string, any>(),
+            diagnostic
           });
           result = parsers ? this._prettifyData(result, parsers) : result;
 
@@ -80,9 +96,9 @@ export function prepareDDFCsvReaderObject (defaultFileReader?: IReader) {
             logger.log(JSON.stringify(queryParam), result.length);
             logger.log(result);
           }
-
-        } catch (error) {
-          throw error;
+        } catch (err) {
+          fatal('global data reading error', err);
+          throw err;
         }
 
         return result;

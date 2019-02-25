@@ -1,11 +1,12 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = () => ({
     mode: 'production',
     entry: {
-        'babel-polyfill': 'babel-polyfill',
-        'vizabi-ddfcsv-reader': './lib/src/index-web.js'
+        'vizabi-ddfcsv-reader': ['./lib-web/src/index-web.js'],
+        'vizabi-ddfcsv-reader-polyfill': ['babel-polyfill', './lib-web/src/index-web.js']
     },
     output: {
         path: path.join(__dirname, 'dist'),
@@ -19,7 +20,6 @@ module.exports = () => ({
         rules: [
             {
                 test: /\.js$/,
-                exclude: /node_modules\/(?![ddf\-query\-validator])/,
                 use: {
                     loader: "babel-loader",
                     options: {
@@ -32,6 +32,7 @@ module.exports = () => ({
         ]
     },
     plugins: [
-        new CleanWebpackPlugin(['dist'])
+        new CleanWebpackPlugin(['dist'])// ,
+        // new BundleAnalyzerPlugin()
     ]
 });

@@ -1,10 +1,10 @@
-import { IReader } from '../interfaces';
+import { IResourceRead } from '../interfaces';
 
 require('fetch-polyfill');
 
 declare var fetch;
 
-export class FrontendFileReader implements IReader {
+export class FrontendFileReader implements IResourceRead {
   public recordTransformer: Function;
 
   setRecordTransformer(recordTransformer) {

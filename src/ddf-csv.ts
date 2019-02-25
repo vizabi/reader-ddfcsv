@@ -38,16 +38,22 @@ export function ddfCsvReader (logger?: any) {
   const resourcesLookup = new Map();
 
   let optimalFilesSet = [];
+  let datapackage;
 
   function loadDataPackage (baseOptions: IBaseReaderOptions): Promise<IDatapackage> {
     const datapackagePath = getFilePath(baseOptions.basePath);
+    const { debug, error } = baseOptions.diagnostic.prepareDiagnosticFor('loadDataPackage');
+
     return new Promise((resolve, reject) => {
+      if (datapackage) {
+        return resolve(datapackage);
+      }
+
       baseOptions.fileReader.readText(datapackagePath, (err, data) => {
         if (err) {
+          error('file reading', err);
           return reject(new DdfCsvError(FILE_READING_ERROR, err, datapackagePath));
         }
-
-        let datapackage;
 
         try {
           datapackage = JSON.parse(data);
@@ -55,15 +61,19 @@ export function ddfCsvReader (logger?: any) {
           buildResourcesLookup(datapackage);
           buildKeyValueLookup(datapackage);
         } catch (parseErr) {
+          error('json file parsing', parseErr);
           return reject(new DdfCsvError(JSON_PARSING_ERROR, parseErr.message, datapackagePath));
         }
+
+        debug('datapackage content is ready');
 
         resolve(datapackage);
       });
     });
   }
 
-  async function loadConcepts (queryParam, options): Promise<object> {
+  async function loadConcepts (queryParam, options: IBaseReaderOptions): Promise<object> {
+    const { error } = options.diagnostic.prepareDiagnosticFor('loadConcepts');
     // start off with internal concepts
     setConceptsLookup(internalConcepts, options);
     // query concepts
@@ -81,8 +91,9 @@ export function ddfCsvReader (logger?: any) {
       // with conceptsLookup built, we can parse other concept properties
       // according to their concept_type
       result = await reparseConcepts(options);
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      error('concepts processing', err);
+      throw err;
     }
     return result;
   }
@@ -152,8 +163,9 @@ export function ddfCsvReader (logger?: any) {
     concepts.forEach(row => options.conceptsLookup.set(row.concept, row));
   }
 
-  async function query (queryParam, baseOptions) {
+  async function query (queryParam, baseOptions: IBaseReaderOptions) {
     // console.log(JSON.stringify(queryParam, null, '\t'))
+    const { warning, error } = baseOptions.diagnostic.prepareDiagnosticFor('query');
     let data;
 
     try {
@@ -163,25 +175,31 @@ export function ddfCsvReader (logger?: any) {
       await validateQueryDefinitions(queryParam, baseOptions);
 
       if (isSchemaQuery(queryParam)) {
-        data = await querySchema(queryParam, { datapackage: baseOptions.datapackage });
+        data = await querySchema(queryParam, baseOptions);
       } else {
         const appropriatePlugin = getAppropriatePlugin(queryParam, baseOptions);
+
         if (appropriatePlugin) {
           optimalFilesSet = [];
           const files = await appropriatePlugin.getRecommendedFilesSet();
           optimalFilesSet = files;
           queryParam.optimalFilesSet = [].concat(files, queryParam.optimalFilesSet);
+
+          warning('get custom optimal files list by a plugin', optimalFilesSet);
         }
+
         data = await queryData(queryParam, baseOptions);
       }
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      error('general query error', err);
+      throw err;
     }
 
     return data;
   }
 
-  function queryData (queryParam, options) {
+  function queryData (queryParam, options: IBaseReaderOptions) {
+    const { debug } = options.diagnostic.prepareDiagnosticFor('queryData');
     const {
       select: { key = [], value = [] },
       from = '',
@@ -192,10 +210,12 @@ export function ddfCsvReader (logger?: any) {
     } = queryParam;
     const select = { key, value };
 
+    debug('start all data loading', queryParam);
+
     const projection = new Set(select.key.concat(select.value));
     const filterFields = getFilterFields(where).filter(field => !projection.has(field));
     // load all relevant resources
-    const resourcesPromise = loadResources(select.key, [ ...select.value, ...filterFields ], language, options);
+    const resourcesPromise = loadResources(select.key, [ ...select.value, ...filterFields ], language, options, queryParam);
     // list of entities selected from a join clause, later insterted in where clause
     const joinsPromise = getJoinFilters(join, queryParam, options);
     // filter which ensures result only includes queried entity sets
@@ -203,21 +223,26 @@ export function ddfCsvReader (logger?: any) {
 
     return Promise.all([ resourcesPromise, entitySetFilterPromise, joinsPromise ])
       .then(([ resourceResponses, entitySetFilter, joinFilters ]) => {
+        debug('finish all data loading', queryParam);
         // create filter from where, join filters and entity set filters
         const whereResolved = processWhere(where, joinFilters);
         const filter = mergeFilters(entitySetFilter, whereResolved);
 
+        debug('dataTables processing', queryParam);
         const dataTables = resourceResponses
         // rename key-columns and remove irrelevant value-columns
           .map(response => processResourceResponse(response, select, filterFields, options));
 
+        debug('queryResult processing', queryParam);
         // join (reduce) data to one data table
         const queryResult = joinData(select.key, 'overwrite', ...dataTables)
           .filter(row => applyFilterRow(row, filter))     // apply filters (entity sets and where (including join))
           .map(row => fillMissingValues(row, projection)) // fill any missing values with null values
           .map(row => projectRow(row, projection));       // remove fields used only for filtering
 
+        debug('result ordering', queryParam);
         orderData(queryResult, order_by);
+        debug('final result is ready', queryParam);
 
         return queryResult;
       });
@@ -307,23 +332,27 @@ export function ddfCsvReader (logger?: any) {
     }, { $and: [] });
   }
 
-  function querySchema (queryParam, { datapackage }) {
+  function querySchema (queryParam, baseOptions: IBaseReaderOptions) {
+    const { debug, error } = baseOptions.diagnostic.prepareDiagnosticFor('query');
     const getSchemaFromCollection = collectionPar => {
-      return datapackage.ddfSchema[ collectionPar ].map(
+      debug(`get schema for collection ${collectionPar}`);
+      return baseOptions.datapackage.ddfSchema[ collectionPar ].map(
         ({ primaryKey, value }) => ({ key: primaryKey, value })
       );
     };
 
     const collection = queryParam.from.split('.')[ 0 ];
 
-    if (datapackage.ddfSchema[ collection ]) {
+    if (baseOptions.datapackage.ddfSchema[ collection ]) {
       return getSchemaFromCollection(collection);
     } else if (collection === '*') {
-      return Object.keys(datapackage.ddfSchema)
+      return Object.keys(baseOptions.datapackage.ddfSchema)
         .map(getSchemaFromCollection)
         .reduce((a, b) => a.concat(b));
     } else {
-      throwError(new DdfCsvError(DDF_ERROR, `No valid collection (${collection}) for schema query`));
+      const message = `No valid collection (${collection}) for schema query`;
+      error(message);
+      throwError(new DdfCsvError(DDF_ERROR, message));
     }
   }
 
@@ -546,9 +575,11 @@ export function ddfCsvReader (logger?: any) {
       .map(row => renameHeaderRow(row, renameMap));    // rename header rows (must happen **after** projection)
   }
 
-  function loadResources (key, value, language, options) {
-
+  function loadResources (key, value, language, options, queryParam) {
+    const { debug } = options.diagnostic.prepareDiagnosticFor('loadResource');
     const resources = getResources(key, value);
+
+    debug('resources list by query', {queryParam, resources: [ ...resources ]});
 
     return Promise.all([ ...resources ].map(
       resource => loadResource(resource, language, options)
@@ -558,7 +589,7 @@ export function ddfCsvReader (logger?: any) {
   function projectRow (row, projectionSet) {
     const result = {};
 
-    for (const concept in row) {
+    for (const concept of Object.keys(row)) {
       if (projectionSet.has(concept)) {
         result[ concept ] = row[ concept ];
       }
@@ -570,7 +601,7 @@ export function ddfCsvReader (logger?: any) {
   function renameHeaderRow (row, renameMap) {
     const result = {};
 
-    for (const concept in row) {
+    for (const concept of Object.keys(row)) {
       result[ renameMap.get(concept) || concept ] = row[ concept ];
     }
 
@@ -653,6 +684,7 @@ export function ddfCsvReader (logger?: any) {
   }
 
   function loadResource (resource, language, options) {
+    const { warning } = options.diagnostic.prepareDiagnosticFor('loadResource');
     const filePromises = [];
 
     if (typeof resource.data === 'undefined') {
@@ -670,7 +702,11 @@ export function ddfCsvReader (logger?: any) {
 
         // error loading translation file is expected when specific file is not translated
         // more correct would be to only resolve file-not-found errors but current solution is sufficient
-        resource.translations[ language ] = loadFile(translationPath, options).catch(err => Promise.resolve({}));
+        resource.translations[ language ] = loadFile(translationPath, options)
+          .catch(err => {
+            warning(`translation file ${translationPath}`, err);
+            return Promise.resolve({});
+          });
       }
 
       filePromises.push(resource.translations[ language ]);
@@ -687,19 +723,24 @@ export function ddfCsvReader (logger?: any) {
 
   }
 
-  function getLanguages ({ datapackage }): string[] {
-    if (!datapackage.translations) {
+  function getLanguages (options: {datapackage}): string[] {
+    if (!options.datapackage.translations) {
       return [];
     }
 
-    return datapackage.translations.map(lang => lang.id);
+    return options.datapackage.translations.map(lang => lang.id);
   }
 
   function loadFile (filePath, options) {
+    const { debug, error } = options.diagnostic.prepareDiagnosticFor('loadFile');
     const fullFilePath = getFilePath(options.basePath, filePath);
+
+    debug(`start reading "${filePath}"`);
+
     return new Promise((resolve, reject) => {
       options.fileReader.readText(fullFilePath, (err, data) => {
         if (err) {
+          error(`fail "${filePath}" reading`, err);
           return reject(new DdfCsvError(FILE_READING_ERROR, err, fullFilePath));
         }
 
@@ -719,8 +760,14 @@ export function ddfCsvReader (logger?: any) {
 
             return includes([ 'boolean', 'measure' ], concept.concept_type);
           },
-          complete: result => resolve(result),
-          error: error => reject(new DdfCsvError(CSV_PARSING_ERROR, error, filePath))
+          complete: result => {
+            debug(`finish reading "${filePath}"`);
+            resolve(result);
+          },
+          error: parseErr => {
+            error(`fail "${filePath}" parsing`, parseErr);
+            reject(new DdfCsvError(CSV_PARSING_ERROR, parseErr, filePath));
+          }
         });
       });
     });

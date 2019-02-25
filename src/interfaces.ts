@@ -1,4 +1,6 @@
-export interface IReader {
+import { DiagnosticManager } from 'cross-project-diagnostics';
+
+export interface IResourceRead {
   recordTransformer: Function;
   setRecordTransformer(recordTransformer: Function);
   readText(filePath: string, onFileRead: Function, options?: object);
@@ -7,9 +9,10 @@ export interface IReader {
 export interface IBaseReaderOptions {
   basePath: string;
   conceptsLookup: Map<string, any>;
-  datapackage?: object;
-  fileReader: IReader;
+  datapackage?: any;
+  fileReader: IResourceRead;
   logger?: any;
+  diagnostic?: DiagnosticManager;
 }
 
 export interface IResource {
@@ -23,12 +26,6 @@ export interface IDatapackage {
     datapoints: IResource[];
     concepts: IResource[];
   };
-}
-
-export interface IPluginOptions {
-  fileReader: IReader;
-  basePath: string;
-  datapackage: IDatapackage;
 }
 
 export interface IResourceSelectionOptimizer {
