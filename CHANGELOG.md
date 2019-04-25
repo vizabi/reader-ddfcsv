@@ -1,3 +1,13 @@
+<a name="3.0.12"></a>
+## [3.0.12](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v2.5.0...v3.0.12) (2019-04-25)
+
+
+### Features
+
+* **Cross-platform Diagnostics:** provide Cross-platform Diagnostics … ([#113](https://github.com/vizabi/vizabi-ddfcsv-reader/issues/113)) ([2d93ea4](https://github.com/vizabi/vizabi-ddfcsv-reader/commit/2d93ea4)), closes [#112](https://github.com/vizabi/vizabi-ddfcsv-reader/issues/112)
+
+
+
 <a name="2.5.0"></a>
 # [2.5.0](https://github.com/vizabi/vizabi-ddfcsv-reader/compare/v2.4.3...v2.5.0) (2018-12-11)
 
