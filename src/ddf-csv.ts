@@ -1,6 +1,7 @@
 import * as includes from 'lodash.includes';
 import * as cloneDeep from 'lodash.clonedeep';
 import * as isEmpty from 'lodash.isempty';
+import * as stripBom from 'strip-bom';
 import { getAppropriatePlugin } from './resource-selection-optimizer';
 import { CSV_PARSING_ERROR, DDF_ERROR, DdfCsvError, FILE_READING_ERROR, JSON_PARSING_ERROR } from './ddfcsv-error';
 import { getFilePath, isSchemaQuery, validateQueryDefinitions, validateQueryStructure } from 'ddf-query-validator';
@@ -56,7 +57,7 @@ export function ddfCsvReader (logger?: any) {
         }
 
         try {
-          datapackage = JSON.parse(data);
+          datapackage = JSON.parse(stripBom(data));
           optimalFilesSet = [];
           buildResourcesLookup(datapackage);
           buildKeyValueLookup(datapackage);
@@ -744,7 +745,7 @@ export function ddfCsvReader (logger?: any) {
           return reject(new DdfCsvError(FILE_READING_ERROR, err, fullFilePath));
         }
 
-        Papa.parse(data, {
+        Papa.parse(stripBom(data), {
           header: true,
           skipEmptyLines: true,
           dynamicTyping: (headerName) => {

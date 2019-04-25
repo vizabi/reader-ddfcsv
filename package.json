@@ -1,6 +1,6 @@
 {
   "name": "vizabi-ddfcsv-reader",
-  "version": "3.0.10",
+  "version": "3.0.11",
   "description": "Vizabi DDFcsv reader",
   "author": "Vyacheslav Chub<vyacheslav.chub@valor-software.com>",
   "license": "GPL-3.0",
@@ -22,7 +22,7 @@
     "e2e:doc": "mocha --require ts-node/register -R markdown > API.SPECIFICATION.md --recursive test/*.spec.ts",
     "test": "npm run e2e",
     "test-travis": "npm run e2e && nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "test-diag": "mocha --require ts-node/register --recursive test/diagnostics.spec.ts",
+    "test-schema": "mocha --require ts-node/register --recursive test/schema.spec.ts",
     "set-own-version": "cd scripts && node ./set-own-version.js",
     "changelog": "conventional-changelog -i CHANGELOG.md -s -p angular",
     "github-release": "conventional-github-releaser -p angular",
