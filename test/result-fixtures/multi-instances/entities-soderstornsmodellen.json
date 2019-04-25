@@ -1,11 +1,11 @@
 [
   {
-    "basomrade": "2150720_pungpinan",
-    "name": "Pungpinan"
-  },
-  {
     "basomrade": "4111110_norra_runby",
     "name": "Norra Runby"
+  },
+  {
+    "basomrade": "4111120_sodra_runby",
+    "name": "Södra Runby"
   },
   {
     "basomrade": "4111130_runby_lovsta",
@@ -2572,8 +2572,8 @@
     "name": "Kärrtorp"
   },
   {
-    "basomrade": "4111120_sodra_runby",
-    "name": "Södra Runby"
+    "basomrade": "2150720_pungpinan",
+    "name": "Pungpinan"
   },
   {
     "basomrade": "2150731_skarpnacksfaltet_o",

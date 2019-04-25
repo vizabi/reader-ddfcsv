@@ -2,16 +2,16 @@
   {
     "geo": "world",
     "year": "2018",
-    "age": "50",
+    "age": "0",
     "gender": "female",
-    "population": 44754913
+    "population": 65899883
   },
   {
     "geo": "world",
     "year": "2018",
-    "age": "0",
+    "age": "1",
     "gender": "female",
-    "population": 65899883
+    "population": 65796890
   },
   {
     "geo": "world",
@@ -352,9 +352,9 @@
   {
     "geo": "world",
     "year": "2018",
-    "age": "1",
+    "age": "50",
     "gender": "female",
-    "population": 65796890
+    "population": 44754913
   },
   {
     "geo": "world",
