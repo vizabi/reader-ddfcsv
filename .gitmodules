@@ -26,3 +26,7 @@
 	path = test/fixtures/VS-work/dataset_name_1/master-twin-c2db557
 	url = git@github.com:VS-work/ddf--ws-testing.git
 	branch = master
+[submodule "test_fasttrack"]
+	path = test/static-fixtures/ddf--gapminder--test_fasttrack
+	url = git@github.com:open-numbers/ddf--gapminder--fasttrack.git
+	branch = master
