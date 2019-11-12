@@ -245,8 +245,51 @@ export function ddfCsvReader (logger?: any) {
         orderData(queryResult, order_by);
         debug('final result is ready', queryParam);
 
-        return queryResult;
+        return parseTime(queryResult, options);
       });
+  }
+
+  /**
+   * Parses time concept strings in result to Date objects
+   * @param result
+   * @param options
+   */
+  function parseTime(result, options: IBaseReaderOptions) {
+    const conceptsLookup = options.conceptsLookup;
+    const concepts = Object.keys(result[0] || {});
+    const timeConcepts = concepts.map(c => conceptsLookup.get(c) || {}).filter(co => co.concept_type == 'time');
+    timeConcepts.forEach(({ concept }) => {
+      const parse = getTimeParser(concept, options);
+      result.forEach(row => {
+        row[concept] = parse(row[concept]);
+      });
+    });
+    return result;
+  }
+
+  /**
+   * Time parsers for DDF built-in time concepts
+   * @param concept
+   */
+  function getTimeParser(concept, options: IBaseReaderOptions) {
+    const { error } = options.diagnostic.prepareDiagnosticFor('queryData');
+    let p;
+    let d;
+    let t;
+    const parsers = {
+      time:   str => new Date(Date.UTC(+str, 0)),
+      year:   str => new Date(Date.UTC(+str, 0)),
+      month:  str => (d = str.split('-'), new Date(Date.UTC(+d[0], d[1] - 1))),
+      day:    str => (d = str.split('-'), new Date(Date.UTC(+d[0], d[1] - 1, +d[2]))),
+      hour:   str => (p = str.split('T'), d = p[0].split('-'), t = p[1].split(':'), new Date(Date.UTC(+d[0], d[1] - 1, +d[2], +t[0]))),
+      minute: str => (p = str.split('T'), d = p[0].split('-'), t = p[1].split(':'), new Date(Date.UTC(+d[0], d[1] - 1, +d[2], +t[0], +t[1]))),
+      second: str => (p = str.split('T'), d = p[0].split('-'), t = p[1].split(':'), new Date(Date.UTC(+d[0], d[1] - 1, +d[2], +t[0], +t[1], +t[2])))
+    };
+    if (!parsers[concept]) {
+      error('No time parser found for time concept ' + concept);
+      return str => str;
+    }
+    return parsers[concept];
   }
 
   function orderData (data, orderBy = []) {
@@ -749,14 +792,11 @@ export function ddfCsvReader (logger?: any) {
           header: true,
           skipEmptyLines: true,
           dynamicTyping: (headerName) => {
+            // parsing to number/boolean based on concept type
+            //
             // can't do dynamic typing without concept types loaded.
             // concept properties are not parsed in first concept query
             // reparsing of concepts resource is done in conceptLookup building
-            if (!options.conceptsLookup) {
-              return true;
-            }
-
-            // parsing to number/boolean based on concept type
             const concept: any = options.conceptsLookup.get(headerName) || {};
 
             return includes([ 'boolean', 'measure' ], concept.concept_type);
