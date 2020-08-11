@@ -7,6 +7,7 @@ import { CSV_PARSING_ERROR, DDF_ERROR, DdfCsvError, FILE_READING_ERROR, JSON_PAR
 import { getFilePath, isSchemaQuery, validateQueryDefinitions, validateQueryStructure } from 'ddf-query-validator';
 
 import * as Papa from 'papaparse';
+import { utcParse } from 'd3-time-format';
 import { IBaseReaderOptions, IDatapackage } from './interfaces';
 
 const isValidNumeric = val => typeof val !== 'number' && !val ? false : true;
@@ -273,40 +274,31 @@ export function ddfCsvReader (logger?: any) {
    */
   function getTimeParser(concept, options: IBaseReaderOptions) {
     const { error } = options.diagnostic.prepareDiagnosticFor('queryData');
-    let p;
-    let d;
-    let t;
     const parsers = {
-      time:    str => new Date(Date.UTC(+str, 0)),
-      year:    str => new Date(Date.UTC(+str, 0)),
-      month:   str => (d = str.split('-'), new Date(Date.UTC(+d[0], d[1] - 1))),
-      day:     str => (d = splitDateString(str), new Date(Date.UTC(+d[0], d[1] - 1, +d[2]))),
-      hour:    str => (p = str.split('t'), d = splitDateString(p[0]), t = splitTimeString(p[1]), new Date(Date.UTC(+d[0], d[1] - 1, +d[2], +t[0]))),
-      minute:  str => (p = str.split('t'), d = splitDateString(p[0]), t = splitTimeString(p[1]), new Date(Date.UTC(+d[0], d[1] - 1, +d[2], +t[0], +t[1]))),
-      second:  str => (p = str.split('t'), d = splitDateString(p[0]), t = splitTimeString(p[1]), new Date(Date.UTC(+d[0], d[1] - 1, +d[2], +t[0], +t[1], +t[2]))),
-      week:    str => (p = str.split('w'), getDateOfISOWeek(p[0], p[1])),
-      quarter: str => (p = str.split('q'), new Date(Date.UTC(+p[0], 1 + (p[1] - 1) * 3)))
+      year:    utcParse('%Y'),
+      month:   utcParse('%Y-%m'),
+      day:     utcParse('%Y%m%d'),
+      hour:    utcParse('%Y%m%dt%H'),
+      minute:  utcParse('%Y%m%dt%H%M'),
+      second:  utcParse('%Y%m%dt%H%M%S'),
+      week:    utcParse('%Yw%V'),
+      quarter: utcParse('%Yq%q')
     };
-    // https://stackoverflow.com/questions/16590500/javascript-calculate-date-from-week-number
-    function getDateOfISOWeek(y, w) {
-      const simple = new Date(Date.UTC(y, 0, 1 + (w - 1) * 7));
-      const dow = simple.getDay();
-      const ISOweekStart = simple;
-      if (dow <= 4) {
-          ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
-      } else {
-          ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+    function tryParse(str) {
+      for (const i in parsers) {
+        const dateObject = parsers[i](str);
+        if (dateObject) {
+          return dateObject;
+        }
       }
-      return ISOweekStart;
+      error('Could not parse time string: ' + str);
+      return null;
     }
-    function splitDateString(dateStr) {
-        return [dateStr.substr(0, 4), dateStr.substr(4, 2), dateStr.substr(6, 2)]; // basic format
-    }
-    function splitTimeString(timeStr) {
-        return [timeStr.substr(0, 2), timeStr.substr(2, 2), timeStr.substr(4, 2)]; // basic format
+    if (concept == 'time') {
+      return tryParse;
     }
     if (!parsers[concept]) {
-      error('No time parser found for time concept ' + concept);
+      error('No time parser found for time concept: ' + concept);
       return str => str;
     }
     return parsers[concept];

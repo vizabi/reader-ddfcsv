@@ -123,7 +123,7 @@ describe('Entities definition errors in query', () => {
       const query = {
         repositoryPath: BASE_PATH + GLOBALIS_PATH + '/master-HEAD',
         where: { world_6region: '$world_6region' },
-        select: { key: [ 'country' ], value: [ 'world_6region', 'gapminder_list', 'god_id', 'landlocked' ] },
+        select: { key: [ 'country' ], value: [ 'world_6region', 'landlocked' ] },
         from: 'entities',
         join: {
           $world_6region: {
@@ -139,57 +139,41 @@ describe('Entities definition errors in query', () => {
       expect(result).to.be.deep.equal([
         {
           country: 'afg',
-          gapminder_list: 'Afghanistan',
-          god_id: 'AF',
           landlocked: 'landlocked',
           world_6region: 'south_asia'
         },
         {
           country: 'bgd',
-          gapminder_list: 'Bangladesh',
-          god_id: 'BD',
           landlocked: 'coastline',
           world_6region: 'south_asia'
         },
         {
           country: 'btn',
-          gapminder_list: 'Bhutan',
-          god_id: 'BT',
           landlocked: 'landlocked',
           world_6region: 'south_asia'
         },
         {
           country: 'ind',
-          gapminder_list: 'India',
-          god_id: 'IN',
           landlocked: 'coastline',
           world_6region: 'south_asia'
         },
         {
           country: 'lka',
-          gapminder_list: 'Sri Lanka',
-          god_id: 'LK',
           landlocked: 'coastline',
           world_6region: 'south_asia'
         },
         {
           country: 'mdv',
-          gapminder_list: 'Maldives',
-          god_id: 'MV',
           landlocked: 'coastline',
           world_6region: 'south_asia'
         },
         {
           country: 'npl',
-          gapminder_list: 'Nepal',
-          god_id: 'NP',
           landlocked: 'landlocked',
           world_6region: 'south_asia'
         },
         {
           country: 'pak',
-          gapminder_list: 'Pakistan',
-          god_id: 'PK',
           landlocked: 'coastline',
           world_6region: 'south_asia'
         }

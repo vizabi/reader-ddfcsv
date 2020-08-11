@@ -56,6 +56,7 @@
   },
   "dependencies": {
     "cross-project-diagnostics": "0.1.5",
+    "d3-time-format": "^2.2.3",
     "ddf-query-validator": "1.4.1",
     "fetch-polyfill": "0.8.2",
     "https": "1.0.0",

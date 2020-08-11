@@ -60,7 +60,7 @@ describe('Concepts definition errors in query', () => {
       };
       const result = await reader.read(query);
 
-      expect(result.length).to.be.equal(8);
+      expect(result.length).to.be.equal(10);
     });
 
     it(`when requests only one column '${BASE_PATH + GLOBALIS_PATH}' dataset with no \'select.value\'`, async () => {
@@ -79,7 +79,7 @@ describe('Concepts definition errors in query', () => {
       };
       const result = await reader.read(query);
 
-      expect(result.length).to.be.equal(590);
+      expect(result.length).to.be.equal(592);
     });
 
     it(`when requests only one column '${BASE_PATH + GLOBALIS_PATH}' dataset with empty \'select.value\'`, async () => {
@@ -99,7 +99,7 @@ describe('Concepts definition errors in query', () => {
       };
       const result = await reader.read(query);
 
-      expect(result.length).to.be.equal(590);
+      expect(result.length).to.be.equal(592);
     });
 
     it(`when requests \'${BASE_PATH + EMPTY_TRANSLATIONS_PATH}\' dataset without \'en\' language in datapackage.json`, async () => {

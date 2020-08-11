@@ -183,9 +183,22 @@ const data = {
   }
 };
 
+function parseYear(resultFixture, concepts = ['year', 'time']) {
+  for (const row of resultFixture) {
+    for (const concept of concepts) {
+      if (row[concept]) {
+        row[concept] = new Date(Date.UTC(row[concept], 0));
+      }
+    }
+  }
+}
+
 async function testProcessing(first, second) {
   const result1Original = require(`./result-fixtures/multi-instances/${first.fixture}`);
   const result2Original = require(`./result-fixtures/multi-instances/${second.fixture}`);
+
+  parseYear(result1Original);
+  parseYear(result2Original);
 
   const reader1 = getDDFCsvReaderObject();
   reader1.init({path: first.dataset});
@@ -226,7 +239,7 @@ async function testProcessing(first, second) {
   expect(result2).to.be.deep.equal(result222);
 }
 
-async function allTestsProcessing(repeat = 1) {
+async function allTestsProcessing() {
   const originals = {
     conceptsFirst: require(`./result-fixtures/multi-instances/${data.concepts.first.fixture}`),
     conceptsSecond: require(`./result-fixtures/multi-instances/${data.concepts.second.fixture}`),
@@ -239,6 +252,10 @@ async function allTestsProcessing(repeat = 1) {
   };
   const queryTypes = ['concepts', 'entities', 'datapoints', 'schema'];
   const results = {};
+
+  for (const prop in originals) {
+    parseYear(originals[prop]);
+  }
 
   for (const queryType of queryTypes) {
     const reader1 = getDDFCsvReaderObject();
@@ -303,9 +320,5 @@ describe('Multi-instances queries', () => {
 
   it(`all kinds schema queries on the same time`, async () => {
     await allTestsProcessing();
-  });
-
-  it(`all kinds schema queries on the same time repeated 3 times`, async () => {
-    await allTestsProcessing(3);
   });
 });

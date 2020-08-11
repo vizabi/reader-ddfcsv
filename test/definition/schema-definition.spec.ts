@@ -30,7 +30,7 @@ describe('Schemas definition errors in query', () => {
       };
       const result = await reader.read(query);
 
-      expect(result.length).to.equal(15);
+      expect(result.length).to.equal(16);
     });
 
     it(`when requests \'concepts.schema\' in \'${BASE_PATH + GLOBALIS_PATH}\' dataset with empty \'select.value\'`, async () => {
@@ -47,7 +47,7 @@ describe('Schemas definition errors in query', () => {
         from: 'concepts.schema'
       };
       const result = await reader.read(query);
-      expect(result.length).to.equal(15);
+      expect(result.length).to.equal(16);
     });
 
     it(`when requests \'entities.schema\' in \'${BASE_PATH + GLOBALIS_PATH}\' dataset with \'select.value\'`, async () => {
@@ -64,7 +64,7 @@ describe('Schemas definition errors in query', () => {
         from: 'entities.schema'
       };
       const result = await reader.read(query);
-      expect(result.length).to.equal(118);
+      expect(result.length).to.equal(95);
     });
 
     it(`when requests \'datapoints.schema\' in \'${BASE_PATH + GLOBALIS_PATH}\' dataset with \'select.value\'`, async () => {
@@ -81,7 +81,7 @@ describe('Schemas definition errors in query', () => {
         from: 'datapoints.schema'
       };
       const result = await reader.read(query);
-      expect(result.length).to.equal(1070);
+      expect(result.length).to.equal(1157);
     });
 
     it(`when requests \'*.schema\' in \'${BASE_PATH + GLOBALIS_PATH}\' dataset with \'select.value\'`, async () => {
@@ -98,7 +98,7 @@ describe('Schemas definition errors in query', () => {
         from: '*.schema'
       };
       const result = await reader.read(query);
-      expect(result.length).to.equal(1203);
+      expect(result.length).to.equal(1268);
     });
   });
 

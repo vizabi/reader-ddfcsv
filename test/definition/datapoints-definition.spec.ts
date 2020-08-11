@@ -17,6 +17,12 @@ import {
 const expect = chai.expect;
 const INIT_READER_PATH = BASE_PATH + GLOBALIS_PATH + '/master-HEAD';
 
+function parseYear(expectedResult, concept = 'year') {
+  for (const row of expectedResult) {
+    row[concept] = new Date(Date.UTC(row[concept], 0));
+  }
+}
+
 describe('Datapoints definition errors in query', () => {
   describe('should never happen for happy flow', () => {
     it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and exists valid condition in 'join' section`, async () => {
@@ -65,7 +71,7 @@ describe('Datapoints definition errors in query', () => {
 
       const countryAntData = result.filter(record => record.geo === 'ant');
 
-      expect(result.length).to.equal(983);
+      expect(result.length).to.equal(977);
       expect(countryAntData).to.be.an('array').that.is.empty;
     });
 
@@ -87,7 +93,7 @@ describe('Datapoints definition errors in query', () => {
 
       const result = await reader.read(query);
 
-      expect(result.length).to.equal(62794);
+      expect(result.length).to.equal(60180);
     });
 
     it(`when requests '${BASE_PATH + BIG_PATH}' dataset`, async () => {
@@ -188,6 +194,7 @@ describe('Datapoints definition errors in query', () => {
       };
       const result = await reader.read(query);
       const expectedResult = require('../result-fixtures/in-clause-under-conjunction-1.json');
+      parseYear(expectedResult);
 
       expect(result).to.deep.equal(expectedResult);
     });
@@ -240,6 +247,7 @@ describe('Datapoints definition errors in query', () => {
       };
       const result = await reader.read(query);
       const expectedResult = require('../result-fixtures/in-clause-under-conjunction-2.json');
+      parseYear(expectedResult);
 
       expect(result).to.deep.equal(expectedResult);
     });
@@ -268,6 +276,7 @@ describe('Datapoints definition errors in query', () => {
       };
       const result = await reader.read(query);
       const expectedResult = require('../result-fixtures/datapoints-assets.json');
+      parseYear(expectedResult, 'time');
 
       expect(result).to.deep.equal(expectedResult);
     });
