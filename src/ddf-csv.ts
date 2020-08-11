@@ -280,29 +280,30 @@ export function ddfCsvReader (logger?: any) {
       time:    str => new Date(Date.UTC(+str, 0)),
       year:    str => new Date(Date.UTC(+str, 0)),
       month:   str => (d = str.split('-'), new Date(Date.UTC(+d[0], d[1] - 1))),
-      day:     str => (d = parseDate(str), new Date(Date.UTC(+d[0], d[1] - 1, +d[2]))),
-      hour:    str => (p = str.split('t'), d = parseDate(p[0]), t = parseTime(p[1]), new Date(Date.UTC(+d[0], d[1] - 1, +d[2], +t[0]))),
-      minute:  str => (p = str.split('t'), d = parseDate(p[0]), t = parseTime(p[1]), new Date(Date.UTC(+d[0], d[1] - 1, +d[2], +t[0], +t[1]))),
-      second:  str => (p = str.split('t'), d = parseDate(p[0]), t = parseTime(p[1]), new Date(Date.UTC(+d[0], d[1] - 1, +d[2], +t[0], +t[1], +t[2]))),
+      day:     str => (d = splitDateString(str), new Date(Date.UTC(+d[0], d[1] - 1, +d[2]))),
+      hour:    str => (p = str.split('t'), d = splitDateString(p[0]), t = splitTimeString(p[1]), new Date(Date.UTC(+d[0], d[1] - 1, +d[2], +t[0]))),
+      minute:  str => (p = str.split('t'), d = splitDateString(p[0]), t = splitTimeString(p[1]), new Date(Date.UTC(+d[0], d[1] - 1, +d[2], +t[0], +t[1]))),
+      second:  str => (p = str.split('t'), d = splitDateString(p[0]), t = splitTimeString(p[1]), new Date(Date.UTC(+d[0], d[1] - 1, +d[2], +t[0], +t[1], +t[2]))),
       week:    str => (p = str.split('w'), getDateOfISOWeek(p[0], p[1])),
       quarter: str => (p = str.split('q'), new Date(Date.UTC(+p[0], 1 + (p[1] - 1) * 3)))
     };
     // https://stackoverflow.com/questions/16590500/javascript-calculate-date-from-week-number
     function getDateOfISOWeek(y, w) {
-      var simple = new Date(Date.UTC(y, 0, 1 + (w - 1) * 7));
-      var dow = simple.getDay();
-      var ISOweekStart = simple;
-      if (dow <= 4)
+      const simple = new Date(Date.UTC(y, 0, 1 + (w - 1) * 7));
+      const dow = simple.getDay();
+      const ISOweekStart = simple;
+      if (dow <= 4) {
           ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
-      else
+      } else {
           ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+      }
       return ISOweekStart;
     }
-    function parseDate(dateStr) {
-        return [dateStr.substr(0,4), dateStr.substr(4,2), dateStr.substr(6,2)] // basic format
+    function splitDateString(dateStr) {
+        return [dateStr.substr(0, 4), dateStr.substr(4, 2), dateStr.substr(6, 2)]; // basic format
     }
-    function parseTime(timeStr) {
-        return [timeStr.substr(0,2), timeStr.substr(2,2), timeStr.substr(4,2)] // basic format
+    function splitTimeString(timeStr) {
+        return [timeStr.substr(0, 2), timeStr.substr(2, 2), timeStr.substr(4, 2)]; // basic format
     }
     if (!parsers[concept]) {
       error('No time parser found for time concept ' + concept);
