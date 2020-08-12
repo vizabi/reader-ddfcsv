@@ -100,7 +100,7 @@
     "babel-preset-stage-0": "6.24.1",
     "chai": "4.1.2",
     "clean-webpack-plugin": "0.1.19",
-    "codecov": "3.0.4",
+    "codecov": "3.7.2",
     "compare-version": "0.1.2",
     "compression-webpack-plugin": "1.1.11",
     "conventional-changelog": "1.1.3",
