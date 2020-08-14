@@ -186,7 +186,7 @@ const data = {
 function parseYear(resultFixture, concepts = ['year', 'time']) {
   for (const row of resultFixture) {
     for (const concept of concepts) {
-      if (row[concept]) {
+      if (row[concept] && typeof row[concept] === 'string') {
         row[concept] = new Date(Date.UTC(row[concept], 0));
       }
     }
@@ -321,4 +321,5 @@ describe('Multi-instances queries', () => {
   it(`all kinds schema queries on the same time`, async () => {
     await allTestsProcessing();
   });
+
 });

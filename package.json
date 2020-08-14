@@ -13,7 +13,7 @@
     "tslint": "npm run tslint:src && npm run tslint:tests",
     "tsc-node": "tsc --project tsconfig.json && TARGET_DIR=lib npm run set-own-version",
     "tsc-web": "tsc --project tsconfig-web.json && TARGET_DIR=lib-web npm run set-own-version",
-    "submodules:init": "git submodule update --remote --init -f",
+    "submodules:init": "git submodule update --init -f",
     "coverage:clean": "rm -rf coverage && rm -rf .nyc_output && rm -rf coverage.lcov",
     "remove-unneeded": "rm -rf test/fixtures/systema_globalis/master-HEAD/etl",
     "pree2e": "npm run submodules:init && npm run remove-unneeded && npm run coverage:clean && npm run tslint && npm run tsc-node",
