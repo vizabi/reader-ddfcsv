@@ -1,10 +1,13 @@
 {
-  "name": "vizabi-ddfcsv-reader",
+  "name": "@vizabi/reader-ddfcsv",
   "version": "4.0.1",
   "description": "Vizabi DDFcsv reader",
   "author": "Vyacheslav Chub<vyacheslav.chub@valor-software.com>",
   "license": "GPL-3.0",
   "main": "lib/src/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "webpack": "webpack",
     "webpack:tests": "webpack --config webpack.tests.config.js",

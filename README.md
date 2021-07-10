@@ -3,14 +3,14 @@
 ## Install
 
 ```
-npm i vizabi-ddfcsv-reader
+npm i @vizabi/reader-ddfcsv
 ```
 
 ## Usage
 
 ```
 const Vizabi = require('vizabi');
-const ddfCsvReader = require('vizabi-ddfcsv-reader');
+const ddfCsvReader = require('reader-ddfcsv');
 const readerObject = ddfCsvReader.getDDFCsvReaderObject();
 Vizabi.Reader.extend('ddf-csv-reader', readerObject);
 // ...
@@ -19,8 +19,8 @@ Vizabi.Reader.extend('ddf-csv-reader', readerObject);
 ## Build
 
 ```
-git clone https://github.com/vizabi/vizabi-ddfcsv-reader.git
-cd vizabi-ddfcsv-reader
+git clone https://github.com/vizabi/reader-ddfcsv.git
+cd reader-ddfcsv
 npm i
 npm run build
 ```
@@ -56,7 +56,7 @@ This reader is designed for file reading via HTTP protocol.
 ## DDFcsv reader usage for DDF data reading examples:
 
 ```
-import {BackendFileReader, Ddf} from 'vizabi-ddfcsv-reader';
+import {BackendFileReader, Ddf} from 'reader-ddfcsv';
 
 const backendFileReader = new BackendFileReader();
 const ddf = new Ddf('your-ddf-folder', backendFileReader);
@@ -87,7 +87,7 @@ ddf.getIndex(indexErr => {
 or 
 
 ```
-import {BackendFileReader, Ddf} from 'vizabi-ddfcsv-reader';
+import {BackendFileReader, Ddf} from 'reader-ddfcsv';
 
 const backendFileReader = new BackendFileReader();
 const ddf = new Ddf('your-ddf-folder', backendFileReader);

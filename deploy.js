@@ -56,7 +56,7 @@ const upload = (path) => {
     ` --recursive` +
     ` --no-mime-magic` +
     ` --guess-mime-type` +
-    ` sync dist/vizabi-ddfcsv-reader.js "${path}"`
+    ` sync dist/reader-ddfcsv.js "${path}"`
   );
 
   shell.exec(
@@ -65,7 +65,7 @@ const upload = (path) => {
     ` --recursive` +
     ` --no-mime-magic` +
     ` --guess-mime-type` +
-    ` sync dist/vizabi-ddfcsv-reader.js.map "${path}"`
+    ` sync dist/reader-ddfcsv.js.map "${path}"`
   );
 };
 

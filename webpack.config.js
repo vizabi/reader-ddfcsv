@@ -5,8 +5,8 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 module.exports = () => ({
     mode: 'production',
     entry: {
-        'vizabi-ddfcsv-reader': ['./lib-web/src/index-web.js'],
-        'vizabi-ddfcsv-reader-polyfill': ['babel-polyfill', './lib-web/src/index-web.js']
+        'reader-ddfcsv': ['./lib-web/src/index-web.js'],
+        'reader-ddfcsv-polyfill': ['babel-polyfill', './lib-web/src/index-web.js']
     },
     output: {
         path: path.join(__dirname, 'dist'),
