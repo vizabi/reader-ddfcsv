@@ -215,7 +215,7 @@ export function ddfCsvReader (logger?: any) {
     debug('start all data loading', queryParam);
 
     const projection = new Set(select.key.concat(select.value));
-    const filterFields = getFilterFields(where).filter(field => !projection.has(field));
+    const filterFields = getFilterFields(where).filter(field => from === 'entities' || !projection.has(field));
     // load all relevant resources
     const resourcesPromise = loadResources(select.key, [ ...select.value, ...filterFields ], language, options, queryParam);
     // list of entities selected from a join clause, later insterted in where clause
@@ -487,7 +487,7 @@ export function ddfCsvReader (logger?: any) {
       }
     }
 
-    return fields;
+    return [...new Set(fields)];
   }
 
   /**
@@ -585,7 +585,7 @@ export function ddfCsvReader (logger?: any) {
    */
   function getResources (key, value?) {
     // value not given, load all resources for key
-    if (!value || value.length === 0) {
+    if (!value || value.length === 0 || key[0] === value) {
       return new Set(
         [ ...keyValueLookup
           .get(createKeyString(key))
