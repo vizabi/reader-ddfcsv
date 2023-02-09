@@ -3,8 +3,8 @@
     "geo": "abkh",
     "name": "Abkhazia",
     "world_4region": "europe",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "afg",
@@ -17,8 +17,8 @@
     "geo": "akr_a_dhe",
     "name": "Akrotiri and Dhekelia",
     "world_4region": "europe",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "ala",
@@ -220,8 +220,8 @@
     "geo": "bouisl",
     "name": "Bouvet Island",
     "world_4region": "africa",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "bra",
@@ -325,8 +325,8 @@
     "geo": "chanisl",
     "name": "Channel Islands",
     "world_4region": "europe",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "chl",
@@ -353,8 +353,8 @@
     "geo": "fra_clipperton",
     "name": "Clipperton",
     "world_4region": "",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "cck",
@@ -451,8 +451,8 @@
     "geo": "cheslo",
     "name": "Czechoslovakia",
     "world_4region": "europe",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "dnk",
@@ -486,8 +486,8 @@
     "geo": "deu_east",
     "name": "East Germany",
     "world_4region": "europe",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "ecu",
@@ -528,8 +528,8 @@
     "geo": "eri_a_eth",
     "name": "Eritrea and Ethiopia",
     "world_4region": "africa",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "est",
@@ -598,8 +598,8 @@
     "geo": "fra_antarc",
     "name": "French Southern and Antarctic Lands",
     "world_4region": "",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "gab",
@@ -619,8 +619,8 @@
     "geo": "pse_gaza",
     "name": "Gaza Strip",
     "world_4region": "asia",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "geo",
@@ -731,8 +731,8 @@
     "geo": "heard_a_mcd",
     "name": "Heard and McDonald Islands",
     "world_4region": "asia",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "hos",
@@ -878,8 +878,8 @@
     "geo": "kos",
     "name": "Kosovo",
     "world_4region": "europe",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "kwt",
@@ -1151,8 +1151,8 @@
     "geo": "ant",
     "name": "Netherlands Antilles",
     "world_4region": "americas",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "ncl",
@@ -1172,8 +1172,8 @@
     "geo": "ngokar",
     "name": "Ngorno-Karabakh",
     "world_4region": "europe",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "nic",
@@ -1221,15 +1221,15 @@
     "geo": "yem_north",
     "name": "North Yemen (former)",
     "world_4region": "asia",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "cyp_nor",
     "name": "Northern Cyprus",
     "world_4region": "europe",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "mnp",
@@ -1417,15 +1417,15 @@
     "geo": "scg",
     "name": "Serbia and Montenegro",
     "world_4region": "europe",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "scg_ex_kos",
     "name": "Serbia excluding Kosovo",
     "world_4region": "europe",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "syc",
@@ -1487,8 +1487,8 @@
     "geo": "som_somland",
     "name": "Somaliland",
     "world_4region": "africa",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "zaf",
@@ -1501,8 +1501,8 @@
     "geo": "sgero_a_ssandw",
     "name": "South Georgia and the South Sandwich Islands",
     "world_4region": "americas",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "kor",
@@ -1515,8 +1515,8 @@
     "geo": "sosset",
     "name": "South Ossetia",
     "world_4region": "europe",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "ssd",
@@ -1529,8 +1529,8 @@
     "geo": "yem_south",
     "name": "South Yemen (former)",
     "world_4region": "asia",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "esp",
@@ -1550,8 +1550,8 @@
     "geo": "stbar",
     "name": "St. Barthélemy",
     "world_4region": "americas",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "shn",
@@ -1578,15 +1578,15 @@
     "geo": "stmar",
     "name": "St. Martin",
     "world_4region": "americas",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "maf",
     "name": "St. Martin (French part)",
     "world_4region": "americas",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "vct",
@@ -1711,8 +1711,8 @@
     "geo": "transn",
     "name": "Transnistria",
     "world_4region": "europe",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "tto",
@@ -1788,8 +1788,8 @@
     "geo": "korea_union",
     "name": "United Korea (former)",
     "world_4region": "asia",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "usa",
@@ -1809,15 +1809,15 @@
     "geo": "usa_minor_out_isl",
     "name": "US Minor Outlying Islands",
     "world_4region": "americas",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "ussr",
     "name": "USSR",
     "world_4region": "europe",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "uzb",
@@ -1865,15 +1865,15 @@
     "geo": "pse_west_bank",
     "name": "West Bank",
     "world_4region": "asia",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "deu_west",
     "name": "West Germany",
     "world_4region": "europe",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "esh",
@@ -1893,8 +1893,8 @@
     "geo": "yug",
     "name": "Yugoslavia",
     "world_4region": "europe",
-    "latitude": "",
-    "longitude": ""
+    "latitude": null,
+    "longitude": null
   },
   {
     "geo": "zmb",
