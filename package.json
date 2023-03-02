@@ -1,6 +1,6 @@
 {
   "name": "@vizabi/reader-ddfcsv",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "description": "Vizabi DDFcsv reader",
   "author": "Vyacheslav Chub<vyacheslav.chub@valor-software.com>",
   "license": "GPL-3.0",
@@ -9,7 +9,7 @@
     "access": "public"
   },
   "scripts": {
-    "webpack": "webpack",
+    "webpack": "export NODE_OPTIONS=--openssl-legacy-provider && webpack",
     "webpack:tests": "webpack --config webpack.tests.config.js",
     "tslint:src": "./node_modules/.bin/tslint -c ./tslint.json 'src/**/*.ts'",
     "tslint:tests": "./node_modules/.bin/tslint -c ./test/tslint.json 'test/**/*.ts'",
@@ -86,7 +86,8 @@
     "lodash.trimstart": "4.5.1",
     "lodash.uniq": "4.5.0",
     "lodash.values": "4.3.0",
-    "papaparse": "5.3.2"
+    "papaparse": "5.3.2",
+    "strip-bom": "3.0.0"
   },
   "devDependencies": {
     "@babel/code-frame": "7.0.0",
