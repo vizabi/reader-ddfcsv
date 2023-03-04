@@ -30,6 +30,12 @@ export function prepareDDFCsvReaderObject (defaultResourceReader?: IResourceRead
         this.reader = ddfCsvReader(this.logger);
       },
 
+      async checkFile(path:string): Promise<any> {
+        return new Promise((resolve, reject) => {
+          return resolve({status: 200, url: path});
+        });
+      },
+
       async getFile (filePath: string, isJsonFile: boolean, options: object): Promise<any> {
         return new Promise((resolve, reject) => {
           this.fileReader.readText(filePath, (err, data) => {
@@ -48,6 +54,17 @@ export function prepareDDFCsvReaderObject (defaultResourceReader?: IResourceRead
             }
           }, options);
         });
+      },
+
+
+      async checkIfAssetExists (filePath: string, repositoryPath: string = ''): Promise<any> {
+        if (isEmpty(repositoryPath) && isEmpty(this._basePath)) {
+          throw new DdfCsvError(`Neither initial 'path' nor 'repositoryPath' as a second param were found.`, `Happens in 'checkIfAssetExists' function`, filePath);
+        }
+
+        const assetPath = `${repositoryPath || this._basePath}/assets/${filePath}`;
+
+        return await this.checkFile(assetPath);
       },
 
       async getAsset (filePath: string, repositoryPath: string = ''): Promise<any> {
