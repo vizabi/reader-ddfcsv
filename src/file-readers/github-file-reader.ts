@@ -30,4 +30,7 @@ export class GithubFileReader implements IResourceRead {
 
   readText(filePath, onFileRead, options: object) {
   }
+
+  checkFile(path: string) {
+  }
 }

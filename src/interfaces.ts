@@ -4,6 +4,7 @@ export interface IResourceRead {
   recordTransformer: Function;
   setRecordTransformer(recordTransformer: Function);
   readText(filePath: string, onFileRead: Function, options?: object);
+  checkFile(path: string);
 }
 
 export interface IBaseReaderOptions {

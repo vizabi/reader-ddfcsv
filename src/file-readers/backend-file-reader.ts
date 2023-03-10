@@ -9,6 +9,10 @@ export class BackendFileReader implements IResourceRead {
     this.recordTransformer = recordTransformer;
   }
 
+  checkFile(path: string) {
+    return fs.existsSync(path) ? 200 : 404;
+  }
+
   readText(filePath, onFileRead, options: object) {
     if (!fs.existsSync(filePath)) {
       return onFileRead('No such file: ' + filePath);

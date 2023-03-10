@@ -11,6 +11,14 @@ export class FrontendFileReader implements IResourceRead {
     this.recordTransformer = recordTransformer;
   }
 
+  checkFile(path: string) {
+    fetch(path, { method: "HEAD", credentials: 'same-origin', redirect: "follow"})
+        .then((response) => {
+          //the client should then look into response.ok, response.status and response.url 
+          return Promise.resolve(response)
+        });
+  }
+
   readText(filePath, onFileRead, options: object) {
     fetch(filePath)
       .then(response => response.text())
