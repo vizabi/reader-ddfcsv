@@ -32,7 +32,7 @@ export function prepareDDFCsvReaderObject (defaultResourceReader?: IResourceRead
 
       async checkFile(path:string): Promise<any> {
         return new Promise((resolve, reject) => {
-          const status = this.fileRrader.checkFile(path);
+          const status = this.fileReader.checkFile(path);
           return resolve({status, url: path});
         });
       },
