@@ -5,6 +5,7 @@ import { getRepositoryPath } from 'ddf-query-validator';
 import { DdfCsvError } from './ddfcsv-error';
 import { createDiagnosticManagerOn, EndpointDiagnosticManager, getLevelByLabel } from 'cross-project-diagnostics';
 import { DiagnosticManager, Level } from 'cross-project-diagnostics/lib';
+import { githubPathAdapter } from './file-readers/github-path-adapter';
 
 const myName = '';
 const myVersion = '';
@@ -14,7 +15,7 @@ export function prepareDDFCsvReaderObject (defaultResourceReader?: IResourceRead
     return {
       init (readerInfo) {
         // TODO: check validity of base path
-        this._basePath = readerInfo.path;
+        this._basePath = githubPathAdapter(readerInfo.path);
 
         this._lastModified = readerInfo._lastModified;
         this.fileReader = externalResourceReader || defaultResourceReader;
