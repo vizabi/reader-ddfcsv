@@ -12,10 +12,10 @@ export class FrontendFileReader implements IResourceRead {
   }
 
   checkFile(path: string) {
-    fetch(path, { method: "HEAD", credentials: 'same-origin', redirect: "follow"})
+    fetch(path, { method: 'HEAD', credentials: 'same-origin', redirect: 'follow'})
         .then((response) => {
-          //the client should then look into response.ok, response.status and response.url 
-          return Promise.resolve(response)
+          // the client should then look into response.ok, response.status and response.url
+          return Promise.resolve(response);
         });
   }
 

@@ -57,7 +57,6 @@ export function prepareDDFCsvReaderObject (defaultResourceReader?: IResourceRead
         });
       },
 
-
       async checkIfAssetExists (filePath: string, repositoryPath: string = ''): Promise<any> {
         if (isEmpty(repositoryPath) && isEmpty(this._basePath)) {
           throw new DdfCsvError(`Neither initial 'path' nor 'repositoryPath' as a second param were found.`, `Happens in 'checkIfAssetExists' function`, filePath);

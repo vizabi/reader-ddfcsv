@@ -9,8 +9,8 @@ export class BackendFileReader implements IResourceRead {
     this.recordTransformer = recordTransformer;
   }
 
-  checkFile(path: string) {
-    return fs.existsSync(path) ? 200 : 404;
+  checkFile(filePath: string) {
+    return fs.existsSync(filePath) ? 200 : 404;
   }
 
   readText(filePath, onFileRead, options: object) {
