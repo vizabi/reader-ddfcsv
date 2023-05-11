@@ -30,7 +30,11 @@ export function prepareDDFCsvReaderObject (defaultResourceReader?: IResourceRead
         this.reader = ddfCsvReader(this.logger);
       },
 
-      async checkFile(path:string): Promise<any> {
+      getDatasetInfo(): Object {
+        return {name: this._basePath.slice(this._basePath.indexOf('ddf--'))};
+      },
+
+      async checkFile(path: string): Promise<any> {
         return new Promise((resolve, reject) => {
           const status = this.fileReader.checkFile(path);
           return resolve({status, url: path});
