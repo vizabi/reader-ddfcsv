@@ -19,6 +19,7 @@ const JOIN_KEYWORD = 'join';
 const KEY_IN = '$in';
 const KEY_NIN = '$nin';
 const KEY_AND = '$and';
+const KEY_OR = '$or';
 
 const getFirstConditionClause = clause => head(values(clause));
 const getFirstKey = obj => head(keys(obj));
@@ -45,8 +46,9 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
 
     const relatedFeatures = compact(featureDetectors.map(detector => detector(this.query, this.conceptsLookup)));
 
-    return includes(relatedFeatures, QueryFeature.WhereClauseBasedOnConjunction) &&
-      includes(relatedFeatures, QueryFeature.ConjunctionPartFromWhereClauseCorrespondsToJoin);
+    return this.query.from === "datapoints";
+    // return includes(relatedFeatures, QueryFeature.WhereClauseBasedOnConjunction) &&
+    //   includes(relatedFeatures, QueryFeature.ConjunctionPartFromWhereClauseCorrespondsToJoin);
   }
 
   async getRecommendedFilesSet(): Promise<string[]> {
@@ -81,7 +83,17 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
 
   private fillResourceToFileHash(): InClauseUnderConjunction {
     this.flow.resourceToFile = get(this.datapackage, 'resources', []).reduce((hash, resource) => {
-      hash.set(resource.name, resource.path);
+      const constraints = resource.schema.fields.reduce((result, field) => {
+        if (field.constraints?.enum) {
+          result.set(field.name, field.constraints.enum);
+        }
+        return result;
+      }, new Map())
+      
+      hash.set(resource.name, {
+        path: resource.path,
+        constraints
+      });
 
       return hash;
     }, new Map());
@@ -99,6 +111,8 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
 
       if (this.singleAndField(where)) {
         this.flow.processableClauses.push(...flattenDeep(where[KEY_AND].map(el => this.getProcessableClauses(el))));
+      } else if (this.singleOrField(where)) {
+        this.flow.processableClauses.push(...flattenDeep(where[KEY_OR].map(el => this.getProcessableClauses(el))));
       } else {
         this.flow.processableClauses.push(...this.getProcessableClauses(where));
       }
@@ -108,7 +122,7 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
   }
 
   private collectEntityFilesNames(): InClauseUnderConjunction {
-    this.flow.entityFilesNames = [];
+    this.flow.entityFilesNames = new Set();
     this.flow.fileNameToPrimaryKeyHash = new Map();
 
     for (const schemaResourceRecord of this.datapackage.ddfSchema.entities) {
@@ -117,9 +131,9 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
 
         if (head(schemaResourceRecord.primaryKey) === primaryKey) {
           for (const resourceName of schemaResourceRecord.resources) {
-            const file = this.flow.resourceToFile.get(resourceName);
+            const file = this.flow.resourceToFile.get(resourceName).path;
 
-            this.flow.entityFilesNames.push(file);
+            this.flow.entityFilesNames.add(file);
             this.flow.fileNameToPrimaryKeyHash.set(file, primaryKey);
           }
         }
@@ -131,7 +145,7 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
 
   private collectEntities(): Promise<any> {
     const self = this;
-    const actions = self.flow.entityFilesNames.map(file => new Promise((actResolve, actReject) => {
+    const actions = [...self.flow.entityFilesNames].map(file => new Promise((actResolve, actReject) => {
       self.fileReader.readText(path.join(self.datasetPath, file), (err, text) => {
         if (err) {
           return actReject(err);
@@ -160,12 +174,13 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
     for (const entityFileDescriptor of entitiesData) {
       for (const entityRecord of entityFileDescriptor.result.data) {
         const primaryKeyForThisFile = this.flow.fileNameToPrimaryKeyHash.get(entityFileDescriptor.file);
-        const primaryKeyCellValue = entityRecord[primaryKeyForThisFile];
         const domainsForCurrentRecord = [...getSubdomainsFromRecord(entityRecord)];
 
         if (isEmpty(domainsForCurrentRecord)) {
           domainsForCurrentRecord.push(primaryKeyForThisFile);
         }
+
+        const primaryKeyCellValue = entityRecord[primaryKeyForThisFile] || entityRecord[domainsForCurrentRecord[0]];
 
         this.flow.entityValueToDomainHash.set(primaryKeyCellValue, domainsForCurrentRecord);
         this.flow.entityValueToFileHash.set(primaryKeyCellValue, entityFileDescriptor.file);
@@ -206,8 +221,17 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
         for (const entityByQuery of entitiesByQuery) {
           for (const schemaResourceRecord of this.datapackage.ddfSchema.datapoints) {
             for (const resourceName of schemaResourceRecord.resources) {
+              const file = this.flow.resourceToFile.get(resourceName);
               if (includes(schemaResourceRecord.primaryKey, entityByQuery)) {
-                filesGroupByClause.datapoints.add(this.flow.resourceToFile.get(resourceName));
+                const constraint = file.constraints.get(entityByQuery);
+                if ( constraint ) {
+                  if (constraint.includes(entityValueFromClause)) {
+                    filesGroupByClause.datapoints.add(file.path);
+                  }
+                }                
+                else {
+                  filesGroupByClause.datapoints.add(file.path);
+                }
               }
             }
           }
@@ -216,7 +240,7 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
 
       for (const schemaResourceRecord of this.datapackage.ddfSchema.concepts) {
         for (const resourceName of schemaResourceRecord.resources) {
-          filesGroupByClause.concepts.add(this.flow.resourceToFile.get(resourceName));
+          filesGroupByClause.concepts.add(this.flow.resourceToFile.get(resourceName).path);
         }
       }
 
@@ -279,5 +303,9 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
 
   private singleAndField(clause): boolean {
     return isOneKeyBased(clause) && !!get(clause, KEY_AND);
+  }
+
+  private singleOrField(clause): boolean {
+    return isOneKeyBased(clause) && !!get(clause, KEY_OR);
   }
 }
