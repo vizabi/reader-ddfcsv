@@ -18,8 +18,11 @@
     "importHelpers": true,
     "strictNullChecks": false,
     "baseUrl": ".",
+    "paths": {
+      "tslib" : ["node_modules/tslib/tslib.d.ts"]
+    },
     "lib": [
-      "es2017",
+      "es2020",
       "dom"
     ],
     "downlevelIteration": true
