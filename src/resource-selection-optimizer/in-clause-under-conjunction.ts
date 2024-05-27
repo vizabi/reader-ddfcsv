@@ -206,7 +206,7 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
 
     for (const clause of this.flow.processableClauses) {
       const filesGroupByClause = {
-        entities: new Set(),
+        entities: this.flow.entityFilesNames,
         datapoints: new Set(),
         concepts: new Set()
       };
@@ -214,7 +214,7 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
       const entityValuesFromClause = firstConditionClause[KEY_IN] || getEntitiesExcept(firstConditionClause[KEY_NIN]);
 
       for (const entityValueFromClause of entityValuesFromClause) {
-        filesGroupByClause.entities.add(this.flow.entityValueToFileHash.get(entityValueFromClause));
+        //filesGroupByClause.entities.add(this.flow.entityValueToFileHash.get(entityValueFromClause));
 
         const entitiesByQuery = this.flow.entityValueToDomainHash.get(entityValueFromClause);
 
