@@ -803,16 +803,17 @@ export function ddfCsvReader (logger?: any) {
         Papa.parse(stripBom(data), {
           header: true,
           skipEmptyLines: true,
-          dynamicTyping: (headerName) => {
-            // parsing to number/boolean based on concept type
-            //
-            // can't do dynamic typing without concept types loaded.
-            // concept properties are not parsed in first concept query
-            // reparsing of concepts resource is done in conceptLookup building
-            const concept: any = options.conceptsLookup.get(headerName) || {};
+          dynamicTyping: true,
+          // dynamicTyping: (headerName) => {
+          //     // parsing to number/boolean based on concept type
+          //   //
+          //   // can't do dynamic typing without concept types loaded.
+          //   // concept properties are not parsed in first concept query
+          //   // reparsing of concepts resource is done in conceptLookup building
+          //   const concept: any = options.conceptsLookup.get(headerName) || {};
 
-            return includes([ 'boolean', 'measure' ], concept.concept_type);
-          },
+          //   return includes([ 'boolean', 'measure' ], concept.concept_type);
+          // },
           complete: result => {
             debug(`finish reading "${filePath}"`);
             resolve(result);
