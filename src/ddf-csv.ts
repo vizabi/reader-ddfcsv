@@ -41,6 +41,7 @@ export function ddfCsvReader (logger?: any) {
 
   let optimalFilesSet = [];
   let datapackage;
+  let datapackagePromise;
 
   function loadDataPackage (baseOptions: IBaseReaderOptions): Promise<IDatapackage> {
     const datapackagePath = getFilePath(baseOptions.basePath);
@@ -172,7 +173,7 @@ export function ddfCsvReader (logger?: any) {
 
     try {
       await validateQueryStructure(queryParam, baseOptions);
-      baseOptions.datapackage = await loadDataPackage(baseOptions);
+      baseOptions.datapackage = await (datapackagePromise || (datapackagePromise = loadDataPackage(baseOptions)));
       await loadConcepts(queryParam, baseOptions);
       await validateQueryDefinitions(queryParam, baseOptions);
 
@@ -803,17 +804,12 @@ export function ddfCsvReader (logger?: any) {
         Papa.parse(stripBom(data), {
           header: true,
           skipEmptyLines: true,
-          dynamicTyping: true,
-          // dynamicTyping: (headerName) => {
-          //     // parsing to number/boolean based on concept type
-          //   //
-          //   // can't do dynamic typing without concept types loaded.
-          //   // concept properties are not parsed in first concept query
-          //   // reparsing of concepts resource is done in conceptLookup building
-          //   const concept: any = options.conceptsLookup.get(headerName) || {};
+          dynamicTyping: (headerName) => {
+            // skip parsing time/string concept types
+            const concept: any = options.conceptsLookup.get(headerName) || {};
 
-          //   return includes([ 'boolean', 'measure' ], concept.concept_type);
-          // },
+            return !includes([ 'time', 'string' ], concept.concept_type);
+          },
           complete: result => {
             debug(`finish reading "${filePath}"`);
             resolve(result);
