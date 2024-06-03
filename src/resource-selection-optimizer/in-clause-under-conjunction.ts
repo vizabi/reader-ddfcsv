@@ -33,7 +33,7 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
   private datapackage: IDatapackage;
   private conceptsLookup;
 
-  constructor(queryParam, private options: IBaseReaderOptions) {
+  constructor(private parent, queryParam, private options: IBaseReaderOptions) {
     this.fileReader = options.fileReader;
     this.datasetPath = options.basePath;
     this.query = queryParam;
@@ -59,7 +59,6 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
 
       let result;
       try {
-        this.fillResourceToFileHash();
         this.collectProcessableClauses();
         this.collectEntityFilesNames();
         const data = await this.collectEntities();
@@ -79,26 +78,6 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
       warning(message);
       throw new DdfCsvError(message, 'InClauseUnderConjunction plugin');
     }
-  }
-
-  private fillResourceToFileHash(): InClauseUnderConjunction {
-    this.flow.resourceToFile = get(this.datapackage, 'resources', []).reduce((hash, resource) => {
-      const constraints = resource.schema.fields.reduce((result, field) => {
-        if (field.constraints?.enum) {
-          result.set(field.name, field.constraints.enum);
-        }
-        return result;
-      }, new Map())
-      
-      hash.set(resource.name, {
-        path: resource.path,
-        constraints
-      });
-
-      return hash;
-    }, new Map());
-
-    return this;
   }
 
   private collectProcessableClauses(): InClauseUnderConjunction {
@@ -123,6 +102,7 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
 
   private collectEntityFilesNames(): InClauseUnderConjunction {
     this.flow.entityFilesNames = new Set();
+    this.flow.entityResources = new Set();
     this.flow.fileNameToPrimaryKeyHash = new Map();
 
     for (const schemaResourceRecord of this.datapackage.ddfSchema.entities) {
@@ -131,10 +111,11 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
 
         if (head(schemaResourceRecord.primaryKey) === primaryKey) {
           for (const resourceName of schemaResourceRecord.resources) {
-            const file = this.flow.resourceToFile.get(resourceName).path;
+            const resource = this.options.resourcesLookup.get(resourceName);
 
-            this.flow.entityFilesNames.add(file);
-            this.flow.fileNameToPrimaryKeyHash.set(file, primaryKey);
+            this.flow.entityResources.add(resource);
+            this.flow.entityFilesNames.add(resource.path);
+            this.flow.fileNameToPrimaryKeyHash.set(resource.path, primaryKey);
           }
         }
       }
@@ -145,27 +126,17 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
 
   private collectEntities(): Promise<any> {
     const self = this;
-    const actions = [...self.flow.entityFilesNames].map(file => new Promise((actResolve, actReject) => {
-      self.fileReader.readText(path.join(self.datasetPath, file), (err, text) => {
-        if (err) {
-          return actReject(err);
-        }
-
-        Papa.parse(text, {
-          header: true,
-          skipEmptyLines: true,
-          complete: result => actResolve({file, result}),
-          error: error => actReject(error)
-        });
-      });
-    }));
+    const actions = [...self.flow.entityResources].map(resource => {
+      return (resource.data || (resource.data = self.parent.loadFile(resource.path, self.options)))
+        .then(data => ({result: data, file: resource.path}));
+    });
 
     return Promise.all(actions);
   }
 
   private fillEntityValuesHash(entitiesData): InClauseUnderConjunction {
     const getSubdomainsFromRecord = record => compact(keys(record)
-      .filter(key => startsWith(key, 'is--') && (record[key] === 'TRUE' || record[key] === 'true'))
+      .filter(key => startsWith(key, 'is--') && (record[key] === true))
       .map(key => key.replace(/^is--/, '')));
 
     this.flow.entityValueToFileHash = new Map();
@@ -221,16 +192,16 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
         for (const entityByQuery of entitiesByQuery) {
           for (const schemaResourceRecord of this.datapackage.ddfSchema.datapoints) {
             for (const resourceName of schemaResourceRecord.resources) {
-              const file = this.flow.resourceToFile.get(resourceName);
               if (includes(schemaResourceRecord.primaryKey, entityByQuery)) {
-                const constraint = file.constraints.get(entityByQuery);
+                const resource = this.options.resourcesLookup.get(resourceName);
+                const constraint = resource.constraints[entityByQuery];
                 if ( constraint ) {
                   if (constraint.includes(entityValueFromClause)) {
-                    filesGroupByClause.datapoints.add(file.path);
+                    filesGroupByClause.datapoints.add(resource.path);
                   }
                 }                
                 else {
-                  filesGroupByClause.datapoints.add(file.path);
+                  filesGroupByClause.datapoints.add(resource.path);
                 }
               }
             }
@@ -240,7 +211,7 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
 
       for (const schemaResourceRecord of this.datapackage.ddfSchema.concepts) {
         for (const resourceName of schemaResourceRecord.resources) {
-          filesGroupByClause.concepts.add(this.flow.resourceToFile.get(resourceName).path);
+          filesGroupByClause.concepts.add(this.options.resourcesLookup.get(resourceName).path);
         }
       }
 

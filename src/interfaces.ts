@@ -10,6 +10,7 @@ export interface IResourceRead {
 export interface IBaseReaderOptions {
   basePath: string;
   conceptsLookup: Map<string, any>;
+  resourcesLookup?: any;
   datapackage?: any;
   fileReader: IResourceRead;
   logger?: any;

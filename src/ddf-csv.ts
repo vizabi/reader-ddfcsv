@@ -1,5 +1,4 @@
 import * as includes from 'lodash.includes';
-import * as cloneDeep from 'lodash.clonedeep';
 import * as isEmpty from 'lodash.isempty';
 import * as stripBom from 'strip-bom';
 import { getAppropriatePlugin } from './resource-selection-optimizer';
@@ -174,13 +173,14 @@ export function ddfCsvReader (logger?: any) {
     try {
       await validateQueryStructure(queryParam, baseOptions);
       baseOptions.datapackage = await (datapackagePromise || (datapackagePromise = loadDataPackage(baseOptions)));
+      baseOptions.resourcesLookup = resourcesLookup;
       await loadConcepts(queryParam, baseOptions);
       await validateQueryDefinitions(queryParam, baseOptions);
 
       if (isSchemaQuery(queryParam)) {
         data = await querySchema(queryParam, baseOptions);
       } else {
-        const appropriatePlugin = getAppropriatePlugin(queryParam, baseOptions);
+        const appropriatePlugin = getAppropriatePlugin(this, queryParam, baseOptions);
 
         if (appropriatePlugin) {
           optimalFilesSet = [];
@@ -465,7 +465,7 @@ export function ddfCsvReader (logger?: any) {
         select: { key: [ join.key ] },
         where: join.where,
         from: options.conceptsLookup.has(join.key) ? 'entities' : 'concepts'
-      }, Object.assign({ joinID }, cloneDeep(options)))
+      }, Object.assign({ joinID }, options))
         .then(result => ({
           [ joinID ]: {
             [ join.key ]: {
@@ -560,7 +560,7 @@ export function ddfCsvReader (logger?: any) {
       .map(concept => query({
           select: { key: [ concept.domain ], value: [ 'is--' + concept.concept ] },
           from: 'entities'
-        }, Object.assign({}, cloneDeep(options)))
+        }, Object.assign({}, options))
           .then(result => ({
             [ concept.concept ]:
               {
@@ -833,6 +833,14 @@ export function ddfCsvReader (logger?: any) {
         resource.schema.primaryKey = [ resource.schema.primaryKey ];
       }
 
+      const constraints = resource.schema.fields.reduce((result, field) => {
+        if (field.constraints?.enum) {
+          result[field.name] = field.constraints.enum;
+        }
+        return result;
+      }, {});
+      resource.constraints = constraints;
+
       resource.translations = {};
       resourcesLookup.set(resource.name, resource);
     });
@@ -864,6 +872,7 @@ export function ddfCsvReader (logger?: any) {
   }
 
   return {
-    query
+    query,
+    loadFile
   };
 }

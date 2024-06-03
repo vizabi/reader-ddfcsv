@@ -2,9 +2,9 @@ import { InClauseUnderConjunction } from './in-clause-under-conjunction';
 import * as head from 'lodash.head';
 import { IBaseReaderOptions, IResourceSelectionOptimizer } from '../interfaces';
 
-export function getAppropriatePlugin(queryParam, options: IBaseReaderOptions): IResourceSelectionOptimizer {
+export function getAppropriatePlugin(parent, queryParam, options: IBaseReaderOptions): IResourceSelectionOptimizer {
   const plugins = [
-    new InClauseUnderConjunction(queryParam, options)
+    new InClauseUnderConjunction(parent, queryParam, options)
   ];
 
   return head(plugins.filter(plugin => plugin.isMatched()));
