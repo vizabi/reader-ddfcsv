@@ -2,16 +2,15 @@ const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-module.exports = () => ({
+module.exports = () => ([{
     mode: 'production',
     entry: {
-        'reader-ddfcsv': ['./lib-web/src/index-web.js'],
         'reader-ddfcsv-polyfill': ['babel-polyfill', './lib-web/src/index-web.js']
     },
     output: {
         path: path.join(__dirname, 'dist'),
         filename: '[name].js',
-        libraryTarget: 'var',
+        libraryTarget: 'umd',
         library: 'DDFCsvReader'
     },
     target: "web",
@@ -35,4 +34,21 @@ module.exports = () => ({
         new CleanWebpackPlugin(['dist'])// ,
         // new BundleAnalyzerPlugin()
     ]
-});
+},
+{
+    mode: 'production',
+    entry: {
+        'reader-ddfcsv': ['./lib-web/src/index-web.js'],
+    },
+    output: {
+        path: path.join(__dirname, 'dist'),
+        filename: '[name].js',
+        libraryTarget: 'umd',
+        library: 'DDFCsvReader'
+    },
+    target: "web",
+    devtool: 'source-map',
+    plugins: [
+        // new BundleAnalyzerPlugin()
+    ]
+}]);
