@@ -127,8 +127,10 @@ describe('General errors in ddfcsv reader', () => {
 
         expect(error.file).to.equal(expectedPath);
         expect(error.name).to.equal('DdfCsvError');
-        expect(error.message).to.equal(`JSON parsing error [filepath: ${expectedPath}]. Unexpected token ( in JSON at position 0.`);
-        expect(error.details).to.equal('Unexpected token ( in JSON at position 0');
+        expect(error.message).to.equal(`JSON parsing error [filepath: ${expectedPath}]. Unexpected token '(', "(
+    "nam"... is not valid JSON.`);
+        expect(error.details).to.equal(`Unexpected token '(', "(
+    "nam"... is not valid JSON`);
       }
     });
   });
@@ -245,8 +247,10 @@ describe('General errors in ddfcsv reader', () => {
 
         expect(error.file).to.equal(expectedPath);
         expect(error.name).to.equal('DdfCsvError');
-        expect(error.message).to.equal(`JSON parsing error [filepath: ${expectedPath}]. Unexpected token ( in JSON at position 0.`);
-        expect(error.details).to.equal('Unexpected token ( in JSON at position 0');
+        expect(error.message).to.equal(`JSON parsing error [filepath: ${expectedPath}]. Unexpected token '(', "(
+    "nam"... is not valid JSON.`);
+        expect(error.details).to.equal(`Unexpected token '(', "(
+    "nam"... is not valid JSON`);
       }
     });
   });

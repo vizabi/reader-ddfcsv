@@ -352,7 +352,7 @@
   {
     "geo": "fra_clipperton",
     "name": "Clipperton",
-    "world_4region": "",
+    "world_4region": null,
     "latitude": null,
     "longitude": null
   },
@@ -597,7 +597,7 @@
   {
     "geo": "fra_antarc",
     "name": "French Southern and Antarctic Lands",
-    "world_4region": "",
+    "world_4region": null,
     "latitude": null,
     "longitude": null
   },

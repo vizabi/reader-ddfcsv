@@ -15,7 +15,7 @@ export function prepareDDFCsvReaderObject (defaultResourceReader?: IResourceRead
     return {
       init (readerInfo) {
         // TODO: check validity of base path
-        this._basePath = githubPathAdapter(readerInfo.path);
+        this._basePath = githubPathAdapter(readerInfo.path || '');
 
         this._lastModified = readerInfo._lastModified;
         this.fileReader = externalResourceReader || defaultResourceReader;

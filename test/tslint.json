@@ -7,7 +7,7 @@
   "rules": {
     "no-unused-expression-chai": true,
     "ban-types": false,
-    "quotemark": [true, "single"],
+    "quotemark": false,
     "arrow-parens": false,
     "no-var-requires": false,
     "trailing-comma": false,
@@ -17,7 +17,8 @@
     "member-access": false,
     "no-unused-expression": false,
     "ordered-imports": false,
-    "max-line-length": false
+    "max-line-length": false,
+    "no-console": false
   },
   "rulesDirectory": [
     "tslint-no-unused-expression-chai"
