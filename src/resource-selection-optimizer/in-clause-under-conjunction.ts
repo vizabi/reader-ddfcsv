@@ -1,9 +1,7 @@
-import * as path from 'path';
 import * as head from 'lodash.head';
 import * as values from 'lodash.values';
 import * as keys from 'lodash.keys';
 import * as get from 'lodash.get';
-import * as flattenDeep from 'lodash.flattendeep';
 import * as isEmpty from 'lodash.isempty';
 import * as startsWith from 'lodash.startswith';
 import * as includes from 'lodash.includes';
@@ -12,18 +10,12 @@ import { DdfCsvError } from '../ddfcsv-error';
 import { IDatapackage, IResourceSelectionOptimizer, IResourceRead, IBaseReaderOptions } from '../interfaces';
 import { QueryFeature, featureDetectors, IQuery } from 'ddf-query-validator';
 
-const Papa = require('papaparse');
-
 const WHERE_KEYWORD = 'where';
 const JOIN_KEYWORD = 'join';
 const KEY_IN = '$in';
 const KEY_NIN = '$nin';
 const KEY_AND = '$and';
 const KEY_OR = '$or';
-
-const getFirstConditionClause = clause => head(values(clause));
-const getFirstKey = obj => head(keys(obj));
-const isOneKeyBased = obj => keys(obj).length === 1;
 
 export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
   private flow: any = {};
@@ -44,11 +36,7 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
   isMatched(): boolean {
     this.flow.joinObject = get(this.query, JOIN_KEYWORD);
 
-    const relatedFeatures = compact(featureDetectors.map(detector => detector(this.query, this.conceptsLookup)));
-
-    return this.query.from === "datapoints";
-    // return includes(relatedFeatures, QueryFeature.WhereClauseBasedOnConjunction) &&
-    //   includes(relatedFeatures, QueryFeature.ConjunctionPartFromWhereClauseCorrespondsToJoin);
+    return this.query.from === "datapoints" && this.flow.joinObject;
   }
 
   async getRecommendedFilesSet(): Promise<string[]> {
@@ -59,7 +47,8 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
 
       let result;
       try {
-        this.collectProcessableClauses();
+        this.flow.processableClauses = await this.collectProcessableClauses();
+        if (!this.flow.processableClauses) return [];
         this.collectEntityFilesNames();
         const data = await this.collectEntities();
         this.fillEntityValuesHash(data);
@@ -80,24 +69,26 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
     }
   }
 
-  private collectProcessableClauses(): InClauseUnderConjunction {
-    const joinKeys = keys(this.flow.joinObject);
+  private collectProcessableClauses(): Promise<any> {
+    const joinKeys = keys(this.flow.joinObject).filter(
+      key => ["entity_domain", "entity_set"].includes(this.options.conceptsLookup.get(key.slice(1))?.concept_type));
+    if (!joinKeys.length) return Promise.resolve(false);
 
-    this.flow.processableClauses = [];
-
-    for (const joinKey of joinKeys) {
+    return Promise.all(joinKeys.map(joinKey => {
+      const key = this.flow.joinObject[joinKey].key;
       const where = get(this.flow.joinObject, `${joinKey}.${WHERE_KEYWORD}`, {});
 
-      if (this.singleAndField(where)) {
-        this.flow.processableClauses.push(...flattenDeep(where[KEY_AND].map(el => this.getProcessableClauses(el))));
-      } else if (this.singleOrField(where)) {
-        this.flow.processableClauses.push(...flattenDeep(where[KEY_OR].map(el => this.getProcessableClauses(el))));
-      } else {
-        this.flow.processableClauses.push(...this.getProcessableClauses(where));
-      }
-    }
+      return this.parent.queryData({
+        select: { key: [key] },
+        where,
+        from: this.options.conceptsLookup.has(key) ? 'entities' : 'concepts'
+      }, Object.assign({ joinID: joinKey }, this.options))
+        .then(result => ({
+          key,
+          entities: new Set(result.map(row => row[ key ]))
+        }));
+    }));
 
-    return this;
   }
 
   private collectEntityFilesNames(): InClauseUnderConjunction {
@@ -107,15 +98,15 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
 
     for (const schemaResourceRecord of this.datapackage.ddfSchema.entities) {
       for (const clause of this.flow.processableClauses) {
-        const primaryKey = getFirstKey(clause);
+        const key = clause.key;
 
-        if (head(schemaResourceRecord.primaryKey) === primaryKey) {
+        if (head(schemaResourceRecord.primaryKey) === key) {
           for (const resourceName of schemaResourceRecord.resources) {
             const resource = this.options.resourcesLookup.get(resourceName);
 
             this.flow.entityResources.add(resource);
             this.flow.entityFilesNames.add(resource.path);
-            this.flow.fileNameToPrimaryKeyHash.set(resource.path, primaryKey);
+            this.flow.fileNameToPrimaryKeyHash.set(resource.path, key);
           }
         }
       }
@@ -162,30 +153,14 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
   }
 
   private getFilesGroupsQueryClause(): InClauseUnderConjunction {
-    const getEntitiesExcept = (entityValuesToExclude: string[]): string[] => {
-      const result = [];
-
-      for (const entityKey of this.flow.entityValueToDomainHash.keys()) {
-        if (!includes(entityValuesToExclude, entityKey)) {
-          result.push(entityKey);
-        }
-      }
-
-      return result;
-    };
     const filesGroupsByClause = new Map();
 
     for (const clause of this.flow.processableClauses) {
       const filesGroupByClause = {
-        entities: this.flow.entityFilesNames,
-        datapoints: new Set(),
-        concepts: new Set()
+        datapoints: new Set()
       };
-      const firstConditionClause = getFirstConditionClause(clause);
-      const entityValuesFromClause = firstConditionClause[KEY_IN] || getEntitiesExcept(firstConditionClause[KEY_NIN]);
 
-      for (const entityValueFromClause of entityValuesFromClause) {
-        //filesGroupByClause.entities.add(this.flow.entityValueToFileHash.get(entityValueFromClause));
+      for (const entityValueFromClause of clause.entities) {
 
         const entitiesByQuery = this.flow.entityValueToDomainHash.get(entityValueFromClause);
 
@@ -194,13 +169,12 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
             for (const resourceName of schemaResourceRecord.resources) {
               if (includes(schemaResourceRecord.primaryKey, entityByQuery)) {
                 const resource = this.options.resourcesLookup.get(resourceName);
-                const constraint = resource.constraints[entityByQuery];
+                const constraint = resource.constraints?.[entityByQuery];
                 if ( constraint ) {
                   if (constraint.includes(entityValueFromClause)) {
                     filesGroupByClause.datapoints.add(resource.path);
                   }
-                }                
-                else {
+                } else {
                   filesGroupByClause.datapoints.add(resource.path);
                 }
               }
@@ -209,13 +183,7 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
         }
       }
 
-      for (const schemaResourceRecord of this.datapackage.ddfSchema.concepts) {
-        for (const resourceName of schemaResourceRecord.resources) {
-          filesGroupByClause.concepts.add(this.options.resourcesLookup.get(resourceName).path);
-        }
-      }
-
-      filesGroupsByClause.set(clause, filesGroupByClause);
+      filesGroupsByClause.set(clause.key, filesGroupByClause);
     }
 
     this.flow.filesGroupsByClause = filesGroupsByClause;
@@ -224,59 +192,29 @@ export class InClauseUnderConjunction implements IResourceSelectionOptimizer {
   }
 
   private getOptimalFilesGroup(): string[] {
+
+    const entities = this.flow.entityFilesNames;
+
+    const concepts = new Set();
+    for (const schemaResourceRecord of this.datapackage.ddfSchema.concepts) {
+      for (const resourceName of schemaResourceRecord.resources) {
+        concepts.add(this.options.resourcesLookup.get(resourceName).path);
+      }
+    }
+
     const clauseKeys = this.flow.filesGroupsByClause.keys();
-
-    let appropriateClauseKey;
-    let appropriateClauseSize;
+    let datapoints = Array.from(this.flow.filesGroupsByClause.get(clauseKeys.next().value).datapoints);
 
     for (const key of clauseKeys) {
-      const size = this.flow.filesGroupsByClause.get(key).datapoints.size +
-        this.flow.filesGroupsByClause.get(key).entities.size +
-        this.flow.filesGroupsByClause.get(key).concepts.size;
-
-      if (!appropriateClauseKey || size < appropriateClauseSize) {
-        appropriateClauseKey = key;
-        appropriateClauseSize = size;
-      }
+      datapoints = this.intersectArray(datapoints, Array.from(this.flow.filesGroupsByClause.get(key).datapoints));
     }
 
-    if (!this.flow.filesGroupsByClause.get(appropriateClauseKey)) {
-      return [];
-    }
-
-    return [
-      ...Array.from(this.flow.filesGroupsByClause.get(appropriateClauseKey).concepts),
-      ...Array.from(this.flow.filesGroupsByClause.get(appropriateClauseKey).entities),
-      ...Array.from(this.flow.filesGroupsByClause.get(appropriateClauseKey).datapoints)
-    ] as string[];
+    return [...Array.from(concepts), ...Array.from(entities)].concat(datapoints) as string[];
   }
 
-  private getProcessableClauses(clause) {
-    const result = [];
-    const clauseKeys = keys(clause);
 
-    for (const key of clauseKeys) {
-      if (!startsWith(key, '$') && isOneKeyBased(clause[key])) {
-        // attention! this functionality process only first clause
-        // for example, { geo: { '$in': ['world'] } }
-        // in this example { geo: { '$in': ['world'] }, foo: { '$in': ['bar', 'baz'] }  }]
-        // foo: { '$in': ['bar', 'baz'] } will NOT be processed
-        const conditionKey = head(keys(clause[key]));
-
-        if (conditionKey === KEY_IN || conditionKey === KEY_NIN) {
-          result.push(clause);
-        }
-      }
-    }
-
-    return result;
+  private intersectArray(array1, array2) {
+    return array1.filter(value => array2.includes(value));
   }
 
-  private singleAndField(clause): boolean {
-    return isOneKeyBased(clause) && !!get(clause, KEY_AND);
-  }
-
-  private singleOrField(clause): boolean {
-    return isOneKeyBased(clause) && !!get(clause, KEY_OR);
-  }
 }

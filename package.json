@@ -1,6 +1,6 @@
 {
   "name": "@vizabi/reader-ddfcsv",
-  "version": "4.3.1",
+  "version": "4.3.2",
   "description": "Vizabi DDFcsv reader",
   "author": "Vyacheslav Chub<vyacheslav.chub@valor-software.com>",
   "license": "GPL-3.0",

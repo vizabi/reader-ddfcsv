@@ -41,6 +41,7 @@ export function ddfCsvReader (logger?: any) {
   let optimalFilesSet = [];
   let datapackage;
   let datapackagePromise;
+  let datasetWithConstraints = false;
 
   function loadDataPackage (baseOptions: IBaseReaderOptions): Promise<IDatapackage> {
     const datapackagePath = getFilePath(baseOptions.basePath);
@@ -165,8 +166,8 @@ export function ddfCsvReader (logger?: any) {
     concepts.forEach(row => options.conceptsLookup.set(row.concept, row));
   }
 
-  async function query (queryParam, baseOptions: IBaseReaderOptions) {
-    // console.log(JSON.stringify(queryParam, null, '\t'))
+  async function query (queryParam, _baseOptions: IBaseReaderOptions) {
+    const baseOptions = Object.assign({}, _baseOptions);
     const { warning, error } = baseOptions.diagnostic.prepareDiagnosticFor('query');
     let data;
 
@@ -180,10 +181,10 @@ export function ddfCsvReader (logger?: any) {
       if (isSchemaQuery(queryParam)) {
         data = await querySchema(queryParam, baseOptions);
       } else {
-        const appropriatePlugin = getAppropriatePlugin(this, queryParam, baseOptions);
+        const appropriatePlugin = datasetWithConstraints && getAppropriatePlugin(this, queryParam, baseOptions);
 
+        optimalFilesSet = [];
         if (appropriatePlugin) {
-          optimalFilesSet = [];
           const files = await appropriatePlugin.getRecommendedFilesSet();
           optimalFilesSet = files;
           queryParam.optimalFilesSet = [].concat(files, queryParam.optimalFilesSet);
@@ -201,7 +202,8 @@ export function ddfCsvReader (logger?: any) {
     return data;
   }
 
-  function queryData (queryParam, options: IBaseReaderOptions) {
+  function queryData (queryParam, _options: IBaseReaderOptions) {
+    const options = Object.assign({}, _options);
     const { debug } = options.diagnostic.prepareDiagnosticFor('queryData');
     const {
       select: { key = [], value = [] },
@@ -383,7 +385,7 @@ export function ddfCsvReader (logger?: any) {
 
   function mergeFilters (...filters) {
     return filters.reduce((a, b) => {
-      a.$and.push(b);
+      if (!isEmpty(b)) a.$and.push(b);
 
       return a;
     }, { $and: [] });
@@ -461,7 +463,7 @@ export function ddfCsvReader (logger?: any) {
       return Promise.resolve({ [ joinID ]: join.where });
     } else {
       // entity concept
-      return query({
+      return queryData({
         select: { key: [ join.key ] },
         where: join.where,
         from: options.conceptsLookup.has(join.key) ? 'entities' : 'concepts'
@@ -557,7 +559,7 @@ export function ddfCsvReader (logger?: any) {
    */
   function getEntitySetFilter (conceptStrings, queryParam, options) {
     const promises = filterConceptsByType([ 'entity_set' ], conceptStrings, options)
-      .map(concept => query({
+      .map(concept => queryData({
           select: { key: [ concept.domain ], value: [ 'is--' + concept.concept ] },
           from: 'entities'
         }, Object.assign({}, options))
@@ -835,7 +837,8 @@ export function ddfCsvReader (logger?: any) {
 
       const constraints = resource.schema.fields.reduce((result, field) => {
         if (field.constraints?.enum) {
-          result[field.name] = field.constraints.enum;
+          if (!datasetWithConstraints) datasetWithConstraints = true;
+          result[field.name] = field.constraints.enum.map(e => +e || e);
         }
         return result;
       }, {});
@@ -873,6 +876,7 @@ export function ddfCsvReader (logger?: any) {
 
   return {
     query,
+    queryData,
     loadFile
   };
 }
