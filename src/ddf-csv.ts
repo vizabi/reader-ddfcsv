@@ -383,9 +383,37 @@ export function ddfCsvReader (logger?: any) {
     return result;
   }
 
+  function patchFilterForOrClause(filter) {
+
+    function processFilter(where) {
+      const whereKeys = Object.keys(where);
+      for (const key of whereKeys) {
+        if (key == "$or") {
+          where[key] = where[key].reduce((res, value) => {
+            const valueKeys = Object.keys(value);
+            if (valueKeys.length > 1) {
+              for (const key of valueKeys) {
+                res.push({ [key]: value[key] });
+              }
+            } else {
+              res.push(value);
+            }
+            return res;
+          }, []);
+        }
+      }
+      return where;
+    }
+
+    return processFilter(filter);
+  }
+
   function mergeFilters (...filters) {
     return filters.reduce((a, b) => {
-      if (!isEmpty(b)) a.$and.push(b);
+      if (!isEmpty(b)) {
+        patchFilterForOrClause(b);
+        a.$and.push(b);
+      }
 
       return a;
     }, { $and: [] });
