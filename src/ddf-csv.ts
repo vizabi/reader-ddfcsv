@@ -710,7 +710,7 @@ export function ddfCsvReader (logger?: any) {
 
           joinRow(resultRow, row, joinMode);
         } else {
-          result.set(keyString, row);
+          result.set(keyString, Object.assign({}, row));
         }
       });
 
