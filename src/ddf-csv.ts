@@ -166,10 +166,19 @@ export function ddfCsvReader (logger?: any) {
     concepts.forEach(row => options.conceptsLookup.set(row.concept, row));
   }
 
+  function preValidateQueryStructure(queryParam, baseOptions): boolean {
+    if (queryParam.from == "datapoints" && queryParam.select.value.length == 0) return true;
+    return false;
+  }
+
   async function query (queryParam, _baseOptions: IBaseReaderOptions) {
     const baseOptions = Object.assign({}, _baseOptions);
     const { warning, error } = baseOptions.diagnostic.prepareDiagnosticFor('query');
     let data;
+
+    if (preValidateQueryStructure(queryParam, baseOptions)) {
+      return Promise.resolve([]);
+    }
 
     try {
       await validateQueryStructure(queryParam, baseOptions);

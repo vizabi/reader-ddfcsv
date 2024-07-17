@@ -888,4 +888,54 @@ describe('Datapoints definition errors in query', () => {
       expect(data).to.be.not.null;
     });
   });
+
+  describe('for bigwaffle behavior compliance empty rows should be returned', () => {
+    it(`when requests '${BASE_PATH + GLOBALIS_PATH}' dataset and select.value is empty array`, async () => {
+      const reader = getDDFCsvReaderObject();
+      reader.init({});
+
+      const query = {
+        repositoryPath: INIT_READER_PATH,
+        select: {
+          key: [ 'geo', 'time' ],
+          value: [
+//            'life_expectancy_years', 'population_total'
+          ]
+        },
+        from: 'datapoints',
+        where: {
+          $and: [
+            { geo: '$geo' },
+            { time: '$time' },
+            {
+              $or: [
+                { population_total: { $gt: 10000 } },
+                { life_expectancy_years: { $gt: 30, $lt: 70 } }
+              ]
+            }
+          ]
+        },
+        join: {
+          $geo: {
+            key: 'geo',
+            where: {
+              $and: [
+                { 'is--country': true },
+                { latitude: { $lte: 0 } }
+              ]
+            }
+          },
+          $time: {
+            key: 'time',
+            where: { $and: [ { time: { $gt: '1990', $lte: '2015' } } ] }
+          }
+        },
+        order_by: [ 'time', 'geo' ]
+      };
+      const result = await reader.read(query);
+
+      expect(result.length).to.equal(0);
+    });
+
+  });
 });
