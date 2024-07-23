@@ -31,8 +31,15 @@ export function prepareDDFCsvReaderObject (defaultResourceReader?: IResourceRead
         this.reader = ddfCsvReader(this.logger);
       },
 
-      getDatasetInfo(): Object {
-        return {name: this._basePath.slice(this._basePath.indexOf('ddf--'))};
+      async getDatasetInfo(): Promise<Object> {
+        const diagnostic = createDiagnosticManagerOn(myName, myVersion).forRequest('').withSeverityLevel(Level.OFF);
+        const baseOptions = Object.assign({}, this.readerOptions, { diagnostic });
+        return this.reader.getDatasetInfo(baseOptions).then(dataPackage => {
+          const datasetInfo = Object.assign({}, dataPackage);
+          delete datasetInfo.ddfSchema;
+          delete datasetInfo.resources;
+          return datasetInfo;
+        });
       },
 
       async checkFile(path: string): Promise<any> {

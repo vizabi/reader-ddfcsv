@@ -43,6 +43,10 @@ export function ddfCsvReader (logger?: any) {
   let datapackagePromise;
   let datasetWithConstraints = false;
 
+  function getDatasetInfo(baseOptions: IBaseReaderOptions) : Promise<Object> {
+    return (datapackagePromise || loadDataPackage(baseOptions));
+  }
+
   function loadDataPackage (baseOptions: IBaseReaderOptions): Promise<IDatapackage> {
     const datapackagePath = getFilePath(baseOptions.basePath);
     const { debug, error } = baseOptions.diagnostic.prepareDiagnosticFor('loadDataPackage');
@@ -914,6 +918,7 @@ export function ddfCsvReader (logger?: any) {
   return {
     query,
     queryData,
-    loadFile
+    loadFile,
+    getDatasetInfo
   };
 }
