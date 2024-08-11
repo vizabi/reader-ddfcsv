@@ -851,7 +851,7 @@ export function ddfCsvReader (logger?: any) {
             // skip parsing time/string concept types
             const concept: any = options.conceptsLookup.get(headerName) || {};
 
-            return !includes([ 'time', 'string' ], concept.concept_type);
+            return !includes([ 'time', 'string', 'entity_domain', 'entity_set' ], concept.concept_type);
           },
           complete: result => {
             debug(`finish reading "${filePath}"`);
