@@ -405,8 +405,8 @@ export function ddfCsvReader (logger?: any) {
           where[key] = where[key].reduce((res, value) => {
             const valueKeys = Object.keys(value);
             if (valueKeys.length > 1) {
-              for (const key of valueKeys) {
-                res.push({ [key]: value[key] });
+              for (const vKey of valueKeys) {
+                res.push({ [vKey]: value[vKey] });
               }
             } else {
               res.push(value);
@@ -851,7 +851,10 @@ export function ddfCsvReader (logger?: any) {
             // skip parsing time/string concept types
             const concept: any = options.conceptsLookup.get(headerName) || {};
 
-            return !includes([ 'time', 'string', 'entity_domain', 'entity_set' ], concept.concept_type);
+            return !includes(['time', 'string', 'entity_domain', 'entity_set'], concept.concept_type);
+          },
+          transform: value => {
+            return value === '' ? null : value
           },
           complete: result => {
             debug(`finish reading "${filePath}"`);
@@ -879,7 +882,7 @@ export function ddfCsvReader (logger?: any) {
       const constraints = resource.schema.fields.reduce((result, field) => {
         if (field.constraints?.enum) {
           if (!datasetWithConstraints) datasetWithConstraints = true;
-          result[field.name] = field.constraints.enum.map(e => +e || e);
+          result[field.name] = field.constraints.enum;
         }
         return result;
       }, {});
