@@ -232,7 +232,7 @@ describe('Datapoints definition errors in query', () => {
             where: {
               country_code: {
                 $in: [
-                  900
+                  '900'
                 ]
               }
             }
