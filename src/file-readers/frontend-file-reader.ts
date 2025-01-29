@@ -1,7 +1,5 @@
 import { IResourceRead } from '../interfaces';
 
-require('fetch-polyfill');
-
 declare var fetch;
 
 export class FrontendFileReader implements IResourceRead {

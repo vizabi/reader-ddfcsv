@@ -1,6 +1,6 @@
 {
   "name": "@vizabi/reader-ddfcsv",
-  "version": "4.5.1",
+  "version": "4.5.2",
   "description": "Vizabi DDFcsv reader",
   "author": "Vyacheslav Chub<vyacheslav.chub@valor-software.com>",
   "license": "GPL-3.0",
@@ -56,7 +56,6 @@
     "cross-project-diagnostics": "0.1.5",
     "d3-time-format": "^2.2.3",
     "ddf-query-validator": "1.4.1",
-    "fetch-polyfill": "0.8.2",
     "https": "1.0.0",
     "lodash.clonedeep": "4.5.0",
     "lodash.compact": "3.0.1",
