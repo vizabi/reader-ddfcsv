@@ -10,7 +10,7 @@ import {
   selectValueClauseContainsUnavailableItems1,
   WS_TESTING_PATH
 } from '../common';
-import { RESERVED_CONCEPT, RESERVED_CONCEPT_TYPE, RESERVED_DOMAIN, RESERVED_DRILL_UP } from 'ddf-query-validator';
+import { RESERVED_CONCEPT, RESERVED_CONCEPT_TYPE, RESERVED_DOMAIN, RESERVED_DRILL_UP } from '@vizabi/ddf-query-validator';
 import { description, initData, testsDescriptors } from '../../src/test-cases/concepts';
 import * as path from 'path';
 

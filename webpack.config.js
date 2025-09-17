@@ -1,6 +1,7 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = () => ([{
     mode: 'production',
@@ -37,6 +38,17 @@ module.exports = () => ([{
 },
 {
     mode: 'production',
+    optimization: { 
+        minimizer: [
+            new TerserPlugin({
+              parallel: true,
+              terserOptions: {
+                safari10: true, // safe
+                output: { comments: false },
+              },
+            }),
+          ],
+    },
     entry: {
         'reader-ddfcsv': ['./lib-web/src/index-web.js'],
     },

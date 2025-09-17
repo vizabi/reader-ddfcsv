@@ -8,7 +8,7 @@ import * as includes from 'lodash.includes';
 import * as compact from 'lodash.compact';
 import { DdfCsvError } from '../ddfcsv-error';
 import { IDatapackage, IResourceSelectionOptimizer, IResourceRead, IBaseReaderOptions } from '../interfaces';
-import { QueryFeature, featureDetectors, IQuery } from 'ddf-query-validator';
+import { QueryFeature, featureDetectors, IQuery } from '@vizabi/ddf-query-validator';
 
 const WHERE_KEYWORD = 'where';
 const JOIN_KEYWORD = 'join';

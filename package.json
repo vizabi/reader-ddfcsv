@@ -1,6 +1,6 @@
 {
   "name": "@vizabi/reader-ddfcsv",
-  "version": "4.5.2",
+  "version": "4.5.3",
   "description": "Vizabi DDFcsv reader",
   "author": "Vyacheslav Chub<vyacheslav.chub@valor-software.com>",
   "license": "GPL-3.0",
@@ -53,9 +53,9 @@
     "instrument": true
   },
   "dependencies": {
+    "@vizabi/ddf-query-validator": "1.4.2",
     "cross-project-diagnostics": "0.1.5",
     "d3-time-format": "^2.2.3",
-    "ddf-query-validator": "1.4.1",
     "https": "1.0.0",
     "lodash.clonedeep": "4.5.0",
     "lodash.compact": "3.0.1",
@@ -112,13 +112,13 @@
     "sinon": "6.1.4",
     "source-map-loader": "0.2.3",
     "source-map-support": "0.5.6",
+    "terser-webpack-plugin": "^1.4.5",
     "ts-loader": "4.3.0",
     "ts-node": "10.9.2",
     "tslib": " 2.6.2",
     "tslint": "6.1.3",
     "tslint-no-unused-expression-chai": "0.1.4",
     "typescript": "5.5.4",
-    "uglifyjs-webpack-plugin": "1.2.5",
     "webpack": "4.8.1",
     "webpack-bundle-analyzer": "^3.0.4",
     "webpack-cli": "2.1.3",

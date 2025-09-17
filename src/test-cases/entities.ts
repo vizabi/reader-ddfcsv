@@ -11,7 +11,7 @@ import {
   RESERVED_CONCEPT_TYPE,
   RESERVED_DOMAIN,
   RESERVED_DRILL_UP
-} from 'ddf-query-validator';
+} from '@vizabi/ddf-query-validator';
 
 import * as map from 'lodash.map';
 import * as flatMap from 'lodash.flatmap';

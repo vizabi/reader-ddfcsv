@@ -19,7 +19,7 @@ import {
   RESERVED_CONCEPT_TYPE,
   RESERVED_DOMAIN,
   RESERVED_DRILL_UP
-} from 'ddf-query-validator';
+} from '@vizabi/ddf-query-validator';
 import { testsDescriptors, initData } from '../../src/test-cases/entities';
 
 const expect = chai.expect;

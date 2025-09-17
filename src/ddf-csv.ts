@@ -3,7 +3,7 @@ import * as isEmpty from 'lodash.isempty';
 import * as stripBom from 'strip-bom';
 import { getAppropriatePlugin } from './resource-selection-optimizer';
 import { CSV_PARSING_ERROR, DDF_ERROR, DdfCsvError, FILE_READING_ERROR, JSON_PARSING_ERROR } from './ddfcsv-error';
-import { getFilePath, isSchemaQuery, validateQueryDefinitions, validateQueryStructure } from 'ddf-query-validator';
+import { getFilePath, isSchemaQuery, validateQueryDefinitions, validateQueryStructure } from '@vizabi/ddf-query-validator';
 
 import * as Papa from 'papaparse';
 import { utcParse } from 'd3-time-format';

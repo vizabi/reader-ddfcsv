@@ -1,6 +1,6 @@
 import * as chai from 'chai';
 import * as compact from 'lodash.compact';
-import { QueryFeature, featureDetectors } from 'ddf-query-validator';
+import { QueryFeature, featureDetectors } from '@vizabi/ddf-query-validator';
 
 const expect = chai.expect;
 const conceptsLookupStub = new Map();

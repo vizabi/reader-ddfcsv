@@ -3,7 +3,7 @@ import {
   RESERVED_CONCEPT_TYPE,
   RESERVED_DOMAIN,
   RESERVED_DRILL_UP
-} from 'ddf-query-validator';
+} from '@vizabi/ddf-query-validator';
 import { BASE_PATH, WS_TESTING_PATH } from '../../test/common';
 import * as path from 'path';
 

@@ -1,7 +1,7 @@
 import * as isEmpty from 'lodash.isempty';
 import { ddfCsvReader } from './ddf-csv';
 import { IResourceRead } from './interfaces';
-import { getRepositoryPath } from 'ddf-query-validator';
+import { getRepositoryPath } from '@vizabi/ddf-query-validator';
 import { DdfCsvError } from './ddfcsv-error';
 import { createDiagnosticManagerOn, EndpointDiagnosticManager, getLevelByLabel } from 'cross-project-diagnostics';
 import { DiagnosticManager, Level } from 'cross-project-diagnostics/lib';
