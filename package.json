@@ -1,6 +1,6 @@
 {
   "name": "@vizabi/reader-ddfcsv",
-  "version": "4.5.5",
+  "version": "4.5.6",
   "description": "Vizabi DDFcsv reader",
   "author": "Vyacheslav Chub<vyacheslav.chub@valor-software.com>",
   "license": "GPL-3.0",
@@ -8,6 +8,12 @@
   "browser": "dist/reader-ddfcsv.js",
   "publishConfig": {
     "access": "public"
+  },
+  "exports": {
+    "node": "./lib/src/index.js",
+    "browser": "./dist/reader-ddfcsv.js",
+    "types": "./lib/src/index.d.ts",
+    "default": "./dist/reader-ddfcsv.js"
   },
   "scripts": {
     "rollup": "rollup -c",

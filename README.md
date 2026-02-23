@@ -52,10 +52,10 @@ const data = await readerInstance.read({
   
 In Observable notebooks use
 ```
-DDFCsvReader = require('https://unpkg.com/@vizabi/reader-ddfcsv@4.5.5')
+DDFCsvReader = require('https://unpkg.com/@vizabi/reader-ddfcsv@4.5.6')
 ```
 
-which will redirect to https://unpkg.com/@vizabi/reader-ddfcsv@4.5.5/dist/reader-ddfcsv.js
+which will redirect to https://unpkg.com/@vizabi/reader-ddfcsv@4.5.6/dist/reader-ddfcsv.js
 
 See the [Live demo](https://observablehq.com/@vizabi/ddfcsv-reader)
 ## Custom file readers
