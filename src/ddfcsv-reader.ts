@@ -1,4 +1,4 @@
-import * as isEmpty from 'lodash.isempty';
+import isEmpty from 'lodash-es/isEmpty';
 import { ddfCsvReader } from './ddf-csv';
 import { IResourceRead } from './interfaces';
 import { getRepositoryPath } from '@vizabi/ddf-query-validator';

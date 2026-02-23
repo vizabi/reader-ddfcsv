@@ -13,10 +13,10 @@ import {
   RESERVED_DRILL_UP
 } from '@vizabi/ddf-query-validator';
 
-import * as map from 'lodash.map';
-import * as flatMap from 'lodash.flatmap';
-import * as isNil from 'lodash.isnil';
-import * as flatten from 'lodash.flatten';
+import map from 'lodash-es/map';
+import flatMap from 'lodash-es/flatMap';
+import isNil from 'lodash-es/isNil';
+import flatten from 'lodash-es/flatten';
 
 const ALL_OPERATORS: string[] = [null, '.', '.is--'];
 const ALL_CONCEPTS: string[] = ['', ' ', RESERVED_CONCEPT, RESERVED_CONCEPT_TYPE, RESERVED_DOMAIN, RESERVED_DRILL_UP, 'company', 'english_speaking', 'company_scale', 'name', 'anno', 'lines_of_code', 'region', 'country', 'latitude', 'longitude', 'full_name_changed', 'project', 'domain', 'additional_column', 'meeting_style', 'popular_appeal', 'methodology'];

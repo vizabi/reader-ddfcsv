@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "target": "es2017",
+    "target": "es2020",
     "module": "commonjs",
     "noImplicitAny": false,
     "outDir": "./lib/src",
@@ -18,6 +18,9 @@
     "importHelpers": true,
     "strictNullChecks": false,
     "baseUrl": ".",
+    "paths": {
+      "tslib" : ["node_modules/tslib/tslib.d.ts"]
+    },
     "lib": [
       "es2020",
       "dom"

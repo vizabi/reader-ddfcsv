@@ -1,6 +1,6 @@
 import * as chai from 'chai';
 import { getDDFCsvReaderObject } from '../../src/index';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 import {
   BASE_PATH,
   BIG_PATH,

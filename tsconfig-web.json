@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "target": "es2019",
-    "module": "commonjs",
+    "target": "es2020",
+    "module": "ES2020",
     "noImplicitAny": false,
     "outDir": "./lib-web/src",
     "preserveConstEnums": true,

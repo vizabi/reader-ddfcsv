@@ -1,5 +1,5 @@
 import * as chai from 'chai';
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 
 const expect = chai.expect;
 

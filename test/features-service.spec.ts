@@ -1,5 +1,5 @@
 import * as chai from 'chai';
-import * as compact from 'lodash.compact';
+import compact from 'lodash-es/compact';
 import { QueryFeature, featureDetectors } from '@vizabi/ddf-query-validator';
 
 const expect = chai.expect;

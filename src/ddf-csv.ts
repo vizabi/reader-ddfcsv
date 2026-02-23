@@ -1,6 +1,6 @@
-import * as includes from 'lodash.includes';
-import * as isEmpty from 'lodash.isempty';
-import * as stripBom from 'strip-bom';
+import includes from 'lodash-es/includes';
+import isEmpty from 'lodash-es/isEmpty';
+import stripBom from 'strip-bom';
 import { getAppropriatePlugin } from './resource-selection-optimizer';
 import { CSV_PARSING_ERROR, DDF_ERROR, DdfCsvError, FILE_READING_ERROR, JSON_PARSING_ERROR } from './ddfcsv-error';
 import { getFilePath, isSchemaQuery, validateQueryDefinitions, validateQueryStructure } from '@vizabi/ddf-query-validator';

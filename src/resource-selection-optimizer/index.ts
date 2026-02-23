@@ -1,5 +1,5 @@
 import { InClauseUnderConjunction } from './in-clause-under-conjunction';
-import * as head from 'lodash.head';
+import head from 'lodash-es/head';
 import { IBaseReaderOptions, IResourceSelectionOptimizer } from '../interfaces';
 
 export function getAppropriatePlugin(parent, queryParam, options: IBaseReaderOptions): IResourceSelectionOptimizer {

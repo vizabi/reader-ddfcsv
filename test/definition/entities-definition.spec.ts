@@ -1,6 +1,6 @@
 import 'mocha';
 import * as chai from 'chai';
-import * as keys from 'lodash.keys';
+import keys from 'lodash-es/keys';
 import {
   BASE_PATH,
   expectPromiseRejection,
