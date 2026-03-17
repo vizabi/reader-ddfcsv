@@ -1,6 +1,6 @@
 {
   "name": "@vizabi/reader-ddfcsv",
-  "version": "4.5.6",
+  "version": "4.6.0",
   "description": "Vizabi DDFcsv reader",
   "author": "Vyacheslav Chub<vyacheslav.chub@valor-software.com>",
   "license": "GPL-3.0",
@@ -53,7 +53,9 @@
     "instrument": true
   },
   "mocha": {
-    "node-option": ["import=tsx"],
+    "node-option": [
+      "import=tsx"
+    ],
     "require": [
       "source-map-support/register"
     ],
