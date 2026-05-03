@@ -1,6 +1,6 @@
 {
   "name": "@vizabi/reader-ddfcsv",
-  "version": "4.6.0",
+  "version": "4.6.1",
   "description": "Vizabi DDFcsv reader",
   "author": "Vyacheslav Chub<vyacheslav.chub@valor-software.com>",
   "license": "GPL-3.0",
@@ -65,38 +65,38 @@
     "spec": "test/**/*.spec.ts"
   },
   "dependencies": {
-    "@vizabi/ddf-query-validator": "1.4.3",
+    "@vizabi/ddf-query-validator": "1.4.4",
     "cross-project-diagnostics": "0.1.5",
     "d3-time-format": "^4.1.0",
     "https": "1.0.0",
+    "lodash-es": "4.18.1",
     "papaparse": "^5.5.3",
-    "strip-bom": "5.0.0",
-    "lodash-es": "4.17.23"
+    "strip-bom": "5.0.0"
   },
   "devDependencies": {
-    "@rollup/plugin-replace": "^6.0.3",
-    "@rollup/plugin-commonjs": "^29.0.0",
+    "@rollup/plugin-commonjs": "^29.0.2",
     "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-replace": "^6.0.3",
     "@types/chai": "5.2.3",
-    "@types/mocha": "10.0.10",
-    "@types/node": "25.3.0",
     "@types/lodash-es": "4.17.12",
+    "@types/mocha": "10.0.10",
+    "@types/node": "25.6.0",
     "chai": "6.2.2",
     "codecov": "3.8.3",
     "compare-version": "0.1.2",
     "mocha": "11.7.5",
-    "nyc": "17.1.0",
+    "nyc": "18.0.0",
     "rimraf": "6.1.3",
-    "rollup": "^4.58.0",
-    "rollup-plugin-visualizer": "^7.0.0",
+    "rollup": "^4.60.2",
     "rollup-plugin-esbuild": "^6.2.1",
+    "rollup-plugin-visualizer": "^7.0.1",
     "shelljs": "0.10.0",
-    "sinon": "21.0.1",
+    "sinon": "21.1.2",
     "source-map-support": "0.5.21",
     "tslib": "2.8.1",
     "tslint": "6.1.3",
     "tslint-no-unused-expression-chai": "0.1.4",
-    "typescript": "5.9.3",
-    "tsx": "^4.21.0"
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   }
 }
