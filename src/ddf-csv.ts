@@ -519,13 +519,15 @@ export function ddfCsvReader (logger?: any) {
     }
   }
 
-  function getFilterFields (filter) {
+function getFilterFields (filter) {
     const fields = [];
 
     for (const field in filter) {
       // no support for deeper object structures (mongo style)
-      if (includes([ '$and', '$or', '$not', '$nor' ], field)) {
+      if (includes([ '$and', '$or', '$nor' ], field)) {
         filter[ field ].map(getFilterFields).forEach(subFields => fields.push(...subFields));
+      } else if (field === '$not') {
+        getFilterFields(filter[ field ]).forEach(subField => fields.push(subField));
       } else {
         fields.push(field);
       }

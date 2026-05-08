@@ -374,6 +374,56 @@ describe('Datapoints definition errors in query', () => {
       expect(result.length).to.equal(58695);
       expect(countryAntData).to.be.an('array').that.is.empty;
     });
+
+    it(`when requests test_fasttrack dataset and join where clause uses $not operator`, async () => {
+      const reader = getDDFCsvReaderObject();
+      reader.init({});
+
+      const query = {
+        repositoryPath: './test/static-fixtures/ddf--gapminder--test_fasttrack',
+        language: 'en',
+        select: {
+          key: [ 'geo', 'time' ],
+          value: [ 'abscorrup_idea' ]
+        },
+        from: 'datapoints',
+        where: {
+          geo: '$geo'
+        },
+        join: {
+          $geo: {
+            key: 'geo',
+            where: {
+              $and: [
+                {
+                  $or: [
+                    { geo: { $in: [ 'usa', 'chn', 'rus', 'nga' ] } }
+                  ]
+                },
+                {
+                  $not: {
+                    $and: [
+                      { 'is--country': true },
+                      { un_state: false }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      };
+
+      // This query previously crashed with "filter[field].map is not a function"
+      // because $not takes an object, not an array, but getFilterFields treated it like $and/$or/$nor.
+      const result = await reader.read(query);
+
+      expect(result).to.be.an('array');
+      // usa, chn, rus, nga are all is--country=true and un_state=true,
+      // so none are excluded by the $not filter
+      const geos = [ ...new Set(result.map(r => r.geo)) ];
+      expect(geos).to.include.members([ 'usa', 'chn', 'rus', 'nga' ]);
+    });
   });
 
   describe('should never happen for happy flow in lenient mode', () => {
